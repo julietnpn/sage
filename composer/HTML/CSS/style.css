@@ -1,0 +1,281 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td
+{
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}
+
+a {
+	text-decoration: none;
+}
+
+body
+{
+  line-height:1;
+}
+
+ol,ul
+{
+  list-style:none;
+}
+
+blockquote,q
+{
+  quotes:none;
+}
+
+blockquote:before,blockquote:after,q:before,q:after
+{
+  content:'';
+  content:none;
+}
+
+/* remember to define focus styles! */
+:focus
+{
+  outline:0;
+}
+
+/* remember to highlight inserts somehow! */
+ins
+{
+  text-decoration:none;
+}
+
+del
+{
+  text-decoration:line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table
+{
+  border-collapse:collapse;
+  border-spacing:0;
+}
+
+/*---------- BODY --------------------------------*/
+body
+{
+  min-width:1000px;
+  text-align:center;
+  background:#9CBA6E;
+}
+
+a
+{
+  text-decoration:none;
+}
+
+.feature
+{
+	height: 400px;
+	background-color: #FFF;
+	
+}
+
+/*---------- Wrapper --------------------*/
+header
+{
+  width:100%;
+  height:400px;
+  background:#FFF;
+}
+
+.contain
+{
+  width:1000px;
+  margin:0 auto;
+}
+
+header .contain
+{
+  width:1000px;
+  margin:0 auto;
+  text-align:left;
+  line-height:80px;
+}
+
+header .contain li
+{
+  float:left;
+}
+
+header .contain li a
+{
+  padding:0 20px;
+  height:80px;
+  color:#777;
+}
+
+header .contain li a:hover
+{
+  color:#eee;
+}
+
+header .contain ul.apps
+{
+  font-family:gotham;
+  font-size:15px;
+}
+
+header .contain ul.rightLinks
+{
+  float:right;
+}
+
+header .contain ul.rightLinks li
+{
+  float:right;
+  position:relative;
+  font:13px lucida grande;
+  cursor:pointer;
+}
+
+header .contain ul.rightLinks li a
+{
+  line-height:80px;
+}
+
+.dropOut .triangle
+{
+  width:0;
+  height:0;
+  position:absolute;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-bottom:8px solid #FFF;
+  top:-8px;
+  left:50%;
+  margin-left:-8px;
+}
+
+.dropdownContain
+{
+  width:160px;
+  position:relative;
+  position:absolute;
+  z-index:2;
+  left:50%;
+  margin-left:-80px;
+  top:-400px;
+}
+
+.dropOut
+{
+  width:160px;
+  background:#FFF;
+  float:left;
+  position:relative;
+  margin-top:0;
+}
+
+header .contain .dropOut ul
+{
+  float:left;
+  padding:10px 0;
+}
+
+header .contain .dropOut ul li
+{
+  text-align:left;
+  float:left;
+  width:125px;
+  padding:12px 0 10px 15px;
+  margin:0 10px;
+  color:#777;
+}
+
+header .contain .dropOut ul li:hover
+{
+  background:#f6f6f6;
+}
+
+header .contain ul li:hover a
+{
+  color:#FFF;
+}
+
+header .contain ul li:hover .dropdownContain
+{
+  top:65px;
+}
+
+header .contain ul li:hover .underline
+{
+  border-bottom-color:#777;
+}
+
+header .contain ul li:hover .dropOut
+{
+  margin-top:8px;
+}
+
+ul.apps a
+{
+  font-family:Helvetica;
+  font-size:15px;
+}
+
+/*-------------Text------------*/
+
+header .contain h1
+{
+	font-family: "Asap";
+	font-weight: 700;
+	color: rgb(80,80,80);
+	font-size: 36px;
+	letter-spacing: 7px;
+	padding-top: 140px;
+	vertical-align: baseline;
+	text-align: center;
+}
+
+header .contain h2
+{
+	font-family: "Asap";
+	font-weight: 400;
+	color: #888;
+	font-size: 17px;
+	width: 300px;
+	padding-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	line-height: 22pt;
+	vertical-align: baseline;
+}
+
+footer .contain h3
+{
+	color: rgba(255, 255, 255, 0.28);
+	width: 300px;
+	padding-top: 10px;
+	margin-top: 60px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	width: 180px;
+	height: 40px;
+	background-color: rgba(0, 0, 0, 0.06);
+	font: 700 18px/24pt "Asap";
+	letter-spacing: 2px;
+}
+
+footer .contain h3:hover
+{
+	color: #FFF;
+}
+
+/*------------Images-----------*/
+
+footer .contain img
+{
+	padding-top: 100px;
+	width: 300px;
+}
+
