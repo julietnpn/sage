@@ -111,13 +111,15 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
 		          		
 		          		google.maps.event.trigger(map, 'resize');
 		          		map.setZoom( map.getZoom() );
+		          		map.setCenter(results[0].geometry.location);
+		          		var marker = new google.maps.Marker({
+		          		    map: map,
+		          		    position: results[0].geometry.location
+		          		});
+		          		
+		          		$("#confirm").slideDown();
 		          	});
-		            map.setCenter(results[0].geometry.location);
-		            var marker = new google.maps.Marker({
-		                map: map,
-		                position: results[0].geometry.location
-		            });
-		            
+		            		            
 		          } else {
 		            console.log(status);
 		          }
@@ -175,7 +177,7 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
   		</div>
   		<div class="top_module">
 	  		<div id="map-frame">
-	  		    	<div id="map-canvas" style="width: 100%; height: 530px"></div>
+	  		    	<div id="map-canvas" style="width: 100%; height: 400px"></div>
 	  		</div>
 	  		<script>
 	  			$(document).ready(function(){
@@ -191,11 +193,17 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
 	  			function initialize() {
 	  				console.log("Run");
 	  				$(".top_module").hide();
+	  				$(".top_module").css("height", "400px");
+	  				$("#confirm").hide();
 	  				}
 	  		</script>
   		</div>
   		<div class="bottom_module">
-  			<input placeholder="Enter Location..." class="big" id="address" type="text" name="address" value="" onSubmit="codeAddress()"/>
+  			<font size="+4">Welcome to the Plant Guild Composer!</font>
+  			
+  			<input style="margin:100px" placeholder="Enter Location..." class="big" id="address" type="text" name="address" value="" onSubmit="codeAddress()"/>
+  			<br>
+  			<input id="confirm" type="button" onSubmit="loadNext()" value="Confirm?">
   			<!--<input class="big" type="submit" value="Search" onclick="codeAddress()" />
   			<input class="big" type="submit" value="Use Current Location" onclick="codeAddress()" />-->
 		</div>
