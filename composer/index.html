@@ -9,7 +9,7 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
 		<!--TITLES-->
 		<title>Plant Guild Composer</title>
 		<!--STYLESHEETS-->
-		<link rel="stylesheet" href="CSS/style.css" type="text/css" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<!--GOOGLE FONTS INTEGRATION-->
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Asap:400,700' rel='stylesheet' type='text/css'>
@@ -33,7 +33,8 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
                     strokeColor: "gold",
                     strokeWeight: 14
                     };
-		      
+                    
+              		      
 		      navigator.geolocation.getCurrentPosition(initialize, displayError);
 		      
 		       function displayError(error) {
@@ -91,7 +92,7 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
 		         });
 		         drawingManager.setMap(map);
                
-               setDrawing('Images/Tree-icon.png',map);
+               setDrawing('img/Tree-icon.png',map);
 		        
 		        var homeControlDiv = document.createElement('div');
 		                var homeControl = new HomeControl(homeControlDiv, map);
@@ -291,7 +292,7 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
 			      // Setup the click event listeners: simply set the map to
 			      // Chicago
 			      google.maps.event.addDomListener(controlUI, 'click', function() {
-			        setDrawing("Images/backpack.png", map);
+			        setDrawing("img/backpack.png", map);
 			      });
 			
 			    }
@@ -320,7 +321,7 @@ Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
 	  			
 	  			function initialize() {
 	  				console.log("Run");
-	  				$(".top_module").hide();
+	  				//$(".top_module").hide();
 	  				$(".top_module").css("height", "400px");
 	  				$("#confirm").hide();
 	  				}
