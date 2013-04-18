@@ -1,123 +1,17 @@
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td
-{
-  margin:0;
-  padding:0;
-  border:0;
-  outline:0;
-  font-size:100%;
-  vertical-align:baseline;
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+    background: url(../img/background.jpg) repeat-y center top;
 }
-
-html {
-	background: url(../img/background.jpg) repeat-y center top;
+.container-item {
+	padding: 10px;
+	margin-bottom: 30px;
+	font-size: 18px;
+	font-weight: 200;
+	line-height: 30px;
+	color: inherit;
+	background-color: #eeeeee;
+	-webkit-border-radius: 6px;
+	   -moz-border-radius: 6px;
+	        border-radius: 6px;
 }
-
-a {
-	text-decoration: none;
-}
-
-body
-{
-  line-height:1;
-}
-
-ol,ul
-{
-  list-style:none;
-}
-
-blockquote,q
-{
-  quotes:none;
-}
-
-blockquote:before,blockquote:after,q:before,q:after
-{
-  content:'';
-  content:none;
-}
-
-/* remember to define focus styles! */
-:focus
-{
-  outline:0;
-}
-
-/* remember to highlight inserts somehow! */
-ins
-{
-  text-decoration:none;
-}
-
-del
-{
-  text-decoration:line-through;
-}
-
-/* tables still need 'cellspacing="0"' in the markup */
-table
-{
-  border-collapse:collapse;
-  border-spacing:0;
-}
-
-
-/* wrapper */
-
-.contain {
-	width: 1500px;
-	margin: 20px auto;
-}
-
-.top_module {
-	position: relative;
-	width: 80%;
-	height: 530px;
-	background: #f8f8f8;
-	margin: 0 auto 0;
-	z-index: 0;
-	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.13);
-}
-
-.bottom_module {
-	width: 100%;
-	height: 450px;
-	background: white;
-	z-index: -1;
-	margin-top: -60px;
-	padding-top: 80px;
-}
-
-footer {
-	height: 50px;
-}
-
-/* text */
-
-.pgc_title {
-	font: 700 20px "Gotham HTF";
-	letter-spacing: 5px;
-	color: white;
-	margin-bottom: 80px;
-	-webkit-font-smoothing: antialiased;
-}
-
-.pgc_footer {
-	font: 500 15px "Gotham HTF";
-	letter-spacing: 3px;
-	color: white;
-	margin: 30px auto 0;
-	-webkit-font-smoothing: antialiased;
-}
-
-.big {
-	font-size: 30px;
-	border-style: hidden;
-	-moz-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.36);
-	-webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.36);
-	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.36);
-	float: left;
-	clear: left;
-	width: 400px;
-}
-
