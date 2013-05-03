@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
   $('#find').on('click', function(event) {
   		event.preventDefault();
@@ -6,7 +5,8 @@ $(document).ready(function(){
   		$("#main-box").append("<div class='progress progress-striped active'><div id='progress' class='bar' style='width: 0%;'></div></div>");
   		var progress_bar = document.getElementById("progress");
   		//TweenMax.to(progress_bar, .5, {width:"800px", ease:Elastic.easeOut});
-        $.ajax({
+        codeAddress("Irvine, CA", map);
+        /*$.ajax({
                     type: 'GET',
                     url: "routes/location.php",
                     data: {
@@ -23,7 +23,7 @@ $(document).ready(function(){
                     	console.log("error" + msg);
                     	$("#main-box").append(msg);
                     }
-                });
+                });*/
         });
     });
     
@@ -32,15 +32,6 @@ $(function() {
   $( "#sortable" ).sortable();
   $( "#sortable" ).disableSelection();
 });
-
-
-	  var shape;
-      var myCoords;
-      var geocoder;
-      var map;
-      var drawingManager;
-      var windspeedLayer;
-      var markersArray = [];
       		      
       navigator.geolocation.getCurrentPosition(initialize, displayError);
       
@@ -56,14 +47,14 @@ $(function() {
       function initialize(position) {
         geocoder = new google.maps.Geocoder();
       	myCoords = position.coords;
-        var mapDiv = document.getElementById('map-canvas');
-        map = new google.maps.Map(mapDiv, {
+        mapDiv = document.getElementById('map-canvas');
+        gmap = new google.maps.Map(mapDiv, {
           center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
           zoom: 20,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
         var marker = new google.maps.Marker({
-          map: map,
+          map: gmap,
           position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
           draggable: false
         });
@@ -93,36 +84,36 @@ $(function() {
              zIndex: 1
            }
          });
-         drawingManager.setMap(map);
+         drawingManager.setMap(gmap);
        
-       setDrawing('img/Tree-icon.png',map);
+       setDrawing('img/Tree-icon.png', gmap);
         
         var homeControlDiv = document.createElement('div');
-                var homeControl = new HomeControl(homeControlDiv, map);
+                var homeControl = new HomeControl(homeControlDiv, gmap);
         
                 homeControlDiv.index = 1;
-                map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+                gmap.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
                 
         var markerControlDiv = document.createElement('div');
-                var homeControl = new markerChange(markerControlDiv, map);
+                var homeControl = new markerChange(markerControlDiv, gmap);
         
                 markerControlDiv.index = 2;
-                map.controls[google.maps.ControlPosition.TOP_RIGHT].push(markerControlDiv);
+                gmap.controls[google.maps.ControlPosition.TOP_RIGHT].push(markerControlDiv);
         
        	var weatherLayer = new google.maps.weather.WeatherLayer({
         	temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
         	});
-        weatherLayer.setMap(map);
+        weatherLayer.setMap(gmap);
         
         var cloudLayer = new google.maps.weather.CloudLayer();
-        cloudLayer.setMap(map);
+        cloudLayer.setMap(gmap);
         
         //windspeedLayer = new google.maps.weather.WeatherConditions();
         //console.log(windspeedLayer);
         //windspeedLayer.setMap(map);
         
         
-         google.maps.event.addListener(map, 'click', function(event) {
+         google.maps.event.addListener(gmap, 'click', function(event) {
                 addMarker(event.latLng);
         });
       } 
@@ -130,7 +121,7 @@ $(function() {
       
       
       
-       function setDrawing(icon, map) {
+       function setDrawing(icon, gmap) {
         drawingManager.setOptions({
               drawingMode: google.maps.drawing.OverlayType.MARKER,
            drawingControl: true,
@@ -163,7 +154,7 @@ $(function() {
       function addMarker(location) {
           marker = new google.maps.Marker({
             position: location,
-            map: map,
+            map: gmap,
           });
           markersArray.push(marker);
         }
@@ -181,7 +172,7 @@ $(function() {
         function showOverlays() {
           if (markersArray) {
             for (i in markersArray) {
-              markersArray[i].setMap(map);
+              markersArray[i].setMap(gmap);
             }
           }
         }
@@ -198,16 +189,16 @@ $(function() {
       
        
       
-      function codeAddress(address) {
+      function codeAddress(address, gmap) {
         geocoder.geocode( { 'address': address}, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
-          	$(".top_module").slideDown("normal", function(){
+          	$("#map").slideDown("normal", function(){
           		
-          		google.maps.event.trigger(map, 'resize');
-          		map.setZoom( map.getZoom() );
-          		map.setCenter(results[0].geometry.location);
+          		google.maps.event.trigger(gmap, 'resize');
+          		gmap.setZoom( gmap.getZoom() );
+          		gmap.setCenter(results[0].geometry.location);
           		var marker = new google.maps.Marker({
-          		    map: map,
+          		    map: gmap,
           		    position: results[0].geometry.location
           		});
           		
@@ -230,7 +221,7 @@ $(function() {
 	     * the control DIV as an argument.
 	     */
 	
-	    function HomeControl(controlDiv, map) {
+	    function HomeControl(controlDiv, gmap) {
 	
 	      // Set CSS styles for the DIV containing the control
 	      // Setting padding to 5 px will offset the control
@@ -259,12 +250,12 @@ $(function() {
 	      // Setup the click event listeners: simply set the map to
 	      // Chicago
 	      google.maps.event.addDomListener(controlUI, 'click', function() {
-	        map.panTo(new google.maps.LatLng(myCoords.latitude, myCoords.longitude))
+	        gmap.panTo(new google.maps.LatLng(myCoords.latitude, myCoords.longitude))
 	      });
 	
 	    }
         
-          function markerChange(controlDiv, map) {
+          function markerChange(controlDiv, gmap) {
 	
 	      // Set CSS styles for the DIV containing the control
 	      // Setting padding to 5 px will offset the control
@@ -293,7 +284,7 @@ $(function() {
 	      // Setup the click event listeners: simply set the map to
 	      // Chicago
 	      google.maps.event.addDomListener(controlUI, 'click', function() {
-	        setDrawing("img/backpack.png", map);
+	        setDrawing("img/backpack.png", gmap);
 	      });
 	
 	    }

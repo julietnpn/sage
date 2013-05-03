@@ -1,11 +1,12 @@
-body {
+body, .jumbotron {
     padding-top: 60px;
     padding-bottom: 40px;
     background: url(../img/background.jpg) repeat-y center top;
 }
 .container-item {
 	padding: 10px;
-	margin-bottom: 30px;
+	overflow: scroll;
+	height: 100%;
 	font-size: 18px;
 	font-weight: 200;
 	line-height: 30px;
@@ -14,4 +15,32 @@ body {
 	-webkit-border-radius: 6px;
 	   -moz-border-radius: 6px;
 	        border-radius: 6px;
+}
+
+.row{
+	margin-bottom: 30px;
+}
+
+.row-item {
+	overflow: scroll;
+}
+
+.welcome-item {
+	height: 200px;
+	overflow: scroll;
+}
+
+.map-item {
+	height: 400px;
+	overflow: scroll;
+}
+
+.options-item {
+	height: 250px;
+	overflow: scroll;
+}
+
+#map-canvas img {
+  max-width: none;
+  
 }

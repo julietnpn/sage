@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+		
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body data-spy="scroll" data-target="#navbar">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+
+        <div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">Plant Guild Composer</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li id="menu-welcome"><a href="#welcome" onClick="scroll($(this).attr('href'));">Welcome</a></li>
+                            <li id="menu-map"><a href="#map" onClick="scroll($(this).attr('href'));">Map</a></li>
+                            <li id="menu-options"><a href="#options" onClick="scroll($(this).attr('href'));">Options</a></li>
+                            <li id="menu-more" class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li class="nav-header">Nav header</li>
+                                    <li><a href="#">Separated link</a></li>
+                                    <li><a href="#">One more separated link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!--<form class="navbar-form pull-right">
+                            <input class="span2" type="text" placeholder="Email">
+                            <input class="span2" type="password" placeholder="Password">
+                            <button type="submit" class="btn">Sign in</button>
+                        </form>-->
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <!-- Main hero unit for a primary marketing message or call to action -->
+            
+            <div id="welcome" class="row">
+                <div class="span12">
+                	<div class="container-item">
+                    	<form class="form-search">
+                    	<h1>Welcome</h1>
+                    	<p class="span3">Enter your location:</p>
+                    	<div class="input-prepend span6">
+                    	  <span class="add-on">
+                    	    <i class="icon-search"></i>
+                    	  </span>
+                    	  <input class="input-xlarge span5" id="location" type="text" placeholder="Street, City, State">
+						</div>
+                    	<button id="find" class="span1 btn">Find</button>
+                    	</form>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="map" class="row">
+            	<div class="span4">
+            		<div class="container-item">
+            		 
+            		<p id="q1">Draw the perimeter of your plant guild
+            		<i class="icon-arrow-right"></i>
+            		</p>
+            		<p id="q2">Draw the current vegetation
+            		<i></i>
+            		</p>
+            		<a id="next" class="btn">Next</a>
+            		</div>
+            	</div>
+            	<div class="span8" style="height:100%;">
+            		<div id="map-canvas" style="height:100%;"></div>
+            	</div>
+            </div>
+            
+            <div id="options" class="row">
+	            <div class="span4">
+	            	<div id="card1" class="container-item">
+		            	<ul id="sortable">
+			            	<li class="item">Item 1</li>
+			            	<li class="item">Item 2</li>
+			            	<li class="item">Item 3</li>
+			            	<li class="item">Item 4</li>
+			            	<li class="item">Item 5</li>
+			            	<li class="item">Item 6</li>
+		            	</ul>
+	            	</div>
+	            </div>
+	            <div class="span4">
+	            	<div id="card2" class="container-item">
+	            	Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
+	            	</div>
+	            
+	            </div>
+	            <div class="span4">
+		            <div class="container-item">
+		            Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
+	            	</div>
+	            </div>
+            </div>
+            
+            <div id="more" class="row">
+                <div id="card3" class="span4">
+                	<div class="container-item">
+                	<ul id="sortable">
+                	<li class="item">Item 1</li>
+                	<li class="item">Item 2</li>
+                	<li class="item">Item 3</li>
+                	<li class="item">Item 4</li>
+                	<li class="item">Item 5</li>
+                	<li class="item">Item 6</li>
+                	</ul>
+                	</div>
+                </div>
+                <div class="span4">
+                	<div class="container-item">
+                	Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
+                	</div>
+                
+                </div>
+                <div class="span4">
+                    <div class="container-item">
+                    Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
+                
+                </div>
+            </div>
+            	
+
+            <hr>
+
+            <footer>
+                <p>&copy; Project by Juliet Norton 2013</p>
+            </footer>
+
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/lib/underscore-min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.9.3/TweenMax.min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=weather,drawing"></script>
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+        <!--<script src="js/main.js"></script>-->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <script>
+        
+        
+            
+        
+        $(function() {
+          $( "#sortable" ).sortable();
+          $( "#sortable" ).disableSelection();
+          $( "#map" ).hide();
+          $( "#options" ).hide();
+          $( "#more" ).hide();
+          $( "#q1" ).hide();
+          $( "#q2" ).hide();
+          $( "#menu-map").hide();
+          $( "#menu-options").hide();
+          $( "#menu-more").hide(); 
+          
+        });
+            
+        $(document).ready(function(){
+        
+          $('#find').on('click', function(event) {
+          		event.preventDefault();
+          		console.log("loading");
+          		
+          		var menu_map = $("#menu-map");
+          		menu_map.slideDown();
+                var address = $('#location').val();
+                geocoder.geocode( { 'address': address}, function(results, status) 
+                {
+                  if (status == google.maps.GeocoderStatus.OK) 
+                  {
+                  	var mapRow = $("#map");
+                  	mapRow.show("normal", function()
+                  	{
+                  		scroll("#map");
+                  		TweenMax.to(mapRow, 1, {
+	                  		height:"400px", ease:Elastic.easeOut, onComplete: function()
+	                  		{
+	                  			google.maps.event.trigger(gmap, 'resize');
+	                  			gmap.setZoom( gmap.getZoom() );
+	                  			gmap.setCenter(results[0].geometry.location);
+	                  			var marker = new google.maps.Marker({
+	                  			    map: gmap,
+	                  			    position: results[0].geometry.location
+	                  			});
+	                  			$("#q1").slideDown();
+		                  	}});
+		             });
+                  		
+                  	/*$("#map").slideDown("normal", function(){
+                  		console.log("Slide down #map");
+                  		google.maps.event.trigger(gmap, 'resize');
+                  		gmap.setZoom( gmap.getZoom() );
+                  		gmap.setCenter(results[0].geometry.location);
+                  		var marker = new google.maps.Marker({
+                  		    map: gmap,
+                  		    position: results[0].geometry.location
+                			});
+                  		
+                  		//$("#confirm").slideDown();
+                  		//var photo = document.getElementById("confirm");
+                  		//TweenLite.to(photo, 2, {width:"200px", height:"150px"});
+                  	});*/
+                    		            
+                  
+	              }
+	              else 
+	              {
+	                console.log(status);
+	              }
+	            console.log(address);
+	                /*$.ajax({
+	                            type: 'GET',
+	                            url: "routes/location.php",
+	                            data: {
+	                            	address: $("#location").val()
+	                            },
+	                            context: $(this),
+	                            success: function (data) {
+	                            	console.log("showing map " + data);
+	                            	var map = $("#map");
+	                                TweenMax.to(map, 2.5, {height:"200px", ease:Elastic.easeOut});
+	                                drawMap(data.lat, data.lng);
+	                            },
+	                            error: function (msg) {
+	                            	console.log("error" + msg);
+	                            	$("#main-box").append(msg);
+	                            }
+	                        });*/
+	           	 });
+           	 });
+            clicks = 0;
+            $('#next').on('click', function(event) {
+            		event.preventDefault();
+            		if(clicks == 0)
+            		{
+		            		
+		            		console.log("click next 1");
+		            		$("#q2").slideDown();
+		            		$("#q1 i").removeClass();
+		            		$("#q1").addClass('disabled');
+		            		$("#q2 i").addClass('icon-arrow-right');
+            		}
+            		else if(clicks == 1)
+            		{
+            				console.log("click next 2");
+            				$('#options').slideDown();
+            				$('#menu-options').slideDown();
+            				scroll("#options");
+            				$(this).addClass("next-q2");
+            				$("#q2 i").removeClass();	
+            		}
+            		clicks++;
+                  });
+              });
+            
+              		      
+              navigator.geolocation.getCurrentPosition(initialize, displayError);
+              
+               function displayError(error) {
+                 var errors = { 
+                   1: 'Permission denied',
+                   2: 'Position unavailable',
+                   3: 'Request timeout'
+                 };
+                 alert("Error: " + errors[error.code]);
+               }
+               
+              function initialize(position) {
+                geocoder = new google.maps.Geocoder();
+              	myCoords = position.coords;
+                mapDiv = document.getElementById('map-canvas');
+                gmap = new google.maps.Map(mapDiv, {
+                  center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                  zoom: 20,
+                  mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                var marker = new google.maps.Marker({
+                  map: gmap,
+                  position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                  draggable: false
+                });
+                
+               drawingManager = new google.maps.drawing.DrawingManager({
+                   drawingMode: google.maps.drawing.OverlayType.MARKER,
+                   drawingControl: true,
+                   drawingControlOptions: {
+                     position: google.maps.ControlPosition.TOP_CENTER,
+                     drawingModes: [
+                       google.maps.drawing.OverlayType.MARKER,
+                       google.maps.drawing.OverlayType.CIRCLE,
+                       google.maps.drawing.OverlayType.POLYGON,
+                       google.maps.drawing.OverlayType.POLYLINE,
+                       google.maps.drawing.OverlayType.RECTANGLE
+                     ]
+                   },
+                   markerOptions: {
+                     draggable: true
+                   },
+                   circleOptions: {
+                     fillColor: '#ffff00',
+                     fillOpacity: 1,
+                     strokeWeight: 1,
+                     clickable: false,
+                     editable: true,
+                     zIndex: 1
+                   }
+                 });
+                 drawingManager.setMap(gmap);
+               
+               setDrawing('img/Tree-icon.png', gmap);
+                
+                var homeControlDiv = document.createElement('div');
+                        var homeControl = new HomeControl(homeControlDiv, gmap);
+                
+                        homeControlDiv.index = 1;
+                        gmap.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+                        
+                var markerControlDiv = document.createElement('div');
+                        var homeControl = new markerChange(markerControlDiv, gmap);
+                
+                        markerControlDiv.index = 2;
+                        gmap.controls[google.maps.ControlPosition.TOP_RIGHT].push(markerControlDiv);
+                
+               	var weatherLayer = new google.maps.weather.WeatherLayer({
+                	temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
+                	});
+                weatherLayer.setMap(gmap);
+                
+                var cloudLayer = new google.maps.weather.CloudLayer();
+                cloudLayer.setMap(gmap);
+                
+                //windspeedLayer = new google.maps.weather.WeatherConditions();
+                //console.log(windspeedLayer);
+                //windspeedLayer.setMap(map);
+                
+                
+                 google.maps.event.addListener(gmap, 'click', function(event) {
+                        addMarker(event.latLng);
+                });
+              } 
+              
+              
+              
+              
+               function setDrawing(icon, gmap) {
+                drawingManager.setOptions({
+                      drawingMode: google.maps.drawing.OverlayType.MARKER,
+                   drawingControl: true,
+                   drawingControlOptions: {
+                     position: google.maps.ControlPosition.TOP_CENTER,
+                     drawingModes: [
+                       google.maps.drawing.OverlayType.MARKER,
+                       google.maps.drawing.OverlayType.CIRCLE,
+                       google.maps.drawing.OverlayType.POLYGON,
+                       google.maps.drawing.OverlayType.POLYLINE,
+                       google.maps.drawing.OverlayType.RECTANGLE
+                     ]
+                   },
+                   markerOptions: {
+                     icon: icon,
+                     draggable: true
+                   },
+                   circleOptions: {
+                     fillColor: '#ffff00',
+                     fillOpacity: 1,
+                     strokeWeight: 1,
+                     clickable: false,
+                     editable: true,
+                     zIndex: 1
+                   }
+                 });
+                
+               }
+              
+              function addMarker(location) {
+                  marker = new google.maps.Marker({
+                    position: location,
+                    map: gmap,
+                  });
+                  markersArray.push(marker);
+                }
+                
+                // Removes the overlays from the map, but keeps them in the array
+                function clearOverlays() {
+                  if (markersArray) {
+                    for (i in markersArray) {
+                      markersArray[i].setMap(null);
+                    }
+                  }
+                }
+                
+                // Shows any overlays currently in the array
+                function showOverlays() {
+                  if (markersArray) {
+                    for (i in markersArray) {
+                      markersArray[i].setMap(gmap);
+                    }
+                  }
+                }
+                
+                // Deletes all markers in the array by removing references to them
+                function deleteOverlays() {
+                  if (markersArray) {
+                    for (i in markersArray) {
+                      markersArray[i].setMap(null);
+                    }
+                    markersArray.length = 0;
+                  }
+                }
+              
+               
+              
+              function codeAddress(address, gmap) {
+                
+                
+              }
+              
+        	
+        	    /**
+        	     * The HomeControl adds a control to the map that simply
+        	     * returns the user to Chicago. This constructor takes
+        	     * the control DIV as an argument.
+        	     */
+        	
+        	    function HomeControl(controlDiv, gmap) {
+        	
+        	      // Set CSS styles for the DIV containing the control
+        	      // Setting padding to 5 px will offset the control
+        	      // from the edge of the map
+        	      controlDiv.style.padding = '5px';
+        	
+        	      // Set CSS for the control border
+        	      var controlUI = document.createElement('div');
+        	      controlUI.style.backgroundColor = 'white';
+        	      controlUI.style.borderStyle = 'solid';
+        	      controlUI.style.borderWidth = '2px';
+        	      controlUI.style.cursor = 'pointer';
+        	      controlUI.style.textAlign = 'center';
+        	      controlUI.title = 'Click to set the map to Home';
+        	      controlDiv.appendChild(controlUI);
+        	
+        	      // Set CSS for the control interior
+        	      var controlText = document.createElement('div');
+        	      controlText.style.fontFamily = 'Arial,sans-serif';
+        	      controlText.style.fontSize = '12px';
+        	      controlText.style.paddingLeft = '4px';
+        	      controlText.style.paddingRight = '4px';
+        	      controlText.innerHTML = '<b>Current Location</b>';
+        	      controlUI.appendChild(controlText);
+        	
+        	      // Setup the click event listeners: simply set the map to
+        	      // Chicago
+        	      google.maps.event.addDomListener(controlUI, 'click', function() {
+        	        gmap.panTo(new google.maps.LatLng(myCoords.latitude, myCoords.longitude))
+        	      });
+        	
+        	    }
+                
+                  function markerChange(controlDiv, gmap) {
+        	
+        	      // Set CSS styles for the DIV containing the control
+        	      // Setting padding to 5 px will offset the control
+        	      // from the edge of the map
+        	      controlDiv.style.padding = '5px';
+        	
+        	      // Set CSS for the control border
+        	      var controlUI = document.createElement('div');
+        	      controlUI.style.backgroundColor = 'white';
+        	      controlUI.style.borderStyle = 'solid';
+        	      controlUI.style.borderWidth = '2px';
+        	      controlUI.style.cursor = 'pointer';
+        	      controlUI.style.textAlign = 'center';
+        	      controlUI.title = 'Click to set the map to Home';
+        	      controlDiv.appendChild(controlUI);
+        	
+        	      // Set CSS for the control interior
+        	      var controlText = document.createElement('div');
+        	      controlText.style.fontFamily = 'Arial,sans-serif';
+        	      controlText.style.fontSize = '12px';
+        	      controlText.style.paddingLeft = '4px';
+        	      controlText.style.paddingRight = '4px';
+        	      controlText.innerHTML = '<b>Icon Change</b>';
+        	      controlUI.appendChild(controlText);
+        	
+        	      // Setup the click event listeners: simply set the map to
+        	      // Chicago
+        	      google.maps.event.addDomListener(controlUI, 'click', function() {
+        	        setDrawing("img/backpack.png", gmap);
+        	      });
+        	
+        	    }
+        
+              google.maps.event.addDomListener(window, 'load', initialize);
+        
+        	function scroll(id)
+        	{
+        		$("html, body").animate({ scrollTop: $(id).offset().top - 75}, 1000);
+        	}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </script>
+       
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </body>
+</html>
