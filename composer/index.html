@@ -144,6 +144,8 @@
 			<div id="viability" class="row">
 				<div class="container-item">
 					<div class="span2">
+						
+						
 					</div>
 				</div>
 			</div>
@@ -246,59 +248,54 @@
 		
 		
 		<script>
-		
-		
-		  
-			
 		$(document).ready(function(){
-		
-		
-		
-		  $( "#sortable" ).sortable();
-		  $( "#sortable" ).disableSelection();
-		  $( "#map" ).hide();
-		  $( "#options" ).hide();
-		  $( "#more" ).hide();
-		  $( "#q1" ).hide();
-		  $( "#q2" ).hide();
-		  $( "#menu-map").hide();
-		  $( "#composer-icons").hide();
-		  $( "#menu-options").hide();
-		  $( "#menu-more").hide(); 
-		  $( "#map-row div.img").draggable({ opacity: 0.7, helper: "original" });
-		  
-		  
-		  
-			  
-			  $("#current-location").popover({trigger: 'hover', delay: { show: 900, hide: 10 }});
-			  $("#current-location").click(function (){
-				  $("#current-location").button("loading");
-				  $("#menu-map").slideDown();
-				  google.maps.event.addDomListener(window, 'load', getCurrentLocation(function(){
-					  console.log("resetting button");
-					  $("#current-location").button("reset");
-					  $("input[name='start-location']").val("Current Location");
-					  $("input[name='start-location']").addClass("input-primary");
-					  $("#current-location-group").addClass("info");
-					  $("#current-location").addClass("btn-primary");
-					  $("#current-location i").addClass("icon-white");
-					  refreshSpy();
-				  }));
-			  });
+			$( "#sortable" ).sortable();
+			$( "#sortable" ).disableSelection();
+			$( "#map" ).hide();
+			$( "#options" ).hide();
+			$( "#more" ).hide();
+		   	$( "#q1" ).hide();
+			$( "#q2" ).hide();
+			$( "#menu-map").hide();
+			$( "#composer-icons").hide();
+			$( "#menu-options").hide();
+			$( "#menu-more").hide(); 
+			$( "#map-row div.img").draggable({ opacity: 0.7, helper: "original" });
+		   
+			$("#current-location").popover({trigger: 'hover', delay: { show: 900, hide: 10 }});
+				  $("#current-location").click(function (){
+					  $("#current-location").button("loading");
+					  $("#menu-map").slideDown();
+					  google.maps.event.addDomListener(window, 'load', getCurrentLocation(function(pos){
+						  console.log("resetting button");
+						  $("#current-location").button("reset");
+						  $("input[name='start-location']").val("Current Location");
+						  $("input[name='start-location']").addClass("input-primary");
+						  $("#current-location-group").addClass("info");
+						  $("#current-location").addClass("btn-primary");
+						  $("#current-location i").addClass("icon-white");
+						  getAddress(pos, function(data){
+						  	$("#location").val(data);
+						  });	
+						  refreshSpy();
+					  }));
+			});
 		  
 		
-		  $('#find').on('click', function(event) {
+		  	$('#find').on('click', function(event) {
 				  event.preventDefault();
 				  console.log("loading");
 				  
 				  $("#menu-map").slideDown();
 				var address = $('#location').val();
-				getAddress(address);
+					getGPS(address, function(data){
+						slideMapDown(data);
+					});
 				refreshSpy();
 				});
 				
-		  clicks = 0;
-		  $('#next').on('click', function(event) {
+		  	clicks = 0;
+		  	$('#next').on('click', function(event) {
 				  event.preventDefault();
 				  if(clicks == 0)
 				  {
@@ -321,251 +318,276 @@
 						  refreshSpy()
 				  }
 				  clicks++;
-		  });
+		  	});
 		  
-		  $('#composer-icons button').click(function(){
+		  	$('#composer-icons button').click(function(){
 			  console.log('icon click');
 			  setDrawing($(this).find("img").attr('src'));
-		  });
-		  
-	});
-	
-			function slideMapDown(pos)
-			{
-				var mapRow = $("#map");
-					mapRow.show("normal", function()
-					{
-						scroll("#map");
-						TweenMax.to(mapRow, 1, {
-						 height:"400px", ease:Quad.easeOut, onComplete: function()
-						 {
-							 google.maps.event.trigger(gmap, 'resize');
-							 gmap.setZoom( gmap.getZoom() );
-							 gmap.setCenter(pos);
-							 var marker = new google.maps.Marker({
-								 map: gmap,
-								 position: pos
-							 });
-							 $("#q1").slideDown();
-						 }});
-				});        
-			}
-				
-			function getAddress(address){
-			geocoder.geocode( { 'address': address}, function(results, status) 
-			{
-			  if (status == google.maps.GeocoderStatus.OK) 
-			  {
-					slideMapDown(results[0].geometry.location);
-			  
+		  	}); 
+		});
+	 
+		function initialize() 
+		{
+			geocoder = new google.maps.Geocoder();
+			pos = new google.maps.LatLng(60, 50);
+			mapDiv = document.getElementById('map-canvas');
+			
+			var mapOptions = {
+			    zoom: 20,
+			    center: pos,
+			    panControl: true,
+			    zoomControl: true,
+			    scaleControl: true,
+			    mapTypeControl: true,
+			    streetViewControl: true,
+			    overviewMapControl: false,
+			    mapTypeId: google.maps.MapTypeId.SATELLITE
 			  }
-			  else 
-			  {
-				console.log(status);
-			  }
-			console.log(address);
-				 });
-			}
-			
-			function getCurrentLocation(callback){
-			navigator.geolocation.getCurrentPosition(function(position){
-				
-				var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
-				
-				slideMapDown(pos);    
-				
-				callback();
-			
-			
-			}, displayError);
-			
-			}
-			
-			function displayError(error) {
-			  var errors = { 
-				1: 'Permission denied',
-				2: 'Position unavailable',
-				3: 'Request timeout'
-			  };
-			  alert("Error: " + errors[error.code]);
-			} 		      
 			  
-			  
-			   
-			   
-			  function initialize() {
-				geocoder = new google.maps.Geocoder();
-				  pos = new google.maps.LatLng(60, 50);
-				mapDiv = document.getElementById('map-canvas');
-				gmap = new google.maps.Map(mapDiv, {
-				  center: pos,
-				  zoom: 20,
-				  mapTypeId: google.maps.MapTypeId.SATELLITE 
-				});
-				var marker = new google.maps.Marker({
+			gmap = new google.maps.Map(mapDiv, mapOptions);
+			
+			var marker = new google.maps.Marker({
 				  map: gmap,
 				  position: pos,
 				  draggable: false
-				});
-				
-			   drawingManager = new google.maps.drawing.DrawingManager();
-			   drawingManager.setMap(gmap);
-			   addPolygonDrawing();
-			   
-			   google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
+			});
+			
+			drawingManager = new google.maps.drawing.DrawingManager();
+			drawingManager.setMap(gmap);
+			addPolygonDrawing();
+			 
+			google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
 					  console.log(polygon);
 					   $('#q1').slideUp();
 					   $('#composer-icons').slideDown();
 					   removePolygonDrawing();
-			   });
-			   i = 0;
-			   google.maps.event.addListener(gmap, 'mouseout', function(event) {
-					  console.log(event);
-					  console.log("Mouse Dropped!" + i++);
-			   });
+			});
 				
-				   var weatherLayer = new google.maps.weather.WeatherLayer({
-					temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
+			var weatherLayer = new google.maps.weather.WeatherLayer({
+			 		temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
 					});
-				weatherLayer.setMap(gmap);
+			weatherLayer.setMap(gmap);
 				
-				var cloudLayer = new google.maps.weather.CloudLayer();
+			var cloudLayer = new google.maps.weather.CloudLayer();
 				cloudLayer.setMap(gmap);
 				
-				//windspeedLayer = new google.maps.weather.WeatherConditions();
-				//console.log(windspeedLayer);
-				//windspeedLayer.setMap(map);
+			var heatmapData = [
+			  new google.maps.LatLng(37.782, -122.447),
+			  new google.maps.LatLng(37.782, -122.445),
+			  new google.maps.LatLng(37.782, -122.443),
+			  new google.maps.LatLng(37.782, -122.441),
+			  new google.maps.LatLng(37.782, -122.439),
+			  new google.maps.LatLng(37.782, -122.437),
+			  new google.maps.LatLng(37.782, -122.435),
+			  new google.maps.LatLng(37.785, -122.447),
+			  new google.maps.LatLng(37.785, -122.445),
+			  new google.maps.LatLng(37.785, -122.443),
+			  new google.maps.LatLng(37.785, -122.441),
+			  new google.maps.LatLng(37.785, -122.439),
+			  new google.maps.LatLng(37.785, -122.437),
+			  new google.maps.LatLng(37.785, -122.435)
+			];
+				
+			var heatmap = new google.maps.visualization.HeatmapLayer({
+			  data: heatmapData
+			});
+			heatmap.setMap(gmap);
 				
 				
-				 google.maps.event.addListener(gmap, 'click', function(event) {
-						addMarker(event.latLng);
-				});
-			  } 
-			  
-			  
-			  
-			  
-			   function setDrawing(icon) {
-				drawingManager.setOptions({
-				   drawingMode: google.maps.drawing.OverlayType.MARKER,
-				   drawingControl: true,
-				   drawingControlOptions: {
-					 position: google.maps.ControlPosition.TOP_CENTER,
-					 drawingModes: [
-					   google.maps.drawing.OverlayType.MARKER,
-					   google.maps.drawing.OverlayType.POLYGON,
-					 ]
-				   },
-				   markerOptions: {
-					 icon: icon,
-					 draggable: true
-				   }
-				 });
+			google.maps.event.addListener(gmap, 'click', function(event) {
+				addMarker(event.latLng);
+			});
 				
-			   }
-			   
-			   function removePolygonDrawing()
-			   {
-				   drawingManager.setOptions({
-					 drawingMode: google.maps.drawing.OverlayType.MARKER,
-					 drawingControl: true,
-					 drawingControlOptions: {
-					   position: google.maps.ControlPosition.TOP_CENTER,
-					   drawingModes: [google.maps.drawing.OverlayType.MARKER]
-					 }
-				   });
-			   }
-			   
-			   function addPolygonDrawing()
-			   {
-				   drawingManager.setOptions({
-					 drawingMode: google.maps.drawing.OverlayType.POLYGON,
-					 drawingControl: true,
-					 drawingControlOptions: {
-					   position: google.maps.ControlPosition.TOP_CENTER,
-					   drawingModes: [google.maps.drawing.OverlayType.POLYGON]
-					 }
-				   });
-			   }
-			   
-			  function addMarker(location) {
+			var bikeLayer = new google.maps.BicyclingLayer();
+			bikeLayer.setMap(map);	
+		} 
+		
+		google.maps.event.addDomListener(window, 'load', initialize);
+		
+		function slideMapDown(pos)
+		{
+			var mapRow = $("#map");
+			mapRow.show("normal", function()
+			{
+				scroll("#map");
+				TweenMax.to(mapRow, 1, {
+				 height:"400px", ease:Quad.easeOut, onComplete: function()
+				 {
+					 google.maps.event.trigger(gmap, 'resize');
+					 gmap.setZoom( gmap.getZoom() );
+					 gmap.setCenter(pos);
+					 var marker = new google.maps.Marker({
+						 map: gmap,
+						 position: pos
+					 });
+					 $("#q1").slideDown();
+				 }});
+			});        
+		}
+			
+		function getGPS(address, output)
+		{
+		    geocoder.geocode( { 'address': address}, function(results, status) 
+		        {
+		          if (status == google.maps.GeocoderStatus.OK) 
+		          {
+		          	
+		          	output(results[0].geometry.location);
+		          }
+		          else 
+		          {
+		              console.log(status);
+		          }
+		        }
+		    );
+		}
+			
+		function getAddress(location, output)
+		{
+			var lat = location.coords.latitude;
+			var lng = location.coords.longitude;
+		    geocoder.geocode( { 'address': lat +"," + lng }, function(results, status)
+		        {
+		          if (status == google.maps.GeocoderStatus.OK)
+		          {
+			          	output(results[0].formatted_address);
+		          }
+		          else
+		          {
+		          		console.log(status);
+		          }
+		        }
+		    );
+		}
+			
+		function getCurrentLocation(callback)
+		{
+			navigator.geolocation.getCurrentPosition(function(position){
+				var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				slideMapDown(pos);    
+				callback(pos);
+				console.log(pos);
+			}, displayError);
+		}
+			
+		function displayError(error) 
+		{
+		  var errors = { 
+			1: 'Permission denied',
+			2: 'Position unavailable',
+			3: 'Request timeout'
+		  };
+		  alert("Error: " + errors[error.code]);
+		} 		      
 			  
-					var marker = new google.maps.Marker({
-								position: location,
-								map: gmap,
-								icon: image,
-								title: office[0],
-								zIndex: office[3]
-							});
+		function setDrawing(icon) 
+		{
+			drawingManager.setOptions({
+			   drawingMode: google.maps.drawing.OverlayType.MARKER,
+			   drawingControl: true,
+			   drawingControlOptions: {
+				 position: google.maps.ControlPosition.TOP_CENTER,
+				 drawingModes: [
+				   google.maps.drawing.OverlayType.MARKER,
+				   google.maps.drawing.OverlayType.POLYGON,
+				 ]
+			   },
+			   markerOptions: {
+				 icon: icon,
+				 draggable: true
+			   }
+		 	});
+	   	}
+			   
+	   	function removePolygonDrawing()
+	   	{
+		   drawingManager.setOptions({
+			 drawingMode: google.maps.drawing.OverlayType.MARKER,
+			 drawingControl: true,
+			 drawingControlOptions: {
+			   position: google.maps.ControlPosition.TOP_CENTER,
+			   drawingModes: [google.maps.drawing.OverlayType.MARKER]
+			 }
+		   });
+	   	}
+	   
+	   	function addPolygonDrawing()
+	   	{
+		   drawingManager.setOptions({
+			 drawingMode: google.maps.drawing.OverlayType.POLYGON,
+			 drawingControl: true,
+			 drawingControlOptions: {
+			   position: google.maps.ControlPosition.TOP_CENTER,
+			   drawingModes: [google.maps.drawing.OverlayType.POLYGON]
+			 }
+		   });
+	   	}
+			   
+		function addMarker(location) 
+		{
+			  
+			var marker = new google.maps.Marker({
+						position: location,
+						map: gmap
+					});
+			
+			var contentString = "Hello!!!";
+			var infowindow = new google.maps.InfoWindow;
+			
+			bindInfoW(marker, contentString, infowindow);
 					
-					var contentString = "Hello!!!";
-					var infowindow = new google.maps.InfoWindow;
+		}
 					
-					bindInfoW(marker, contentString, infowindow);
-					
-			  }
-					
-			  function bindInfoW(marker, contentString, infowindow)
-			  {
-							google.maps.event.addListener(marker, 'click', function() {
-								infowindow.setContent(contentString);
-								infowindow.open(map, marker);
-							});
-			  }
+	  	function bindInfoW(marker, contentString, infowindow)
+	  	{
+					google.maps.event.addListener(marker, 'click', function() {
+						infowindow.setContent(contentString);
+						infowindow.open(gmap, marker);
+					});
+	  	}
 							  
-				// Removes the overlays from the map, but keeps them in the array
-				function clearOverlays() {
-				  if (markersArray) {
-					for (i in markersArray) {
-					  markersArray[i].setMap(null);
-					}
-				  }
-				}
-				
-				// Shows any overlays currently in the array
-				function showOverlays() {
-				  if (markersArray) {
-					for (i in markersArray) {
-					  markersArray[i].setMap(gmap);
-					}
-				  }
-				}
-				
-				// Deletes all markers in the array by removing references to them
-				function deleteOverlays() {
-				  if (markersArray) {
-					for (i in markersArray) {
-					  markersArray[i].setMap(null);
-					}
-					markersArray.length = 0;
-				  }
-				}
-		
-			  google.maps.event.addDomListener(window, 'load', initialize);
-		
-			function scroll(id)
-			{
-				$("html, body").animate({ scrollTop: $(id).offset().top - 75}, 1000);
+		// Removes the overlays from the map, but keeps them in the array
+		function clearOverlays() {
+		  if (markersArray) {
+			for (i in markersArray) {
+			  markersArray[i].setMap(null);
 			}
-			
-			function refreshSpy()
-			{
-				$('[data-spy="scroll"]').each(function () {
-				  $(this).scrollspy('refresh');
-				});
-			
+		  }
+		}
+				
+		// Shows any overlays currently in the array
+		function showOverlays() {
+		  if (markersArray) {
+			for (i in markersArray) {
+			  markersArray[i].setMap(gmap);
 			}
+		  }
+		}
+				
+		// Deletes all markers in the array by removing references to them
+		function deleteOverlays() {
+		  if (markersArray) {
+			for (i in markersArray) {
+			  markersArray[i].setMap(null);
+			}
+			markersArray.length = 0;
+		  }
+		}
 		
 		
+		function scroll(id)
+		{
+			$("html, body").animate({ scrollTop: $(id).offset().top - 75}, 1000);
+		}
+			
+		function refreshSpy()
+		{
+			$('[data-spy="scroll"]').each(function () {
+			  $(this).scrollspy('refresh');
+			});
 		
-		
-		
-		
-		
-		
-		
-		
-		</script>
+		}
+	</script>
 	   
 		
 		
