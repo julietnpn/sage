@@ -108,16 +108,20 @@
 							<div id="composer-icons"  style="display:none;">
 								<h4>Key Species</h4>
 								<div class="btn-group btn-group-vertical" data-toggle="buttons-radio">
-								  <button class="btn" data-category="primary"><img src="img/Tree-icon.png"><p name="Orange">Orange</p></button>
-								  <button class="btn" data-category="primary"><img src="img/Tree-icon.png"><p name="Avacado">Avacado</p></button>
-								  <button class="btn" data-category="primary"><img src="img/Tree-icon.png"><p name="Permisson">Persimmon</p></button>
+								  <button class="btn" data-category="key"><img src="img/tree100.png"><p name="avacado">Avacado Tree</p></button>
+								  <button class="btn" data-category="key"><img src="img/tree100.png"><p name="orange">Orange Tree</p></button>
+								  <button class="btn" data-category="key"><img src="img/tree100.png"><p name="persimmon">Persimmon Tree</p></button>
 								</div>
 								<h4>Supporting Species</h4>
 								<div class="btn-group btn-group-vertical" data-toggle="buttons-radio">
-									<button class="btn" data-category="n-type"><img src="img/plant.png"><p name="Pea">Pea</p></button>
-									<button class="btn" data-category="p-type"><img src="img/plant.png"><p name="Rosemary">Rosemary</p></button>
-									<button class="btn" data-category="p-type"><img src="img/plant.png"><p name="Strawberry">Strawberry</p></button>
-									<button class="btn" data-category="n-type"><img src="img/plant.png"><p name="Lavendar">Lavendar</p></button>
+									<button class="btn" data-category="nitrogen"><img src="img/shrub50.png"><p name="pigeon-peas">Pigeon Peas</p></button>
+									<button class="btn" data-category="nitrogen"><img src="img/herb50.png"><p name="mexican-sunflower">Mexican Sunflower</p></button>
+									<button class="btn" data-category="pests"><img src="img/herb50.png"><p name="comfrey">Comfrey</p></button>
+									<button class="btn" data-category="nitrogen"><img src="img/herb50.png"><p name="chives">Chives</p></button>
+									<button class="btn" data-category="pests"><img src="img/herb50.png"><p name="watercress">Watercress</p></button>
+									<button class="btn" data-category="nitrogen"><img src="img/shrub50.png"><p name="lavendar">Lavendar</p></button>
+									<button class="btn" data-category="pests"><img src="img/herb50.png"><p name="radish">Radish</p></button>
+									<button class="btn" data-category="nitrogen"><img src="img/herb50.png"><p name="green-bean">Green Bean</p></button>
 								</div>
 							</div>
 						</div>
@@ -129,21 +133,13 @@
 					</div>
 					<div class="span2">
 						<div class="container-item">
-						 
-						<p id="temperature">Temperature
-						<i class="icon-fire"></i>
-						<h2>62°</h2>
-						<p id="rainfall">Rain fall
-						<i class="icon-tint"></i>
-						<h2>6 in.</h2>
-						<p id="rainfall">Other
-						<i class="icon-leaf"></i>
-						<i class="icon-globe"></i>
-						</p>
-						
-						
-						
-						
+							<div id="inspector" class="map-item">
+								<img src=""/>
+								<label></label>
+								<div id="more-info">
+								
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -153,10 +149,6 @@
 				<div class="span12 container-item">
 				
 					<div class="span4">
-						<div id="inspector">
-							<label></label>
-							<img src=""/>
-						</div>
 					</div>
 					<div class="span4">
 						<div>
@@ -194,7 +186,7 @@
 						<div id="card2" class="container-item">
 						<div class="container-item">
 							<ul id="sortable-species">
-								<li class="item">Avacodo</li>
+								<li class="item">Avacado</li>
 								<li class="item">Navel Orange</li>
 								<li class="item">Persimmon</li>
 							</ul>
@@ -355,8 +347,25 @@
 		  
 		  	$('#composer-icons button').click(function(){
 			  console.log('icon click');
+			  
 			  setDrawing($(this).find("img").attr('src'), $(this).attr("data-category"), $(this).find("p").attr('name'));
+			  $('#inspector').hide();
 			  $('#inspector label').html($(this).html());
+			  switch ($(this).find("p").attr('name')){
+			  
+				  case 'avacado': 
+						$('#more-info').html("<h4>Commmon Name:</h4> Avocado Tree<h4>Family Name:</h4> Lauraceae <h4>Genus Name:</h4> Persea 	<h4>Species:</h4> Americana 	<h4>Endemic Status:</h4>	Non-Native");
+						break;
+				  case 'persimmon':
+				  		$('#more-info').html("<h4>Commmon Name:</h4> Persimmon Tree<h4>Family Name:</h4> Ebenaceae <h4>Genus Name:</h4> Diospyros	<h4>Species:</h4> Americana <h4>Endemic Status:</h4>	Non-Native");
+				  		break;
+				  case 'orange':
+				  		$('#more-info').html("<h4>Commmon Name:</h4> Orange Tree	<h4> Family Name:</h4> Rutaceae	<h4> Genus Name:</h4> Citrus	<h4>Species:</h4> C. × Sinensis	<h4>Endemic Status:</h4>	Non-native"	);
+				  		break;	  			
+			  }			  	
+			  $('#inspector').slideDown('normal', function(){
+			  	$('#more-info').slideDown();
+			  });
 		  	}); 
 		});
 	 	var gmap;
@@ -376,7 +385,7 @@
 			    zoomControl: true,
 			    scaleControl: true,
 			    mapTypeControl: true,
-			    streetViewControl: true,
+			    streetViewControl: false,
 			    overviewMapControl: false,
 			    mapTypeId: google.maps.MapTypeId.SATELLITE
 			  }
@@ -407,6 +416,7 @@
 			  }
 			  else if (event.type == google.maps.drawing.OverlayType.POLYGON) {
 				  	console.log(event);
+				  	event.overlay.setOptions({fillColor: '#000000'});
 				   	$('#q1').slideUp(function(){
 				   		$('#composer-icons').slideDown(function(){
 				   			$('#dashboard').slideDown();
@@ -437,23 +447,22 @@
 			{
 				scroll("#map");
 				TweenMax.to(mapRow, 1, {
-				 height:"400px", ease:Quad.easeOut, onComplete: function()
-				 {
-					 google.maps.event.trigger(gmap, 'resize');
-					 gmap.setZoom( gmap.getZoom() );
-					 gmap.setCenter(pos);
-					 var marker = new google.maps.Marker({
-						 map: gmap,
-						 position: pos,
-						 animation: google.maps.Animation.DROP
-					 });
-					 google.maps.event.addListener(gmap, 'idle', function() {
-					  	$("#q1").slideDown("normal", function(){
-					  		$(this).addClass("alert-success");
-					  	});
-					 });
-				 }});
-			});        
+					 height:"400px", ease:Quad.easeOut, onComplete: function()
+					 {
+						 google.maps.event.trigger(gmap, 'resize');
+						 gmap.setZoom( gmap.getZoom() );
+						 gmap.setCenter(pos);
+						 var marker = new google.maps.Marker({
+							 map: gmap,
+							 position: pos,
+							 animation: google.maps.Animation.DROP
+						 });
+						 $("#q1").slideDown("normal", function(){
+						 	$(this).addClass("alert-success");
+						 });
+					 }
+				});  
+			});     
 		}
 			
 		function getGPS(address, output)
@@ -538,6 +547,9 @@
 			 drawingControlOptions: {
 			   position: google.maps.ControlPosition.TOP_CENTER,
 			   drawingModes: [google.maps.drawing.OverlayType.MARKER]
+			 },
+			 markerOptions: {
+			 	icon: 'img/null.png'
 			 }
 		   });
 	   	}
@@ -604,12 +616,15 @@
 		
 	 	function updateProgressBars()
 	 	{
-	 		$(".bar").each(function(){
-	 			width = [(markersArray.length)/4]*100;
-	 			$(this).css("width", width + "%");
-	 		});	 	
-	 	
-	 	
+	 		key_size = _.size(_.where(markersArray, {title: "key"}));
+	 		n_size = _.size(_.where(markersArray, {title: "nitrogen"}));
+	 		p_size = _.size(_.where(markersArray, {title: "pests"}));
+	 		
+	 		n_width = (n_size/(key_size*4))*100;
+	 		p_width = (p_size/(key_size*3))*100;
+	 		
+	 		$("#nitrogen").css("width", n_width + "%");
+	 		$("#pests").css("width", p_width + "%");
 	 	
 	 	}
 	</script>

@@ -49,3 +49,7 @@ body, .jumbotron {
 	width: 100%;
 	
 }
+
+#composer-icons img {
+	width: 50px;
+}
