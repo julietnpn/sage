@@ -44,3 +44,8 @@ body, .jumbotron {
   max-width: none;
   
 }
+
+#composer-icons .btn{
+	width: 100%;
+	
+}
