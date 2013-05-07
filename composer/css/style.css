@@ -46,10 +46,19 @@ body, .jumbotron {
 }
 
 #composer-icons .btn{
-	width: 100%;
+	width: 150px;
 	
 }
 
-#composer-icons img {
+#composer-icons img{
 	width: 50px;
+}
+
+#inspector img {
+	width: 100px;
+}
+
+#more-info {
+	padding-left: 10px;
+	
 }
