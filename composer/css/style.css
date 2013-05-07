@@ -1,123 +1,64 @@
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td
-{
-  margin:0;
-  padding:0;
-  border:0;
-  outline:0;
-  font-size:100%;
-  vertical-align:baseline;
+body, .jumbotron {
+    padding-top: 60px;
+    padding-bottom: 40px;
+    background: url(../img/background.jpg) repeat-y center top;
+}
+.container-item {
+	padding: 10px;
+	overflow: scroll;
+	height: 100%;
+	font-size: 18px;
+	font-weight: 200;
+	line-height: 30px;
+	color: inherit;
+	background-color: #eeeeee;
+	-webkit-border-radius: 6px;
+	   -moz-border-radius: 6px;
+	        border-radius: 6px;
 }
 
-html {
-	background: url(../img/background.jpg) repeat-y center top;
+.row{
+	margin-bottom: 30px;
 }
 
-a {
-	text-decoration: none;
+.row-item {
+	overflow: scroll;
 }
 
-body
-{
-  line-height:1;
+.welcome-item {
+	height: 200px;
+	overflow: scroll;
 }
 
-ol,ul
-{
-  list-style:none;
+.map-item {
+	height: 400px;
+	overflow: scroll;
 }
 
-blockquote,q
-{
-  quotes:none;
+.options-item {
+	height: 250px;
+	overflow: scroll;
 }
 
-blockquote:before,blockquote:after,q:before,q:after
-{
-  content:'';
-  content:none;
+#map-canvas img {
+  max-width: none;
+  
 }
 
-/* remember to define focus styles! */
-:focus
-{
-  outline:0;
+#composer-icons .btn{
+	width: 150px;
+	
 }
 
-/* remember to highlight inserts somehow! */
-ins
-{
-  text-decoration:none;
+#composer-icons img{
+	width: 50px;
 }
 
-del
-{
-  text-decoration:line-through;
+#inspector img {
+	width: 100px;
 }
 
-/* tables still need 'cellspacing="0"' in the markup */
-table
-{
-  border-collapse:collapse;
-  border-spacing:0;
+#more-info {
+	padding-left: 10px;
+	
 }
-
-
-/* wrapper */
-
-.contain {
-	width: 1500px;
-	margin: 20px auto;
-}
-
-.top_module {
-	position: relative;
-	width: 80%;
-	height: 530px;
-	background: #f8f8f8;
-	margin: 0 auto 0;
-	z-index: 0;
-	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.13);
-}
-
-.bottom_module {
-	width: 100%;
-	height: 450px;
-	background: white;
-	z-index: -1;
-	margin-top: -60px;
-	padding-top: 80px;
-}
-
-footer {
-	height: 50px;
-}
-
-/* text */
-
-.pgc_title {
-	font: 700 20px "Gotham HTF";
-	letter-spacing: 5px;
-	color: white;
-	margin-bottom: 80px;
-	-webkit-font-smoothing: antialiased;
-}
-
-.pgc_footer {
-	font: 500 15px "Gotham HTF";
-	letter-spacing: 3px;
-	color: white;
-	margin: 30px auto 0;
-	-webkit-font-smoothing: antialiased;
-}
-
-.big {
-	font-size: 30px;
-	border-style: hidden;
-	-moz-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.36);
-	-webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.36);
-	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.36);
-	float: left;
-	clear: left;
-	width: 400px;
-}
-
