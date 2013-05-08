@@ -269,6 +269,8 @@
 	
 	<script>
 	$(document).ready(function(){
+	
+		//set everything initially to hide. This was slow, so instead I just added style="display:none;" for all the things that needed to be hidden.
 		$( "#sortable" ).sortable();
 		$( "#sortable" ).disableSelection();
 		$( "#map" ).hide();
@@ -283,28 +285,32 @@
 		$( "#dashboard" ).hide();
 		$( "#map-row div.img").draggable({ opacity: 0.7, helper: "original" });
 	   
+	   //displays the pop up over the current location button, and 
 		$("#current-location").popover({trigger: 'hover', delay: { show: 900, hide: 10 }});
-			  $("#current-location").click(function (){
-				  $("#current-location").button("loading");
-				  $("#menu-map").slideDown();
-				  google.maps.event.addDomListener(window, 'load', getCurrentLocation(function(pos){
-					  console.log("resetting button");
-					  $("#current-location").button("reset");
-					  $("input[name='start-location']").val("Current Location");
-					  $("input[name='start-location']").addClass("input-primary");
-					  $("#current-location-group").addClass("info");
-					  $("#current-location").addClass("btn-primary");
-					  $("#current-location i").addClass("icon-white");
-					  
-					  console.log("before scroll");
-					  console.log(pos);
-					  getAddress(pos, function(data){
-					  	console.log(data);
-					  	$("#location").val(data);
-					  });
-					  console.log("scroll");
-					  refreshSpy();
-				  }));
+		//click event for current location
+	    $("#current-location").click(function (){
+	    	  //sets the state of the button to loading.
+			  $("#current-location").button("loading");
+			  //slide down the map menu for the navigation menu
+			  $("#menu-map").slideDown();
+			  google.maps.event.addDomListener(window, 'load', getCurrentLocation(function(pos){
+				  console.log("resetting button");
+				  $("#current-location").button("reset");
+				  $("input[name='start-location']").val("Current Location");
+				  $("input[name='start-location']").addClass("input-primary");
+				  $("#current-location-group").addClass("info");
+				  $("#current-location").addClass("btn-primary");
+				  $("#current-location i").addClass("icon-white");
+				  
+				  console.log("before scroll");
+				  console.log(pos);
+				  getAddress(pos, function(data){
+				  	console.log(data);
+				  	$("#location").val(data);
+				  });
+				  console.log("scroll");
+				  refreshSpy();
+			  }));
 		});
 	  
 	
