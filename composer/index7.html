@@ -6,7 +6,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Plant Guild Composer</title>
+	<title></title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 	
@@ -108,21 +108,19 @@
 						<div id="composer-icons"  style="display:none;">
 							<h4>Key Species</h4>
 							<div class="btn-group btn-group-vertical" data-toggle="buttons-radio">
-							    <button class="btn" data-category="key" data-size="50" data-name="Avocado Tree"><img src="img/tree.png"><p name="avocado">Avocado Tree</p></button>
-							    <button class="btn" data-category="key" data-size="50" data-name="Orange Tree"><img src="img/tree.png"><p name="orange">Orange Tree</p></button>
-							    <button class="btn" data-category="key" data-size="50" data-name="Persimmon Tree"><img src="img/tree.png"><p name="persimmon">Persimmon Tree</p></button>
-								<h4>Support Species</h4>
-								<h5 class="text-info">Nitrogen</h5>
-									<button class="btn" data-category="nitrogen" data-size="10" data-name="Watercress"><img src="img/herb.png"><p name="nitrogen">Watercress</p></button>
-									<button class="btn" data-category="nitrogen" data-size="10" data-name="Pigeon Peas"><img src="img/shrub.png"><p name="nitrogen">Pigeon Peas</p></button>
-									<button class="btn" data-category="nitrogen" data-size="15" data-name="Mexican Sunflower"><img src="img/herb.png"><p name="nitrogen">Mexican Sunflower</p></button>
-									<button class="btn" data-category="nitrogen" data-size="15" data-name="Green Bean"><img src="img/understory.png"><p name="nitrogen">Green Bean</p></button>
-								<h5 class="text-success">Pest Control</h5>
-									<button class="btn" data-category="pests" data-size="15" data-name="Radish"><img src="img/herb.png"><p name="pests">Radish</p></button>
-									<button class="btn" data-category="pests" data-size="10" data-name="Comfrey"><img src="img/shrub.png"><p name="pests">Comfrey</p></button>
-									<button class="btn" data-category="pests" data-size="15" data-name="Chives"><img src="img/understory.png"><p name="pests">Chives</p></button>
-									<button class="btn" data-category="pests" data-size="15" data-name="Lavendar"><img src="img/herb.png"><p name="pests">Lavender</p></button>
-								</div>
+							  <button class="btn" data-category="key" data-size="50"><img src="img/tree.png"><p name="avocado">Avocado Tree</p></button>
+							  <button class="btn" data-category="key" data-size="50"><img src="img/understory.png"><p name="orange">Orange Tree</p></button>
+							  <button class="btn" data-category="key" data-size="50"><img src="img/tree.png"><p name="persimmon">Persimmon Tree</p></button>
+							<h4>Support Species</h4>
+								<button class="btn" data-category="nitrogen" data-size="20"><img src="img/shrub.png"><p name="pigeon-peas">Pigeon Peas</p></button>
+								<button class="btn" data-category="nitrogen" data-size="15"><img src="img/herb.png"><p name="mexican-sunflower">Mexican Sunflower</p></button>
+								<button class="btn" data-category="pests" data-size="20"><img src="img/herb.png"><p name="comfrey">Comfrey</p></button>
+								<button class="btn" data-category="nitrogen" data-size="25"><img src="img/herb.png"><p name="chives">Chives</p></button>
+								<button class="btn" data-category="pests" data-size="20"><img src="img/herb.png"><p name="watercress">Watercress</p></button>
+								<button class="btn" data-category="nitrogen" data-size="15"><img src="img/shrub.png"><p name="lavender">Lavender</p></button>
+								<button class="btn" data-category="pests" data-size="25"><img src="img/herb.png"><p name="radish">Radish</p></button>
+								<button class="btn" data-category="nitrogen" data-size="15"><img src="img/herb.png"><p name="green-bean">Green Bean</p></button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -159,7 +157,7 @@
 					<div class="progress">
 					  <div class="nitrogen-bar bar bar-info" style="width:0%"></div>
 					</div>
-					<label class="control-label">Pest Control Level</label>
+					<label class="control-label">Pest Repellant Level</label>
 					<div class="progress">
 					  <div class="pests-bar bar bar-success" style="width:0%"></div>
 					</div>
@@ -269,8 +267,6 @@
 	
 	<script>
 	$(document).ready(function(){
-	
-		//set everything initially to hide. This was slow, so instead I just added style="display:none;" for all the things that needed to be hidden.
 		$( "#sortable" ).sortable();
 		$( "#sortable" ).disableSelection();
 		$( "#map" ).hide();
@@ -285,32 +281,28 @@
 		$( "#dashboard" ).hide();
 		$( "#map-row div.img").draggable({ opacity: 0.7, helper: "original" });
 	   
-	   //displays the pop up over the current location button, and 
 		$("#current-location").popover({trigger: 'hover', delay: { show: 900, hide: 10 }});
-		//click event for current location
-	    $("#current-location").click(function (){
-	    	  //sets the state of the button to loading.
-			  $("#current-location").button("loading");
-			  //slide down the map menu for the navigation menu
-			  $("#menu-map").slideDown();
-			  google.maps.event.addDomListener(window, 'load', getCurrentLocation(function(pos){
-				  console.log("resetting button");
-				  $("#current-location").button("reset");
-				  $("input[name='start-location']").val("Current Location");
-				  $("input[name='start-location']").addClass("input-primary");
-				  $("#current-location-group").addClass("info");
-				  $("#current-location").addClass("btn-primary");
-				  $("#current-location i").addClass("icon-white");
-				  
-				  console.log("before scroll");
-				  console.log(pos);
-				  getAddress(pos, function(data){
-				  	console.log(data);
-				  	$("#location").val(data);
-				  });
-				  console.log("scroll");
-				  refreshSpy();
-			  }));
+			  $("#current-location").click(function (){
+				  $("#current-location").button("loading");
+				  $("#menu-map").slideDown();
+				  google.maps.event.addDomListener(window, 'load', getCurrentLocation(function(pos){
+					  console.log("resetting button");
+					  $("#current-location").button("reset");
+					  $("input[name='start-location']").val("Current Location");
+					  $("input[name='start-location']").addClass("input-primary");
+					  $("#current-location-group").addClass("info");
+					  $("#current-location").addClass("btn-primary");
+					  $("#current-location i").addClass("icon-white");
+					  
+					  console.log("before scroll");
+					  console.log(pos);
+					  getAddress(pos, function(data){
+					  	console.log(data);
+					  	$("#location").val(data);
+					  });
+					  console.log("scroll");
+					  refreshSpy();
+				  }));
 		});
 	  
 	
@@ -376,14 +368,6 @@
 			  		content = '<h4 class="media-heading">Common Name:</h4> Orange Tree	<h4> Family Name:</h4> Rutaceae	<h4> Genus Name:</h4> Citrus	<h4>Species:</h4> C. × Sinensis	<h4>Endemic Status:</h4>	Non-native';
 			  		$('#more-info').html(content);
 			  		break;
-			  case 'nitrogen':
-				  content = '<h4 class="media-heading">Guild Role:</h4> Nitrogen Fixation';
-				  $('#more-info').html(content);
-				  break;			  
-			  case 'pests':
-				  content = '<h4 class="media-heading">Guild Role:</h4> Pest Control';
-				  $('#more-info').html(content);
-				  break;
 			  default:
 			  		$('#more-info').html(" ");
 			  		break;	  			
@@ -419,7 +403,7 @@
 		  }
 		
 		gmap = new google.maps.Map(mapDiv, mapOptions);
-		//gmap.setTilt(0);
+		gmap.setTilt(0);
 		drawingManager = new google.maps.drawing.DrawingManager();
 		drawingManager.setMap(gmap);			
 		
@@ -438,21 +422,16 @@
 		    }
 		    else{
 			    console.log(event);
-			    var icon_midpoint = event.overlay.getIcon().size.height/2;
-			    console.log(icon_midpoint);
 			    $("#q1").slideUp();
 			    var size = $("#composer-icons button.active").attr("data-size");
-			    var name = $("#composer-icons button.active").attr("data-name");
 			    console.log("size:" + size);
-			    addMarker(event.overlay, size, size, name);
+			    addMarker(event.overlay, size, size);
 			    var infowindow = new google.maps.InfoWindow({
-			      content: '<div id="content" onmouseover="updateContent()"><h4>'+ name+'</h4><label class="control-label">Guild Viability</label><div class="progress"><div class="nitrogen-bar-total bar bar-info" style="width:0%"></div><div class="pests-bar-total bar bar-success" style="width:0%"></div></div>',
-			      maxWidth: 10,
-			      pixelOffset: new google.maps.Size(0, icon_midpoint)
+			      content: '<div id="content" onmouseover="updateContent()"><h1>'+ event.overlay.title+'</h1><label class="control-label">Nitrogen</label><div class="progress progress-info"><div class="nitrogen-bar bar" style="width:0%"></div></div><label class="control-label">Pests</label><div class="progress progress-success"><div class="pests-bar bar" style="width:0%"></div></div></div>',
+			      maxWidth: 10
 			    });
 			    google.maps.event.addListener(event.overlay,'click',function(){
-			    	infowindow.open(gmap,event.overlay);
-			    	updateProgressBars();
+			      infowindow.open(gmap,event.overlay);
 			    });
 			}
 		  }
@@ -696,8 +675,8 @@
    	}
    	
    	// Removes the overlays from the map, but keeps them in the array
-   	function addMarker(marker, width, height, name) {
-   	  markersArray.push({'marker': marker, 'width': width, 'height':height, 'name':name});
+   	function addMarker(marker, width, height) {
+   	  markersArray.push({'marker': marker, 'width': width, 'height':height});
    	  updateProgressBars();
    	}
 						  
@@ -753,15 +732,10 @@
  		n_width = (n_size/(key_size*4))*100;
  		p_width = (p_size/(key_size*3))*100;
  		
- 		if(n_width > 100)
- 			n_width = 100;
- 		if(p_width > 100)
- 			p_width = 100;
  		$(".nitrogen-bar").css("width", n_width + "%");
+ 		$(".nitrogen-filler-bar").css("width", (100 - n_width) + "%");
  		$(".pests-bar").css("width", p_width + "%");
- 		
- 		$(".nitrogen-bar-total").css("width", n_width*(4/7) + "%");
- 		$(".pests-bar-total").css("width", p_width*(3/7) + "%");
+ 		$(".pests-filler-bar").css("width", (100 - p_width) + "%");
  	
  	}
 </script>
