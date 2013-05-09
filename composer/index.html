@@ -293,73 +293,71 @@
 			  $("#current-location").button("loading");
 			  //slide down the map menu for the navigation menu
 			  $("#menu-map").slideDown();
+			  //after the load event on the window triggers, call the getCurrentLocation function
 			  google.maps.event.addDomListener(window, 'load', getCurrentLocation(function(pos){
 				  console.log("resetting button");
+				  //reset the loading state on the current location button
 				  $("#current-location").button("reset");
-				  $("input[name='start-location']").val("Current Location");
+				  //set the color of the input to blue
 				  $("input[name='start-location']").addClass("input-primary");
+				  //set the color of the group to blue
 				  $("#current-location-group").addClass("info");
+				  //change the color of the button to blue
 				  $("#current-location").addClass("btn-primary");
+				  //change the color of the icon for current location to white
 				  $("#current-location i").addClass("icon-white");
 				  
-				  console.log("before scroll");
+				  //console.log("before scroll");
 				  console.log(pos);
+				  
+				  //get the address for the gps location and set that in the location input
 				  getAddress(pos, function(data){
 				  	console.log(data);
 				  	$("#location").val(data);
 				  });
-				  console.log("scroll");
+				  //refresh the spy scroller, check bootstrap documentation for spy-scroll
 				  refreshSpy();
 			  }));
 		});
 	  
-	
+		//trigger the onFind event, the search for location button
 	  	$('#find').on('click', function(event) {
-			  event.preventDefault();
-			  
-			  $("#menu-map").slideDown();
+	  		//prevent the page from reloading
+			event.preventDefault();
+			//slide the map menu item from the navigation bar down
+			$("#menu-map").slideDown();
+			//make an address variable with the text from the location input
 			var address = $('#location').val();
+				//get the gps location for the address from google's geolocation service
 				getGPS(address, function(data){
+					//log the return data
 					console.log(data);
+					//slide the map down
 					slideMapDown(data);
 				});
-				
+			//change the drawing tools to include the polygon tool	
 			addPolygonDrawing();
+			//refresh the spy-scroll, check bootstrap docs
 			refreshSpy();
 			});
-			
-			
-	  	clicks = 0;
-	  	$('#next').on('click', function(event) {
-			  event.preventDefault();
-			  if(clicks == 0)
-			  {
-					  
-					  console.log("click next 1");
-					  $("#q2").slideDown();
-					  $("#q1 i").removeClass();
-					  $("#q1").addClass('muted');
-					  $("#q2 i").addClass('icon-arrow-right');
-					  refreshSpy()
-			  }
-			  else if(clicks == 1)
-			  {
-					  console.log("click next 2");
-					  $('#options').slideDown();
-					  $('#menu-options').slideDown();
-					  scroll("#options");
-					  $("#q2").addClass('muted');
-					  $("#q2 i").removeClass();	
-					  refreshSpy()
-			  }
-			  clicks++;
-	  	});
-	  
+	    
+	    //trigger event for selecting plants from the side bar
 	  	$('#composer-icons button').click(function(){
-		  console.log('icon click');
-		  
-		  setDrawing($(this).find("img").attr('src'), $(this).attr("data-category"), $(this).find("p").attr('name'), $(this).attr("data-size"));
+	  	
+		  //make variables from the composer icons html 
+		  //get the source from button's img 
+		  var icon_img = $(this).find("img").attr('src');
+		  //get the category from data-category
+		  var icon_category = $(this).attr("data-category");
+		  //get the name from data-name
+		  var icon_name = $(this).find("p").attr('name');
+		  //get size of icon from data-size
+		  var icon_size = $(this).attr("data-size");
+		  //set the Drawing Manager to the current plant selected
+		  setDrawing(icon_img, icon_category, icon_name, icon_size);
+		  //hide the inspector if there is something already showing
 		  $('#inspector').hide();
+		  //set the inspector to the current button's html
 		  $('#inspector label').html($(this).html());
 		  $('#inspector label').find('img').addClass("img-polaroid");
 		  switch ($(this).find("p").attr('name')){
