@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/style.css?new">
 	<link rel="stylesheet" href="css/main.css">
 
 	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -135,13 +135,15 @@
 					<div class="container-item">
 						<div id="forecast-dash" class="map-item">
 							<h4>Temperature <i class="icon-fire"></i></h4>
-							<h1 id="temperature"></h1>
+							<h2 id="temperature"><span id="value"></span><span class="muted">°F</span></h2>
 							<h4>Humidity <i class="icon-tint"></i></h4>
-							<h1 id="humidity"></h1>
+							<h2 id="humidity"><span id="value"></span><span class="muted">%</span></h2>
 							<h4>Wind Speed <i class="icon-plane"></i></h4>
-							<h1 id="wind-speed"></h1>
+							<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>
 							<h4>Wind Bearing <i class="icon-plane"></i></h4>
-							<h1 id="wind-bearing"></h1>
+							<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
+							  <path d="M25,0 L50,50 L25,35 L0,50 L25,0" />
+							</svg>
 							<h6>Powered by <a href="forecast.io">Forecast.io</a></h6>
 						</div>
 					</div>
@@ -549,14 +551,15 @@
 	{
 		conditions = forecast.getCurrentConditions(lat, long);
 		var temp = conditions.getTemperature();
-		var humidity = conditions.getHumidity();
+		var humidity = (Math.round(conditions.getHumidity()*100));
 		var wind_speed = conditions.getWindSpeed();
 		var wind_bearing = conditions.getWindBearing();
 			
-		$("#temperature").text(temp + "°F");
-		$("#humidity").text(humidity);
-		$("#wind-speed").text(wind_speed + "mph");
-		$("#wind-bearing").text(wind_bearing);
+		$("#temperature #value").text(temp);
+		$("#humidity #value").text(humidity);
+		$("#wind-speed #value").text(wind_speed);
+		$("#wind-bearing").css("transition","all 1s ease-in-out");
+		$("#wind-bearing").css("transform", "rotate("+wind_bearing+"deg)");
 
 	}
 		
