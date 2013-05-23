@@ -133,8 +133,16 @@
 				</div>
 				<div class="span2">
 					<div class="container-item">
-						<div class="map-item">
-							
+						<div id="forecast-dash" class="map-item">
+							<h4>Temperature <i class="icon-fire"></i></h4>
+							<h1 id="temperature"></h1>
+							<h4>Humidity <i class="icon-tint"></i></h4>
+							<h1 id="humidity"></h1>
+							<h4>Wind Speed <i class="icon-plane"></i></h4>
+							<h1 id="wind-speed"></h1>
+							<h4>Wind Bearing <i class="icon-plane"></i></h4>
+							<h1 id="wind-bearing"></h1>
+							<h6>Powered by <a href="forecast.io">Forecast.io</a></h6>
 						</div>
 					</div>
 				</div>
@@ -254,6 +262,7 @@
 	<script src="js/lib/underscore-min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.9.3/TweenMax.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=weather,drawing"></script>
+	<script src="js/forecast.io.js"></script>
 	<!--<script src="js/main.js"></script>-->
 	
 	
@@ -311,6 +320,7 @@
 				  console.log(pos);
 				  
 				  //get the address for the gps location and set that in the location input
+				  //the second argument is a callback function that is triggered after the getAddress method is called
 				  getAddress(pos, function(data){
 				  	console.log(data);
 				  	$("#location").val(data);
@@ -391,12 +401,16 @@
 		  });
 	  	}); 
 	});
+	
+	
  	var gmap;
  	var geocoder;
  	var markersArray = new Array();
  	var pixelSizeAtZoom0 = .000001;
  	var maxPixelSize = 350; //restricts the maximum size of the icon, otherwise the browser will choke at higher zoom levels trying to scale an image to millions of pixels
- 	
+ 	var conditions; //weather conditions from the forecast.io api
+ 	var forecast = new ForecastIO(); //Forecast.io API
+ 	//console.log(forecast);
  	
 	function initialize() 
 	{
@@ -500,61 +514,9 @@
 		weatherLayer.setMap(gmap);
 			
 		var cloudLayer = new google.maps.weather.CloudLayer();
-		cloudLayer.setMap(gmap);
-			
-		var bikeLayer = new google.maps.BicyclingLayer();
-		bikeLayer.setMap(map);	
+		cloudLayer.setMap(gmap);	
 	} 
-	
-	
-	/*********************
-	testing zoom part
-	
-	
-	
-	
-	//create a marker image with the path to your graphic and the size of your graphic
-	var markerImage = new google.maps.MarkerImage(
-	    icon,
-	    new google.maps.Size(8,8), //size
-	    null, //origin
-	    null, //anchor
-	    new google.maps.Size(8,8) //scale
-	);
-	
-	var marker = new google.maps.Marker({
-	    position: new google.maps.LatLng(38, -98),
-	    map: map,
-	    icon: markerImage //set the markers icon to the MarkerImage
-	});
-	
-	//when the map zoom changes, resize the icon based on the zoom level so the marker covers the same geographic area
-	google.maps.event.addListener(map, 'zoom_changed', function() {
-	
-	    var pixelSizeAtZoom0 = 8; //the size of the icon at zoom level 0
-	    var maxPixelSize = 350; //restricts the maximum size of the icon, otherwise the browser will choke at higher zoom levels trying to scale an image to millions of pixels
-	
-	    var zoom = map.getZoom();
-	    var relativePixelSize = Math.round(pixelSizeAtZoom0*Math.pow(2,zoom)); // use 2 to the power of current zoom to calculate relative pixel size.  Base of exponent is 2 because relative size should double every time you zoom in
-	
-	    if(relativePixelSize > maxPixelSize) //restrict the maximum size of the icon
-	        relativePixelSize = maxPixelSize;
-	
-	    //change the size of the icon
-	    marker.setIcon(
-	        new google.maps.MarkerImage(
-	            marker.getIcon().url, //marker's same icon graphic
-	            null,//size
-	            null,//origin
-	            null, //anchor
-	            new google.maps.Size(relativePixelSize, relativePixelSize) //changes the scale
-	        )
-	    );        
-	});
-	
-	End Zoooom
-	***/
-	
+
 	google.maps.event.addDomListener(window, 'load', initialize);
 	
 	function slideMapDown(pos)
@@ -562,6 +524,7 @@
 		var mapRow = $("#map");
 		mapRow.show("normal", function()
 		{
+			console.log(pos);
 			scroll("#map");
 			TweenMax.to(mapRow, 1, {
 				 height:"400px", ease:Quad.easeOut, onComplete: function()
@@ -575,9 +538,26 @@
 						 position: pos
 					 });
 					 $("#q1").slideDown();
+					 loadForecast(pos.lat(), pos.lng());
 				 }
 			});  
 		});     
+	}
+	
+	
+	function loadForecast(lat, long)
+	{
+		conditions = forecast.getCurrentConditions(lat, long);
+		var temp = conditions.getTemperature();
+		var humidity = conditions.getHumidity();
+		var wind_speed = conditions.getWindSpeed();
+		var wind_bearing = conditions.getWindBearing();
+			
+		$("#temperature").text(temp + "°F");
+		$("#humidity").text(humidity);
+		$("#wind-speed").text(wind_speed + "mph");
+		$("#wind-bearing").text(wind_bearing);
+
 	}
 		
 	function getGPS(address, output)
