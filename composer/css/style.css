@@ -62,3 +62,8 @@ body, .jumbotron {
 	padding-left: 10px;
 	
 }
+
+#wind-bearing{
+	transition: all 1s ease-in-out;
+	margin-left: 20px;
+}
