@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-	<link rel="stylesheet" href="css/style.css?new">
+	<link rel="stylesheet" href="css/style.css?old">
 	<link rel="stylesheet" href="css/main.css">
 
 	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -142,7 +142,7 @@
 							<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>
 							<h4>Wind Bearing <i class="icon-plane"></i></h4>
 							<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
-							  <path d="M25,0 L50,50 L25,35 L0,50 L25,0" />
+							  <path d="M25,0 L40,50 L25,35 L10,50 L25,0" />
 							</svg>
 							<h6>Powered by <a href="forecast.io">Forecast.io</a></h6>
 						</div>
@@ -413,6 +413,7 @@
  	var conditions; //weather conditions from the forecast.io api
  	var forecast = new ForecastIO(); //Forecast.io API
  	//console.log(forecast);
+ 	google.maps.visualRefresh = true;
  	
 	function initialize() 
 	{
@@ -461,7 +462,6 @@
 			    addMarker(event.overlay, size, size, name);
 			    var infowindow = new google.maps.InfoWindow({
 			      content: '<div id="content" onmouseover="updateContent()"><h4>'+ name+'</h4><label class="control-label">Guild Viability</label><div class="progress"><div class="nitrogen-bar-total bar bar-info" style="width:0%"></div><div class="pests-bar-total bar bar-success" style="width:0%"></div></div>',
-			      maxWidth: 10,
 			      pixelOffset: new google.maps.Size(0, icon_midpoint)
 			    });
 			    google.maps.event.addListener(event.overlay,'click',function(){
