@@ -404,15 +404,18 @@
 	});
 	
 	
- 	var gmap;
- 	var geocoder;
- 	var markersArray = new Array();
- 	var pixelSizeAtZoom0 = .000001;
+ 	var gmap; //global map variable
+ 	var glat = 33.6431859; //global lat and png values. Set initially to irvine
+ 	var glng = -117.8413502; //global lat and png values. Set initially to irvine
+ 	var geocoder; //global geocoder from google's geocoder API
+ 	var markersArray = new Array(); //array to store markers on map
+ 	var pixelSizeAtZoom0 = .000001; //the size of a pixel at map-zoom = 0
  	var maxPixelSize = 350; //restricts the maximum size of the icon, otherwise the browser will choke at higher zoom levels trying to scale an image to millions of pixels
  	var conditions; //weather conditions from the forecast.io api
  	var forecast = new ForecastIO(); //Forecast.io API
- 	//console.log(forecast);
- 	google.maps.visualRefresh = true;
+
+ 	console.log(forecast);
+ 	google.maps.visualRefresh = true; //show the new Google Maps API as of May 2013
  	
 	function initialize() 
 	{
@@ -568,7 +571,7 @@
 	        {
 	          if (status == google.maps.GeocoderStatus.OK) 
 	          {
-	          	
+	          	console.log(results);
 	          	output(results[0].geometry.location);
 	          }
 	          else 
@@ -581,16 +584,19 @@
 		
 	function getAddress(location, output)
 	{
+		console.log(location);
+		//glat = location.lat();
+		//glng = location.lng();
 	    geocoder.geocode( { 'latLng': location }, function(results, status)
 	        {
-	        	console.log(status);
+	        	//console.log(status);
 	          if (status == google.maps.GeocoderStatus.OK)
 	          {
 		          	output(results[0].formatted_address);
 	          }
 	          else
 	          {
-	          		console.log(status);
+	          		//console.log(status);
 	          }
 	        }
 	    );
@@ -600,6 +606,8 @@
 	{
 		navigator.geolocation.getCurrentPosition(function(position){
 			var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			glat = position.coords.latitude;
+			glng = position.coords.longitude;
 			slideMapDown(pos);    
 			callback(pos);
 			console.log(pos);
