@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+
+<head>
+
+
+    <meta charset="utf-8">
+
+    <title>PGC Mark 2 // Bamboo</title>
+
+    <link rel="stylesheet" href="css/bamboo.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="javascript" href="js/bootstrap.js">
+
+    <!--[if IE]>
+
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+
+    <![endif]-->
+    
+	<style>
+    
+
+    </style>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing"></script>
+    
+    <script>
+	var map;
+	function initialize() {
+  	var mapOptions = {
+    	zoom: 16,
+    	center: new google.maps.LatLng(
+    	33.640133,-117.840165),
+    	mapTypeId: google.maps.MapTypeId.HYBRID
+  		};
+  	map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+      
+    var drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.MARKER,
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: [
+            google.maps.drawing.OverlayType.MARKER,
+            google.maps.drawing.OverlayType.CIRCLE,
+            google.maps.drawing.OverlayType.POLYGON,
+            google.maps.drawing.OverlayType.POLYLINE,
+            google.maps.drawing.OverlayType.RECTANGLE
+          ]
+        },
+        markerOptions: {
+          icon: 'images/beachflag.png'
+        },
+        circleOptions: {
+          fillColor: '#ffff00',
+          fillOpacity: 1,
+          strokeWeight: 5,
+          clickable: false,
+          editable: true,
+          zIndex: 1
+        }
+      });
+      drawingManager.setMap(map);
+}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+     
+     <style>
+     
+     #map-canvas {
+     	height: 480px;
+     	width: 890px;
+     	margin-left: 20px;
+     	margin-top: 20px;
+     	padding: 0;
+     }
+     
+     </style>
+     
+<!--     the javascript from mark I by sean burke
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/lib/underscore-min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.9.3/TweenMax.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=weather,drawing"></script>
+<script src="js/forecast.io.js"></script>
+
+-->
+
+
+
+
+
+</head>
+
+<body id="home">
+
+	<div id="container">
+
+	<div id="top">
+	
+		<p class="title">plant guild composer</p>
+	
+	
+	
+	
+	
+	</div>
+	
+	<div id="leftbar">
+	
+		<p class="leftbartitle">RECOMMENDED PLANTS</p>
+	
+	
+	
+	</div>
+	
+	<div id="left">
+	
+	
+	
+	
+	
+	</div>
+	
+	<div id="center">
+		
+		<div id="map-canvas"></div>	
+	</div>
+	
+	<div id="bottom">
+	
+	<div id="leftcolumn">
+		<p class="currentplanttitle">Current Plant</p>
+		<p class="currentplant">Persimmon Tree</p>
+		
+		<img src="img/persimmon.png" class="currentplantimage" alt="" />
+		
+		<p class="currentplantdescription">Persimmons are the edible fruit of a number of species of trees in the genus Diospyros.</p>
+	
+	</div>
+	
+	<div id="centercolumn">
+		<p class="ident">Ebenaceae</p>
+		<p class="categ">family name</p>
+		<p class="ident">Diospyros</p>
+		<p class="categ">genus</p>
+		<p class="ident">Diospyros Virginiana</p>
+		<p class="categ">species</p>
+		<p class="ident">Diospyros</p>
+		<p class="categ">variety</p>
+	</div>
+	
+	<div id="rightcolumn">
+		<p class="currentgardentitle">Garden Vitality</p>
+	</div>
+	
+	</div>
+
+	</div>
+
+
+</body>
+
+</html>

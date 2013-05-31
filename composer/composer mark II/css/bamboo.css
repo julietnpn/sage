@@ -1,0 +1,219 @@
+*------------------------------------*\
+    RESET
+\*------------------------------------*/
+/* http://meyerweb.com/eric/tools/css/reset/ 
+    v2.0b1 | 201101 
+    NOTE:WORK IN PROGRESS
+    USE WITH CAUTION AND TEST WITH ABANDON */
+
+html,body,div,span,applet,object,iframe,
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,
+a,abbr,acronym,address,big,cite,code,
+del,dfn,em,img,ins,kbd,q,s,samp,
+small,strike,strong,sub,sup,tt,var,
+b,u,i,center,
+dl,dt,dd,ol,ul,li,
+fieldset,form,label,legend,
+table,caption,tbody,tfoot,thead,tr,th,td,
+article,aside,canvas,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section,summary,
+time,mark,audio,video{
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    font:inherit;
+    vertical-align:baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section{
+    display:block;
+}
+body{
+    line-height:1;
+}
+ol,ul{
+    list-style:none;
+}
+blockquote,q{
+    quotes:none;
+}
+blockquote:before,blockquote:after,
+q:before,q:after{
+    content:’’;
+    content:none;
+}
+/* remember to define visible focus styles! 
+:focus{
+    outline:?????;
+} */
+
+/* remember to highlight inserts somehow! */
+ins{
+    text-decoration:none;
+}
+del{
+    text-decoration:line-through;
+}
+
+table{
+    border-collapse:collapse;
+    border-spacing:0;
+}
+
+p {
+	-webkit-font-smoothing: antialiased;
+}
+
+/*------------------------------------*\
+    $MAIN
+\*------------------------------------*/
+/* GO! */
+
+
+
+html {
+	background-image: url('../img/background.jpg');
+	width: 100%;
+}
+
+#top {
+	width: 1680px;
+	height: 600px;
+	display: block;
+	z-index: 1;
+	background-image: url(../img/background.jpg);
+}
+
+#bottom {
+	width: 1680px;
+	height: 380px;
+	background-color: white;
+	z-index: 1;
+}
+
+#center {
+	width: 930px;
+	height: 520px;
+	background-color: rgb(248, 248, 248);
+	z-index: 3;
+	position: absolute;
+	top: 130px;
+	left: 375px;
+	-moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+#left {
+	width: 375px;
+	height: 375px;
+	z-index: 2;
+	position: absolute;
+	background-color: black;
+	top: 225px;
+}
+
+#leftbar {
+	width: 375px;
+	height: 55px;
+	z-index: 2;
+	position: absolute;
+	background-color: rgb(136, 160, 162);
+	top: 170px;
+}
+
+#centercolumn {
+	width: 500px;
+	height: 400px;
+	margin: 0 auto;
+	margin-top: -220px;
+	text-align: center;
+}
+
+/* text */
+
+.title {
+	position: relative;
+	letter-spacing: 4px;
+	top: 60px;
+	margin-left: 45px;
+	color: white;
+	-webkit-font-smoothing: antialiased;
+	font: 700 17pt Facit;
+	text-transform: uppercase;
+}
+
+.leftbartitle {
+	position: relative;
+	letter-spacing: 2px;
+	top: 20px;
+	width: 375px;
+	text-align: center;
+	color: white;
+	-webkit-font-smoothing: antialiased;
+	font: 13pt Facit;
+}
+
+.currentplanttitle {
+	font: 17px Consolas;
+	font-weight: 100;
+	letter-spacing: 2px;
+	opacity: .6;
+	margin-top: 60px;
+	margin-left: 45px;
+}
+
+.currentplant {
+	font: 32px Facit;
+	letter-spacing: 2px;
+	opacity: 1;
+	margin-top: 10px;
+	margin-left: 45px;
+	margin-bottom: -5px;
+	}
+	
+.currentplantdescription {
+	font: 17px/34px Consolas;
+	letter-spacing: 2px;
+	color: rgba(138, 122, 115, 0.46);
+	width: 300px;
+	margin-left: 220px;
+	margin-top: -140px;
+}
+	
+.ident {
+	font: 20px Facit;
+	margin-bottom: 8px;
+	-webkit-font-smoothing: antialiased;
+}	
+
+.categ {
+	font: 14px Consolas;
+	margin-bottom: 25px;
+	color: gray;
+	opacity: .4;
+	-webkit-font-smoothing: antialiased;
+}
+
+.currentgardentitle {
+	font: 17px Consolas;
+	font-weight: 100;
+	letter-spacing: 2px;
+	opacity: .6;
+	margin-top: -420px;
+	float: right;
+	margin-right: 45px;
+}
+
+	
+	
+/* images */
+.currentplantimage {
+	width: 150px;
+	height: 150px;
+	margin-left: 45px;
+	margin-top: 20px;
+}
