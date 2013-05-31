@@ -1,0 +1,75 @@
+body, .jumbotron {
+    padding-top: 60px;
+    padding-bottom: 40px;
+    background: url(../img/background.jpg) repeat-y center top;
+}
+.container-item {
+	padding: 10px;
+	overflow: scroll;
+	height: 100%;
+	font-size: 18px;
+	font-weight: 200;
+	line-height: 30px;
+	color: inherit;
+	background-color: #eeeeee;
+	-webkit-border-radius: 6px;
+	   -moz-border-radius: 6px;
+	        border-radius: 6px;
+}
+
+.row{
+	margin-bottom: 30px;
+}
+
+.row-item {
+	overflow: scroll;
+}
+
+.welcome-item {
+	height: 200px;
+	overflow: scroll;
+}
+
+.map-item {
+	height: 400px;
+	overflow: scroll;
+}
+
+.options-item {
+	height: 250px;
+	overflow: scroll;
+}
+
+#map-canvas img {
+  max-width: none;
+  
+}
+
+#composer-icons .btn{
+	width: 150px;
+	
+}
+
+#composer-icons img{
+	width: 50px;
+}
+
+#inspector img {
+	width: 100px;
+}
+
+#more-info {
+	padding-left: 10px;
+	
+}
+
+#wind-bearing{
+	transition: all 1s ease-in-out;
+	margin-left: 20px;
+}
+
+path{
+	stroke: #000;
+	stroke-width: 2;
+	fill: none;
+}
