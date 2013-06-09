@@ -142,8 +142,14 @@
 							<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
 							  <path d="M25,0 L40,50 L25,35 L10,50 L25,0" />
 							</svg>
+							<p id="wind-bearing-value">
+								<span id="value"></span><span class="muted">°</span>
+							</p>
 							<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>
-							<h6>Powered by <a href="http://forecast.io">Forecast.io</a></h6>
+							<h6>
+					        	Powered by <a href="http://forecast.io">Forecast.io</a>
+					      	</h6>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -562,7 +568,7 @@
 		$("#wind-speed #value").text(wind_speed);
 		$("#wind-bearing").css("transition","all 1s ease-in-out");
 		$("#wind-bearing").css("transform", "rotate("+wind_bearing+"deg)");
-		#("#wind-bearing").attr("alt",wind_bearing);
+		$("#wind-bearing-value #value").text(wind_bearing);
 
 	}
 		
