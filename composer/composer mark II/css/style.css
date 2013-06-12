@@ -208,6 +208,28 @@ html {
 	margin-right: 45px;
 }
 
+#planticons {
+	margin-top: 00px;
+	margin-left: 00px;
+	width: 375px;
+}
+
+#plantititles {
+	margin-top: 40px;
+	margin-left: -15px;
+	width: 375px;
+	position: absolute;
+}
+
+.plantititle {
+	color: white;
+	opacity: 1;
+	font: 13px/34px Facit;
+	letter-spacing: 2px;
+	margin-left: 45px;
+	margin-top: 20px;
+}
+
 	
 	
 /* images */
@@ -216,4 +238,27 @@ html {
 	height: 150px;
 	margin-left: 45px;
 	margin-top: 20px;
+}
+
+.planticon
+{
+	float: left;
+	height: 70px;
+	margin-left: 40px;
+	margin-top: 40px;
+	-webkit-transition: opacity .25s ease-in-out 0s;
+	opacity: .2;
+}
+
+.planticon:hover{
+	opacity: 1;
+}
+
+/*map*/
+#map-canvas {
+	height: 480px;
+	width: 890px;
+	margin-left: 20px;
+	margin-top: 20px;
+	padding: 0;
 }
