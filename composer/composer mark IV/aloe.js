@@ -37,3 +37,9 @@ function startMap() {
 }
 
 google.maps.event.addDomListener(window, 'load', startMap);
+
+$(document).ready(function() {
+  $("#loadButton").click(function() {
+    $("#loadButton").hide(10);
+  });
+});

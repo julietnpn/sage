@@ -135,6 +135,15 @@ h2 {
 	font-size: 11pt;
 }
 
+h3 {
+	font-family: "Gotham HTF";
+	font-weight: 500;
+	-webkit-font-smoothing: subpixel-antialiased;
+	color: white;
+	letter-spacing: 2px;
+	font-size: 12px;
+}
+
 #title {
 	position: absolute;
 	margin-top: 40px;
@@ -146,8 +155,23 @@ h2 {
 	margin-left: 56px;
 }
 
+#loadButton {
+	color: white;
+	position: absolute;
+	margin-top: 140px;
+	margin-left: 75px;
+	padding: 24px 18px;
+	border: 1px solid white;
+}
+
+#loadButton:hover {
+	background-color: white;
+	color: black;
+}
+
 
 #map-canvas {
 	height: 100%;
 	width: 100%;
 }
+
