@@ -1,0 +1,153 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+
+
+
+
+
+
+/*structure*/
+
+#tophalf {
+	height: 450px;
+	width: 100%;
+	background: url(background.jpg);
+	z-index: 1;
+	
+}
+
+#bottomhalf {
+	height: 240px;
+	width: 100%;
+	z-index: 1;
+}
+
+#centerpiece {
+	width: 700px;
+	height: 400px;
+	position: relative;
+	background-color: #f1f1f1;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: -585px;
+	z-index: 3;
+	-moz-box-shadow: 0 2px 9px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0 2px 9px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 2px 9px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+#centerscreen {
+	width:660px;
+	height: 360px;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: rgba(0, 0, 0, 0.03);
+	z-index: 4;
+	position: relative;
+}
+
+#blackbox {
+	height: 320px;
+	float: left;
+	width: 50%;
+	margin-top: 130px;
+	z-index: 2;
+	position: fixed;
+	background-color: rgb(30,13,19);
+}
+
+#bluebar {
+	background-color: rgb(130,160,162);
+	height: 50px;
+	width: 100%;
+	position: absolute;
+}
+
+
+
+/*type*/
+
+h1 {
+	font-family: "Gotham HTF";
+	font-weight: 300;
+	-webkit-font-smoothing: subpixel-antialiased;
+	color: white;
+	letter-spacing: 4px;
+	font-size: 14pt
+}
+
+h2 {
+	font-family: "Gotham HTF";
+	font-weight: 300;
+	-webkit-font-smoothing: subpixel-antialiased;
+	color: white;
+	letter-spacing: 3px;
+	font-size: 11pt;
+}
+
+#title {
+	position: absolute;
+	margin-top: 40px;
+	margin-left: 40px;
+}
+
+#lefttitle {
+	margin-top: 16px;
+	margin-left: 56px;
+}
+
+
+#map-canvas {
+	height: 100%;
+	width: 100%;
+}
