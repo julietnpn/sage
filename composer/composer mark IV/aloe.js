@@ -1,7 +1,7 @@
 function startMap() {
   var mapOptions = {
     center: new google.maps.LatLng(33.640133,-117.840165),
-    zoom: 14,
+    zoom: 15,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
 
@@ -38,8 +38,12 @@ function startMap() {
 
 google.maps.event.addDomListener(window, 'load', startMap);
 
+
+
 $(document).ready(function() {
-  $("#loadButton").click(function() {
-    $("#loadButton").hide(10);
-  });
+	$("#loadingbayflowers, #loadingbaytitles").hide();
+	$("#loadButton").click(function() {
+    	$("#loadButton").hide();
+    	$("#loadingbayflowers, #loadingbaytitles").show(200);
+  	});
 });

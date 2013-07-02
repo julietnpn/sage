@@ -175,3 +175,46 @@ h3 {
 	width: 100%;
 }
 
+#loadingbayflowers {
+	position: absolute;
+	width: 350px;
+	margin-left: 45px;
+	margin-top: 70px;
+	z-index: 4;
+}
+
+.bayflowers {
+	height: 60px;
+	width: 60px;
+	margin-right: 45px;
+	margin-bottom: 60px;
+	opacity: .7;
+	display: inline-block;
+	z-index: 4;
+}
+
+.bayflowers:hover {
+	opacity: 1;
+}
+
+#loadingbaytitles {
+	position: absolute;
+	width: 350px;
+	margin-top: 150px;
+	margin-left: 28px;
+	z-index: 3;
+}
+
+.baytitles {
+	color: white;
+	font-family: "Gotham HTF";
+	font-size: 12px;
+	letter-spacing: 2px;
+	margin-right: 16px;
+	text-align: center;
+	display: inline-block;
+	margin-bottom: 115px;
+	opacity: .7;
+	z-index: 3;
+	-webkit-font-smoothing: antialiased;
+}
