@@ -155,20 +155,42 @@ h3 {
 	margin-left: 56px;
 }
 
-#loadButton {
-	color: white;
+#loadplants {
 	position: absolute;
 	margin-top: 140px;
 	margin-left: 75px;
+}
+
+.button {
+	color: white;
 	padding: 24px 18px;
+	position: absolute;
 	border: 1px solid white;
 }
 
-#loadButton:hover {
+.button:hover {
 	background-color: white;
 	color: black;
 }
 
+#loadweather {
+	margin-top: 270px;
+	margin-left: 1145px;
+	z-index: 9;
+}
+
+#loadvitality {
+	margin-top: 580px;
+	margin-left: 1140px;
+	z-index: 9;
+	color: black;
+	border: 1px solid black;
+}
+
+#loadvitality:hover {
+	background-color: black;
+	color: white;
+}
 
 #map-canvas {
 	height: 100%;
@@ -214,7 +236,8 @@ h3 {
 	text-align: center;
 	display: inline-block;
 	margin-bottom: 115px;
-	opacity: .7;
+	opacity: 1;
 	z-index: 3;
+	font-weight: 500;
 	-webkit-font-smoothing: antialiased;
 }
