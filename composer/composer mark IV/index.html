@@ -45,21 +45,25 @@
 		
 		</div>
 		
+		<!--here's the button that's going to load up the next div "loading bay flowers", following the pattern you'll see with the other boxes too-->
 		<h3 id="loadplants" class="button">LOAD PLANT RESULTS</h3>
 		
+		
+		<!--initially hidden, shown after "loadplants" is pressed-->
 		<div id="loadingbayflowers">
 		
 		
-			<img src="flower.png" class="bayflowers" alt="" />
-			<img src="flower.png" class="bayflowers" alt="" />
-			<img src="flower.png" class="bayflowers" alt="" />
-			<img src="flower.png" class="bayflowers" alt="" />
-			<img src="flower.png" class="bayflowers" alt="" />
-			<img src="flower.png" class="bayflowers" alt="" />
+			<img id="plantOne" src="flower.png" class="bayflowers" alt="" />
+			<img id="plantTwo" src="flower.png" class="bayflowers" alt="" />
+			<img id="plantThree" src="flower.png" class="bayflowers" alt="" />
+			<img id="plantFour" src="flower.png" class="bayflowers" alt="" />
+			<img id="plantFive" src="flower.png" class="bayflowers" alt="" />
+			<img id="plantSix" src="flower.png" class="bayflowers" alt="" />
 
 		
 		</div>
 		
+		<!--the titles attached to each photo, in next implementation these won't be separately ghetto-attached-->
 		<div id="loadingbaytitles">
 		
 			<p class="baytitles">PERSIMMON</p><p class="baytitles">PERSIMMON</p><p class="baytitles">PERSIMMON</p><p class="baytitles">PERSIMMON</p><p class="baytitles">PERSIMMON</p><p class="baytitles">PERSIMMON</p>
@@ -70,8 +74,9 @@
 	
 	<div id="weatherbox">
 	
-	
+		
 		<h3 class="button" id="loadweather">LOAD LOCAL WEATHER</h3>
+		<!--this button needs to be moved to a different div for better organization, but now it's fine-->
 		<h3 class="button" id="loadvitality">LOAD GARDEN VITALITY</h3>
 		
 	
@@ -80,16 +85,7 @@
 
 </div>
 
-
-
-<div id="bottomhalf">
-
-
-
-</div>
-
-
-
+<!--the map block is organized right here, inspect element to see what I've done-->
 <div id="centerpiece">
 
 	<div id="centerscreen">
@@ -101,5 +97,35 @@
 	</div>
 
 </div>
+
+<div id="bottomhalf">
+
+	<div id="vitalitybox">
+	
+		<!--each vitality meter written out in pairs, is a title, a big grey div, and big green/red/blue/whatever div that we extend by CHANGING IT'S WIDTH! THAT'S ALL!-->
+		<h4 class="vitalitytitle">SUN</h4>
+		<div class="meterback"><div class="metertop"></div></div>
+		
+		<h4 class="vitalitytitle">WATER</h4>
+		<div class="meterback"><div class="metertop"></div></div>
+		
+		<h4 class="vitalitytitle">NITROGEN</h4>
+		<div class="meterback"><div class="metertop"></div></div>
+		
+		<h4 class="vitalitytitle">LOVE</h4>
+		<div class="meterback"><div class="metertop"></div></div>
+	
+	
+	
+	
+	
+	</div>
+
+
+</div>
+
+
+
+
 
 </body>

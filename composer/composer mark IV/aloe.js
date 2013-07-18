@@ -1,3 +1,5 @@
+var selectedPlant = 'smallflower.png';
+
 function startMap() {
   var mapOptions = {
     center: new google.maps.LatLng(33.640133,-117.840165),
@@ -14,6 +16,7 @@ function startMap() {
     drawingControlOptions: {
       position: google.maps.ControlPosition.TOP_CENTER,
       drawingModes: [
+//      only left the tools that we need on in here
         google.maps.drawing.OverlayType.POLYGON,
 //      google.maps.drawing.OverlayType.CIRCLE,
         google.maps.drawing.OverlayType.MARKER,
@@ -23,7 +26,8 @@ function startMap() {
     },
     markerOptions: {
       draggable: true,
-      icon: 'smallflower.png',
+//       "icon" is where the plant icon that gets stamped is selected, needs a proper listener that can be changed through the clicks on the plants
+      icon: selectedPlant,
     },
     circleOptions: {
       fillColor: '#ffff00',
@@ -40,9 +44,9 @@ function startMap() {
 google.maps.event.addDomListener(window, 'load', startMap);
 
 
-
+//in here are the initial hides as well as the show/hide pairs that run with the buttons
 $(document).ready(function() {
-	$("#loadingbayflowers, #loadingbaytitles").hide();
+	$("#loadingbayflowers, #loadingbaytitles, #vitalitybox").hide();
 	
 	$("#loadplants").click(function() {
     	$("#loadplants").hide();
@@ -57,40 +61,30 @@ $(document).ready(function() {
   	
   	$("#loadvitality").click(function() {
   		$("#loadvitality").hide();
+  		$("#vitalitybox").show();
+  		
+  		
+  	});
+  	
+  	$("#plantTwo").click(function() {
+  		selectedPlant = 'flower.png';
   		
   	});
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
 //needs implementation
-//   function setDrawing(icon, gmap) {
-//    drawingManager.setOptions({
-//          drawingMode: google.maps.drawing.OverlayType.MARKER,
-//       drawingControl: true,
-//       drawingControlOptions: {
-//         position: google.maps.ControlPosition.TOP_CENTER,
-//         drawingModes: [
-//           google.maps.drawing.OverlayType.MARKER,
-//           google.maps.drawing.OverlayType.CIRCLE,
-//           google.maps.drawing.OverlayType.POLYGON,
-//           google.maps.drawing.OverlayType.POLYLINE,
-//           google.maps.drawing.OverlayType.RECTANGLE
-//         ]
-//       },
-//       markerOptions: {
-//         icon: icon,
-//         draggable: true
-//       },
-//       circleOptions: {
-//         fillColor: '#ffff00',
-//         fillOpacity: 1,
-//         strokeWeight: 1,
-//         clickable: false,
-//         editable: true,
-//         zIndex: 1
-//       }
-//     });
-//    
-//   }
 //  
 //  function addMarker(location) {
 //      marker = new google.maps.Marker({
