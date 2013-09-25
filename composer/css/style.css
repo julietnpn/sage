@@ -83,7 +83,8 @@ path{
 	fill: none;
 }
 
-<<<<<<< HEAD
+
+
 /*begin sahand's css*/
 #topbar {
 		height: 100px;
@@ -103,8 +104,9 @@ path{
 		color: #f4f4f4;
 		padding-top: 33px;
 		-webkit-font-smoothing: antialiased;
-=======
-.italics{
-	font-style:italic;
->>>>>>> d8a911969c6e38ca12560c2dfc93f8beb62b0e09
 }
+
+.italics {
+	font-style:italic;
+}
+	
