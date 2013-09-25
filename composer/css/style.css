@@ -1,6 +1,5 @@
 
 body, .jumbotron {
-    padding-top: 60px;
     padding-bottom: 40px;
     /*background: url(../img/background.jpg) repeat-y center top;*/
 }
@@ -32,6 +31,11 @@ body, .jumbotron {
 }
 
 .map-item {
+	height: 400px;
+	overflow: scroll;
+}
+
+.dashboard-item {
 	height: 400px;
 	overflow: scroll;
 }
@@ -77,4 +81,30 @@ path{
 	stroke: #000;
 	stroke-width: 2;
 	fill: none;
+}
+
+<<<<<<< HEAD
+/*begin sahand's css*/
+#topbar {
+		height: 100px;
+		width: 100%;
+		position: relative;
+		margin: 0 auto;
+		background: url(file://localhost/Users/Sahand/Dropbox/research/plant%20guilds/2013/plant%20guild%20video%20demo/trees.jpg) center -710px;
+}
+
+#headertext {
+		width: 600px;
+		height: auto;
+		text-align: center;
+		margin: 0 auto;
+		font: 40px MillerBanner;
+		line-height: 1.5em;
+		color: #f4f4f4;
+		padding-top: 33px;
+		-webkit-font-smoothing: antialiased;
+=======
+.italics{
+	font-style:italic;
+>>>>>>> d8a911969c6e38ca12560c2dfc93f8beb62b0e09
 }

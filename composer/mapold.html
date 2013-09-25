@@ -8,187 +8,96 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Plant Guild Composer</title>
 	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=2.0">
+	<meta name="viewport" content="width=device-width">
 	
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 <!--	<link rel="stylesheet" href="css/style.css?old">-->
 	<link rel="stylesheet" href="css/style.css">
-	
-	
 
 	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
-      //google.setOnLoadCallback(drawChart);
-      function drawLineChart(data_array, options, div) {
-        /*var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
-	*/
-        
-        var data = google.visualization.arrayToDataTable(data_array);
-
-        var chart = new google.visualization.LineChart(document.getElementById(div) );
-        chart.draw(data, options);
-      }
-      
-    </script>
-    
-    <!--<input type="file" id="fileinput" /> -->
-<script type="text/javascript">
-  
-  function importData(contents){
-	//first row are the data labels
-	rows = contents.split("\n");
-	label_array = rows[0].split(",");
-	
-	var value_array = [];
-	value_array.length = rows.length-1;
-	
-	//we start at one because the first entry in rows were stored in label_array
-	for(i=1; i<rows.length; i++){
-		value_array[i-1]= rows[i].split(",");
-	}
-	
-	//temperature chart
-	chart_data = [];
-	chart_data[0] = new Array("Date", label_array[1], label_array[2], label_array[3]);
-	
-	for(i=0; i< value_array.length; i++){
-			chart_data[i+1] = new Array(value_array[i][0], parseInt(value_array[i][1]), parseInt(value_array[i][2]), parseInt(value_array[i][3]));
-	}
-	
-	var options = {
-	title: "One Year Temperature History",
-	vAxis: {title: "Fahrenheit"},
-	lineWidth: ".05",
-	pointSize: "1",
-	legend: {position: 'top', alignment: 'center'},
-	width: 400,
-	colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
-	}
-		
-	drawLineChart(chart_data, options, "chart_div");
-	
-	
-	//precipitation chart
-	chart_data = [];
-	chart_data[0] = new Array("Date", label_array[19]);
-	
-	for(i=0; i< value_array.length; i++){
-			chart_data[i+1] = new Array(value_array[i][0], parseFloat(value_array[i][19]));
-	}
-	
-	var options = {
-	title: "One Year Precipitation History",
-	vAxis: {title: "Inches"},
-	lineWidth: ".05",
-	pointSize: "1",
-	legend: {position: 'top'},
-	width: 400,
-		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
-	}
-	
-	drawLineChart(chart_data, options, "chart_div_rain");
-	
-	//wind speed and gust chart
-	chart_data = [];
-	chart_data[0] = new Array("Date", label_array[17], label_array[18]);
-	
-	for(i=0; i< value_array.length; i++){
-			chart_data[i+1] = new Array(value_array[i][0], parseInt(value_array[i][17]), parseInt(value_array[i][18]));
-	}
-	var options = {
-	title: "One Year Wind Speed History",
-	vAxis: {title: "MPH"},
-	lineWidth: ".05",
-	pointSize: "1",
-	legend: {position: 'top', alignment: 'center'},
-	width: 400,
-		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
-	}
-	drawLineChart(chart_data, options, "chart_div_windspeed");
-	
-	//wind direction
-	chart_data = [];
-	chart_data[0] = new Array("Date", label_array[22]);
-	
-	for(i=0; i< value_array.length; i++){
-			chart_data[i+1] = new Array( value_array[i][0], parseInt(value_array[i][22]));
-	}
-	
-	var options = {
-	title: "One Year Wind Direction History",
-	vAxis: {title: 'Direction (N: 360, S: 180)', minValue: 0, maxValue: 360},
-	lineWidth: "0",
-	pointSize: "2",
-	legend: {position: 'top'},
-	width: 400,
-		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
-	}
-	
-	drawLineChart(chart_data, options, "chart_div_winddirection");
-}
-  
-  function readSingleFile(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    
-    var f = evt.target.files[0]; 
-
-    if (f) {
-      var r = new FileReader();
-      r.onload = function(e) { 
-	      var contents = e.target.result;
-        /*alert( "Got the file.\n" 
-              +"name: " + f.name + "\n"
-              +"type: " + f.type + "\n"
-              +"size: " + f.size + " bytes\n"
-              + "starts with: " + contents.substr(1, contents.indexOf("\n"))
-        );  */
-        
-        importData(contents);
-        
-      }
-      r.readAsText(f);
-    } else { 
-      alert("Failed to load file");
-    }
-    
-    document.getElementById('fileinput').style.visibility = 'hidden';
-  }
-  
-  function toggle_weather_f (){
-	//from forecast to historical
-  	document.getElementById('forecast-dash').parentNode.parentNode.style.display = 'none';
-  	document.getElementById('weatherhistory-dash').parentNode.parentNode.style.display = 'inline';
-  
-    }
-function toggle_weather_h (){
-    //from historical to forecast
-   
-      	document.getElementById('weatherhistory-dash').parentNode.parentNode.style.display = 'none';
-  	document.getElementById('forecast-dash').parentNode.parentNode.style.display = 'inline';
-  	}
-  
-
-  document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
-
-
-</script>
-    
 </head>
 <body data-spy="scroll" data-target="#navbar" data-offset="20">
-	<div id="topbar"><p id="headertext">Plant Guild Composer</p></div>
-	<div class="fullscreen-container" style="margin-left:35px">
-		<div id="map-row" class="row" >
-			<div id="map">
+	<!--[if lt IE 7]>
+		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+	<![endif]-->
+
+	<!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+
+	<!--<div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="#">Plant Guild Composer</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li id="menu-welcome"><a href="#welcome-row" onClick="scroll($(this).attr('href'));">Welcome</a></li>
+						<li id="menu-map"  style="display:none;"><a href="#map-row" onClick="scroll($(this).attr('href'));">Map</a></li>
+						<li id="menu-options"  style="display:none;"><a href="#options-row" onClick="scroll($(this).attr('href'));">Options</a></li>
+						<li id="menu-more"  style="display:none;" class="dropdown">
+							<a href="#more-row" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Another action</a></li>
+								<li><a href="#">Something else here</a></li>
+								<li class="divider"></li>
+								<li class="nav-header">Nav header</li>
+								<li><a href="#">Separated link</a></li>
+								<li><a href="#">One more separated link</a></li>
+							</ul>
+						</li>
+					</ul>-->
+					<!--<form class="navbar-form pull-right">
+						<input class="span2" type="text" placeholder="Email">
+						<input class="span2" type="password" placeholder="Password">
+						<button type="submit" class="btn">Sign in</button>
+					</form>-->
+				<!--</div>--> <!--/.nav-collapse -->
+			<!--</div>
+		</div>
+	</div>-->
+	
+	<!--<header class="jumbotron subhead" id="overview">
+		  <div class="inner">
+			<div class="container">
+			  <h1>Plant Guild Composer</h1>
+			  <p class="lead">
+				Project by <a href="#" target="_blank">Juliet Norton</a>.
+			  </p>
+			</div>
+		  </div>
+	</header>-->
+
+	<div class="container">
+
+		<!-- Main hero unit for a primary marketing message or call to action -->
+		
+		<!--<div id="welcome-row"class="row">
+			<div id="welcome" class="span12">
+				<div class="container-item">
+					<form class="form-search">
+					<h1>Welcome</h1>
+					<p class="span3">Enter your location:</p>
+					 <div class="input-append span6">
+					  <input class="input-xlarge span5" id="location" type="text" placeholder="Street, City, State" />
+						<button id="current-location" class="btn" type="button" data-trigger"hover" data-toggle="popover" data-content="Click for current Location" data-placement="top"
+						data-loading-text="<i class='icon-refresh'></i>">
+							<i class="icon-map-marker"></i>
+						</button>
+					</div>
+					<button id="find" class="span1 btn">Find</button>
+					</form>
+				</div>
+			</div>
+		</div> -->
+		
+		<div id="map-row" class="row">
+			<div id="map" style="display:show;">
 				<div class="span2">
 					<div class="container-item map-item">
 					 
@@ -222,10 +131,9 @@ function toggle_weather_h (){
 						<div id="map-canvas" style="height:100%;"></div>
 					</div>
 				</div>
-				<div class="span4">
+				<div class="span2">
 					<div class="container-item">
 						<div id="forecast-dash" class="map-item">
-							<input type="button" id="weather_toggle_forecast" value="Switch to Historical" onclick="toggle_weather_f()"/>
 							<h4>Temperature <i class="icon-fire"></i></h4>
 							<h2 id="temperature"><span id="value"></span><span class="muted">°F</span></h2>
 							<h4>Humidity <i class="icon-tint"></i></h4>
@@ -243,51 +151,46 @@ function toggle_weather_h (){
 					      	</h6>
 							</div>
 						</div>
+					</div>
 				</div>
-				<div class="span4" style="display:none;">
+				<div class="span2">
 					<div class="container-item">
-						<div id="weatherhistory-dash" class="map-item">
-							<input type="button" id="weather_toggle_history" value="Switch to Live" onclick="toggle_weather_h()"/>
+						<div id="forecast-dash" class="map-item">
 							<h4>Temperature <i class="icon-fire"></i></h4>
-							<!--<h2 id="temperature"><span id="value"></span><span class="muted">°F</span></h2>-->
-							<div id="chart_div" style="width: 550px; height: 250px;"></div>
-							<h4>Precipitation<i class="icon-tint"></i></h4>
-							<!--<h2 id="humidity"><span id="value"></span><span class="muted">%</span></h2>-->
-							<div id="chart_div_rain" style="width: 550px; height: 250px;"></div>
+							<h2 id="temperature"><span id="value"></span><span class="muted">°F</span></h2>
+							<h4>Humidity <i class="icon-tint"></i></h4>
+							<h2 id="humidity"><span id="value"></span><span class="muted">%</span></h2>
 							<h4>Wind <i class="icon-plane"></i></h4>
-							<!--<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
+							<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
 							  <path d="M25,0 L40,50 L25,35 L10,50 L25,0" />
 							</svg>
 							<p id="wind-bearing-value">
 								<span id="value"></span><span class="muted">°</span>
-							</p>-->
-							<div id="chart_div_windspeed" style="width: 550px; height: 250px;"></div>
-							<!--<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>-->
-							
-							<div id="chart_div_winddirection" style="width: 550px; height: 250px;"></div>
-							
+							</p>
+							<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>
+							<h6>
+					        	Powered by <a href="http://forecast.io">Forecast.io</a>
+					      	</h6>
 							</div>
 						</div>
+					</div>
 				</div>
-		</div>
-	</div>
+			</div>
 		
 		
 		<div id="dashboard" class="row" style="display:none;">
-<!--			<div class="span12 container-item">-->
+			<div class="span12 container-item">
 			
-				<div class="span7 container-item" id="inspector">
-					<div class="dashboard-item">
+				<div class="span4" id="inspector">
 					<h3>Inspector</h3>
 					<label class="pull-left text-center">
 						<!-- inspector media goes into this label with javascript -->
 					</label>
 					<div id="more-info" class="media-body">
-					</div>
+					
 					</div>
 				</div>
-				<div class="span4 container-item">
-					<div class="dashboard-item">
+				<div class="span4">
 					<h3>Guild Viability</h3>
 					<label class="control-label">Nitrogen Fixation Level</label>
 					<div class="progress">
@@ -296,13 +199,12 @@ function toggle_weather_h (){
 					<label class="control-label">Pest Control Level</label>
 					<div class="progress">
 					  <div class="pests-bar bar bar-success" style="width:0%"></div>
-					</div>		
-				</div>
+					</div>
 				</div>
 				<div class="span4">
 				
 				</div>				
-		<!--	</div>-->
+			</div>
 		</div>
 		
 		<div id="options-row" class="row">
@@ -378,10 +280,10 @@ function toggle_weather_h (){
 		<hr>
 
 		<footer>
-			<p>&copy; Project by GreenIT Lab, UC Irvine</p>
+			<p>&copy; Project by Juliet Norton 2013</p>
 		</footer>
-</div>
-<!--	</div> -- /container -->
+
+	</div> <!-- /container -->
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
@@ -504,15 +406,15 @@ function toggle_weather_h (){
 		  switch ($(this).find("p").attr('name')){
 		  
 			  case 'avocado': 
-			  		content =  '<h4 class="media-heading">Avocado Tree</h4><p>Family: Lauraceae <br>Binomial Name: <span class="italics">Persea americana</span></p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 30-40 ft<br>Spread: 15-35 ft<br> Roots: Shallow<br>Canopy: Dense<br>Shedding:Evergreen<br>Harvest Season: Spring<br>Hardiness Zone: 9</p><h4>Needs</h4><p>Nutrients: Nitrogen, Potassium, and Phosphorus<br>Water: Moderate, soil should be moist roughly 9\" deep (use mulch).<br>Sun: Full Sun<br>Pest and pathogens: (Pests) Mites, Thrips; (Pathogens) Laurel wilt.</p><h4>Products and Behaviors</h4><p>Edibles: 80-140 lbs Avocado Fruit<br>Raw Material: Leaf-Biomass, poisonous seeds<br>Attracted Insects: Glassy-winged sharpshooter (Homalodisca vitripennis) Pierce\'s Disease vector</p>';
+			  		content =  '<h4 class="media-heading">Common Name:</h4> Avocado Tree<h4>Family Name:</h4> Lauraceae <h4>Genus Name:</h4> Persea 	<h4>Species:</h4> Americana 	<h4>Endemic Status:</h4>	Non-Native';
 					$('#more-info').html(content);
 					break;
 			  case 'persimmon':
-			  		content = '<h4 class="media-heading">Persimmon Tree</h4><p>Family: Ebenaceae <br>Binomial Name: <span class="italics">Diospyros virginiana</span></p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 30-80 ft<br>Spread: 25-50 ft<br> Roots: Deep Tap-Root<br>Canopy: Dense<br>Shedding: Deciduous<br>Harvest Season: Autumn<br>Hardiness Zone: 5 thru 9<br> Heat Zone: 9 thru 4</p><h4>Needs</h4><p>Nutrients: Nitrogen, and Phosphorus<br>Water: Moderate.<br>Sun: Full Sun<br>Pest and pathogens: (Pests) Aphids</p><h4>Products and Behaviors</h4><p>Edibles: Persimmon Fruit<br>Raw Material: Leaf-Biomass, timber, fuel wood<br> Biochemical Material: Potassium, Magnesium, Calcium, Iron, Phenolic Compounds<br>Cultural and Amenity: Aesthetic<br>Medicinal and Nutrition: Dietary Fiber, Anti-oxidant, Vitamin C and Beta Carotene</p>';
+			  		content = '<h4 class="media-heading">Common Name:</h4> Persimmon Tree<h4>Family Name:</h4> Ebenaceae <h4>Genus Name:</h4> Diospyros	<h4>Species:</h4> Americana <h4>Endemic Status:</h4>	Non-Native';
 			  		$('#more-info').html(content);
 			  		break;
 			  case 'orange':
-			  		content = '<h4 class="media-heading"> Orange Tree</h4> <p> Family: Rutaceae	<br>Binomial Name:  <span class="italics">Citrus sinensis</span> <\p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 18-25 ft<br>Spread: 12-16 ft<br> Roots: Shallow<br>Canopy: Dense<br>Shedding: Evergreen<br>Harvest Season: Autumn, Variety Dependent<br>Hardiness Zone: 9 thru 11<br> Heat Zone: 8 thru 11</p><h4>Needs</h4><p>Nutrients: Nitrogen, Phosphorus, Magnesium, Boron, Copper, Zinc<br>Water: High<br>Sun: Full Sun<br>Inoculents: Mycorrhizal Fungi<br>Pest and pathogens: (Pests) Aphids</p><h4>Products and Behaviors</h4><p>Edibles: Persimmon Fruit<br>Raw Material: Leaf-Biomass, timber, fuel wood<br> Biochemical Material: Potassium, Magnesium, Calcium, Iron, Phenolic Compounds<br>Cultural and Amenity: Aesthetic<br>Medicinal and Nutrition: Dietary Fiber, Anti-oxidant, Vitamin C and Beta Carotene</p>';
+			  		content = '<h4 class="media-heading">Common Name:</h4> Orange Tree	<h4> Family Name:</h4> Rutaceae	<h4> Genus Name:</h4> Citrus	<h4>Species:</h4> C. × Sinensis	<h4>Endemic Status:</h4>	Non-native';
 			  		$('#more-info').html(content);
 			  		break;
 			  case 'nitrogen':
