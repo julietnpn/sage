@@ -133,8 +133,11 @@
   .navbar-fixed-bottom .container {
     width: 1170px;
   }
+  .span13 {
+  	width: 600px;
+  }
   .span12 {
-    width: 1170px;
+    width: 1160px;
   }
   .span11 {
     width: 1070px;

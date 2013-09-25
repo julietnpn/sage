@@ -108,20 +108,20 @@
 						<div id="composer-icons"  style="display:none;">
 							<h4>Key Species</h4>
 							<div class="btn-group btn-group-vertical" data-toggle="buttons-radio">
-							    <button class="btn" data-category="key" data-size="50" data-name="Avocado Tree"><img src="img/tree.png"><p name="avocado">Avocado Tree</p></button>
-							    <button class="btn" data-category="key" data-size="50" data-name="Orange Tree"><img src="img/tree.png"><p name="orange">Orange Tree</p></button>
-							    <button class="btn" data-category="key" data-size="50" data-name="Persimmon Tree"><img src="img/tree.png"><p name="persimmon">Persimmon Tree</p></button>
+							    <button class="btn" data-category="key" data-size="50" data-name="Avocado Tree"><img src="img/tree.png"/><p name="avocado">Avocado Tree</p></button>
+							    <button class="btn" data-category="key" data-size="50" data-name="Orange Tree"><img src="img/tree.png"/><p name="orange">Orange Tree</p></button>
+							    <button class="btn" data-category="key" data-size="50" data-name="Persimmon Tree"><img src="img/tree.png"/><p name="persimmon">Persimmon Tree</p></button>
 								<h4>Support Species</h4>
 								<h5 class="text-info">Nitrogen</h5>
-									<button class="btn" data-category="nitrogen" data-size="10" data-name="Watercress"><img src="img/herb.png"><p name="nitrogen">Watercress</p></button>
-									<button class="btn" data-category="nitrogen" data-size="10" data-name="Pigeon Peas"><img src="img/shrub.png"><p name="nitrogen">Pigeon Peas</p></button>
-									<button class="btn" data-category="nitrogen" data-size="15" data-name="Mexican Sunflower"><img src="img/herb.png"><p name="nitrogen">Mexican Sunflower</p></button>
-									<button class="btn" data-category="nitrogen" data-size="15" data-name="Green Bean"><img src="img/understory.png"><p name="nitrogen">Green Bean</p></button>
+									<button class="btn" data-category="nitrogen" data-size="10" data-name="Watercress"><img src="img/herb.png"/><p name="nitrogen">Watercress</p></button>
+									<button class="btn" data-category="nitrogen" data-size="10" data-name="Pigeon Peas"><img src="img/shrub.png"/><p name="nitrogen">Pigeon Peas</p></button>
+									<button class="btn" data-category="nitrogen" data-size="15" data-name="Mexican Sunflower"><img src="img/herb.png"/><p name="nitrogen">Mexican Sunflower</p></button>
+									<button class="btn" data-category="nitrogen" data-size="15" data-name="Green Bean"><img src="img/understory.png"/><p name="nitrogen">Green Bean</p></button>
 								<h5 class="text-success">Pest Control</h5>
-									<button class="btn" data-category="pests" data-size="15" data-name="Radish"><img src="img/herb.png"><p name="pests">Radish</p></button>
-									<button class="btn" data-category="pests" data-size="10" data-name="Comfrey"><img src="img/shrub.png"><p name="pests">Comfrey</p></button>
-									<button class="btn" data-category="pests" data-size="15" data-name="Chives"><img src="img/understory.png"><p name="pests">Chives</p></button>
-									<button class="btn" data-category="pests" data-size="15" data-name="Lavendar"><img src="img/herb.png"><p name="pests">Lavender</p></button>
+									<button class="btn" data-category="pests" data-size="15" data-name="Radish"><img src="img/herb.png"/><p name="pests">Radish</p></button>
+									<button class="btn" data-category="pests" data-size="10" data-name="Comfrey"><img src="img/shrub.png"/><p name="pests">Comfrey</p></button>
+									<button class="btn" data-category="pests" data-size="15" data-name="Chives"><img src="img/understory.png"/><p name="pests">Chives</p></button>
+									<button class="btn" data-category="pests" data-size="15" data-name="Lavendar"><img src="img/herb.png"/><p name="pests">Lavender</p></button>
 								</div>
 						</div>
 					</div>
@@ -153,10 +153,32 @@
 						</div>
 					</div>
 				</div>
+				<div class="span2">
+					<div class="container-item">
+						<div id="forecast-dash" class="map-item">
+							<h4>Temperature <i class="icon-fire"></i></h4>
+							<h2 id="temperature"><span id="value"></span><span class="muted">°F</span></h2>
+							<h4>Humidity <i class="icon-tint"></i></h4>
+							<h2 id="humidity"><span id="value"></span><span class="muted">%</span></h2>
+							<h4>Wind <i class="icon-plane"></i></h4>
+							<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
+							  <path d="M25,0 L40,50 L25,35 L10,50 L25,0" />
+							</svg>
+							<p id="wind-bearing-value">
+								<span id="value"></span><span class="muted">°</span>
+							</p>
+							<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>
+							<h6>
+					        	Powered by <a href="http://forecast.io">Forecast.io</a>
+					      	</h6>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
 		
-		<div id="dashboard" class="row"  style="display:none;">
+		
+		<div id="dashboard" class="row" style="display:none;">
 			<div class="span12 container-item">
 			
 				<div class="span4" id="inspector">
@@ -252,6 +274,8 @@
 			</div>
 		</div>
 			
+			
+		</div>
 
 		<hr>
 
@@ -577,13 +601,14 @@
 	}
 	
 	
-	function loadForecast(lat, long)
+	function loadForecast(lat, longitude)
 	{
-		conditions = forecast.getCurrentConditions(lat, long);
+		conditions = forecast.getCurrentConditions(lat, longitude);
 		var temp = conditions.getTemperature();
 		var humidity = (Math.round(conditions.getHumidity()*100));
 		var wind_speed = conditions.getWindSpeed();
 		var wind_bearing = conditions.getWindBearing();
+		
 			
 		$("#temperature #value").text(temp);
 		$("#humidity #value").text(humidity);
