@@ -13,8 +13,8 @@
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-	<link rel="stylesheet" href="css/style.css?old">
-	<link rel="stylesheet" href="css/main.css">
+<!--	<link rel="stylesheet" href="css/style.css?old">-->
+	<link rel="stylesheet" href="css/style.css">
 
 	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
@@ -25,7 +25,7 @@
 
 	<!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
 
-	<div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
+	<!--<div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -51,16 +51,16 @@
 								<li><a href="#">One more separated link</a></li>
 							</ul>
 						</li>
-					</ul>
+					</ul>-->
 					<!--<form class="navbar-form pull-right">
 						<input class="span2" type="text" placeholder="Email">
 						<input class="span2" type="password" placeholder="Password">
 						<button type="submit" class="btn">Sign in</button>
 					</form>-->
-				</div><!--/.nav-collapse -->
-			</div>
+				<!--</div>--> <!--/.nav-collapse -->
+			<!--</div>
 		</div>
-	</div>
+	</div>-->
 	
 	<!--<header class="jumbotron subhead" id="overview">
 		  <div class="inner">
@@ -77,14 +77,14 @@
 
 		<!-- Main hero unit for a primary marketing message or call to action -->
 		
-		<div id="welcome-row"class="row">
+		<!--<div id="welcome-row"class="row">
 			<div id="welcome" class="span12">
 				<div class="container-item">
 					<form class="form-search">
 					<h1>Welcome</h1>
 					<p class="span3">Enter your location:</p>
 					 <div class="input-append span6">
-					  <input class="input-xlarge span5" id="location" type="text" placeholder="Street, City, State">
+					  <input class="input-xlarge span5" id="location" type="text" placeholder="Street, City, State" />
 						<button id="current-location" class="btn" type="button" data-trigger"hover" data-toggle="popover" data-content="Click for current Location" data-placement="top"
 						data-loading-text="<i class='icon-refresh'></i>">
 							<i class="icon-map-marker"></i>
@@ -94,10 +94,10 @@
 					</form>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		
 		<div id="map-row" class="row">
-			<div id="map" style="display:none;">
+			<div id="map" style="display:show;">
 				<div class="span2">
 					<div class="container-item map-item">
 					 
@@ -261,7 +261,7 @@
 
 	</div> <!-- /container -->
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
 	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 	<script src="js/vendor/bootstrap.min.js"></script>
@@ -335,6 +335,8 @@
 				  //refresh the spy scroller, check bootstrap documentation for spy-scroll
 				  refreshSpy();
 			  }));
+			  
+			  
 		});
 	  
 		//trigger the onFind event, the search for location button
@@ -344,7 +346,7 @@
 			//slide the map menu item from the navigation bar down
 			$("#menu-map").slideDown();
 			//make an address variable with the text from the location input
-			var address = $('#location').val();
+			var address = $('#find').val();
 				//get the gps location for the address from google's geolocation service
 				getGPS(address, function(data){
 					//log the return data
@@ -438,7 +440,7 @@
 		    mapTypeControl: true,
 		    streetViewControl: false,
 		    overviewMapControl: false,
-		    mapTypeId: google.maps.MapTypeId.SATELLITE
+		    mapTypeId: google.maps.MapTypeId.ROADMAP
 		  }
 		
 		gmap = new google.maps.Map(mapDiv, mapOptions);
@@ -524,10 +526,30 @@
 		weatherLayer.setMap(gmap);
 			
 		var cloudLayer = new google.maps.weather.CloudLayer();
-		cloudLayer.setMap(gmap);	
+		cloudLayer.setMap(gmap);
+		
+		
+		//slide the map menu item from the navigation bar down
+			$("#menu-map").slideDown();
+			//make an address variable with the text from the location input
+			var address = '28 Murasaki, Irvine, CA 92617';
+				//get the gps location for the address from google's geolocation service
+				getGPS(address, function(data){
+					//log the return data
+					console.log(data);
+					//slide the map down
+					slideMapDown(data);
+				});
+			//change the drawing tools to include the polygon tool	
+			addPolygonDrawing();
+			//refresh the spy-scroll, check bootstrap docs
+			refreshSpy();
+			
 	} 
 
 	google.maps.event.addDomListener(window, 'load', initialize);
+	
+	
 	
 	function slideMapDown(pos)
 	{

@@ -1,7 +1,8 @@
+
 body, .jumbotron {
     padding-top: 60px;
     padding-bottom: 40px;
-    background: url(../img/background.jpg) repeat-y center top;
+    /*background: url(../img/background.jpg) repeat-y center top;*/
 }
 .container-item {
 	padding: 10px;
@@ -43,6 +44,10 @@ body, .jumbotron {
 #map-canvas img {
   max-width: none;
   
+}
+
+::-webkit-scrollbar { 
+    display: none; 
 }
 
 #composer-icons .btn{
