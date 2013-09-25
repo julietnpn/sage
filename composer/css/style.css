@@ -36,6 +36,11 @@ body, .jumbotron {
 	overflow: scroll;
 }
 
+.dashboard-item {
+	height: 400px;
+	overflow: scroll;
+}
+
 .options-item {
 	height: 250px;
 	overflow: scroll;
@@ -77,4 +82,8 @@ path{
 	stroke: #000;
 	stroke-width: 2;
 	fill: none;
+}
+
+.italics{
+	font-style:italic;
 }

@@ -351,18 +351,20 @@ function toggle_weather_h (){
 		
 		
 		<div id="dashboard" class="row" style="display:none;">
-			<div class="span12 container-item">
+<!--			<div class="span12 container-item">-->
 			
-				<div class="span4" id="inspector">
+				<div class="span7 container-item" id="inspector">
+					<div class="dashboard-item">
 					<h3>Inspector</h3>
 					<label class="pull-left text-center">
 						<!-- inspector media goes into this label with javascript -->
 					</label>
 					<div id="more-info" class="media-body">
-					
+					</div>
 					</div>
 				</div>
-				<div class="span4">
+				<div class="span4 container-item">
+					<div class="dashboard-item">
 					<h3>Guild Viability</h3>
 					<label class="control-label">Nitrogen Fixation Level</label>
 					<div class="progress">
@@ -371,12 +373,13 @@ function toggle_weather_h (){
 					<label class="control-label">Pest Control Level</label>
 					<div class="progress">
 					  <div class="pests-bar bar bar-success" style="width:0%"></div>
-					</div>
+					</div>		
+				</div>
 				</div>
 				<div class="span4">
 				
 				</div>				
-			</div>
+		<!--	</div>-->
 		</div>
 		
 		<div id="options-row" class="row">
@@ -578,15 +581,15 @@ function toggle_weather_h (){
 		  switch ($(this).find("p").attr('name')){
 		  
 			  case 'avocado': 
-			  		content =  '<h4 class="media-heading">Common Name:</h4> Avocado Tree<h4>Family Name:</h4> Lauraceae <h4>Genus Name:</h4> Persea 	<h4>Species:</h4> Americana 	<h4>Endemic Status:</h4>	Non-Native';
+			  		content =  '<h4 class="media-heading">Avocado Tree</h4><p>Family: Lauraceae <br>Binomial Name: <span class="italics">Persea americana</span></p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 30-40 ft<br>Spread: 15-35 ft<br> Roots: Shallow<br>Canopy: Dense<br>Shedding:Evergreen<br>Harvest Season: Spring<br>Hardiness Zone: 9</p><h4>Needs</h4><p>Nutrients: Nitrogen, Potassium, and Phosphorus<br>Water: Moderate, soil should be moist roughly 9\" deep (use mulch).<br>Sun: Full Sun<br>Pest and pathogens: (Pests) Mites, Thrips; (Pathogens) Laurel wilt.</p><h4>Products and Behaviors</h4><p>Edibles: 80-140 lbs Avocado Fruit<br>Raw Material: Leaf-Biomass, poisonous seeds<br>Attracted Insects: Glassy-winged sharpshooter (Homalodisca vitripennis) Pierce\'s Disease vector</p>';
 					$('#more-info').html(content);
 					break;
 			  case 'persimmon':
-			  		content = '<h4 class="media-heading">Common Name:</h4> Persimmon Tree<h4>Family Name:</h4> Ebenaceae <h4>Genus Name:</h4> Diospyros	<h4>Species:</h4> Americana <h4>Endemic Status:</h4>	Non-Native';
+			  		content = '<h4 class="media-heading">Persimmon Tree</h4><p>Family: Ebenaceae <br>Binomial Name: <span class="italics">Diospyros virginiana</span></p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 30-80 ft<br>Spread: 25-50 ft<br> Roots: Deep Tap-Root<br>Canopy: Dense<br>Shedding: Deciduous<br>Harvest Season: Autumn<br>Hardiness Zone: 5 thru 9<br> Heat Zone: 9 thru 4</p><h4>Needs</h4><p>Nutrients: Nitrogen, and Phosphorus<br>Water: Moderate.<br>Sun: Full Sun<br>Pest and pathogens: (Pests) Aphids</p><h4>Products and Behaviors</h4><p>Edibles: Persimmon Fruit<br>Raw Material: Leaf-Biomass, timber, fuel wood<br> Biochemical Material: Potassium, Magnesium, Calcium, Iron, Phenolic Compounds<br>Cultural and Amenity: Aesthetic<br>Medicinal and Nutrition: Dietary Fiber, Anti-oxidant, Vitamin C and Beta Carotene</p>';
 			  		$('#more-info').html(content);
 			  		break;
 			  case 'orange':
-			  		content = '<h4 class="media-heading">Common Name:</h4> Orange Tree	<h4> Family Name:</h4> Rutaceae	<h4> Genus Name:</h4> Citrus	<h4>Species:</h4> C. × Sinensis	<h4>Endemic Status:</h4>	Non-native';
+			  		content = '<h4 class="media-heading"> Orange Tree</h4> <p> Family: Rutaceae	<br>Binomial Name:  <span class="italics">Citrus sinensis</span> <\p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 18-25 ft<br>Spread: 12-16 ft<br> Roots: Shallow<br>Canopy: Dense<br>Shedding: Evergreen<br>Harvest Season: Autumn, Variety Dependent<br>Hardiness Zone: 9 thru 11<br> Heat Zone: 8 thru 11</p><h4>Needs</h4><p>Nutrients: Nitrogen, Phosphorus, Magnesium, Boron, Copper, Zinc<br>Water: High<br>Sun: Full Sun<br>Inoculents: Mycorrhizal Fungi<br>Pest and pathogens: (Pests) Aphids</p><h4>Products and Behaviors</h4><p>Edibles: Persimmon Fruit<br>Raw Material: Leaf-Biomass, timber, fuel wood<br> Biochemical Material: Potassium, Magnesium, Calcium, Iron, Phenolic Compounds<br>Cultural and Amenity: Aesthetic<br>Medicinal and Nutrition: Dietary Fiber, Anti-oxidant, Vitamin C and Beta Carotene</p>';
 			  		$('#more-info').html(content);
 			  		break;
 			  case 'nitrogen':
