@@ -36,7 +36,7 @@ body, .jumbotron {
 }
 
 .dashboard-item {
-	height: 400px;
+	height: 300px;
 	overflow: scroll;
 }
 
