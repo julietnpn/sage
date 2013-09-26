@@ -21,18 +21,11 @@
 	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
+    	/* Code is derived and then heavily modified from:  https://developers.google.com/chart/interactive/docs/gallery/linechart?hl=en  */
       google.load("visualization", "1", {packages:["corechart"]});
-      //google.setOnLoadCallback(drawChart);
+    
       function drawLineChart(data_array, options, div) {
-        /*var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
-	*/
-        
+       
         var data = google.visualization.arrayToDataTable(data_array);
 
         var chart = new google.visualization.LineChart(document.getElementById(div) );
@@ -41,7 +34,8 @@
       
     </script>
     
-    <!--<input type="file" id="fileinput" /> -->
+    <!-- use to chose hte file with file chooser
+    <input type="file" id="fileinput" />-->
 <script type="text/javascript">
   
   function importData(contents){
@@ -66,13 +60,15 @@
 	}
 	
 	var options = {
-	title: "One Year Temperature History",
-	vAxis: {title: "Fahrenheit"},
-	lineWidth: ".05",
-	pointSize: "1",
-	legend: {position: 'top', alignment: 'center'},
-	width: 400,
-	colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
+		width: 350,
+		heigth: 300,
+		chartArea: {width: "80%", left:"60"},
+		title: "One Year Temperature History",
+		vAxis: {title: "Fahrenheit"},
+		lineWidth: ".05",
+		pointSize: "1",
+		legend: {position: 'top'},
+		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
 	}
 		
 	drawLineChart(chart_data, options, "chart_div");
@@ -87,12 +83,13 @@
 	}
 	
 	var options = {
-	title: "One Year Precipitation History",
-	vAxis: {title: "Inches"},
-	lineWidth: ".05",
-	pointSize: "1",
-	legend: {position: 'top'},
-	width: 400,
+		title: "One Year Precipitation History",
+		chartArea: {width: "80%", left:"60"},
+		vAxis: {title: "Inches"},
+		lineWidth: ".05",
+		pointSize: "1",
+		legend: {position: 'top'},
+		width: 350,
 		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
 	}
 	
@@ -106,12 +103,13 @@
 			chart_data[i+1] = new Array(value_array[i][0], parseInt(value_array[i][17]), parseInt(value_array[i][18]));
 	}
 	var options = {
-	title: "One Year Wind Speed History",
-	vAxis: {title: "MPH"},
-	lineWidth: ".05",
-	pointSize: "1",
-	legend: {position: 'top', alignment: 'center'},
-	width: 400,
+		title: "One Year Wind Speed History",
+		chartArea: {width: "80%", left:"60"},
+		vAxis: {title: "MPH"},
+		lineWidth: ".05",
+		pointSize: "1",
+		legend: {position: 'top'},
+		width: 350,
 		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
 	}
 	drawLineChart(chart_data, options, "chart_div_windspeed");
@@ -125,16 +123,35 @@
 	}
 	
 	var options = {
-	title: "One Year Wind Direction History",
-	vAxis: {title: 'Direction (N: 360, S: 180)', minValue: 0, maxValue: 360},
-	lineWidth: "0",
-	pointSize: "2",
-	legend: {position: 'top'},
-	width: 400,
+		title: "One Year Wind Direction History",
+		chartArea: {width: "80%", left:"60"},
+		vAxis: {title: 'Direction (N: 360, S: 180)', minValue: 0, maxValue: 360},
+		lineWidth: "0",
+		pointSize: "2",
+		legend: {position: 'top'},
+		width: 350,
 		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
 	}
 	
 	drawLineChart(chart_data, options, "chart_div_winddirection");
+}
+
+  function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                importData(allText);
+            }
+        }
+    }
+    rawFile.send(null);
 }
   
   function readSingleFile(evt) {
@@ -178,8 +195,9 @@ function toggle_weather_h (){
   	}
   
 
+  /*Need if going to use the file chooser to import the climate data
   document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
-
+*/
 
 </script>
     
@@ -197,23 +215,22 @@ function toggle_weather_h (){
 						</div>
 						
 						<div id="composer-icons"  style="display:none;">
-							<h4>Key Species</h4>
 							<div class="btn-group btn-group-vertical" data-toggle="buttons-radio">
+							    <h4>Key Species</h4>
 							    <button class="btn" data-category="key" data-size="50" data-name="Avocado Tree"><img src="img/tree.png"/><p name="avocado">Avocado Tree</p></button>
 							    <button class="btn" data-category="key" data-size="50" data-name="Orange Tree"><img src="img/tree.png"/><p name="orange">Orange Tree</p></button>
 							    <button class="btn" data-category="key" data-size="50" data-name="Persimmon Tree"><img src="img/tree.png"/><p name="persimmon">Persimmon Tree</p></button>
 								<h4>Support Species</h4>
-								<h5 class="text-info">Nitrogen</h5>
-									<button class="btn" data-category="nitrogen" data-size="10" data-name="Watercress"><img src="img/herb.png"/><p name="nitrogen">Watercress</p></button>
-									<button class="btn" data-category="nitrogen" data-size="10" data-name="Pigeon Peas"><img src="img/shrub.png"/><p name="nitrogen">Pigeon Peas</p></button>
-									<button class="btn" data-category="nitrogen" data-size="15" data-name="Mexican Sunflower"><img src="img/herb.png"/><p name="nitrogen">Mexican Sunflower</p></button>
-									<button class="btn" data-category="nitrogen" data-size="15" data-name="Green Bean"><img src="img/understory.png"/><p name="nitrogen">Green Bean</p></button>
-								<h5 class="text-success">Pest Control</h5>
-									<button class="btn" data-category="pests" data-size="15" data-name="Radish"><img src="img/herb.png"/><p name="pests">Radish</p></button>
-									<button class="btn" data-category="pests" data-size="10" data-name="Comfrey"><img src="img/shrub.png"/><p name="pests">Comfrey</p></button>
-									<button class="btn" data-category="pests" data-size="15" data-name="Chives"><img src="img/understory.png"/><p name="pests">Chives</p></button>
-									<button class="btn" data-category="pests" data-size="15" data-name="Lavendar"><img src="img/herb.png"/><p name="pests">Lavender</p></button>
-								</div>
+								<button class="btn" data-category="nitrogen" data-size="10" data-name="Watercress"><img src="img/herb.png"/><p name="watercress">Watercress</p></button>
+								<button class="btn" data-category="nitrogen" data-size="10" data-name="Pigeon Peas"><img src="img/shrub.png"/><p name="pigeon pea">Pigeon Peas</p></button>
+								<button class="btn" data-category="nitrogen" data-size="15" data-name="Mexican Sunflower"><img src="img/herb.png"/><p name="mexican sunflower">Mexican Sunflower</p></button>
+								<button class="btn" data-category="nitrogen" data-size="15" data-name="Green Bean"><img src="img/understory.png"/><p name="green bean">Green Bean</p></button>
+
+								<button class="btn" data-category="pests" data-size="15" data-name="Radish"><img src="img/herb.png"/><p name="pests">Radish</p></button>
+								<button class="btn" data-category="pests" data-size="10" data-name="Comfrey"><img src="img/shrub.png"/><p name="pests">Comfrey</p></button>
+								<button class="btn" data-category="pests" data-size="15" data-name="Chives"><img src="img/understory.png"/><p name="pests">Chives</p></button>
+								<button class="btn" data-category="pests" data-size="15" data-name="Lavendar"><img src="img/herb.png"/><p name="pests">Lavender</p></button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -222,7 +239,7 @@ function toggle_weather_h (){
 						<div id="map-canvas" style="height:100%;"></div>
 					</div>
 				</div>
-				<div class="span4">
+				<div class="span4" style="display:none;">
 					<div class="container-item">
 						<div id="forecast-dash" class="map-item">
 							<input type="button" id="weather_toggle_forecast" value="Switch to Historical" onclick="toggle_weather_f()"/>
@@ -244,16 +261,16 @@ function toggle_weather_h (){
 							</div>
 						</div>
 				</div>
-				<div class="span4" style="display:none;">
+				<div class="span4" >
 					<div class="container-item">
 						<div id="weatherhistory-dash" class="map-item">
 							<input type="button" id="weather_toggle_history" value="Switch to Live" onclick="toggle_weather_h()"/>
 							<h4>Temperature <i class="icon-fire"></i></h4>
 							<!--<h2 id="temperature"><span id="value"></span><span class="muted">°F</span></h2>-->
-							<div id="chart_div" style="width: 550px; height: 250px;"></div>
+							<div id="chart_div" style="width: 350px; height: 300px;"></div>
 							<h4>Precipitation<i class="icon-tint"></i></h4>
 							<!--<h2 id="humidity"><span id="value"></span><span class="muted">%</span></h2>-->
-							<div id="chart_div_rain" style="width: 550px; height: 250px;"></div>
+							<div id="chart_div_rain" style="width: 350px; height: 300px;"></div>
 							<h4>Wind <i class="icon-plane"></i></h4>
 							<!--<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
 							  <path d="M25,0 L40,50 L25,35 L10,50 L25,0" />
@@ -261,10 +278,10 @@ function toggle_weather_h (){
 							<p id="wind-bearing-value">
 								<span id="value"></span><span class="muted">°</span>
 							</p>-->
-							<div id="chart_div_windspeed" style="width: 550px; height: 250px;"></div>
+							<div id="chart_div_windspeed" style="width: 350px; height: 300px;"></div>
 							<!--<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>-->
 							
-							<div id="chart_div_winddirection" style="width: 550px; height: 250px;"></div>
+							<div id="chart_div_winddirection" style="width: 350px; height: 300px;"></div>
 							
 							</div>
 						</div>
@@ -512,11 +529,11 @@ function toggle_weather_h (){
 			  		$('#more-info').html(content);
 			  		break;
 			  case 'orange':
-			  		content = '<h4 class="media-heading"> Orange Tree</h4> <p> Family: Rutaceae	<br>Binomial Name:  <span class="italics">Citrus sinensis</span> <\p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 18-25 ft<br>Spread: 12-16 ft<br> Roots: Shallow<br>Canopy: Dense<br>Shedding: Evergreen<br>Harvest Season: Autumn, Variety Dependent<br>Hardiness Zone: 9 thru 11<br> Heat Zone: 8 thru 11</p><h4>Needs</h4><p>Nutrients: Nitrogen, Phosphorus, Magnesium, Boron, Copper, Zinc<br>Water: High<br>Sun: Full Sun<br>Inoculents: Mycorrhizal Fungi<br>Pest and pathogens: (Pests) Aphids</p><h4>Products and Behaviors</h4><p>Edibles: Persimmon Fruit<br>Raw Material: Leaf-Biomass, timber, fuel wood<br> Biochemical Material: Potassium, Magnesium, Calcium, Iron, Phenolic Compounds<br>Cultural and Amenity: Aesthetic<br>Medicinal and Nutrition: Dietary Fiber, Anti-oxidant, Vitamin C and Beta Carotene</p>';
+			  		content = '<h4 class="media-heading">Orange Tree</h4> <p> Family: Rutaceae	<br>Binomial Name:  <span class="italics">Citrus sinensis</span> <\p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 18-25 ft<br>Spread: 12-16 ft<br> Roots: Shallow<br>Canopy: Dense<br>Shedding: Evergreen<br>Harvest Season: Autumn, Variety Dependent<br>Hardiness Zone: 9 thru 11<br> Heat Zone: 8 thru 11</p><h4>Needs</h4><p>Nutrients: Nitrogen, Phosphorus, Magnesium, Boron, Copper, Zinc<br>Water: High<br>Sun: Full Sun<br>Inoculents: Mycorrhizal Fungi<br>Pest and pathogens: (Pests) Aphids</p><h4>Products and Behaviors</h4><p>Edibles: Persimmon Fruit<br>Raw Material: Leaf-Biomass, timber, fuel wood<br> Biochemical Material: Potassium, Magnesium, Calcium, Iron, Phenolic Compounds<br>Cultural and Amenity: Aesthetic<br>Medicinal and Nutrition: Dietary Fiber, Anti-oxidant, Vitamin C and Beta Carotene</p>';
 			  		$('#more-info').html(content);
 			  		break;
-			  case 'nitrogen':
-				  content = '<h4 class="media-heading">Guild Role:</h4> Nitrogen Fixation';
+			  case 'pigeon pea':
+				  content = '<h4 class="media-heading">Pigeon Pea</h4> <p>FIX00 THIS IS ORAGNGE INFO Family: Rutaceae	<br>Binomial Name:  <span class="italics">Citrus sinensis</span> <\p> <h4>Characteristics</h4><p>Layer: Tree<br>Height: 18-25 ft<br>Spread: 12-16 ft<br> Roots: Shallow<br>Canopy: Dense<br>Shedding: Evergreen<br>Harvest Season: Autumn, Variety Dependent<br>Hardiness Zone: 9 thru 11<br> Heat Zone: 8 thru 11</p><h4>Needs</h4><p>Nutrients: Nitrogen, Phosphorus, Magnesium, Boron, Copper, Zinc<br>Water: High<br>Sun: Full Sun<br>Inoculents: Mycorrhizal Fungi<br>Pest and pathogens: (Pests) Aphids</p><h4>Products and Behaviors</h4><p>Edibles: Persimmon Fruit<br>Raw Material: Leaf-Biomass, timber, fuel wood<br> Biochemical Material: Potassium, Magnesium, Calcium, Iron, Phenolic Compounds<br>Cultural and Amenity: Aesthetic<br>Medicinal and Nutrition: Dietary Fiber, Anti-oxidant, Vitamin C and Beta Carotene</p>';
 				  $('#more-info').html(content);
 				  break;			  
 			  case 'pests':
@@ -549,6 +566,9 @@ function toggle_weather_h (){
  	
 	function initialize() 
 	{
+		
+		
+		
 		geocoder = new google.maps.Geocoder();
 		var pos = new google.maps.LatLng(60, 50);
 		mapDiv = document.getElementById('map-canvas');
@@ -693,6 +713,7 @@ function toggle_weather_h (){
 					 });
 					 $("#q1").slideDown();
 					 loadForecast(pos.lat(), pos.lng());
+					 readTextFile('weather/temp.09.25.2013.txt');
 				 }
 			});  
 		});     
