@@ -88,7 +88,7 @@ h1 {
 }
 
 h2 {
-	font-size: 15px;
+	font-size: 24px;
 	letter-spacing: 2px;
 	line-height: 60px;
 	border: 1px solid #111111;
@@ -130,11 +130,17 @@ h3 {
 #locationinput {
 	border-style: none;
 	margin: 0 auto;
-	background-color: rgba(233, 233, 233, 0.21);
-	height: 40px;
-	width: 400px;
+	background-color: rgba(233, 233, 233, 0.11);
+	height: 100px;
+	width: 800px;
 	margin-bottom: 90px;
 	margin-top: 30px;
+	font-family: MillerBanner;
+	font-size: 42px;
+}
+
+#locationinput:focus {
+	outline: none;
 }
 
  /* begin inside pages */
