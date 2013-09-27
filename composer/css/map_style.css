@@ -11,7 +11,8 @@ body, .jumbotron {
 	font-weight: 200;
 	line-height: 30px;
 	color: inherit;
-	background-color: #eeeeee;
+	/* removed to make the container items white */
+	/*background-color: #eeeeee;*/
 	-webkit-border-radius: 6px;
 	   -moz-border-radius: 6px;
 	        border-radius: 6px;
@@ -109,4 +110,42 @@ path{
 .italics {
 	font-style:italic;
 }
+
+.alert-success {
+	background-color: rgba(255, 255, 254, 0);
+}
+
+.alert {
+	border: none;
+	font-family: MillerBanner;
+	font-size: 25px;
+	height: 23px;
+	line-height: 25px;
+	-webkit-font-smoothing: antialiased;
+}
 	
+h4 {
+	font-family: MillerBanner;
+	font-size: 21px;
+	height: 21px;
+	line-height: 28px;
+	letter-spacing: -2;
+	font-weight: 100;
+	margin-bottom: 9px;
+}
+
+h3 {
+	font-family: MillerBanner;
+	font-size: 28px;
+	font-weight: 100;
+	height: 28px;
+	line-height: 28px;
+	margin-bottom: 28px;
+}
+
+p {
+	font: 13px "Gotham HTF";
+	font-weight: 100;
+	height: auto;
+	line-height: 21px;
+}
