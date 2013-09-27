@@ -118,29 +118,40 @@ path{
 .alert {
 	border: none;
 	font-family: MillerBanner;
-	font-size: 25px;
+	font-size: 28px;
 	height: 23px;
 	line-height: 25px;
 	-webkit-font-smoothing: antialiased;
 }
 	
-h4 {
-	font-family: MillerBanner;
-	font-size: 21px;
-	height: 21px;
+h4, .control-label {
+	font-family: 'Helvetica Neue', Helvetica;
+	font-size: 23px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 300;
+	height: 28px;
+	letter-spacing: 1px;
 	line-height: 28px;
-	letter-spacing: -2;
-	font-weight: 100;
-	margin-bottom: 9px;
+	margin-bottom: 10px;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
 }
 
 h3 {
-	font-family: MillerBanner;
-	font-size: 28px;
-	font-weight: 100;
+	font-family: 'Helvetica Neue', Helvetica;
+	font-size: 29px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 300;
 	height: 28px;
+	letter-spacing: 1px;
 	line-height: 28px;
-	margin-bottom: 28px;
+	margin-bottom: 20px;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	border-bottom: 1px solid #333;
+	padding-bottom: 20px;
 }
 
 p {
