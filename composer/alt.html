@@ -326,14 +326,11 @@ function toggle_weather_h (){
 						<h3>Guild Members</h3>
 						<h4>Key Species</h4>
 						<div id="guild-list-key">
-						 Avocado
+						 <!-- Will be filled by a script -->
 						 </div>
 						<h4>Support Species</h4>
 						<div id="guild-list-support">
-							Elderberry Tree x 1
-							Pigeon Pea x 2
-							Comfrey x 5
-							Mexican Sunflower x 2
+							<!-- Will be filled by a script -->
 						</div>
 					</div>
 					</div>
@@ -645,7 +642,7 @@ function toggle_weather_h (){
 			    	infowindow.open(gmap,event.overlay);
 			    	updateProgressBars();
 			    });
-			    addGuildList("data-name");
+			    addGuildList();
 			}
 		  }
 		  else if (event.type == google.maps.drawing.OverlayType.POLYGON) {
@@ -953,7 +950,75 @@ function toggle_weather_h (){
  	
  	}
  	
- 	function addGuildList(plant){
+ 	function addGuildList(){
+ 		
+ 		insert = false;
+ 		name = $("#composer-icons button.active").attr("data-name");
+ 		console.log("inAddGuildList: Name is "+ name);
+ 		category  = $("#composer-icons button.active").attr("data-category");
+ 		
+ 		
+ 		//if plant is a key species, add to the key list
+ 		if (category == "key"){
+ 			console.log("inAddGuildList: category is key");
+ 			key_members = $("#guild-list-key").find("div");
+ 			console.log("inAddGuildList: key_members.length:"+key_members.length);
+ 			//if data-category is in guild-member-key
+ 				//increment data-category
+ 			for(i = 0; i< key_members.length; i++){
+ 				console.log("inAddGuildList: key_member[i] data-name is " + key_members);
+ 				if($(key_members[i]).attr("data-name") == name){
+ 					
+ 					quant = $(key_members[i]).find("span");
+ 					curr_quant = parseInt(quant.attr("quantity"));
+ 					curr_quant++;
+ 					console.log("inAddGuildList: old_quant is "+curr_quant);
+ 					
+ 					
+ 					quant.attr("quantity", curr_quant);
+ 					console.log("inAddGuildList: new_quant is "+ quant.attr("quantity"));
+ 					
+ 					
+ 					quant.text(quant.attr("quantity"));
+ 					insert = true;
+ 					break;
+ 				}
+ 			}
+ 			//else, add to guild-member-key
+ 			if(!insert){
+ 				console.log("inAddGuildList: adding to key members");
+ 				$("#guild-list-key").append('<div data-name="'+name+'">'+name+' x<span quantity="1">1</span></div>');
+ 			}
+ 		}
+ 			
+ 		//otherwise it is  a support species so add it to the support list
+ 		else{
+ 			console.log("inAddGuildList: category is support");
+ 			support_members = $("#guild-list-support").find("div");
+ 		
+ 			//if data-category is in guild-member-support
+ 				//increment data-category
+ 			for(i = 0; i< support_members.length; i++){
+ 				if($(support_members[i]).attr("data-name") == name){
+ 					quant = $(support_members[i]).find("span");
+ 					curr_quant = parseInt(quant.attr("quantity"));
+ 					curr_quant++;
+ 					quant.attr("quantity", curr_quant);
+ 					quant.text(quant.attr("quantity"));
+ 					insert = true;
+ 					break;
+ 				}
+ 			}
+ 				
+ 				
+ 			//else, add to guild-member-support
+ 			if(!insert){
+ 					$("#guild-list-support").append('<div data-name="'+name+'">'+name+' x<span quantity="1">1</span></div>');
+ 			}
+ 		
+ 		}
+ 			
+ 		
  		
  	}
 </script>
