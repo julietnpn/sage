@@ -293,7 +293,8 @@ function toggle_weather_h (){
 		<div id="dashboard" class="row" style="display:none;">
 <!--			<div class="span12 container-item">-->
 			
-				<div class="span7 container-item" id="inspector">
+				<div class="span8">
+					<div class="container-item" id="inspector">
 					<div class="dashboard-item">
 					<h3>Inspector</h3>
 					<label class="pull-left text-center">
@@ -302,8 +303,10 @@ function toggle_weather_h (){
 					<div id="more-info" class="media-body">
 					</div>
 					</div>
+					</div>
 				</div>
-				<div class="span4 container-item">
+				<div class="span4">
+				<div class="container-item">
 					<div class="dashboard-item">
 					<h3>Guild Viability</h3>
 					<label class="control-label">Nutrient Availability</label>
@@ -313,25 +316,32 @@ function toggle_weather_h (){
 					<label class="control-label">Pest Control Availability</label>
 					<div class="progress">
 					  <div class="pests-bar bar bar-success" style="width:0%"></div>
-					</div>		
+					</div>	
+					</div>	
 				</div>
 				</div>
-				<div class="span2 container-item">
+				<div class="span2">
+				<div class="container-item">
 					<div class="dashboard-item"> 
-						<h4>Key Species</h4> Avocado
+						<h3>Guild Members</h3>
+						<h4>Key Species</h4>
+						<div id="guild-list-key">
+						 Avocado
+						 </div>
 						<h4>Support Species</h4>
-						<p>
+						<div id="guild-list-support">
 							Elderberry Tree x 1
 							Pigeon Pea x 2
 							Comfrey x 5
 							Mexican Sunflower x 2
-						</p>
+						</div>
+					</div>
 					</div>
 				</div>				
 		<!--	</div>-->
 		</div>
 		
-		<div id="options-row" class="row">
+		<!--<div id="options-row" class="row">
 			<div id="options" style="display:none;">
 				<div class="span4">
 					<div id="card1" class="container-item">
@@ -398,10 +408,8 @@ function toggle_weather_h (){
 			</div>
 		</div>
 			
-			
+			-->
 		</div>
-
-		<hr>
 </div>
 <!--	</div> -- /container -->
 
@@ -630,18 +638,19 @@ function toggle_weather_h (){
 			    console.log("size:" + size);
 			    addMarker(event.overlay, size, size, name);
 			    var infowindow = new google.maps.InfoWindow({
-			      content: '<div id="content" onmouseover="updateContent()"><h4>'+ name+'</h4><label class="control-label">Guild Viability</label><div class="progress"><div class="nitrogen-bar-total bar bar-info" style="width:0%"></div><div class="pests-bar-total bar bar-success" style="width:0%"></div></div>',
+			      content: '<div id="content" onmouseover="updateContent()"><h4>'+ name+'</h4><label class="control-label">Plant Viability</label><div class="progress"><div class="nitrogen-bar-total bar bar-info" style="width:0%"></div><div class="pests-bar-total bar bar-success" style="width:0%"></div></div>',
 			      pixelOffset: new google.maps.Size(0, icon_midpoint)
 			    });
 			    google.maps.event.addListener(event.overlay,'click',function(){
 			    	infowindow.open(gmap,event.overlay);
 			    	updateProgressBars();
 			    });
+			    addGuildList("data-name");
 			}
 		  }
 		  else if (event.type == google.maps.drawing.OverlayType.POLYGON) {
 			  	console.log(event);
-			  	event.overlay.setOptions({fillColor: '#000000'});
+			  	event.overlay.setOptions({fillColor: '#FFFFFF'});
 			   	$('#q1').slideUp(function(){
 			   		$('#composer-icons').slideDown(function(){
 			   			$('#dashboard').slideDown();
@@ -942,6 +951,10 @@ function toggle_weather_h (){
  		$(".nitrogen-bar-total").css("width", n_width*(4/7) + "%");
  		$(".pests-bar-total").css("width", p_width*(3/7) + "%");
  	
+ 	}
+ 	
+ 	function addGuildList(plant){
+ 		
  	}
 </script>
    
