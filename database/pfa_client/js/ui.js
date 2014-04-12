@@ -1,3 +1,16 @@
+
+
+//Global Vars
+
+ var FunctionalAnalysis = {
+	intrinsics_lib : {	},
+	needs_lib : { },
+	products_lib : {	},
+	behaviors_lib : {}	
+};
+
+
+
 function getElementsFromId(parent, id_key)
 {
 	var propertyArray = new Array();
@@ -218,23 +231,20 @@ var intrinsic="", needs="", products="", behaviors="";
 	
 }
 
-function FunctionalAnalysisSetUp(i_array, n_array, p_array, b_array){
-	
-	FunctionalAnalysis.intrinsics_lib = i_array;
-	FunctionalAnalysis.needs_lib = n_array;
-	FunctionalAnalysis.products_lib = p_array;
-	FunctionalAnalysis.behaviors_lib = b_array;
-	
-	//alert(JSON.stringify(FunctionalAnalysis.Need, null, 4));
+
+function FunctionalAnalysisSetUp(){
+	var resp = {};
+    jQuery.ajax({url: 'cli2serv.php', dataType : 'json'}).done(function(resp){
+    															FunctionalAnalysis.intrinsics_lib = resp[0]; 
+    															FunctionalAnalysis.needs_lib = resp[1];
+																FunctionalAnalysis.products_lib = resp[2];
+																FunctionalAnalysis.behaviors_lib = resp[3];
+    															//console.log(FunctionalAnalysis.intrinsics_lib);
+    															});
 	
 }
 
- FunctionalAnalysis = {
-	intrinsics_lib : {	},
-	needs_lib : { },
-	products_lib : {	},
-	behaviors_lib : {}	
-};
+
 
 function FAToolSetUp($tools){
 	//alert("FA Tool SetUp "+JSON.stringify($tools));
@@ -259,7 +269,7 @@ function printNewPropertyList(property_data,divID){
 		return htcontents;
 	}
 
-function printNewValueList(prop, val, divID){
+function printNewValueList(prop, val, divID, parentID){
 		var htcontents = "ERROR: PrintNewValueList";
 		
 		//alert("val is: "+val+"  "+JSON.stringify(prop, null, 4));
@@ -284,11 +294,20 @@ function printNewValueList(prop, val, divID){
 				return htcontents;
 			}
 			else{ //meaning that there are predetermined options
-				htcontents = '<select id="'+divID+'list">';
+				htcontents_pre = '<select id="'+divID+'list">';
+				htcontents = '';
+				
 				var i;
 				for(i = 0; i <valuelist.length; i++){
-					htcontents +='<option>'+valuelist[i]+'</option>';
+					//console.log(valuelist[i])
+					if(!(valuelist[i] instanceof Array))
+						htcontents +='<option>'+valuelist[i]+'</option>';
+					else{
+						htcontents_pre = '<select id="'+divID+'proplist" onchange="updateDescription(FunctionalAnalysis.'+prop["name"]+',\''+divID+'proplist\');">';
+						htcontents +='<option>'+valuelist[i][0]+'</option>';
+					}
 				}
+				htcontents = htcontents_pre+htcontents;
 				htcontents += '</select>';
 				return htcontents;
 			}
@@ -296,6 +315,29 @@ function printNewValueList(prop, val, divID){
 		}
 		
 	}
+	
+function printNewDescription(prop, val, divID, parentNode){
+	var htcontents = "ERROR: PrintNewDescriptionList";
+	valuelist = prop[val];
+	//console.log(prop);
+	//console.log(val);
+	
+	var value = document.getElementById(parentNode).value;
+	console.log('value '+value);
+	for(i = 0; i <valuelist.length; i++){
+		if(!(valuelist[i] instanceof Array)){
+			if(valuelist[i] ==value){
+				htcontents = 'none';
+			}
+		}
+		else {
+			if(valuelist[i][0] == value){
+				htcontents = valuelist[i][1];
+			}
+		}
+	}
+	return htcontents;
+}
 	
 function printFATool(tool, divID){
 	var t = FunctionalAnalysisTools[tool];
@@ -332,6 +374,7 @@ function addProperty(property_data, divID)
 {
 //alert(JSON.stringify(property_data, null, 4));
 var newArea = add_New_Element("new"+property_data.name,divID, "div");
+//alert(property_data.name);
 var htcontents = printNewPropertyList(property_data, newArea);   /* to do: determine if the text area name needs to have the [] or why I did it like that... */
 document.getElementById(newArea).innerHTML = htcontents; // You can any other elements in place of 'htcontents' 
 return newArea;
@@ -345,31 +388,34 @@ function addProductProperty(type, divID)
 	document.getElementById(property).innerHTML += " Plant Part: " +printFATool("plant part",property)+" Yield: " +printFATool("yield",property);
 }
 
-
+function addDescription(prop, divID)
+{
+	var parentparentid = document.getElementById(divID).parentNode.parentNode.id;
+	var val = document.getElementById(parentparentid+"proplist").value;
+	//console.log('val is '+val);
+	
+	var parent = document.getElementById(divID).parentNode;
+	var newArea = add_New_Element(parent.id+"description", parent.id, "div");
+	document.getElementById(newArea).setAttribute('style', "display:inline");
+	
+	var htcontents = "";
+	htcontents = "Description: "+printNewDescription(prop, val, newArea, divID);
+	document.getElementById(newArea).innerHTML += htcontents;
+	}
 
 function addValue(prop, divID)
 {
+	
 	var val = document.getElementById(divID).value;
+	
 	var parent = document.getElementById(divID).parentNode;
 	var newArea = add_New_Element(parent.id+"value", parent.id, "div");
 	document.getElementById(newArea).setAttribute('style', "display:inline");
 	
 	//2. determine the contents of that class - eg. if its a text area or another option list...
 	var htcontents = "";
-	htcontents = "Value: "+printNewValueList(prop, val, newArea);
-	
-	
-	/*if(divID.indexOf("behavior") >-1){
-		htcontents = "Details: "+printNewValueList(prop, val, newArea);
-	}else if(divID.indexOf("product") > -1){
-		htcontents = "Value: "+printNewValueList(prop, val, newArea);
-		for( p in prop){
-			if(p != "property"){
-				htcontents +=  p+": "+printNewValueList(prop, p, newArea);
-			}
-		}
-	}else{ htcontents = "Value: "+printNewValueList(prop, val, newArea);}*/
-	//3. add that stuff to the value div element
+	htcontents = "Value: "+printNewValueList(prop, val, newArea, divID);
+
 	document.getElementById(newArea).innerHTML += htcontents;
 }
 
@@ -382,6 +428,17 @@ function updateValue(prop, divID)
 	// 2. add new value
 	addValue(prop, divID);
 }
+
+function updateDescription(prop, divID){
+
+	var parent = document.getElementById(divID).parentNode.id;
+	// 1. remove current value
+	console.log("to delete "+parent+"description");
+	//delete_Element(parent+"description");
+	// 2. add new value
+	addDescription(prop, divID);
+	
+	}
 
 function addImageUploader(){
 	var newInputID = add_New_Element("iUploader", "uploadForm", "input");

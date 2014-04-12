@@ -1,11 +1,13 @@
 <?php
-include ('connect-wp-db.php');
+//include ('connect-wp-db.php');
 
 $site_title = '';
 
 
 function loadSiteDetails(){
 	GLOBAL $site_title;
+	
+	//TO DO: UPDATE THIS TO MONGO
 	//This function will set all of the global variables with the site details
 	$result = mysql_query("SELECT title FROM SiteInfo WHERE id=1");
 	if(mysql_num_rows($result) > 0){

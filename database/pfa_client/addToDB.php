@@ -14,8 +14,9 @@
 		<?php echo('<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_file_size.'">'); ?>
 	</form>
 </div>
-<a onclick='addImageUploader()' href='#'>Add New Image </a><br/>
+<!--<a onclick='addImageUploader()' href='#'>Add New Image </a><br/>
 <button onclick="UploadImages()">Upload Images</button>
+-->
 
 <div id="plantintrinsic">
 <h2>Intrinsic Characteristics</h2>

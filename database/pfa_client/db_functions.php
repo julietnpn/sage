@@ -2,43 +2,58 @@
 
 include('connect-pg-db.php');
 
-//mysql_query format of all entries in the products table
 
+$IntrinsicChar = setup_FA($db_intrinsics_lib);
+	$Need = setup_FA($db_needs_lib);
+	$Product = setup_FA($db_products_lib);
+	$Behavior = setup_FA($db_behaviors_lib);
 
+//in transition from mysql_query format to mongodb query
 
-function get_table_entries($tablename)
+//ported, not tested
+//function get_table_entries($tablename)
+function get_collection_entries($collectionname)
 {
-	return mysql_query("SELECT * FROM ".$tablename." WHERE active=TRUE");
+	global $db;
+	$c = $db->$collectionname;
+	return $c->find();
 }
 
-function get_table_entries_order($tablename, $order)
+
+//ported, not tested
+//function get_table_entries_order($tablename, $order)
+//TODO: incorporating a sort order, ascending/decending. Right now does decending order
+function get_collection_entries_order($collectionname, $order)
 {
-	return mysql_query("SELECT * FROM ".$tablename." WHERE active=TRUE ORDER BY ".$order);
+	$cursor = get_collection_entries($collectionname);
+	return $cursor->sort(array($order => -1));
 }
 
 
+//TODO: Can this be removed?
 function get_entries_with_pl_id($tablename, $pl_id){
 	return mysql_query("SELECT * FROM ".$tablename." WHERE active=TRUE AND pl_id=".strval($pl_id));
 }	
 
-
+//ported, not tested
 function type_of_products()
 {
-	$types = array('Food', 'Medicine', 'BuildingMaterials', 'HomeMaterials');
+	$types = get_collection_entries('products_lib');
 	$return = array();
 	foreach( $types as $t){
-		$result = get_table_entries($t);
-		$num = mysql_num_rows($result);
+		$vals = $t['values'];
+		$num = count($vals);
 		if ($num > 0){
-			$prodstruct['name'] = $t;
+			$prodstruct['name'] = $t['name'];
 			$prodstruct['num_entries'] = $num;
-			$prodstruct['data'] = $result;
+			$prodstruct['data'] = $vals;
 			array_push($return, $prodstruct);
 			}
 	}
 	return $return;
 }
 
+//TO DO: Identify the purpose of this function and then port.
 function product_info($data, $entry){
 	$prod_id = mysql_result($data, $entry, 1);
 	$plant_part = mysql_result($data, $entry, 'plantpart');
@@ -529,22 +544,23 @@ function printDBListing($plantRS){
 		echo("</div></div>");
 }
 
-
-
 function loadFunctionalAnalysis($collection){
 	//propertyList['name'] = intrinsics;
 	//propertyList['layer'] = {canopy, understory, ...}
 	
 	global $db;
 	$libCursor = $collection->find();
+	
 	//$cursor looks like:
 	//[{ "_id" : ObjectId( "511ae981ff2ca2d43bc464ef" ),
   	//	"property" : "layer",
-  	//	"collection" : "layer" },
+  	//	"collection" : "layer",
+  	//	"values" : ["511ae981ff2ca2d43bc464a0", "511ae981ff2ca2d43bc464f9", "511ae981ff2ca2d43bc464b0"....] },
   	//
   	//{ "_id" : ObjectId( "511ae981ff2ca2d43bc464f0" ),
  	//  "property" : "canopy density",
-  	//  "collection" : "canopy_density" }, 
+  	//  "collection" : "canopy_density",
+  	//  "values" : ["511ae981ff2ca2d43bc464a0", "511ae981ff2ca2d43bc464f9", "511ae981ff2ca2d43bc464b0"....] },
   	//
   	// ... ]
 
@@ -554,7 +570,7 @@ function loadFunctionalAnalysis($collection){
 	
 	foreach ($libCursor as $libDoc){
 		//Now we go through each pointer in the library, find the actual collection and load its values.
-		$property = $libDoc['property'];
+		$property = $libDoc['name'];
 		$prop_collection_name = $libDoc['collection'];
 		$propCollection = $db->selectCollection($prop_collection_name);
 		
@@ -562,64 +578,21 @@ function loadFunctionalAnalysis($collection){
 		$propCursor = $propCollection->find();
 		$val = array();
 		foreach ($propCursor as $propDoc){
-			array_push($val, [$propDoc['value'], $propDoc['description']]);
+			//check to see if the library value has a cooresponding description, if so push it to the array and if not only push the value to the array.
+			if( array_key_exists('description', $propDoc) ){
+				array_push( $val, [ $propDoc['value'], $propDoc['description'] ] );
+			} else{
+				array_push($val, $propDoc['value']);
+			}
 		}
-			
+	
 		
 		$propertyList[$property] = $val;
 		
-	
 	}
 	
 	return $propertyList;
 
-
-///////////// Old Stuff
-/*
-	$result = mysql_query("SHOW COLUMNS FROM ".$table);
-	if (mysql_num_rows($result) > 0) {
-	
-			$propertyList = array();
-			$propertyList['name'] = $table;
-			while ($row = mysql_fetch_assoc($result)) { //problem, this assoc array wants to be accessed by the row names.
-				//$row is an array containing filed, type, null, key, default, extra in that order
-				
-				$field = $row['Field'];
-				$type = $row['Type'];
-			
-				
-				if($field != "val"){
-					$enum = Null;
-					
-					if(strrpos($type, "enum")!== false){
-						
-						//remove enum stuff
-						preg_match('/enum\((.*)\)$/', $type, $matches);
-						$val = explode(',', $matches[1]);
-						foreach($val as $v)
-							$enum[] = trim($v, "'");
-						$type = $enum;
-					}
-				
-					if($field == 'id' || $field == 'pl_id' || $field == 'property') // all of the fields from active on wards are just important to the DB
-						continue;
-					if($field == 'active' || $field == 'plant part') // all of the fields from active on wards are just important to the DB
-						break;
-					
-					
-					$propertyList[$field] = $type;
-				}
-				else{
-					foreach ($enum as $e)
-						$propertyList[$e] = $type;
-				}
-		}	
-			
-		return $propertyList;
-	} 
-	else
-		return false;
-		*/
 }
 
 function loadFATools(){
@@ -655,5 +628,11 @@ function loadFATools(){
 	}else{
 		return false;
 		}
-
 }
+
+function setup_FA($dbcur){
+
+	return loadFunctionalAnalysis($dbcur);
+}
+
+?>

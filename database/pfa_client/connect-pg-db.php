@@ -5,8 +5,9 @@
 */
 
  // Database Variables (edit with your own server information)
- $db_name = 'pfa_ca';
+ $db_name = 'plantdb_oc';
  
+ //Ju's shit from before
  //server is only used if not default localhost
  //$server = 'localhost:27020';
  //$user = 'root';
@@ -21,7 +22,7 @@
  $pgconnection = new MongoClient();
  $db = $pgconnection->$db_name;
  
- $db_plant_coll = $db->plants;
+ $db_plant_coll = $db->plant_lib;
  $db_general_lib = $db->general_lib;
  $db_intrinsics_lib = $db->intrinsics_lib;
  $db_needs_lib = $db->needs_lib;

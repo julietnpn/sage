@@ -1,4 +1,4 @@
-//use pfa_ca;
+db = db.getSiblingDB("plantdb_oc");
 var library_list = [ "general_lib", "intrinsics_lib", "needs_lib", "products_lib", "behaviors_lib"];
 var property_list = [];
 
@@ -31,27 +31,43 @@ var property_list = [];
 	var curLib = db.getCollection(library_list[0]);
 	for(p in property_list){
 		curEntry = db.getCollection(property_list[p][1]);
-		doc = {property : property_list[p][0], collection : property_list[p][1]};
+		doc = {name : property_list[p][0], collection : property_list[p][1]};
 		curLib.insert(doc);
-		/*
-		var valueCursor = curEntry.find({},{_id:1} );
+		
+		
+	//**Set up library **
+		
+		//This uses db ref which also stores the "value", but not the descriptions
+		/*var valueCursor = curEntry.find();
 		valueCursor.forEach(
 			function(doc){
 				curLib.update(
-					{property: property_list[p]},
-					{'$push': {values : new DBRef(curEntry, doc._id)}}
+					{ name: property_list[p][0]},
+					{ '$push': {values : new DBRef(doc.value, doc._id)} }
 				)
 			}
-		)*/
+		)
+		*/
+		
+		//This uses a manual ref. The value isn't in the lib, but instead it gives you an id and you have to make a second query to get the "value"
+		var valueCursor = curEntry.find();
+		valueCursor.forEach(
+			function(doc){
+				curLib.update(
+					{ name: property_list[p][0]},
+					{ '$push': {values : doc._id } }
+				)
+			}
+		)
 	}
 	
 	db.intrinsic_lib.find();
 	
+	
+	//reset property list
 	property_list = [];
 	
 	
-
-
 //intrinsics:
 	/* Not sure how to handle this quite yet
 	property_list.push("height range");
@@ -97,10 +113,10 @@ var property_list = [];
 	v = [{value: "very wind tolerant", description:"Can survive winds from 110-130 mph"}, {value: "moderately wind tolerant", description:"Can survive winds from 75-110mph"}, {value: "somewhat wind-tolerant", description:"Can survive winds from 55-75mph"}, {value: "not wind-tolerant", description:"Can survive winds less than 55mph"}];
 	db.wind_tol.save(v);
 	
-	//Removing this b.c. I think it is redundant to flood tolerance
-	/*property_list.push("soil drainage tolerance");
+	//Should this be removed b.c. is redundant to flood tolerance? I think not because this is a daily behavior, where the flood tolerance is occasional/seasonal.
+	property_list.push(["soil drainage tolerance", "soil_drainage_tol"]);
 	v = [{value: "poor-drainage tolerant", description: "Wet to shallow depths most of the time."}, {value: "somewhat-poor-drainage tolerant", description: "periodic wetness at shallow depths due to seasonable weather or water conditions."}, {value: "moderate-drainage tolerant", description: "Soil is wet in root zone for short period of the year."}, {value: "well-drained tolerant", description: "Adequate water movement; root growth not restricted due to wetness"}, {value: "excessively-drained tolerance", description:"Soil doesn't retain adequate water for most plant growth following precipitation."}];
-	db.soil_drainage_tol.save(v);*/
+	db.soil_drainage_tol.save(v);
 	
 	property_list.push(["soil pH tolerance", "soil_pH_tol"]); 
 	//specific for florida, what about ca?
@@ -111,9 +127,9 @@ var property_list = [];
 	
 	
 	//POINT TO GEN LIb
-	property_list.push(["pest intolerance", "pest_intol"]);
+	//property_list.push(["pest intolerance", "pest_intol"]);
 	//DO GENERAL LIB FIRST?
-	db.createCollection("pest_intol", {});
+	//db.createCollection("pest_intol", {});
 	
 	
 	/* Not sure what to do about this yet
@@ -137,18 +153,34 @@ var property_list = [];
 	var curLib = db.getCollection(library_list[1]);
 	for(p in property_list){
 		curEntry = db.getCollection(property_list[p][1]);
-		doc = {property : property_list[p][0], collection : property_list[p][1]};
+		doc = {name : property_list[p][0], collection : property_list[p][1]};
 		curLib.insert(doc);
-		/*
-		var valueCursor = curEntry.find({},{_id:1} );
+		
+	//**Set up library **
+	
+		//This uses db ref which also stores the "value"
+		/*var valueCursor = curEntry.find();
 		valueCursor.forEach(
 			function(doc){
 				curLib.update(
-					{property: property_list[p]},
-					{'$push': {values : new DBRef(curEntry, doc._id)}}
+					{ name: property_list[p][0]},
+					{ '$push': {values : new DBRef(doc.value, doc._id)} }
 				)
 			}
-		)*/
+		)
+		*/
+		
+		
+		//This uses a manual ref. The value isn't in the lib, but instead it gives you an id and you have to make a second query to get the "value"
+		var valueCursor = curEntry.find();
+		valueCursor.forEach(
+			function(doc){
+				curLib.update(
+					{ name: property_list[p][0]},
+					{ '$push': {values : doc._id } }
+				)
+			}
+		)
 	}
 	
 	property_list = [];
@@ -174,8 +206,9 @@ var property_list = [];
 	*/
 	
 	//inoculant
-	property_list.push(["inoculants", "innoculants"]);
-	db.createCollection("inoculants", {});
+	property_list.push(["innoculants", "innoculants"]);
+	v = [{value: "rhizobia bacteria", description: "legume species require rhizobia bacteria to form nodules and fix nitrogen."}];
+	db.innoculants.save(v);
 	
 	/* Not sure what to do with this yet
 	property_list.push("chill hours");
@@ -188,18 +221,32 @@ var property_list = [];
 	var curLib = db.getCollection(library_list[2]);
 	for(p in property_list){
 		curEntry = db.getCollection(property_list[p][1]);
-		doc = {property : property_list[p][0], collection : property_list[p][1]};
+		doc = {name : property_list[p][0], collection : property_list[p][1]};
 		curLib.insert(doc);
-		/*
-		var valueCursor = curEntry.find({},{_id:1} );
+		
+		//**Set up library **		
+		//This uses db ref which also stores the "value"
+		/*var valueCursor = curEntry.find();
 		valueCursor.forEach(
 			function(doc){
 				curLib.update(
-					{property: property_list[p]},
-					{'$push': {values : new DBRef(curEntry, doc._id)}}
+					{ name: property_list[p][0]},
+					{ '$push': {values : new DBRef(doc.value, doc._id)} }
 				)
 			}
-		)*/
+		)
+		*/
+		
+		//This uses a manual ref. The value isn't in the lib, but instead it gives you an id and you have to make a second query to get the "value"
+		var valueCursor = curEntry.find();
+		valueCursor.forEach(
+			function(doc){
+				curLib.update(
+					{ name: property_list[p][0]},
+					{ '$push': {values : doc._id } }
+				)
+			}
+		)
 	}
 	
 	property_list = [];
@@ -219,7 +266,7 @@ var property_list = [];
 	property_list.push(["medicinal", "medicinals"]);
 	v = [{value: "antispasmodic"}, {value: "stimulant"}, {value: "carminative"}, {value: "anti-inflammatory"}, {value: "antiseptic"}];
 	db.medicinals.save(v);
-	//chemical resources (non-medicinal)
+	//biochemical resources (non-medicinal)
 	property_list.push(["biochemical material", "biochemicals"]);
 	v = [{value: "detergents"}, {value: "wetting agent"}, {value: "emulsifier"}, {value: "foaming agent"}];
 	db.biochemicals.save(v);
@@ -240,18 +287,35 @@ var property_list = [];
 	var curLib = db.getCollection(library_list[3]);
 	for(p in property_list){
 		curEntry = db.getCollection(property_list[p][1]);
-		doc = {property : property_list[p][0], collection : property_list[p][1]};
+		doc = {name : property_list[p][0], collection : property_list[p][1]};
 		curLib.insert(doc);
-		/*
-		var valueCursor = curEntry.find({},{_id:1} );
+		
+		
+	//**Set up library **
+		
+		//This uses db ref which also stores the "value"
+		/*var valueCursor = curEntry.find();
 		valueCursor.forEach(
 			function(doc){
 				curLib.update(
-					{property: property_list[p]},
-					{'$push': {values : new DBRef(curEntry, doc._id)}}
+					{ name: property_list[p][0]},
+					{ '$push': {values : new DBRef(doc.value, doc._id)} }
 				)
 			}
 		)*/
+		
+		
+		//This uses a manual ref. The value isn't in the lib, but instead it gives you an id and you have to make a second query to get the "value"
+		var valueCursor = curEntry.find();
+		valueCursor.forEach(
+			function(doc){
+				curLib.update(
+					{ name: property_list[p][0]},
+					{ '$push': {values : doc._id } }
+				)
+			}
+		)
+		
 	}
 	
 	property_list = [];
@@ -297,53 +361,35 @@ var property_list = [];
 var curLib = db.getCollection(library_list[4]);
 	for(p in property_list){
 		curEntry = db.getCollection(property_list[p][1]);
-		doc = {property : property_list[p][0], collection : property_list[p][1]};
+		doc = {name : property_list[p][0], collection : property_list[p][1]};
 		curLib.insert(doc);
-		/*
-		var valueCursor = curEntry.find({},{_id:1} );
-		valueCursor.forEach(
-			function(doc){
-				curLib.update(
-					{property: property_list[p]},
-					{'$push': {values : new DBRef(curEntry, doc._id)}}
-				)
-			}
-		)*/
-	}
-	
-	property_list = [];
-
-/*
-
-//Now set up the libraries
-
-	var collectionArray = db.getCollectionNames();
-	
-	var i, p, l = 0;
-	
-	var curLib = db.getCollection(library_list[l]);
-	
-	while(i < collectionArray.length - 1 ){ 
-	//filter through every collection. The last one is behavior library.
-	
-		if(collectionArray[i] == library_list[l]){ 
-		//when the collection is a library, we're ready to fill the next library.
-			i,l += 1;
-			curLib = db.getCollection(library_list[l]);
-		}
 		
-		prop = {property : property_list[p]};
-		curLib.insert(prop);
-		var valueCursor = db.collectionArray[i].find({},{_id:1} );
+		
+	//**Set up library **
+		//This uses db ref which also stores the "value"
+		
+		/*var valueCursor = curEntry.find();
 		valueCursor.forEach(
 			function(doc){
 				curLib.update(
-					{property: property_list[p]},
-					{'$push': {values : new DBRef(collectionArray[i], doc._id)}}
+					{ name: property_list[p][0]},
+					{ '$push': {values : new DBRef(doc.value, doc._id)} }
 				)
 			}
 		)
-		i,p += 1; 
-		//move to the next collection and its properties
+		*/
+		
+		//This uses a manual ref. The value isn't in the lib, but instead it gives you an id and you have to make a second query to get the "value"
+		var valueCursor = curEntry.find();
+		valueCursor.forEach(
+			function(doc){
+				curLib.update(
+					{ name: property_list[p][0]},
+					{ '$push': {values : doc._id } }
+				)
+			}
+		)
 	}
-	*/
+	
+//plant library
+	db.createCollection("plant_lib", {});
