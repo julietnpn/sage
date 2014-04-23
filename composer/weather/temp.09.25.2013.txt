@@ -1,4 +1,4 @@
-PDT,Max TemperatureF,Mean TemperatureF,Min TemperatureF,Max Dew PointF,MeanDew PointF,Min DewpointF,Max Humidity, Mean Humidity, Min Humidity, Max Sea Level PressureIn, Mean Sea Level PressureIn, Min Sea Level PressureIn, Max VisibilityMiles, Mean VisibilityMiles, Min VisibilityMiles, Max Wind SpeedMPH, Mean Wind SpeedMPH, Max Gust SpeedMPH,PrecipitationIn, CloudCover, Events, WindDirDegrees
+PDT,Max Temperature,Mean Temperature,Min Temperature,Max Dew PointF,MeanDew PointF,Min DewpointF,Max Humidity, Mean Humidity, Min Humidity, Max Sea Level PressureIn, Mean Sea Level PressureIn, Min Sea Level PressureIn, Max VisibilityMiles, Mean VisibilityMiles, Min VisibilityMiles, Max Wind Speed, Mean Wind Speed, Max Gust Speed,Precipitation, CloudCover, Events, WindDirDegrees
 2012-9-25,78,72,65,62,59,57,87,71,54,29.92,29.89,29.84,10,10,8,13,5,18,0.00,3,,199
 2012-9-26,80,73,66,61,59,57,73,63,52,29.89,29.86,29.82,10,10,8,13,3,16,0.00,3,,222
 2012-9-27,82,74,65,62,61,60,87,71,54,29.92,29.89,29.84,10,7,4,10,4,15,0.00,3,,213

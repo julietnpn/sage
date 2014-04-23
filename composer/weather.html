@@ -1,0 +1,81 @@
+<html>
+<head>
+	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script src="js/vendor/bootstrap.min.js"></script>
+	<script src="js/plugins.js"></script>
+	<script src="js/lib/underscore-min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.9.3/TweenMax.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=weather,drawing"></script>
+	<script src="js/forecast.io.js"></script>
+<script>
+function importData(contents){
+	//first row are the data labels
+	rows = contents.split("\n");
+	label_array = rows[0].split(",");
+	
+	var value_array = [];
+	value_array.length = rows.length-1;
+	
+	//we start at one because the first entry in rows were stored in label_array
+	for(i=1; i<rows.length; i++){
+		value_array[i-1]= rows[i].split(",");
+	}
+	
+	//temperature chart
+	chart_data = [];
+	chart_data[0] = new Array("Date", label_array[1], label_array[2], label_array[3]);
+	
+	for(i=0; i< value_array.length; i++){
+			chart_data[i+1] = new Array(value_array[i][0], parseInt(value_array[i][1]), parseInt(value_array[i][2]), parseInt(value_array[i][3]));
+	}
+	
+	var google_data = google.visualization.arrayToDataTable(chart_data);
+	
+	var options = {
+		width: 620,
+		heigth: 210,
+		chartArea: {width: "100%", left:"60"},
+		title: "One Year Temperature History",
+		vAxis: {title: "Fahrenheit"},
+		lineWidth: ".05",
+		pointSize: "1",
+		legend: {position: 'top', alignment: 'start', maxLines: 3},
+		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
+	}
+	
+	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		
+	chart.draw(google_data, options);
+    
+}
+
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                importData(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+</script>
+
+</head>
+<body>
+<div id="chart_div"></div>
+
+<script> readTextFile('weather/temp.09.25.2013.txt');</script>
+</body>
+</html>

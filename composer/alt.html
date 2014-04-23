@@ -15,9 +15,9 @@
 	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 <!--	<link rel="stylesheet" href="css/style.css?old">-->
 	<link rel="stylesheet" href="css/map_style.css">
+	<link rel="stylesheet" href="css/joyride-2.1.css"> 
 	
 	
-
 	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
@@ -31,216 +31,74 @@
         var chart = new google.visualization.LineChart(document.getElementById(div) );
         chart.draw(data, options);
       }
-      
     </script>
     
-    <!-- use to chose hte file with file chooser
-    <input type="file" id="fileinput" />-->
-<script type="text/javascript">
-  
-  function importData(contents){
-	//first row are the data labels
-	rows = contents.split("\n");
-	label_array = rows[0].split(",");
-	
-	var value_array = [];
-	value_array.length = rows.length-1;
-	
-	//we start at one because the first entry in rows were stored in label_array
-	for(i=1; i<rows.length; i++){
-		value_array[i-1]= rows[i].split(",");
-	}
-	
-	//temperature chart
-	chart_data = [];
-	chart_data[0] = new Array("Date", label_array[1], label_array[2], label_array[3]);
-	
-	for(i=0; i< value_array.length; i++){
-			chart_data[i+1] = new Array(value_array[i][0], parseInt(value_array[i][1]), parseInt(value_array[i][2]), parseInt(value_array[i][3]));
-	}
-	
-	var options = {
-		width: 350,
-		heigth: 300,
-		chartArea: {width: "80%", left:"60"},
-		title: "One Year Temperature History",
-		vAxis: {title: "Fahrenheit"},
-		lineWidth: ".05",
-		pointSize: "1",
-		legend: {position: 'top'},
-		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
-	}
-		
-	drawLineChart(chart_data, options, "chart_div");
-	
-	
-	//precipitation chart
-	chart_data = [];
-	chart_data[0] = new Array("Date", label_array[19]);
-	
-	for(i=0; i< value_array.length; i++){
-			chart_data[i+1] = new Array(value_array[i][0], parseFloat(value_array[i][19]));
-	}
-	
-	var options = {
-		title: "One Year Precipitation History",
-		chartArea: {width: "80%", left:"60"},
-		vAxis: {title: "Inches"},
-		lineWidth: ".05",
-		pointSize: "1",
-		legend: {position: 'top'},
-		width: 350,
-		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
-	}
-	
-	drawLineChart(chart_data, options, "chart_div_rain");
-	
-	//wind speed and gust chart
-	chart_data = [];
-	chart_data[0] = new Array("Date", label_array[17], label_array[18]);
-	
-	for(i=0; i< value_array.length; i++){
-			chart_data[i+1] = new Array(value_array[i][0], parseInt(value_array[i][17]), parseInt(value_array[i][18]));
-	}
-	var options = {
-		title: "One Year Wind Speed History",
-		chartArea: {width: "80%", left:"60"},
-		vAxis: {title: "MPH"},
-		lineWidth: ".05",
-		pointSize: "1",
-		legend: {position: 'top'},
-		width: 350,
-		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
-	}
-	drawLineChart(chart_data, options, "chart_div_windspeed");
-	
-	//wind direction
-	chart_data = [];
-	chart_data[0] = new Array("Date", label_array[22]);
-	
-	for(i=0; i< value_array.length; i++){
-			chart_data[i+1] = new Array( value_array[i][0], parseInt(value_array[i][22]));
-	}
-	
-	var options = {
-		title: "One Year Wind Direction History",
-		chartArea: {width: "80%", left:"60"},
-		vAxis: {title: 'Direction (N: 360, S: 180)', minValue: 0, maxValue: 360},
-		lineWidth: "0",
-		pointSize: "2",
-		legend: {position: 'top'},
-		width: 350,
-		colors: ['#d9005b', '#00b945', '#e2fa00', '#bd003b']
-	}
-	
-	drawLineChart(chart_data, options, "chart_div_winddirection");
-}
-
-  function readTextFile(file)
-{
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, true);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                importData(allText);
-            }
-        }
-    }
-    rawFile.send(null);
-}
-  
-  function readSingleFile(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    
-    var f = evt.target.files[0]; 
-
-    if (f) {
-      var r = new FileReader();
-      r.onload = function(e) { 
-	      var contents = e.target.result;
-        /*alert( "Got the file.\n" 
-              +"name: " + f.name + "\n"
-              +"type: " + f.type + "\n"
-              +"size: " + f.size + " bytes\n"
-              + "starts with: " + contents.substr(1, contents.indexOf("\n"))
-        );  */
-        
-        importData(contents);
-        
-      }
-      r.readAsText(f);
-    } else { 
-      alert("Failed to load file");
-    }
-    
-    document.getElementById('fileinput').style.visibility = 'hidden';
-  }
-  
-  function toggle_weather_f (){
-	//from forecast to historical
-  	document.getElementById('forecast-dash').parentNode.parentNode.style.display = 'none';
-  	document.getElementById('weatherhistory-dash').parentNode.parentNode.style.display = 'inline';
-  
-    }
-function toggle_weather_h (){
-    //from historical to forecast
-   
-      	document.getElementById('weatherhistory-dash').parentNode.parentNode.style.display = 'none';
-  	document.getElementById('forecast-dash').parentNode.parentNode.style.display = 'inline';
-  	}
-  
-
-  /*Need if going to use the file chooser to import the climate data
-  document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
-*/
-
-</script>
-    
 </head>
-<body data-spy="scroll" data-target="#navbar" data-offset="20">
+<body>
+<!--<body data-spy="scroll" data-target="#inspector" data-offset="20">-->
+	
+	<!-- Header -->
 	<div id="topbar"><p id="headertext">Plant Guild Composer</p></div>
+	
+	<!-- Interactive Body -->
 	<div class="fullscreen-container" style="margin-left:35px">
+		<!-- First Row -->
 		<div id="map-row" class="row" >
 			<div id="map">
-				<div class="span3">
-					<div class="container-item map-item">
+				<div class="span2">
 					 
-						<div id="q1" class="alert alert-success" style="display:none;">Draw the perimeter of your plant guild
+						<!--<div id="q1" class="alert alert-success" style="display:none;">Draw the perimeter of your plant guild
 						<i class="icon-arrow-right"></i>
 						</div>
-						
-						<div id="composer-icons"  style="display:none;">
+						-->
+						<div id="composer-icons" class="container-item"  style="display:none;">
 							<div class="btn-group btn-group-vertical" data-toggle="buttons-radio">
 							    <h4>Key Species</h4>
-							    <button class="btn" data-category="key" data-size="50" data-name="Avocado Tree"><img src="img/tree.png"/><p name="avocado">Avocado Tree</p></button>
-							    <button class="btn" data-category="key" data-size="50" data-name="Orange Tree"><img src="img/tree.png"/><p name="orange">Orange Tree</p></button>
-							    <button class="btn" data-category="key" data-size="50" data-name="Persimmon Tree"><img src="img/tree.png"/><p name="persimmon">Persimmon Tree</p></button>
+							    <button id="speciesforTutorials" class="btn btn_plantlist" data-category="key" data-size="50" data-name="Avocado Tree"><img src="img/tree.png"/><span name="avocado">Avocado Tree</span></button>
+							    <button class="btn btn_plantlist" data-category="key" data-size="50" data-name="Orange Tree"><img src="img/tree.png"/><span name="orange">Orange Tree</span></button>
+							    <button class="btn btn_plantlist" data-category="key" data-size="50" data-name="Persimmon Tree"><img src="img/tree.png"/><span name="persimmon">Persimmon Tree</span></button>
 								<h4>Support Species</h4>
-								<button class="btn" data-category="pests" data-size="20" data-name="Lemon Grass"><img src="img/herb.png"/><p name="lemon grass">Lemon Grass</p></button>
-								<button class="btn" data-category="nitrogen" data-size="30" data-name="Pigeon Peas"><img src="img/shrub.png"/><p name="pigeon pea">Pigeon Peas</p></button>
-								<button class="btn" data-category="nitrogen" data-size="30" data-name="Mexican Sunflower"><img src="img/herb.png"/><p name="mexican sunflower">Mexican Sunflower</p></button>
-								<button class="btn" data-category="none" data-size="40" data-name="Elderberry"><img src="img/understory.png"/><p name="elder">Elderberry</p></button>
+								<button class="btn btn_plantlist" data-category="pests" data-size="20" data-name="Lemon Grass"><img src="img/herb.png"/><span name="lemon grass">Lemon Grass</span></button>
+								<button class="btn btn_plantlist" data-category="nitrogen" data-size="30" data-name="Pigeon Peas"><img src="img/shrub.png"/><span name="pigeon pea">Pigeon Peas</span></button>
+								<button class="btn btn_plantlist" data-category="nitrogen" data-size="30" data-name="Mexican Sunflower"><img src="img/herb.png"/><span name="mexican sunflower">Mexican Sunflower</span></button>
+								<button class="btn btn_plantlist" data-category="none" data-size="40" data-name="Elderberry"><img src="img/understory.png"/><span name="elder">Elderberry</span></button>
 
-								<button class="btn" data-category="pests" data-size="10" data-name="Clover"><img src="img/herb.png"/><p name="clover">Clover</p></button>
-								<button class="btn" data-category="nitrogen" data-size="10" data-name="Comfrey"><img src="img/shrub.png"/><p name="comfrey">Comfrey</p></button>
-								<button class="btn" data-category="pests" data-size="10" data-name="Chives"><img src="img/understory.png"/><p name="chives">Chives</p></button>
-								<button class="btn" data-category="pests" data-size="25" data-name="Lavendar"><img src="img/herb.png"/><p name="lavender">Lavender</p></button>
+								<button class="btn btn_plantlist" data-category="pests" data-size="15" data-name="Clover"><img src="img/herb.png"/><span name="clover">Clover</span></button>
+								<button class="btn btn_plantlist" data-category="nitrogen" data-size="15" data-name="Comfrey"><img src="img/shrub.png"/><span name="comfrey">Comfrey</span></button>
+								<button class="btn btn_plantlist" data-category="pests" data-size="15" data-name="Chives"><img src="img/understory.png"/><span name="chives">Chives</span></button>
+								<button class="btn btn_plantlist" data-category="pests" data-size="25" data-name="Lavendar"><img src="img/herb.png"/><span name="lavender">Lavender</span></button>
 							</div>
 						</div>
+		
+				</div>
+				<div class="span4" style="height:100%;">
+					<div class="container-item" id="inspector" style="display:none;">
+						
+						<h3>Inspector</h3>
+						<!-- inspector media goes into this label with javascript -->
+						<!--< label class="pull-left text-center">
+							
+						</label> -->
+						<div id="more-info" class="media-body">
+						</div>
+						
 					</div>
 				</div>
-				<div class="span7" style="height:100%;">
+				<div class="span8" style="height:100%;">
 					<div class="container-item">
 						<div id="map-canvas" style="height:100%;"></div>
 					</div>
 				</div>
-				<div class="span1" style="display:none;">
-					<div class="container-item">
+				
+		</div>
+	</div>
+		
+		<!--Second row -->
+		<div id="dashboard" class="row" style="display:none;">
+			<!-- Weather -->
+			<!--<div class="span1" style="display:none;">
+				<div class="container-item">
+					<div class="dashboard-item">
 						<div id="forecast-dash" class="map-item">
 							<input type="button" id="weather_toggle_forecast" value="Switch to Historical" onclick="toggle_weather_f()"/>
 							<h4>Temperature <i class="icon-fire"></i></h4>
@@ -256,58 +114,43 @@ function toggle_weather_h (){
 							</p>
 							<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>
 							<h6>
-					        	Powered by <a href="http://forecast.io">Forecast.io</a>
-					      	</h6>
-							</div>
+								Powered by <a href="http://forecast.io">Forecast.io</a>
+							</h6>
 						</div>
-				</div>
-				<div class="span4" >
-					<div class="container-item">
-						<div id="weatherhistory-dash" class="map-item">
-							<input type="button" id="weather_toggle_history" value="Switch to Live" onclick="toggle_weather_h()"/>
-							<h4>Temperature <i class="icon-fire"></i></h4>
-							<!--<h2 id="temperature"><span id="value"></span><span class="muted">°F</span></h2>-->
-							<div id="chart_div" style="width: 350px; height: 300px;"></div>
-							<h4>Precipitation<i class="icon-tint"></i></h4>
-							<!--<h2 id="humidity"><span id="value"></span><span class="muted">%</span></h2>-->
-							<div id="chart_div_rain" style="width: 350px; height: 300px;"></div>
-							<h4>Wind <i class="icon-plane"></i></h4>
-							<!--<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
-							  <path d="M25,0 L40,50 L25,35 L10,50 L25,0" />
-							</svg>
-							<p id="wind-bearing-value">
-								<span id="value"></span><span class="muted">°</span>
-							</p>-->
-							<div id="chart_div_windspeed" style="width: 350px; height: 300px;"></div>
-							<!--<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>-->
-							
-							<div id="chart_div_winddirection" style="width: 350px; height: 300px;"></div>
-							
-							</div>
-						</div>
-				</div>
-		</div>
-	</div>
-		
-		
-		<div id="dashboard" class="row" style="display:none;">
-<!--			<div class="span12 container-item">-->
-			
-				<div class="span7">
-					<div class="container-item" id="inspector">
-					<div class="dashboard-item">
-					<h3>Inspector</h3>
-					<label class="pull-left text-center">
-						<!-- inspector media goes into this label with javascript -->
-					</label>
-					<div id="more-info" class="media-body">
-					</div>
-					</div>
 					</div>
 				</div>
-				<div class="span4">
+			</div>-->
+			<div class="span7" >
 				<div class="container-item">
-					<div class="dashboard-item">
+					<!--<div id="weatherhistory-dash" class="map-item">-->
+					<div id="weatherhistory-dash" class="dashboard-item">
+						<!--<input type="button" id="weather_toggle_history" value="Switch to Live" onclick="toggle_weather_h()"/>-->
+						<h4>Temperature <i class="icon-fire"></i></h4>
+						<!--<h2 id="temperature"><span id="value"></span><span class="muted">°F</span></h2>-->
+						<div id="chart_div" style="width: 650px; height: 230px;"></div>
+						<h4>Precipitation<i class="icon-tint"></i></h4>
+						<!--<h2 id="humidity"><span id="value"></span><span class="muted">%</span></h2>-->
+						<div id="chart_div_rain" style="width: 650px; height: 230px;"></div>
+						<h4>Wind <i class="icon-plane"></i></h4>
+						<!--<svg id="wind-bearing" xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50" viewBox="0 0 50 50">>
+						  <path d="M25,0 L40,50 L25,35 L10,50 L25,0" />
+						</svg>
+						<p id="wind-bearing-value">
+							<span id="value"></span><span class="muted">°</span>
+						</p>-->
+						<div id="chart_div_windspeed" style="width: 650px; height: 230px;"></div>
+						<!--<h2 id="wind-speed"><span id="value"></span><span class="muted">mph</span></h2>-->
+						
+						<div id="chart_div_winddirection" style="width: 650px; height: 230px;"></div>
+						
+						</div>
+					</div>
+			</div>
+			
+			<!-- Viability -->
+			<div class="span4">
+				<div class="container-item" id="viability">
+					<div class="dashboard-item" >
 					<h3>Guild Viability</h3>
 					<label class="control-label">Nutrient Availability</label>
 					<div class="progress">
@@ -319,10 +162,12 @@ function toggle_weather_h (){
 					</div>	
 					</div>	
 				</div>
-				</div>
-				<div class="span3">
-				<div class="container-item">
-					<div class="dashboard-item"> 
+			</div>
+			
+			<!-- Guild members -->
+			<div class="span3">
+				<div class="container-item" id="inventory">
+					<div class="dashboard-item" > 
 						<h3>Guild Members</h3>
 						<h4>Key Species</h4>
 						<div id="guild-list-key">
@@ -333,83 +178,84 @@ function toggle_weather_h (){
 							<!-- Will be filled by a script -->
 						</div>
 					</div>
-					</div>
-				</div>				
-		<!--	</div>-->
-		</div>
-		
-		<!--<div id="options-row" class="row">
-			<div id="options" style="display:none;">
-				<div class="span4">
-					<div id="card1" class="container-item">
-						<form>
-						<p>Is there a building to the south of the guild?</p>
-						<div class="btn-group" data-toggle="buttons-radio">
-						  <input type="button" class="btn btn-good" value="Yes" />
-						  <input type="button" class="btn btn-bad" value="No" />
-						</div>
-						</form>
-					</div>
-				</div>
-				<div class="span4">
-					<div id="card2" class="container-item">
-					<div class="container-item">
-						<ul id="sortable-species">
-							<li class="item">Avocado</li>
-							<li class="item">Navel Orange</li>
-							<li class="item">Persimmon</li>
-						</ul>
-					</div>
-					</div>
-				</div>
-				<div class="span4">
-					<div id="card2" class="container-item">
-						<div class="container-item">
-							<ul id="sortable">
-								<li class="item">Mexican Sunflower - Dynamic Accumulator</li>
-								<li class="item">Lavender - Pollenating</li>
-								<li class="item">Strawberry</li>
-								<li class="item">Rosemary - Pest</li>
-								<li class="item">Pigeon Pea - NF</li>
-								<li class="item">Marigold - Pest</li>
-								<li class="item">Chard</li>
-								<li class="item">Onion - Pest</li>
-								<li class="item">Garlic - Pest</li>
-								<li class="item">Leek - Pest</li>
-								<li class="item">Radish - Pest</li>
-								<li class="item">Yarrow - Dynamic Accumulator</li>
-								
-							</ul>
-						</div>
-					</div>
 				</div>
 			</div>
+						
 		</div>
-		
-		<div id="more-row"class="row">
-			<div id="more"  style="display:none;">
-				<div id="card3" class="span4">
-					
-				</div>
-				<div class="span4">
-					<div class="container-item">
-					Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
-					</div>
-				
-				</div>
-				<div class="span4">
-					<div class="container-item">
-					Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
-					</div>
-				</div>
-			</div>
-		</div>
-			
-			-->
-		</div>
-</div>
-<!--	</div> -- /container -->
+	
+	</div>
 
+	<!-- Joyride2 Tool Tips -->
+<!--/* Each tip is set within this <ol>. */
+/* This creates the order the tips are displayed */ -->
+<ol id="joyRideTipContent" >
+  <!--/* data-id needs to be the same as the parent it will attach to */-->
+  <li data-button="Next: Available Plants">
+	  <h2>Welcome to the Plant Guild Composer!</h2>
+	  <p>You're a resident of Orange County, CA looking to transform your front yard into an edible landscape.</p>
+  </li>
+  
+   <li data-id="composer-icons" data-button="Next: Plant Information" data-options="tipLocation:right">
+	  <p>Based on your food preference and site details the following plants are candidates for your yard.</p>
+	  <p>They key species are those that produce the bulk of your food. The support species can also do this but are there to ensure your key species is in good health.</p>
+  </li>
+
+  <li data-id="speciesforTutorials" data-button="Ok">
+	  <p>Click on a plant to view its characteristics, needs, and products.</p>
+  </li>
+ </ol> 
+  
+<ol id="joyRideTipContent2" style="display:none;">  
+	<li data-id="inspector" data-button="Next: Monitoring the Environment">
+	  <p>By looking at the needs of a key species and the products of a support species you can make good plant companionships.</p>
+  </li>
+<li data-id="weatherhistory-dash" data-button="Ok" data-options="tipLocation:right">
+	  <p>By taking weather data into consideration you can determine which plants are most suitable for your site. Scroll down to view annual temperature, precipitation and wind data.</p>
+  </li>
+
+  <!--/* using 'data-button' lets you have custom button text */-->
+  <!--<li data-class="parent-element-class" data-options="tipLocation:top;tipAnimation:fade" data-button="Second Button">Content...</li>-->
+
+  <!--/* you can put a class for custom styling */
+  i data-id="parentElementID" class="custom-class">Content...</li>-->
+</ol>
+
+<ol id="joyRideTipContent3" style="display:none;" >  
+	<li data-id="map-canvas" data-button="Ok" data-options="tipLocation:left">
+	  <p>This is a map of your yard. You will be designing your guild on this map.
+	  Select a key species of your choice and click on the map to place it.</p>
+  </li>
+</ol>
+
+<ol id="joyRideTipContent4" style="display:none;">  
+	<!--not greying-->
+	<li data-id="inventory" data-button="Next: Support Species" data-options="tipLocation:left">
+	  <p>Here you can see an inventory of which plants are in your guild.</p>
+  </li>
+  <li data-id="composer-icons" data-button="Ok" data-options="tipLocation:left">
+	  <p>Now its time to chose a support species that provides your key species with the appropriate nutrients or pest control. Select a support species and place it on the map.</p>
+  </li>
+</ol>
+
+<ol id="joyRideTipContent5" style="display:none;">  
+	<!--not greying-->
+	<li data-id="viability" data-button="Next: Support Species" data-options="tipLocation:top">
+	  <p>Here you can see the viability of the guild. It is critical the the key and support species have enough nutrients and aren't bombarded by pests for the guild to be successful. Plants like Pigeon Pea, Mexican Sunflower, and Comfrey provide the guild with nutrients. Plants like Lemongrass, Chives, and Lavender provide the guild with pest control.</p>
+	  <p>Its important to realize that the larger your guild the more of these support species you'll require. For example, a guild with two avocados requires more nutrients and pest resistance than a guild with one!</p>
+  </li>
+  <li data-button="Ok">
+	  <p>Keep arranging the plants in your yard until you have completed your design!</p>
+  </li>
+</ol>
+
+<ol id="joyRideTipContent6" style="display:none;">  
+	<li data-button="Ok" > <!-- doesn't grey, greyed on retry? -->
+	  <h2>Congratulations, you've formed a viable guild!</h2>
+	  <p>This demo is over, but you are free to continue modifying your guild. Thanks for participating in the effort to make sustainable landscapes and food systems!</p>
+  </li>
+</ol>
+
+	<!-- Scripts -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
 	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
@@ -419,25 +265,106 @@ function toggle_weather_h (){
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.9.3/TweenMax.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=weather,drawing"></script>
 	<script src="js/forecast.io.js"></script>
+	
+	<!--Next four for joy ride -->
+	<script type="text/javascript" src="js/jquery-1.10.1.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/modernizr.mq.js"></script>
+    <script type="text/javascript" src="js/jquery.joyride-2.1.js"></script>
 	<!--<script src="js/main.js"></script>-->
+	<script> 
+		var tutorialcomplete2 = false;
+		var tutorialcomplete3 = false;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<script>
-	$(document).ready(function(){
+		  $(window).load(function() {
+		  
+        $('#joyRideTipContent').joyride({
+          autoStart : true,
+          postStepCallback : function (index, tip) {
+			  if (index == 2) {
+				$(this).joyride('set_li', false, 1);
+			  }
+        	},
+        	postRideCallback: function(){
+				$('#joyRideTipContent').joyride('destroy');
+			},
+        modal:true,
+        expose: true
+        });
+        
+      });
+      
+      	  $('.btn_plantlist').click(function(){
+      		if(!tutorialcomplete2){
+      			tutorialcomplete2=true;
+      		
+				$('#joyRideTipContent2').joyride({
+				  autoStart : true,
+				  postStepCallback : function (index, tip) {
+				  if (index == 2) {
+					$(this).joyride('set_li', false, 1);
+				  }
+				},
+				postRideCallback: function(){
+					$('#joyRideTipContent2').joyride('destroy');
+					/* This is the right way to do this, but for some reason doesn't work.
+					$('#weatherhistory-dash').bind("scroll", function(){
+						$('#weatherhistory').unbind("scroll");
+						setTimeout(function(){
+								$('#joyRideTipContent3').joyride({
+								  autoStart : true,
+								  postStepCallback : function (index, tip) {
+									  if (index == 2) {
+										$(this).joyride('set_li', false, 1);
+									  }
+									},
+									postRideCallback: function(){
+										$('#joyRideTipContent3').joyride('destroy');
+								
+									},
+									modal:true,
+									expose: true
+								});
+							}, 2000);
+					});*/
+				},
+				modal:true,
+				expose: true
+				});
+			}
+			
+		});
+		
+			/* wrong way to do this, but its working */
+		  $('#weatherhistory-dash').scroll(function(){
+			if(!tutorialcomplete3)
+			{
+				tutorialcomplete3 = true;
+				setTimeout( 
+					function(){
+						$('#joyRideTipContent3').joyride({
+						  autoStart : true,
+						  postStepCallback : function (index, tip) {
+							  if (index == 2) {
+								$(this).joyride('set_li', false, 1);
+							  }
+							},
+							postRideCallback: function(){
+								$('#joyRideTipContent3').joyride('destroy');
+							},
+							modal:true,
+							expose: true
+						});
+					}, 2000);
+			}
+		});
+		
+		
+		$(document).ready(function(){
 	
 		//set everything initially to hide. This was slow, so instead I just added style="display:none;" for all the things that needed to be hidden.
-		$( "#sortable" ).sortable();
-		$( "#sortable" ).disableSelection();
+		//$( "#sortable" ).sortable();
+		//$( "#sortable" ).disableSelection();
 		$( "#map" ).hide();
 		$( "#options" ).hide();
 		$( "#more" ).hide();
@@ -448,12 +375,13 @@ function toggle_weather_h (){
 		$( "#menu-more").hide(); 
 		$( "#composer-icons").hide();
 		$( "#dashboard" ).hide();
-		$( "#map-row div.img").draggable({ opacity: 0.7, helper: "original" });
+		$( "#inspector" ).hide();
+		//$( "#map-row div.img").draggable({ opacity: 0.7, helper: "original" });
 	   
 	   //displays the pop up over the current location button, and 
-		$("#current-location").popover({trigger: 'hover', delay: { show: 900, hide: 10 }});
+		//$("#current-location").popover({trigger: 'hover', delay: { show: 900, hide: 10 }});
 		//click event for current location
-	    $("#current-location").click(function (){
+	   /* $("#current-location").click(function (){
 	    	  //sets the state of the button to loading.
 			  $("#current-location").button("loading");
 			  //slide down the map menu for the navigation menu
@@ -486,7 +414,7 @@ function toggle_weather_h (){
 			  }));
 			  
 			  
-		});
+		});*/
 	  
 		//trigger the onFind event, the search for location button
 	  	$('#find').on('click', function(event) {
@@ -526,9 +454,9 @@ function toggle_weather_h (){
 		  //hide the inspector if there is something already showing
 		  $('#inspector').hide();
 		  //set the inspector to the current button's html
-		  $('#inspector label').html($(this).html());
-		  $('#inspector label').find('img').addClass("img-polaroid");
-		  switch ($(this).find("p").attr('name')){
+		 // $('#inspector label').html($(this).html());
+		  //$('#inspector label').find('img').addClass("img-polaroid");
+		  switch ($(this).find("span").attr('name')){
 		  
 			  case 'avocado': 
 			  		content =  '<h4 class="media-heading">Avocado Tree</h4><p>Family: Lauraceae <br>Binomial Name: <span class="italics">Persea americana</span></p> <h4>Characteristics</h4><p>Layer: Canopy or Understory<br>Height: 30-40 ft, (dwarf) 12-15 ft <br>Spread: 15-35 ft, (dwarf) 8-12 ft<br> Roots: Shallow<br>Canopy: Dense<br>Shedding:Evergreen<br>Harvest Season: Spring<br>Hardiness Zone: 9</p><h4>Needs</h4><p>Nutrients: Nitrogen, Potassium, and Phosphorus<br>Water: Moderate, soil should be moist roughly 9\" deep (use mulch).<br>Sun: Full Sun<br>Pest and pathogens: (Pests) Mites, Thrips; (Pathogens) Laurel wilt.</p><h4>Products and Behaviors</h4><p>Edibles: 80-140 lbs Avocado Fruit<br>Raw Material: Leaf-Biomass, poisonous seeds<br>Attracted Insects: Glassy-winged sharpshooter (Homalodisca vitripennis) Pierce\'s Disease vector</p>';
@@ -571,468 +499,9 @@ function toggle_weather_h (){
 		  });
 	  	}); 
 	});
+	</script>
+	<script type="text/javascript" src="js/alt.js"></script>
 	
-	
- 	var gmap; //global map variable
- 	var glat = 33.6431859; //global lat and png values. Set initially to irvine
- 	var glng = -117.8413502; //global lat and png values. Set initially to irvine
- 	var geocoder; //global geocoder from google's geocoder API
- 	var markersArray = new Array(); //array to store markers on map
- 	var pixelSizeAtZoom0 = .000001; //the size of a pixel at map-zoom = 0
- 	var maxPixelSize = 350; //restricts the maximum size of the icon, otherwise the browser will choke at higher zoom levels trying to scale an image to millions of pixels
- 	var conditions; //weather conditions from the forecast.io api
- 	var forecast = new ForecastIO(); //Forecast.io API
 
- 	console.log(forecast);
- 	google.maps.visualRefresh = true; //show the new Google Maps API as of May 2013
- 	
-	function initialize() 
-	{
-		
-		
-		
-		geocoder = new google.maps.Geocoder();
-		var pos = new google.maps.LatLng(60, 50);
-		mapDiv = document.getElementById('map-canvas');
-		
-		var mapOptions = {
-		    zoom: 20,
-		    center: pos,
-		    panControl: true,
-		    zoomControl: true,
-		    scaleControl: true,
-		    mapTypeControl: true,
-		    streetViewControl: false,
-		    overviewMapControl: false,
-		    mapTypeId: google.maps.MapTypeId.ROADMAP
-		  }
-		
-		gmap = new google.maps.Map(mapDiv, mapOptions);
-		//gmap.setTilt(0);
-		drawingManager = new google.maps.drawing.DrawingManager();
-		drawingManager.setMap(gmap);			
-		
-		addPolygonDrawing();
-		 /*
-		google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
-				  
-		});*/
-		
-		google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
-		  if (event.type == google.maps.drawing.OverlayType.MARKER) {
-		    //event.overlay.setTitle("Hello");
-		    if(event.overlay.icon == "img/null.png"){
-		    	$("#q1").html('Please select a key species <i class="icon-arrow-down"></i>');
-		    	$("#q1").slideDown();
-		    }
-		    else{
-			    console.log(event);
-			    var icon_midpoint = event.overlay.getIcon().size.height/2;
-			    console.log(icon_midpoint);
-			    $("#q1").slideUp();
-			    var size = $("#composer-icons button.active").attr("data-size");
-			    var name = $("#composer-icons button.active").attr("data-name");
-			    console.log("size:" + size);
-			    addMarker(event.overlay, size, size, name);
-			    var infowindow = new google.maps.InfoWindow({
-			      content: '<div id="content" onmouseover="updateContent()"><h4>'+ name+'</h4><label class="control-label">Plant Viability</label><div class="progress"><div class="nitrogen-bar-total bar bar-info" style="width:0%"></div><div class="pests-bar-total bar bar-success" style="width:0%"></div></div>',
-			      pixelOffset: new google.maps.Size(0, icon_midpoint)
-			    });
-			    google.maps.event.addListener(event.overlay,'click',function(){
-			    	infowindow.open(gmap,event.overlay);
-			    	updateProgressBars();
-			    });
-			    addGuildList();
-			}
-		  }
-		  else if (event.type == google.maps.drawing.OverlayType.POLYGON) {
-			  	console.log(event);
-			  	event.overlay.setOptions({fillColor: '#FFFFFF'});
-			   	$('#q1').slideUp(function(){
-			   		$('#composer-icons').slideDown(function(){
-			   			$('#dashboard').slideDown();
-			   		});
-			   		removePolygonDrawing();
-			   });
-		  }
-		});
-		
-		google.maps.event.addListener(gmap, 'zoom_changed', function() {
-			console.log("zoom:" + gmap.getZoom());
-		    
-		    var zoom = gmap.getZoom();
-		    var relativePixelSize = pixelSizeAtZoom0*Math.pow(2,zoom); // use 2 to the power of current zoom to calculate relative pixel size.  Base of exponent is 2 because relative size should double every time you zoom in
-		
-		    /*if(relativePixelSize > maxPixelSize) //restrict the maximum size of the icon
-		        relativePixelSize = maxPixelSize;*/
-		
-		    //change the size of the icon
-		    _.each(markersArray, function(value, key, list){
-		    	console.log(value.width + "*" + relativePixelSize);
-		    	console.log(value.marker.getIcon());
-		    	value.marker.setIcon(
-		    	    new google.maps.MarkerImage(
-		    	        value.marker.getIcon().url, //marker's same icon graphic
-		    	        null,//size
-		    	        null,//origin
-		    	        null, //anchor
-		    	        new google.maps.Size(value.width*relativePixelSize, value.height*relativePixelSize) //changes the scale
-		    	    )
-		    	);   
-		    
-		    });
-		    
-		         
-		});
-			
-		var weatherLayer = new google.maps.weather.WeatherLayer({
-		 		temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
-				});
-		weatherLayer.setMap(gmap);
-			
-		var cloudLayer = new google.maps.weather.CloudLayer();
-		cloudLayer.setMap(gmap);
-		
-		
-		//slide the map menu item from the navigation bar down
-			$("#menu-map").slideDown();
-			//make an address variable with the text from the location input
-			var address = '28 Murasaki, Irvine, CA 92617';
-				//get the gps location for the address from google's geolocation service
-				getGPS(address, function(data){
-					//log the return data
-					console.log(data);
-					//slide the map down
-					slideMapDown(data);
-				});
-			//change the drawing tools to include the polygon tool	
-			addPolygonDrawing();
-			//refresh the spy-scroll, check bootstrap docs
-			refreshSpy();
-			
-	} 
-
-	google.maps.event.addDomListener(window, 'load', initialize);
-	
-	
-	
-	function slideMapDown(pos)
-	{
-		var mapRow = $("#map");
-		mapRow.show("normal", function()
-		{
-			console.log(pos);
-			scroll("#map");
-			TweenMax.to(mapRow, 1, {
-				 height:"400px", ease:Quad.easeOut, onComplete: function()
-				 {
-					 google.maps.event.trigger(gmap, 'resize');
-					 gmap.setZoom( gmap.getZoom() );
-					 gmap.setCenter(pos);
-					 //gmap.setTilt(0);
-					 var marker = new google.maps.Marker({
-						 map: gmap,
-						 position: pos
-					 });
-					 $("#q1").slideDown();
-					 loadForecast(pos.lat(), pos.lng());
-					 readTextFile('weather/temp.09.25.2013.txt');
-				 }
-			});  
-		});     
-	}
-	
-	
-	function loadForecast(lat, longitude)
-	{
-		conditions = forecast.getCurrentConditions(lat, longitude);
-		var temp = conditions.getTemperature();
-		var humidity = (Math.round(conditions.getHumidity()*100));
-		var wind_speed = conditions.getWindSpeed();
-		var wind_bearing = conditions.getWindBearing();
-		
-			
-		$("#temperature #value").text(temp);
-		$("#humidity #value").text(humidity);
-		$("#wind-speed #value").text(wind_speed);
-		$("#wind-bearing").css("transition","all 1s ease-in-out");
-		$("#wind-bearing").css("transform", "rotate("+wind_bearing+"deg)");
-		$("#wind-bearing-value #value").text(wind_bearing);
-
-	}
-		
-	function getGPS(address, output)
-	{
-	    geocoder.geocode( { 'address': address}, function(results, status) 
-	        {
-	          if (status == google.maps.GeocoderStatus.OK) 
-	          {
-	          	console.log(results);
-	          	output(results[0].geometry.location);
-	          }
-	          else 
-	          {
-	              console.log(status);
-	          }
-	        }
-	    );
-	}
-		
-	function getAddress(location, output)
-	{
-		console.log(location);
-		//glat = location.lat();
-		//glng = location.lng();
-	    geocoder.geocode( { 'latLng': location }, function(results, status)
-	        {
-	        	//console.log(status);
-	          if (status == google.maps.GeocoderStatus.OK)
-	          {
-		          	output(results[0].formatted_address);
-	          }
-	          else
-	          {
-	          		//console.log(status);
-	          }
-	        }
-	    );
-	}
-		
-	function getCurrentLocation(callback)
-	{
-		navigator.geolocation.getCurrentPosition(function(position){
-			var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-			glat = position.coords.latitude;
-			glng = position.coords.longitude;
-			slideMapDown(pos);    
-			callback(pos);
-			console.log(pos);
-		}, displayError);
-	}
-		
-	function displayError(error) 
-	{
-	  var errors = { 
-		1: 'Permission denied',
-		2: 'Position unavailable',
-		3: 'Request timeout'
-	  };
-	  alert("Error: " + errors[error.code]);
-	} 		      
-		  
-	function setDrawing(icon, title, name, size) 
-	{
-		var relativePixelSize = pixelSizeAtZoom0*Math.pow(2,gmap.getZoom());
-		
-		var markerImage = new google.maps.MarkerImage(
-		    icon,
-		    new google.maps.Size(size*relativePixelSize,size*relativePixelSize), //size
-		    null, //origin
-		    null, //anchor
-		    new google.maps.Size(size*relativePixelSize,size*relativePixelSize) //scale
-		);
-	
-	
-		drawingManager.setOptions({
-		   drawingMode: google.maps.drawing.OverlayType.MARKER,
-		   drawingControl: true,
-		   drawingControlOptions: {
-			 position: google.maps.ControlPosition.TOP_CENTER,
-			 drawingModes: [
-			   google.maps.drawing.OverlayType.MARKER,
-			   google.maps.drawing.OverlayType.POLYGON,
-			 ]
-		   },
-		   markerOptions: {
-			 icon: markerImage,
-			 draggable: true,
-			 title: title,
-			 raiseOnDrag: false
-		   }
-	 	});
-   	}
-		   
-   	function removePolygonDrawing()
-   	{
-	   drawingManager.setOptions({
-		 drawingMode: google.maps.drawing.OverlayType.MARKER,
-		 drawingControl: true,
-		 drawingControlOptions: {
-		   position: google.maps.ControlPosition.TOP_CENTER,
-		   drawingModes: [google.maps.drawing.OverlayType.MARKER]
-		 },
-		 markerOptions: {
-		 	icon: 'img/null.png'
-		 }
-	   });
-   	}
-   
-   	function addPolygonDrawing()
-   	{
-	   drawingManager.setOptions({
-		 drawingMode: google.maps.drawing.OverlayType.POLYGON,
-		 drawingControl: true,
-		 drawingControlOptions: {
-		   position: google.maps.ControlPosition.TOP_CENTER,
-		   drawingModes: [google.maps.drawing.OverlayType.POLYGON]
-		 }
-	   });
-   	}
-   	
-   	// Removes the overlays from the map, but keeps them in the array
-   	function addMarker(marker, width, height, name) {
-   	  markersArray.push({'marker': marker, 'width': width, 'height':height, 'name':name});
-   	  updateProgressBars();
-   	}
-						  
-	// Removes the overlays from the map, but keeps them in the array
-	function clearOverlays() {
-	  if (markersArray) {
-		for (i in markersArray) {
-		  markersArray[i].setMap(null);
-		}
-	  }
-	}
-			
-	// Shows any overlays currently in the array
-	function showOverlays() {
-	  if (markersArray) {
-		for (i in markersArray) {
-		  markersArray[i].setMap(gmap);
-		}
-	  }
-	}
-			
-	// Deletes all markers in the array by removing references to them
-	function deleteOverlays() {
-	  if (markersArray) {
-		for (i in markersArray) {
-		  markersArray[i].setMap(null);
-		}
-		markersArray.length = 0;
-	  }
-	}
-	
-	
-	function scroll(id)
-	{
-		$("html, body").animate({ scrollTop: $(id).offset().top - 75}, 1000);
-	}
-		
-	function refreshSpy()
-	{
-		$('[data-spy="scroll"]').each(function () {
-		  $(this).scrollspy('refresh');
-		});
-	
-	}
- 	
- 	function updateProgressBars()
- 	{
- 		var newArray = _.pluck(markersArray, 'marker');
- 		key_size = _.size(_.where(newArray, {title: "key"}));
- 		n_size = _.size(_.where(newArray, {title: "nitrogen"}));
- 		p_size = _.size(_.where(newArray, {title: "pests"}));
- 		both_size = _.size(_.where(newArray, {title: "both"}));
- 		
- 		n_width = ((n_size+both_size)/(key_size*4))*100;
- 		p_width = ((p_size+both_size)/(key_size*3))*100;
- 		
- 		if(n_width > 100)
- 			n_width = 100;
- 		if(p_width > 100)
- 			p_width = 100;
- 		$(".nitrogen-bar").css("width", n_width + "%");
- 		$(".pests-bar").css("width", p_width + "%");
- 		
- 		$(".nitrogen-bar-total").css("width", n_width*(4/7) + "%");
- 		$(".pests-bar-total").css("width", p_width*(3/7) + "%");
- 	
- 	}
- 	
- 	function addGuildList(){
- 		
- 		insert = false;
- 		name = $("#composer-icons button.active").attr("data-name");
- 		console.log("inAddGuildList: Name is "+ name);
- 		category  = $("#composer-icons button.active").attr("data-category");
- 		
- 		
- 		//if plant is a key species, add to the key list
- 		if (category == "key"){
- 			console.log("inAddGuildList: category is key");
- 			key_members = $("#guild-list-key").find("div");
- 			console.log("inAddGuildList: key_members.length:"+key_members.length);
- 			//if data-category is in guild-member-key
- 				//increment data-category
- 			for(i = 0; i< key_members.length; i++){
- 				console.log("inAddGuildList: key_member[i] data-name is " + key_members);
- 				if($(key_members[i]).attr("data-name") == name){
- 					
- 					quant = $(key_members[i]).find("span");
- 					curr_quant = parseInt(quant.attr("quantity"));
- 					curr_quant++;
- 					console.log("inAddGuildList: old_quant is "+curr_quant);
- 					
- 					
- 					quant.attr("quantity", curr_quant);
- 					console.log("inAddGuildList: new_quant is "+ quant.attr("quantity"));
- 					
- 					
- 					quant.text(quant.attr("quantity"));
- 					insert = true;
- 					break;
- 				}
- 			}
- 			//else, add to guild-member-key
- 			if(!insert){
- 				console.log("inAddGuildList: adding to key members");
- 				$("#guild-list-key").append('<div data-name="'+name+'">'+name+' x<span quantity="1">1</span></div>');
- 			}
- 		}
- 			
- 		//otherwise it is  a support species so add it to the support list
- 		else{
- 			console.log("inAddGuildList: category is support");
- 			support_members = $("#guild-list-support").find("div");
- 		
- 			//if data-category is in guild-member-support
- 				//increment data-category
- 			for(i = 0; i< support_members.length; i++){
- 				if($(support_members[i]).attr("data-name") == name){
- 					quant = $(support_members[i]).find("span");
- 					curr_quant = parseInt(quant.attr("quantity"));
- 					curr_quant++;
- 					quant.attr("quantity", curr_quant);
- 					quant.text(quant.attr("quantity"));
- 					insert = true;
- 					break;
- 				}
- 			}
- 				
- 				
- 			//else, add to guild-member-support
- 			if(!insert){
- 					$("#guild-list-support").append('<div data-name="'+name+'">'+name+' x<span quantity="1">1</span></div>');
- 			}
- 		
- 		}
- 			
- 		
- 		
- 	}
-</script>
-   
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 </body>
 </html>

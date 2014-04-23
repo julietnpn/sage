@@ -1,6 +1,6 @@
 
 body, .jumbotron {
-    padding-bottom: 40px;
+    padding-bottom: 5px;
     /*background: url(../img/background.jpg) repeat-y center top;*/
 }
 .container-item {
@@ -19,7 +19,7 @@ body, .jumbotron {
 }
 
 .row{
-	margin-bottom: 30px;
+	margin-bottom: 15px;
 }
 
 .row-item {
@@ -32,12 +32,12 @@ body, .jumbotron {
 }
 
 .map-item {
-	height: 400px;
+	height: 350px;
 	overflow: scroll;
 }
 
 .dashboard-item {
-	height: 300px;
+	height: 210px;
 	overflow: scroll;
 }
 
@@ -56,16 +56,20 @@ body, .jumbotron {
 }
 
 #composer-icons .btn{
-	width: 150px;
-	
+	width: 155px;
+	padding: 0px;
+	text-align:left;
+	text-indent:2px;
 }
 
 #composer-icons img{
-	width: 50px;
+	width: 20px;
+	display: inline;
+	margin: 2px;
 }
 
 #inspector img {
-	width: 100px;
+	width: 30px;
 }
 
 #more-info {
@@ -88,7 +92,7 @@ path{
 
 /*begin sahand's css*/
 #topbar {
-		height: 100px;
+		height: 40px;
 		width: 100%;
 		position: relative;
 		margin: 0 auto;
@@ -100,10 +104,10 @@ path{
 		height: auto;
 		text-align: center;
 		margin: 0 auto;
-		font: 40px MillerBanner;
+		font: 20px MillerBanner;
 		line-height: 1.5em;
 		color: #f4f4f4;
-		padding-top: 33px;
+		padding-top: 10px;
 		-webkit-font-smoothing: antialiased;
 }
 
@@ -126,13 +130,13 @@ path{
 	
 h4, .control-label {
 	font-family: 'Helvetica Neue', Helvetica;
-	font-size: 23px;
+	font-size: 18px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 300;
-	height: 28px;
+	height: 20px;
 	letter-spacing: 1px;
-	line-height: 28px;
+	line-height: 20px;
 	margin-bottom: 10px;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
@@ -140,18 +144,18 @@ h4, .control-label {
 
 h3 {
 	font-family: 'Helvetica Neue', Helvetica;
-	font-size: 29px;
+	font-size: 18px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 300;
-	height: 28px;
+	height: 20px;
 	letter-spacing: 1px;
-	line-height: 28px;
-	margin-bottom: 20px;
+	line-height: 20px;
+	margin-bottom: 10px;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	border-bottom: 1px solid #333;
-	padding-bottom: 20px;
+	padding-bottom: 5px;
 }
 
 p {
@@ -159,4 +163,8 @@ p {
 	font-weight: 100;
 	height: auto;
 	line-height: 21px;
+}
+
+btn_plantlist{
+
 }
