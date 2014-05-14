@@ -5,6 +5,7 @@
 	if(isset($_GET['pl_id'])){
 		$plantId = $_GET['pl_id'];  ///bug here...
 		$plantData = load_Plant_Data($plantId);
+		//var_dump($plantData);
 	}
 ?>
 
@@ -16,7 +17,7 @@
 <div id="plantimages">
 	<h2>Images</h2>
 	<?php 
-	printImages($plantData[7]);
+	//printImages($plantData[7]);
 ?>
 	<form id="uploadForm" action="upload.process.php" enctype='multipart/form-data' method='post' target='_blank'>
 		<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_file_size ?>">
@@ -32,7 +33,7 @@
 ?>
 </div><!--end plantintrinsic-->
 
-<a onclick='addProperty(FunctionalAnalysis.intrinsic,"plantintrinsic")' href='#'>Add New Intrinsic Characteristic </a>
+<a onclick='addProperty(FunctionalAnalysis.intrinsics_lib,"plantintrinsic")' href='#'>Add New Intrinsic Characteristic </a>
 
 
 <div id="plantneeds">
@@ -41,7 +42,7 @@
 printPlantData_SingleCategory($plantData[4], "needs");
 ?>
 </div><!--end plantneeds -->
-<a onclick='addProperty(FunctionalAnalysis.need,"plantneeds")' href='#'>Add New Need</a>
+<a onclick='addProperty(FunctionalAnalysis.needs_lib,"plantneeds")' href='#'>Add New Need</a>
 
 <div id="plantproducts">
 <h2>Products</h2>
@@ -49,7 +50,7 @@ printPlantData_SingleCategory($plantData[4], "needs");
 printPlantData_SingleCategory($plantData[5], "products");
 ?>
 </div><!--end plantproducts -->
-<a onclick='addProductProperty(FunctionalAnalysis.product,"plantproducts")' href='#'>Add New Product</a>
+<a onclick='addProperty(FunctionalAnalysis.products_lib,"plantproducts")' href='#'>Add New Product</a>
 
 <div id="plantbehaviors">
 <h2>Behaviors</h2>
@@ -58,7 +59,7 @@ printPlantData_SingleCategory($plantData[6], "behaviors");
 ?>
 
 </div><!--end plantbehaviors -->
-<a onclick='addProperty(FunctionalAnalysis.behavior,"plantbehaviors")' href='#'>Add New Behavior</a>
+<a onclick='addProperty(FunctionalAnalysis.behaviors_lib,"plantbehaviors")' href='#'>Add New Behavior</a>
 
 <div id="submitplant">
 	<?php echo('<button onclick="UpdatePlant(\''.$plantId.'\')">Update Plant Information</button>');?>

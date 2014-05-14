@@ -42,20 +42,20 @@ function DeletePlant(pl_id){
 }
 
 function UpdatePlant(pl_id){
+	//alert("plant id = "+ pl_id);
 	if(ProcessImageUploads()){
 		var varArray = pl_id+"|"+ProcessPlantInfo()+"|"+ProcessNewPlantData()+"|"+ProcessDeletedPlantData();//also process Deleted Plant Data
-		//url= 'db_work.php?action=update_Plant&vars='+varArray;
-		url= 'index.php?action=update_Plant&vars='+varArray; //For Debug 
-		window.location.replace(url);
-		
+		url= 'db_work.php?action=update_Plant&vars='+varArray;
+		//url= 'index.php?action=update_Plant&vars='+varArray; //For Debug 
+		window.location = url;
 	}
 }
 
 function SubmitPlant(){
 	if(ProcessImageUploads()){
 		var varArray = ProcessPlantInfo()+"|"+ProcessNewPlantData();
-		//url= 'db_work.php?action=add_New_Plant&vars='+varArray;
-		url= 'index.php?action=add_New_Plant&vars='+varArray; //For Debug 
+		url= 'db_work.php?action=add_New_Plant&vars='+varArray;
+		//url= 'index.php?action=add_New_Plant&vars='+varArray; //For Debug 
 		window.location = url;
 	}
 }
@@ -68,6 +68,7 @@ function UploadImages(){
 }
 
 function ProcessImageUploads(){
+	//alert("process imageuploads");
 	var uploadForm = document.getElementById("uploadForm");
 	if(getElementsFromId(uploadForm, "iUploader").length >0){
 		if(confirm("Would you like to continue without uploading images?"))
@@ -75,11 +76,13 @@ function ProcessImageUploads(){
 		else
 			return false;
 	}
+	//alert("end process image uploads");
 	return true;
 }
 
 function ProcessPlantInfo(){
 	//add family, endemic status here.
+	//alert("process plant info");
 	g_cur = document.getElementById("genus");
 	s_cur = document.getElementById("species");
 	c_cur = document.getElementById("commonnames");
@@ -90,7 +93,7 @@ function ProcessPlantInfo(){
 	for(i = 0; i < plantinfo.length; i++){
 		if(plantinfo[i][0] != plantinfo [i][1]){
 			updated += plantinfo[i][2]+"{"+plantinfo[i][0]+"";
-			if(i != plantinfo.length-1)
+			//if(i != plantinfo.length-1)
 				updated += "},";
 		}
 	}
@@ -104,10 +107,19 @@ function ProcessDeletedPlantData(){
 	for(var t = 0; t < tableArray.length; t++){
 		searchString = "DELETE"+tableArray[t];
 		pi_properties = "";
-		if(t<4)
-			pi_properties = getElementsFromId(document.getElementById("plant"+tableArray[t]), searchString);
-		else
-			pi_properties = getElementsFromId(document.getElementById("saved"+tableArray[t]), searchString);
+		if(t<4){
+			searchingDiv = document.getElementById("plant"+tableArray[t]);
+			//console.log("The searching Div is "+searchingDiv);
+			pi_properties = getElementsFromId(searchingDiv, searchString);
+				
+		}
+		else{
+			searchingDiv = document.getElementById("saved"+tableArray[t]);
+			//console.log("The searching Div is "+searchingDiv);
+			if(searchingDiv != null){
+				pi_properties = getElementsFromId(searchingDiv, searchString);
+			}
+		}
 		if(pi_properties.length > 0){
 			
 			for(var i = 0; i< pi_properties.length; i++)
@@ -128,12 +140,14 @@ function ProcessDeletedPlantData(){
 
 function ProcessNewPlantData(){
 
+//alert("process new plant data");
 var intrinsic="", needs="", products="", behaviors="";
 	
 	//Intrinsic Chars 
-	pi_properties = getElementsFromId(document.getElementById("plantintrinsic"), "newIntrinsicChar");
+	pi_properties = getElementsFromId(document.getElementById("plantintrinsic"), "newintrinsics");
 	if(pi_properties.length > 0){
 		for(var i = 0; i<pi_properties.length; i++){
+			//alert("length is"+pi_properties.length);
 			var id = pi_properties[i].attributes.getNamedItem("id").textContent;
 			var property = document.getElementById(id+"proplist").value;
 			intrinsic+= property+"{";
@@ -153,7 +167,7 @@ var intrinsic="", needs="", products="", behaviors="";
 				intrinsic+= val;	
 			}
 			
-			if(i != pi_properties.length-1)
+			//if(i != pi_properties.length-1)
 				intrinsic += "},";
 		}
 	}
@@ -162,7 +176,7 @@ var intrinsic="", needs="", products="", behaviors="";
 	intrinsic+="$$";
 	
 	//Needs
-	pn_properties = getElementsFromId(document.getElementById("plantneeds"), "newNeed");
+	pn_properties = getElementsFromId(document.getElementById("plantneeds"), "newneeds");
 	if(pn_properties.length > 0){
 		for(var i = 0; i<pn_properties.length; i++){
 			var id = pn_properties[i].attributes.getNamedItem("id").textContent;
@@ -171,7 +185,7 @@ var intrinsic="", needs="", products="", behaviors="";
 			
 			needs+=document.getElementById(id+"valuelist").value;
 			
-			if(i != pn_properties.length-1)
+			//if(i != pn_properties.length-1)
 				needs += "},";
 		}
 	}
@@ -179,7 +193,7 @@ var intrinsic="", needs="", products="", behaviors="";
 	
 	
 	//Products
-	pp_properties = getElementsFromId(document.getElementById("plantproducts"), "newProduct");
+	pp_properties = getElementsFromId(document.getElementById("plantproducts"), "newproducts");
 	if(pp_properties.length > 0){
 		for(var i = 0; i<pp_properties.length; i++){
 			var id = pp_properties[i].attributes.getNamedItem("id").textContent;
@@ -200,7 +214,7 @@ var intrinsic="", needs="", products="", behaviors="";
 			
 			products +=document.getElementById(id+"valuelist").value;
 			
-			if(i != pp_properties.length-1)
+			//if(i != pp_properties.length-1)
 				products += "},";
 		}
 	}
@@ -210,7 +224,7 @@ var intrinsic="", needs="", products="", behaviors="";
 	
 	//Behaviors
 	
-	pb_properties = getElementsFromId(document.getElementById("plantbehaviors"), "newBehavior");
+	pb_properties = getElementsFromId(document.getElementById("plantbehaviors"), "newbehaviors");
 	if(pb_properties.length > 0){
 		for(var i = 0; i<pb_properties.length; i++){
 			var id = pb_properties[i].attributes.getNamedItem("id").textContent;
@@ -219,7 +233,7 @@ var intrinsic="", needs="", products="", behaviors="";
 			
 			var val = document.getElementById(id+"valuelist").value;		
 			behaviors+=val;
-			if(i != pb_properties.length-1)
+			//if(i != pb_properties.length-1)
 				behaviors += "},";
 		}
 	}
@@ -303,7 +317,7 @@ function printNewValueList(prop, val, divID, parentID){
 					if(!(valuelist[i] instanceof Array))
 						htcontents +='<option>'+valuelist[i]+'</option>';
 					else{
-						htcontents_pre = '<select id="'+divID+'proplist" onchange="updateDescription(FunctionalAnalysis.'+prop["name"]+',\''+divID+'proplist\');">';
+						htcontents_pre = '<select id="'+divID+'list" onchange="updateDescription(FunctionalAnalysis.'+prop["name"]+',\''+divID+'list\');">';
 						htcontents +='<option>'+valuelist[i][0]+'</option>';
 					}
 				}
@@ -340,6 +354,7 @@ function printNewDescription(prop, val, divID, parentNode){
 }
 	
 function printFATool(tool, divID){
+	console.log(tool);
 	var t = FunctionalAnalysisTools[tool];
 	var htcontents = '<select id="'+divID+tool+'">';
 	for(var i=0; i< t.length; i++){
@@ -372,6 +387,7 @@ function delete_Element(name) {
 // Call this function to add textbox
 function addProperty(property_data, divID)
 {
+console.log(property_data);
 //alert(JSON.stringify(property_data, null, 4));
 var newArea = add_New_Element("new"+property_data.name,divID, "div");
 //alert(property_data.name);
@@ -434,7 +450,7 @@ function updateDescription(prop, divID){
 	var parent = document.getElementById(divID).parentNode.id;
 	// 1. remove current value
 	console.log("to delete "+parent+"description");
-	//delete_Element(parent+"description");
+	delete_Element(parent+"description");
 	// 2. add new value
 	addDescription(prop, divID);
 	

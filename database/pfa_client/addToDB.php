@@ -14,9 +14,9 @@
 		<?php echo('<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_file_size.'">'); ?>
 	</form>
 </div>
-<!--<a onclick='addImageUploader()' href='#'>Add New Image </a><br/>
+<a onclick='addImageUploader()' href='#'>Add New Image </a><br/>
 <button onclick="UploadImages()">Upload Images</button>
--->
+
 
 <div id="plantintrinsic">
 <h2>Intrinsic Characteristics</h2>
@@ -39,14 +39,14 @@
 
 
 </div><!--end plantproducts -->
-<a onclick='addProductProperty(FunctionalAnalysis.products_lib,"plantproducts")' href='#'>Add New Product</a>
+<a onclick='addProperty(FunctionalAnalysis.products_lib,"plantproducts")' href='#'>Add New Product</a>
 
 <div id="plantbehaviors">
 <h2>Behaviors</h2>
 
 
 </div><!--end plantbehaviors -->
-<a onclick='addProperty(FunctionalAnalysis.behavior_lib,"plantbehaviors")' href='#'>Add New Behavior</a>
+<a onclick='addProperty(FunctionalAnalysis.behaviors_lib,"plantbehaviors")' href='#'>Add New Behavior</a>
 
 <div id="submitplant">
 	<button onclick="SubmitPlant()">Add Plant to Database</button>
