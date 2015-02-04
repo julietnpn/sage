@@ -58,14 +58,14 @@
 							    <button class="btn btn_plantlist" data-category="key" data-size="50" data-name="Orange Tree"><img src="img/tree.png"/><span name="orange">Orange Tree</span></button>
 							    <button class="btn btn_plantlist" data-category="key" data-size="50" data-name="Persimmon Tree"><img src="img/tree.png"/><span name="persimmon">Persimmon Tree</span></button>
 								<h4>Support Species</h4>
-								<button class="btn btn_plantlist" data-category="pests" data-size="20" data-name="Lemon Grass"><img src="img/herb.png"/><span name="lemon grass">Lemon Grass</span></button>
+								<button class="btn btn_plantlist" data-category="pests" data-size="25" data-name="Rosemary"><img src="img/shrub.png"/><span name="rosemary">Rosemary</span></button>
 								<button class="btn btn_plantlist" data-category="nitrogen" data-size="30" data-name="Pigeon Peas"><img src="img/shrub.png"/><span name="pigeon pea">Pigeon Peas</span></button>
 								<button class="btn btn_plantlist" data-category="nitrogen" data-size="30" data-name="Mexican Sunflower"><img src="img/herb.png"/><span name="mexican sunflower">Mexican Sunflower</span></button>
 								<button class="btn btn_plantlist" data-category="none" data-size="40" data-name="Elderberry"><img src="img/understory.png"/><span name="elder">Elderberry</span></button>
 
-								<button class="btn btn_plantlist" data-category="pests" data-size="15" data-name="Clover"><img src="img/herb.png"/><span name="clover">Clover</span></button>
+								<button class="btn btn_plantlist" data-category="pests" data-size="20" data-name="Oregano"><img src="img/shrub.png"/><span name="oregano">Oregano</span></button>
 								<button class="btn btn_plantlist" data-category="nitrogen" data-size="15" data-name="Comfrey"><img src="img/shrub.png"/><span name="comfrey">Comfrey</span></button>
-								<button class="btn btn_plantlist" data-category="pests" data-size="15" data-name="Chives"><img src="img/understory.png"/><span name="chives">Chives</span></button>
+								<button class="btn btn_plantlist" data-category="pests" data-size="25" data-name="Sage"><img src="img/herb.png"/><span name="sage">Sage</span></button>
 								<button class="btn btn_plantlist" data-category="pests" data-size="25" data-name="Lavendar"><img src="img/herb.png"/><span name="lavender">Lavender</span></button>
 							</div>
 						</div>
@@ -197,7 +197,7 @@
   
    <li data-id="composer-icons" data-button="Next: Plant Information" data-options="tipLocation:right">
 	  <p>Based on your food preference and site details the following plants are candidates for your yard.</p>
-	  <p>They key species are those that produce the bulk of your food. The support species can also do this but are there to ensure your key species is in good health.</p>
+	  <p>The key species are those that produce the bulk of your food. The support species can also provide food but are primarily there to ensure your key species is in good health.</p>
   </li>
 
   <li data-id="speciesforTutorials" data-button="Ok">
@@ -233,15 +233,15 @@
 	  <p>Here you can see an inventory of which plants are in your guild.</p>
   </li>
   <li data-id="composer-icons" data-button="Ok" data-options="tipLocation:left">
-	  <p>Now its time to chose a support species that provides your key species with the appropriate nutrients or pest control. Select a support species and place it on the map.</p>
+	  <p>Now its time to choose a support species that provides your key species with the appropriate nutrients or pest control. Select a support species and place it on the map.</p>
   </li>
 </ol>
 
 <ol id="joyRideTipContent5" style="display:none;">  
 	<!--not greying-->
 	<li data-id="viability" data-button="Next: Support Species" data-options="tipLocation:top">
-	  <p>Here you can see the viability of the guild. It is critical the the key and support species have enough nutrients and aren't bombarded by pests for the guild to be successful. Plants like Pigeon Pea, Mexican Sunflower, and Comfrey provide the guild with nutrients. Plants like Lemongrass, Chives, and Lavender provide the guild with pest control.</p>
-	  <p>Its important to realize that the larger your guild the more of these support species you'll require. For example, a guild with two avocados requires more nutrients and pest resistance than a guild with one!</p>
+	  <p>Here you can see the viability of the guild. It is critical that the key and support species have enough nutrients and aren't bombarded by pests for the guild to be successful. Plants like Pigeon Pea, Mexican Sunflower, and Comfrey provide the guild with nutrients. Plants like Rosemary, Sage, Oregano, and Lavender provide the guild with pest control.</p>
+	  <p>Its important to realize that the larger your guild is the more of these support species you'll require. For example, a guild with two avocados requires more nutrients and pest resistance than a guild with one!</p>
   </li>
   <li data-button="Ok">
 	  <p>Keep arranging the plants in your yard until you have completed your design!</p>
@@ -355,7 +355,7 @@
 							modal:true,
 							expose: true
 						});
-					}, 2000);
+					}, 7000);
 			}
 		});
 		
@@ -489,6 +489,18 @@
 			  case 'elder':
 				  content = '<h4 class="media-heading">Elder Tree</h4> <p>Family: Caprifoliaceae <br>Binomial Name:  <span class="italics">Sambucus nigra</span> <\p> <h4>Characteristics</h4><p>Layer: Understory<br>Height: 6-14 ft<br>Spread: 4-16 ft<br>Harvest Season: Summer</p><h4>Needs</h4><p>Nutrients:  <br> Water: Moderate, Well Drained <br>Sun: Full Sun, Partial Sun</p><h4>Products and Behaviors</h4><p>Edible: Berries, flowers<br>Raw Material: Hard wood, hollow stems (combs, spindles, pegs)<br> Biochemical Material: <br>Cultural and Amenity: Musical instrument material (clappers, flutes), Considered a holy tree capable of restoring and keeping good health.<br> Medicinal: [Flowers] contain flavenoids and rutin, which are known to improve immune function in combination with vitamin C; contain tannins to reduce bleeding, diarrhea, and congestion; as tea used to break fevers, aid headache, indegestion, twitching eyes, dropsy, rheumatism, appendix inflammation, bladder or kidney infections, colds, influenza, bleeding in lungs, and mild enough for newborns. [Leaves, strong] can be steeped an used as a slight leaxitive, external poultice ingredient for soreness, inflammation, joint stiffness, and bee stings. [Berries] diuretic, used for arthritis and rheumatism, juice to use in salve for burns ans scalds, concentrated juice can be used as a purgative.<br>Erosion Control: On hill sides near water sources <br>Attracted Insects: valley elderberry longhorn beetle (endangered),  <br>Attracted Animals: song birds, game birds, squirrels, bears, deer, elk, moose</p>';
 				  $('#more-info').html(content);
+				  break;
+			  case 'rosemary':
+				  content = '<h4 class="media-heading">Rosemary</h4> <p>Family: Lamiaceae <br>Binomial Name:  <span class="italics">Rosmarinus officinalis</span> <\p> <h4>Characteristics</h4><p>Layer: Shrub<br>Height: 5 ft<br>Spread: 3-5 ft<br>Harvest Season: Spring and Summer</p><h4>Needs</h4><p>Nutrients:  Low demand of Nitrogen, Phosphorous, and Potassium (NPK)<br> Water: Low <br>Sun: Full Sun</p><h4>Products and Behaviors</h4><p>Edible: [Leaves] culinary herb, wine<br>Raw Material: [Stems]flexible but durable for weaving <br> Biochemical Material: [Leaves/Oil] Used in combination with detergents as anti-dandruff shampoo <br>Cultural and Amenity: Used in many cultural rituals and ceremonies, and has strong ties with the feminine (e.g., bridal wreaths). <br> Medicinal: [Oil] antibacterial, anti-fungal, aromatherapy <br>Repels Noxious Insects: cabbage lopper, carrot fly, slugs, snails, Mexican bean beetle  <br>Attracted Animals: butterflies, hummingbirds</p>';
+				  $('#more-info').html(content);
+				  break;
+			  case 'sage':
+				  	content = '<h4 class="media-heading">Canyon Grey Sagebrush</h4> <p>Family: Asteraceae <br>Binomial Name:  <span class="italics">Artemisia californica</span> <\p> <h4>Characteristics</h4><p>Layer: Shrub<br>Height: 2-3 ft<br>Spread: 5 ft<br>Harvest Season: Spring and Summer</p><h4>Needs</h4><p>Nutrients:  Low demand of Nitrogen, Phosphorous, and Potassium (NPK)<br> Water: Low (drought tolerant) <br>Sun: Full Sun</p><h4>Products and Behaviors</h4><p>Cultural and Amenity: Used by Native Americans for chewing or smoking with tobacco and other dried leaves. Burned in ceremonial fires before hunting. <br> Medicinal:[Leaves] poultice for tooth aches and wounds, applied to back to treat asthma, used in a decoction for menstural problems, to eas child birth, and menopausal symptoms, used in a decoction as a bath for colds, rheumatism and coughs.<br>Repels Noxious Insects: fleas, mosquitos <br>Attracted Animals: habitat for California gnatcatcher, Bell sage sparrow, and other foraging birds (that eat aphids); habitat for amphibians, reptiles, dusky-footed and desert wood rats.<br>Erosion Control: deep roots</p>';
+				  	$('#more-info').html(content);
+				  break;
+				case 'oregano':
+				  	content = '<h4 class="media-heading">Desert Oregano</h4> <p>Family: Verbenaceae <br>Binomial Name:  <span class="italics">Lippia graveolens</span> <\p> <h4>Characteristics</h4><p>Layer: Shrub<br>Height: 3-6 ft<br>Spread: 3-6 ft<br>Harvest Season: After rains (pick leaves with fingers, do not break branches)</p><h4>Needs</h4><p>Nutrients: Low demand of Nitrogen, Phosphorous, and Potassium (NPK)<br> Water: Low (drought tolerant) <br>Sun: Full Sun</p><h4>Products and Behaviors</h4><p>Edible: [Leaves] culinary herb (has a hint of citrus), used as a basil substitute in pesto, an essential ingredient in many "chili powders".<br>Cultural and Amenity: Used by Seri people of the Sonoran desert for culinary and ceremonial purposes. <br> Medicinal: [Leaves] antiseptic, anti-fungal, anti-oxidan, anti-inflammatory. Used to calm tooth aches.<br>Repels Pests: most bugs and animals due to its very strong scent</p>';
+				  	$('#more-info').html(content);
 				  break;
 			  default:
 			  		$('#more-info').html(" ");

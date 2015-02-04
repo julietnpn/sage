@@ -181,8 +181,12 @@ function update_Plant_Info($varString, $pl_id){
 	global $db_plant_coll;
 	$propertyList = explode("},", $varString);
 	for($i = 0; $i < sizeof($propertyList); $i++){
-		$contents = explode("{", $propertyList[$i]);
-		$db_plant_coll->update(array('_id'=>$pl_id), array('$set' => array($contents[0]=>$contents[1])));
+		if($propertyList[$i] != ""){
+			error_log("current parse: ".$propertyList[$i]." parse end");
+			$contents = explode("{", $propertyList[$i]);
+			$propval = array($contents[0]=>$contents[1]);
+			$db_plant_coll->update(array('_id'=> new MongoId($pl_id)), array('$set' => $propval));
+		}
 	}
 }
 
