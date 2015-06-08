@@ -1,9 +1,35 @@
 import time
+from flask.ext.admin.contrib.sqla import ModelView
 from sandman import app, db
 from sandman.model import activate, register, Model
+from sqlalchemy import inspect
+from sqlalchemy.orm.attributes import get_history, instance_state
 #from sqlalchemy.ext.associationproxy import association_proxy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:plants@localhost/plantdb_oc'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:plants@localhost/plants'
+
+properties_1_to_1 = ['genus',
+                     'species',
+                     'common_name',
+                     'biochemical_material_prod_id',
+                     'cultural_and_amenity_prod_id',
+                     'drought_tol_id',
+                     'family_id',
+                     'flood_tol_id',
+                     'food_prod_id',
+                     'humidity_tol_id',
+                     'layer_id',
+                     'medicinals_prod_id',
+                     'raw_materials_prod_id',
+                     'salt_tol_id',
+                     'toxin_removal_id',
+                     'wind_tol_id',
+                     'minimum_temperature_tol',
+                     'pH',
+                     'innoculant',
+                     'variety',
+                     'mineral_nutrients_prod_id',
+                     'fire_tol_id']
 
 rel_plants_to_active_growth_period = db.Table('plants_active_growth_period_by_region',
                                      db.Column('plants_id', db.ForeignKey(u'plants.id'), nullable=False, index=True),
@@ -93,6 +119,56 @@ rel_plants_to_water_needs = db.Table('plants_water_needs_by_region',
                                      db.Column('water_needs_id', db.ForeignKey(u'water_needs.id'), nullable=False, index=True),
                                      db.Column('regions_id', db.ForeignKey(u'regions.id'), nullable=False, index=True))
 
+class ModelViewAddToTransactions(ModelView):
+    def create_model(self, form):
+        return self._handle_edits(form, self.model(), 'INSERT')
+
+
+    def update_model(self, form, model):
+        return self._handle_edits(self, form, model, 'UPDATE')
+
+
+    def _handle_edits(self, form, model, edit_type):
+        try:
+            print 'handling edits...'
+            transaction = Transactions(users_id=1, transaction_type=edit_type, ignore=False)
+            self.session.add(transaction)
+            form.populate_obj(model)
+                       
+            #for attr in sorted(inspect(model).attrs, key=lambda a: a.key):
+            #    print str(attr.key) + ': ' + str(attr.history)
+            for prop_name in properties_1_to_1:
+                history = get_history(model, prop_name)
+                if history.added and history.added[0]:
+                    # action type could be 'DELETE' if, for example, a value for a one-to-many property is being removed
+                    action = Actions(transaction=transaction, action_type='UPDATE', property=prop_name, value=history.added[0])
+                    self.session.add(action)
+            self.session.commit()
+            return True
+        except Exception as ex:
+            print 'EXCEPTION!!!'
+            print ex
+            if not self.handle_view_exception(ex):
+                flash(gettext('Failed to create record. %(error)s', error=str(ex)), 'error')
+                log.exception('Failed to create record.')
+            self.session.rollback()
+            return False
+
+    def delete_model(self, model):
+        try:
+            transaction = Transactions(users_id=1, transaction_type='DELETE', plants_id=model.id, ignore=False)
+            self.session.add(transaction)
+            self.session.commit()
+            return True
+        except Exception as ex:
+            if not self.handle_view_exception(ex):
+                flash(gettext('Failed to delete record. %(error)s', error=str(ex)), 'error')
+                log.exception('Failed to delete record.')
+
+            self.session.rollback()
+
+            return False
+
 class Actions(db.Model):
     __tablename__ = 'actions'
 
@@ -108,6 +184,7 @@ class Actions(db.Model):
         return str(self.id)
 
 class ActiveGrowthPeriod(db.Model):
+    __view__ = ModelViewAddToTransactions
     __tablename__ = 'active_growth_period'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -309,6 +386,7 @@ class MineralNutrientsProd(db.Model):
 
 class Plants(db.Model):
     __tablename__ = 'plants'
+    __view__ = ModelViewAddToTransactions
     
     id = db.Column(db.Integer, primary_key=True)
     genus = db.Column(db.String)
@@ -449,7 +527,7 @@ class Transactions(db.Model):
     __tablename__ = 'transactions'
 
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime(timezone=False))
+    timestamp = db.Column(db.DateTime(timezone=False), server_default="timezone('utc'::text, now())")
     users_id = db.Column(db.Integer, db.ForeignKey(u'users.id'))
     transaction_type = db.Column(db.String)
     plants_id = db.Column(db.Integer, db.ForeignKey(u'plants.id'))
@@ -520,28 +598,6 @@ register((Actions,
           WaterNeeds,
           WindTol))
 
-properties_1_to_1 = ['genus',
-                     'species',
-                     'common_name',
-                     'biochemical_material_prod_id',
-                     'cultural_and_amenity_prod_id',
-                     'drought_tol_id',
-                     'family_id',
-                     'flood_tol_id',
-                     'food_prod_id',
-                     'humidity_tol_id',
-                     'layer_id',
-                     'medicinals_prod_id',
-                     'raw_materials_prod_id',
-                     'salt_tol_id',
-                     'toxin_removal_id',
-                     'wind_tol_id',
-                     'minimum_temperature_tol',
-                     'pH',
-                     'innoculant',
-                     'variety',
-                     'mineral_nutrients_prod_id',
-                     'fire_tol_id']
 
 def delete_plants():
   Plants.query.delete()
@@ -549,6 +605,8 @@ def delete_plants():
 
 def process_transactions():
   for transaction in Transactions.query.filter_by(ignore=False).order_by(Transactions.id).all():
+    print 'transaction type=' + transaction.transaction_type
+    print 'transaction type=' + str(transaction.plants_id)
     if transaction.transaction_type == 'INSERT':
       new_plant = Plants()
       transaction.plant = new_plant
