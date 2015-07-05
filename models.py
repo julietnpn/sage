@@ -359,6 +359,7 @@ class Plants(db.Model):
     innoculant = db.Column(db.String)
     variety = db.Column(db.String)
     fire_tol_id = db.Column(db.Integer, db.ForeignKey(u'fire_tol.id'))
+    livestock_bloat_id = db.Column(db.Integer, db.ForeignKey(u'livestock_bloat.id'))
     pH_min = db.Column(db.Numeric)
     pH_max = db.Column(db.Numeric)
     toxicity_id = db.Column(db.Integer, db.ForeignKey(u'toxicity.id'))
