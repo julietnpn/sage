@@ -381,6 +381,7 @@ class Plants(db.Model):
     medicinals = db.relationship('PlantsMedicinalsProd', backref='plant')
     mineral_nutrients = db.relationship('PlantsMineralNutrientsProd', backref='plant')
     raw_materials = db.relationship('PlantsRawMaterialsProd', backref='plant')
+    url_tags = db.relationship('UrlTags', backref='plant')
     
 
     #endemic_statuses_proxy = association_proxy('endemic_statuses', 'endemic_status')
@@ -697,7 +698,7 @@ class PlantsMineralNutrientsProd(db.Model):
     __tablename__ = 'plants_mineral_nutrients_prod'
 
     id = db.Column(db.Integer, primary_key=True)
-    mineral_nutrients_prod_id = db.Column(db.Integer, db.ForeignKey('raw_mineral_nutrients_prod.id'))
+    mineral_nutrients_prod_id = db.Column(db.Integer, db.ForeignKey('mineral_nutrients_prod.id'))
     plants_id = db.Column(db.Integer, db.ForeignKey('plants.id'))
 
     def __init__(self, plant, region, mineral_nutrients_prod_id):
@@ -903,7 +904,7 @@ class UrlTags(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.String)
-    plants_id = db.Column(db.Integer)
+    plants_id = db.Column(db.Integer, db.ForeignKey('plants.id'))
 
     def __init__(self, plant, region, value):
         self.plant = plant
