@@ -19,14 +19,15 @@ properties_1_to_1 = ['genus',
                      'toxin_removal_id',
                      'wind_tol_id',
                      'minimum_temperature_tol',
-                     'pH',
                      'innoculant',
                      'variety',
                      'fire_tol_id',
                      'livestock_bloat_id',
-                     'toxicity',
-                     'lifespan',
-                     'allelopathic']
+                     'pH_min',
+                     'pH_max',
+                     'toxicity_id',
+                     'lifespan_id',
+                     'allelopathic_id']
 
 properties_many_with_region = ['active_growth_period',
                                'animal_attractor',
@@ -52,7 +53,7 @@ properties_1_to_many = ['family',
                         'url_tags']
 
 properties_many_to_many = ['biochemical_material_prod',
-                           'cultural_and_amenity_prod'
+                           'cultural_and_amenity_prod',
                            'flower_color',
                            'foliage_color',
                            'food_prod',
@@ -159,8 +160,8 @@ def process_transactions():
     db.session.commit()
     #time.sleep(30)
 
-#delete_plants()
-#process_transactions()
+delete_plants()
+process_transactions()
 
 
 print('ACTIVATE')
