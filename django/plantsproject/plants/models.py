@@ -10,7 +10,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Actions(models.Model):
     transactions = models.ForeignKey('Transactions', blank=True, null=True)
@@ -69,25 +69,25 @@ class AuthGroup(models.Model):
         db_table = 'auth_group'
 
 
-# class AuthGroupPermissions(models.Model):
-#     group = models.ForeignKey(AuthGroup)
-#     permission = models.ForeignKey('AuthPermission')
+class AuthGroupPermissions(models.Model):
+    group = models.ForeignKey(AuthGroup)
+    permission = models.ForeignKey('AuthPermission')
 
-#     class Meta:
-#         managed = False
-#         db_table = 'auth_group_permissions'
-#         unique_together = (('group_id', 'permission_id'),)
+    class Meta:
+        managed = False
+        db_table = 'auth_group_permissions'
+        unique_together = (('group', 'permission'),)
 
 
-# class AuthPermission(models.Model):
-#     name = models.CharField(max_length=255)
-#     content_type = models.ForeignKey('DjangoContentType')
-#     codename = models.CharField(max_length=100)
+class AuthPermission(models.Model):
+    name = models.CharField(max_length=255)
+    content_type = models.ForeignKey('DjangoContentType')
+    codename = models.CharField(max_length=100)
 
-#     class Meta:
-#         managed = False
-#         db_table = 'auth_permission'
-#         unique_together = (('content_type_id', 'codename'),)
+    class Meta:
+        managed = False
+        db_table = 'auth_permission'
+        unique_together = (('content_type', 'codename'),)
 
 
 class AuthUser(models.Model):
@@ -107,24 +107,24 @@ class AuthUser(models.Model):
         db_table = 'auth_user'
 
 
-# class AuthUserGroups(models.Model):
-#     user = models.ForeignKey(AuthUser)
-#     group = models.ForeignKey(AuthGroup)
+class AuthUserGroups(models.Model):
+    user = models.ForeignKey(AuthUser)
+    group = models.ForeignKey(AuthGroup)
 
-#     class Meta:
-#         managed = False
-#         db_table = 'auth_user_groups'
-#         unique_together = (('user_id', 'group_id'),)
+    class Meta:
+        managed = False
+        db_table = 'auth_user_groups'
+        unique_together = (('user', 'group'),)
 
 
-# class AuthUserUserPermissions(models.Model):
-#     user = models.ForeignKey(AuthUser)
-#     permission = models.ForeignKey(AuthPermission)
+class AuthUserUserPermissions(models.Model):
+    user = models.ForeignKey(AuthUser)
+    permission = models.ForeignKey(AuthPermission)
 
-#     class Meta:
-#         managed = False
-#         db_table = 'auth_user_user_permissions'
-#         unique_together = (('user_id', 'permission_id'),)
+    class Meta:
+        managed = False
+        db_table = 'auth_user_user_permissions'
+        unique_together = (('user', 'permission'),)
 
 
 class BiochemicalMaterialProd(models.Model):
@@ -257,7 +257,7 @@ class Family(models.Model):
     class Meta:
         managed = True
         db_table = 'family'
-        unique_together = (('value', 'plants'),)
+        #unique_together = (('value', 'plants'),)
 
     def __str__(self):
     	return self.value
@@ -457,12 +457,12 @@ class MineralNutrientsProd(models.Model):
 
 class Plant(models.Model):
     #-----------------------------id-----------------------------
-    family = models.ForeignKey('Family', blank=True, null=True) # why foreign keys? why not columns?
-    def get_family(self):
-        return ','.join([str(a) for a in self.plants_plant_related.all()])
-    family_common_name = models.ForeignKey('FamilyCommonName', blank=True, null=True) # why foreign keys? why not columns?
-    def get_family_common_name(self):
-        return ','.join([str(a) for a in self.plants_plant_family_common_name_related.all()])
+    # family = models.ForeignKey('Family', blank=True, null=True) # why foreign keys? why not columns?
+    # def get_family(self):
+    #     return ','.join([str(a) for a in self.plants_plant_related.all()])
+    # family_common_name = models.ForeignKey('FamilyCommonName', blank=True, null=True) # why foreign keys? why not columns?
+    # def get_family_common_name(self):
+    #     return ','.join([str(a) for a in self.plants_plant_family_common_name_related.all()])
     genus = models.CharField(max_length=160, blank=True, null=True)
     species = models.CharField(max_length=160, blank=True, null=True)
     variety = models.CharField(max_length=160, blank=True, null=True)
@@ -473,7 +473,7 @@ class Plant(models.Model):
         return ','.join([str(a) for a in self.endemic_status.all()])
 
     tags = models.CharField(max_length=160, blank=True, null=True)
-    urltags = models.ForeignKey('UrlTags', blank=True, null=True)
+    # urltags = models.ForeignKey('UrlTags', blank=True, null=True)
 
     #--------------------------characteristic------------------------
     #duration
@@ -483,14 +483,14 @@ class Plant(models.Model):
     #height
     height = models.ManyToManyField('PlantHeightAtMaturityByRegion')
     def get_height(self):
-        return ','.join([str(a) for a in self.height.all()])# ??????????
+        return ','.join([str(a) for a in self.height.all()])# ???????????????????????????
     #spread
     spread = models.ManyToManyField('PlantSpreadAtMaturityByRegion')
     def get_spread(self):
-        return ','.join([str(a) for a in self.spread.all()])
+        return ','.join([str(a) for a in self.spread.all()])# ???????????????????????????
 
-    ph_min = models.DecimalField(db_column='pH_min', max_digits=65535, decimal_places=65535, blank=True, null=True)  # Field name made lowercase.
-    ph_max = models.DecimalField(db_column='pH_max', max_digits=65535, decimal_places=65535, blank=True, null=True)  # Field name made lowercase.
+    ph_min = models.DecimalField(db_column='pH_min', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase. #
+    ph_max = models.DecimalField(db_column='pH_max', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase.
     layer = models.ManyToManyField(Layer, through='PlantLayer')#, blank=True, null=True) #not sure testing
     def get_layer(self):
     	return ','.join([str(a) for a in self.layer.all()])
@@ -529,16 +529,16 @@ class Plant(models.Model):
     def get_shade_tol(self):
         return ','.join([str(a) for a in self.shade_tol.all()])
     salt_tol = models.ForeignKey('SaltTol', blank=True, null=True)
-    flood_tol = models.ForeignKey(FloodTol, blank=True, null=True)
-    drought_tol = models.ForeignKey(DroughtTol, blank=True, null=True)
-    humidity_tol = models.ForeignKey(HumidityTol, blank=True, null=True)
+    flood_tol = models.ForeignKey('FloodTol', blank=True, null=True)
+    drought_tol = models.ForeignKey('DroughtTol', blank=True, null=True)
+    humidity_tol = models.ForeignKey('HumidityTol', blank=True, null=True)
     wind_tol = models.ForeignKey('WindTol', blank=True, null=True)
     #soil_drainage_tol
     soil_drainage_tol = models.ManyToManyField('SoilDrainageTol', through='PlantSoilDrainageTolByRegion')
     def get_soil_drainage_tol(self):
         return ','.join([str(a) for a in self.soil_drainage_tol.all()])
 
-    fire_tol = models.ForeignKey(FireTol, blank=True, null=True)
+    fire_tol = models.ForeignKey('FireTol', blank=True, null=True)
     minimum_temperature_tol = models.IntegerField(blank=True, null=True)
 
     #-------------------------needs--------------------------------
@@ -590,19 +590,19 @@ class Plant(models.Model):
         return ','.join([str(a) for a in self.erosion_control.all()])
     #plants_insect_attractor
     plants_insect_attractor = models.ManyToManyField(Insects, through='PlantInsectAttractorByRegion', related_name='a_plants_insect_attractor_related')
-    def get_plants_insect_attractor(self):
+    def get_insect_attractor(self):
         return ','.join([str(a) for a in self.plants_insect_attractor.all()])
     #plants_insect_regulator
     plants_insect_regulator = models.ManyToManyField(Insects, through='PlantInsectRegulatorByRegion')
-    def get_plants_insect_regulator(self):
+    def get_insect_regulator(self):
         return ','.join([str(a) for a in self.plants_insect_regulator.all()])
     #plants_animal_regulator
     plants_animal_regulator = models.ManyToManyField(Animals, through='PlantAnimalRegulatorByRegion')
-    def get_plants_animal_regulator(self):
+    def get_animal_regulator(self):
         return ','.join([str(a) for a in self.plants_animal_regulator.all()])
     #plants_animal_attractor
     plants_animal_attractor = models.ManyToManyField(Animals, through='PlantAnimalAttractorByRegion', related_name='a_plants_animal_attractor_related')
-    def get_plants_animal_attractor(self):
+    def get_animal_attractor(self):
         return ','.join([str(a) for a in self.plants_animal_attractor.all()])
 
     livestock_bloat = models.ForeignKey(LivestockBloat, blank=True, null=True)
@@ -775,15 +775,15 @@ class PlantHarvestPeriodByRegion(models.Model):
 class PlantHeightAtMaturityByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
     regions = models.ForeignKey('Region', blank=True, null=True)
-    height = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    height = models.DecimalField(max_digits=8, decimal_places=5, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'plants_height_at_maturity_by_region'
         unique_together = (('plants', 'regions'),)
 
-    def __str__(self):
-        return str(self.height)
+    # def __str__(self):
+    #     return str(self.height)
 
 
 class PlantInsectAttractorByRegion(models.Model):
