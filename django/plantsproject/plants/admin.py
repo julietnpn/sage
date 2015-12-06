@@ -131,8 +131,8 @@ class PlantSoilDrainageTolByRegionInline(admin.TabularInline):
 	model = PlantSoilDrainageTolByRegion
 	extra = 1
 
-class PlantFertilityNeedsByRegionInline(admin.TabularInline):
-	model = PlantFertilityNeedsByRegion
+class PlantNutrientRquirementsByRegionInline(admin.TabularInline):
+	model = PlantNutrientRquirementsByRegion
 	extra = 1
 
 class PlantWaterNeedsByRegionInline(admin.TabularInline):
@@ -222,7 +222,7 @@ class PlantsAdmin(admin.ModelAdmin):
 	# 	return obj.family
 	# related_family.short_description = 'family'
 #[PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantHeightAtMaturityByRegionInline, PlantSpreadAtMaturityByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantFertilityNeedsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
-	inlines = [PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantHeightAtMaturityByRegionInline, PlantSpreadAtMaturityByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantFertilityNeedsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
+	inlines = [PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantHeightAtMaturityByRegionInline, PlantSpreadAtMaturityByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantNutrientRquirementsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
 
 
 class PlantID(Plant):
@@ -232,8 +232,13 @@ class PlantID(Plant):
 class PlantIDAdmin(admin.ModelAdmin):
 	#list_display = ('Family', 'family_common_name', 'genus', 'species', 'variety', 'common_name', 'EndemicStatus', 'tags', 'urltags')
 	list_display = ('genus', 'species', 'variety', 'common_name', 'get_endemic_status', 'tags')
+	fields = ['genus', 'species', 'variety', 'common_name', 'tags']
+	# readonly_fields= ('common_name',)
 	exclude = ('height','spread')
 	inlines = [PlantEndemicStatusByRegionInline]
+	def get_endemic_status(self, obj):
+		return ','.join([str(a) for a in obj.endemic_status.all()])
+	get_endemic_status.short_description = 'Endemic Status'
 
 	def get_family(self, obj):
 		return obj.family
@@ -246,9 +251,55 @@ class PlantCharacteristic(Plant):
 
 class PlantCharacteristicAdmin(admin.ModelAdmin):
 	# list_display = ('duration', 'height', 'spread', 'pH', 'layer', 'CanopyDensity', 'ActiveGrowthPeriod', 'HarvestPeriod', 'LeafRetention', 'FlowerColor', 'FoliageColor', 'FruitColor')
-	list_display = ('genus', 'species','get_duration', 'get_height', 'get_spread', 'ph_min', 'ph_max', 'get_layer', 'get_canopy_density', 'get_active_growth_period', 'get_harvest_period', 'get_leaf_retention', 'get_flower_color', 'get_foliage_color', 'get_fruit_color')
+	list_display = ('genus', 'species','get_duration', 'get_height', 'get_spread', 'ph_min', 'ph_max', 'get_layer', 'get_canopy_density', 'get_active_growth_period', 'get_harvest_period', 'get_leaf_retention', 'get_flower_color', 'get_foliage_color', 'get_fruit_color', 'degree_of_serotiny')
+	fields = ['common_name', 'ph_min', 'ph_max', 'degree_of_serotiny']
+	readonly_fields= ('common_name',)
 	exclude = ('height','spread')
 	inlines = [PlantDurationByRegionInline, PlantHeightAtMaturityByRegionInline, PlantSpreadAtMaturityByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline]
+
+	def get_duration(self, obj):
+		return ','.join([str(a) for a in obj.duration.all()])
+	get_duration.short_description = 'Durations'
+
+	def get_height(self, obj):
+		return ','.join([str(a) for a in obj.height.all()])
+	get_height.short_description = 'Height At maturity'
+
+	def get_spread(self, obj):
+		return ','.join([str(a) for a in obj.spread.all()])
+	get_spread.short_description = 'Spread At Maturity'
+
+	def get_layer(self, obj):
+		return ','.join([str(a) for a in obj.layer.all()])
+	get_layer.short_description = 'Layers'
+
+	def get_canopy_density(self, obj):
+		return ','.join([str(a) for a in obj.canopy_density.all()])
+	get_canopy_density.short_description = 'Canopy Density'
+
+	def get_active_growth_period(self, obj):
+		return ','.join([str(a) for a in obj.active_growth_period.all()])
+	get_active_growth_period.short_description = 'Active Growth Period'
+
+	def get_harvest_period(self, obj):
+		return ','.join([str(a) for a in obj.harvest_period.all()])
+	get_harvest_period.short_description = 'Harvest Period'
+
+	def get_leaf_retention(self, obj):
+		return ','.join([str(a) for a in obj.leaf_retention.all()])
+	get_leaf_retention.short_description = 'Leaf Retention'
+
+	def get_flower_color(self, obj):
+		return ','.join([str(a) for a in obj.flower_color.all()])
+	get_flower_color.short_description = 'Flower Color'
+
+	def get_foliage_color(self, obj):
+		return ','.join([str(a) for a in obj.foliage_color.all()])
+	get_foliage_color.short_description = 'Foliage Color'
+
+	def get_fruit_color(self, obj):
+		return ','.join([str(a) for a in obj.fruit_color.all()])
+	get_fruit_color.short_description = 'Fruit Color'
 
 	# def get_layer(self, obj):
 	# 	return '\n'.join([x.layer for x in obj.layer.all()])
@@ -260,9 +311,18 @@ class PlantTolerance(Plant):
 class PlantToleranceAdmin(admin.ModelAdmin):
 	# list_display = ('shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol')
 	list_display = ('genus', 'species', 'get_shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'get_soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol')
+	fields = ['common_name', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'fire_tol', 'minimum_temperature_tol']
+	readonly_fields= ('common_name',)
 	exclude = ('height','spread')
 	inlines = [PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline]
 
+	def get_shade_tol(self, obj):
+		return ','.join([str(a) for a in obj.shade_tol.all()])
+	get_shade_tol.short_description = 'Shade Tolerance'
+
+	def get_soil_drainage_tol(self, obj):
+		return ','.join([str(a) for a in obj.soil_drainage_tol.all()])
+	get_soil_drainage_tol.short_description = 'Soil Drainage Tolerance By Region'
 
 class PlantNeed(Plant):
 	class Meta:
@@ -270,19 +330,58 @@ class PlantNeed(Plant):
 
 class PlantNeedAdmin(admin.ModelAdmin):
 	# list_display = ('FertilityNeeds', 'WaterNeeds', 'innoculant', 'SunNeeds')
-	list_display = ('genus', 'species', 'get_fertility_needs', 'get_water_needs', 'innoculant', 'get_sun_needs')
+	list_display = ('genus', 'species', 'get_fertility_needs', 'get_water_needs', 'innoculant', 'get_sun_needs', 'serotiny')
+	fields = ['common_name','innoculant', 'serotiny']
+	readonly_fields= ('common_name',)
 	exclude = ('height','spread')
-	inlines = [PlantFertilityNeedsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline]
+	inlines = [PlantNutrientRquirementsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline]
 
+	def get_fertility_needs(self, obj):
+		return ','.join([str(a) for a in obj.fertility_needs.all()])
+	get_fertility_needs.short_description = 'Nutrient Requirements' # I may need to change the entire fertility_needs tp nutrient_requirements later....!!!!!
+
+	def get_water_needs(self, obj):
+		return ','.join([str(a) for a in obj.water_needs.all()])
+	get_water_needs.short_description = 'Water Needs'
+
+	def get_sun_needs(self, obj):
+		return ','.join([str(a) for a in obj.sun_needs.all()])
+	get_sun_needs.short_description = 'Sun Needs'
 
 class PlantProduct(Plant):
 	class Meta:
 		proxy = True
 
 class PlantProductAdmin(admin.ModelAdmin):
-	list_display = ('genus', 'species', 'get_food_prod', 'get_raw_materials_prod', 'get_medicinals_prod', 'get_biochemical_material_prod', 'get_cultural_and_amenity_prod', 'get_mineral_nutrients_prod')
+	list_display = ('genus', 'species', 'get_food_prod', 'get_raw_materials_prod', 'get_medicinals_prod', 'get_biochemical_material_prod', 'get_cultural_and_amenity_prod', 'get_mineral_nutrients_prod', 'allelochemicals')
+	fields = ['common_name', 'allelochemicals']
+	readonly_fields= ('common_name',)
 	exclude = ('height','spread')
 	inlines = [PlantFoodProdInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline]
+
+	def get_food_prod(self, obj):
+		return ','.join([str(a) for a in obj.food_prod.all()])
+	get_food_prod.short_description = 'Food'
+
+	def get_raw_materials_prod(self, obj):
+		return ','.join([str(a) for a in obj.raw_materials_prod.all()])
+	get_raw_materials_prod.short_description = 'Raw Materials'
+
+	def get_medicinals_prod(self, obj):
+		return ','.join([str(a) for a in obj.medicinals_prod.all()])
+	get_medicinals_prod.short_description = 'Medicinals'
+
+	def get_biochemical_material_prod(self, obj):
+		return ','.join([str(a) for a in obj.biochemical_material_prod.all()])
+	get_biochemical_material_prod.short_description = 'Biochemical Material'
+
+	def get_cultural_and_amenity_prod(self, obj):
+		return ','.join([str(a) for a in obj.cultural_and_amenity_prod.all()])
+	get_cultural_and_amenity_prod.short_description = 'Cultural And Amenity'
+
+	def get_mineral_nutrients_prod(self, obj):
+		return ','.join([str(a) for a in obj.mineral_nutrients_prod.all()])
+	get_mineral_nutrients_prod.short_description = 'Mineral Nutrients'
 
 class PlantBehavior(Plant):
 	class Meta:
@@ -291,8 +390,30 @@ class PlantBehavior(Plant):
 class PlantBehaviorAdmin(admin.ModelAdmin):
 	# list_display = ('erosion_control', 'insect_attractor', 'insect_regulator', 'animal_attractor', 'animal_regulator','livestock_bloat', 'toxicity')
 	list_display = ('genus', 'species', 'get_erosion_control', 'get_insect_attractor', 'get_insect_regulator', 'get_animal_attractor', 'get_animal_regulator', 'livestock_bloat', 'toxicity')
+	fields = ['common_name', 'livestock_bloat', 'toxicity']
+	readonly_fields= ('common_name',)
 	exclude = ('height','spread')
 	inlines = [PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
+
+	def get_erosion_control(self, obj):
+		return ','.join([str(a) for a in obj.erosion_control.all()])
+	get_erosion_control.short_description = 'Erosion Control '
+
+	def get_insect_attractor(self, obj):
+		return ','.join([str(a) for a in obj.plants_insect_attractor.all()])
+	get_insect_attractor.short_description = 'Insect Attractor'
+
+	def get_insect_regulator(self, obj):
+		return ','.join([str(a) for a in obj.plants_insect_regulator.all()])
+	get_insect_regulator.short_description = 'Insect Regulator'
+
+	def get_animal_attractor(self, obj):
+		return ','.join([str(a) for a in obj.plants_animal_attractor.all()])
+	get_animal_attractor.short_description = 'Animal Attractor'
+
+	def get_animal_regulator(self, obj):
+		return ','.join([str(a) for a in obj.plants_animal_regulator.all()])
+	get_animal_regulator.short_description = 'Animal Regulator'
 
 #admin.site.register(Layer)
 admin.site.register(Plant, PlantsAdmin)

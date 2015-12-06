@@ -276,7 +276,7 @@ class FamilyCommonName(models.Model):
     	return self.value
 
 
-class FertilityNeeds(models.Model):
+class NutrientRquirements(models.Model):
     value = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -469,8 +469,8 @@ class Plant(models.Model):
     common_name = models.CharField(max_length=160, blank=True, null=True)
     #endemic_status
     endemic_status = models.ManyToManyField(EndemicStatus, through='PlantEndemicStatusByRegion')
-    def get_endemic_status(self):
-        return ','.join([str(a) for a in self.endemic_status.all()])
+    # def get_endemic_status(self):
+    #     return ','.join([str(a) for a in self.endemic_status.all()])
 
     tags = models.CharField(max_length=160, blank=True, null=True)
     # urltags = models.ForeignKey('UrlTags', blank=True, null=True)
@@ -478,26 +478,26 @@ class Plant(models.Model):
     #--------------------------characteristic------------------------
     #duration
     duration = models.ManyToManyField('Duration', through='PlantDurationByRegion')
-    def get_duration(self):
-        return ','.join([str(a) for a in self.duration.all()])
+    # def get_duration(self):
+    #     return ','.join([str(a) for a in self.duration.all()])
     #height
     height = models.ManyToManyField('PlantHeightAtMaturityByRegion')
-    def get_height(self):
-        return ','.join([str(a) for a in self.height.all()])# ???????????????????????????
+    # def get_height(self):
+    #     return ','.join([str(a) for a in self.height.all()])# ???????????????????????????
     #spread
     spread = models.ManyToManyField('PlantSpreadAtMaturityByRegion')
-    def get_spread(self):
-        return ','.join([str(a) for a in self.spread.all()])# ???????????????????????????
+    # def get_spread(self):
+    #     return ','.join([str(a) for a in self.spread.all()])# ???????????????????????????
 
     ph_min = models.DecimalField(db_column='pH_min', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase. #
     ph_max = models.DecimalField(db_column='pH_max', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase.
     layer = models.ManyToManyField(Layer, through='PlantLayer')#, blank=True, null=True) #not sure testing
-    def get_layer(self):
-    	return ','.join([str(a) for a in self.layer.all()])
+    # def get_layer(self):
+    # 	return ','.join([str(a) for a in self.layer.all()])
     #CanopyDensity
     canopy_density = models.ManyToManyField(CanopyDensity, through='PlantCanopyDensityByRegion')
-    def get_canopy_density(self):
-        return ','.join([str(a) for a in self.canopy_density.all()])
+    # def get_canopy_density(self):
+    #     return ','.join([str(a) for a in self.canopy_density.all()])
     #ActiveGrowthPeriod
     active_growth_period = models.ManyToManyField(ActiveGrowthPeriod, through='PlantActiveGrowthPeriodByRegion')
     def get_active_growth_period(self):
@@ -520,8 +520,7 @@ class Plant(models.Model):
         return ','.join([str(a) for a in self.foliage_color.all()])
     #FruitColor
     fruit_color = models.ManyToManyField(FruitColor, through='PlantFruitColor')
-    def get_fruit_color(self):
-        return ','.join([str(a) for a in self.fruit_color.all()])
+    degree_of_serotiny = models.ForeignKey('DegreeOfSerotiny', blank=True, null=True)
 
     #--------------------------Tolerance-----------------------------
     #shade_tol
@@ -543,21 +542,21 @@ class Plant(models.Model):
 
     #-------------------------needs--------------------------------
     #FertilityNeeds
-    fertility_needs = models.ManyToManyField(FertilityNeeds, through='PlantFertilityNeedsByRegion')
-    def get_fertility_needs(self):
-        return ','.join([str(a) for a in self.fertility_needs.all()])
+    fertility_needs = models.ManyToManyField(NutrientRquirements, through='PlantNutrientRquirementsByRegion', verbose_name='Nutrient Rquirements')
+    # def get_fertility_needs(self):
+    #     return ','.join([str(a) for a in self.fertility_needs.all()])
     #WaterNeeds
     water_needs = models.ManyToManyField('WaterNeeds', through='PlantWaterNeedsByRegion')
-    def get_water_needs(self):
-        return ','.join([str(a) for a in self.water_needs.all()])
+    # def get_water_needs(self):
+    #     return ','.join([str(a) for a in self.water_needs.all()])
 
     innoculant = models.CharField(max_length=160, blank=True, null=True)
     #SunNeeds
     sun_needs = models.ManyToManyField('SunNeeds', through='PlantSunNeedsByRegion')
-    def get_sun_needs(self):
-        return ','.join([str(a) for a in self.sun_needs.all()])
+    serotiny = models.ForeignKey('Serotiny', blank=True, null=True)
 
     #-------------------------products----------------------------
+    allelochemicals = models.CharField(max_length=160, blank=True, null=True)
     #FoodProd
     food_prod = models.ManyToManyField(FoodProd, through='PlantFoodProd')
     def get_food_prod(self):
@@ -715,10 +714,10 @@ class PlantErosionControlByRegion(models.Model):
         unique_together = (('plants', 'regions'),)
 
 
-class PlantFertilityNeedsByRegion(models.Model):
+class PlantNutrientRquirementsByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
     regions = models.ForeignKey('Region', blank=True, null=True)
-    fertility_needs = models.ForeignKey(FertilityNeeds, blank=True, null=True)
+    fertility_needs = models.ForeignKey(NutrientRquirements, blank=True, null=True, verbose_name='Nutrient Rquirements') #####
 
     class Meta:
         managed = False
@@ -948,6 +947,27 @@ class SaltTol(models.Model):
     def __str__(self):
     	return self.value
 
+class Serotiny(models.Model):
+    value = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'serotiny'
+
+    def __str__(self):
+        return self.value
+
+class DegreeOfSerotiny(models.Model):
+    value = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'degree_of_serotiny'
+
+    def __str__(self):
+        return self.value
 
 class ShadeTol(models.Model):
     value = models.TextField(blank=True, null=True)
