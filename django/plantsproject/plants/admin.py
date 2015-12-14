@@ -207,7 +207,7 @@ class PlantsAdmin(admin.ModelAdmin):
 	list_display = ('common_name','genus','species')
 	#list_filter = ['genus']
 	#filter_horizontal = ('water_needs',)
-	search_fields = ('genus', 'common_name',)
+	search_fields = ('genus', 'common_name', )
 	ca_delete = False
 	exclude = ('height','spread')
 	#specifies the fields to show for change panel
@@ -231,19 +231,14 @@ class PlantID(Plant):
 
 class PlantIDAdmin(admin.ModelAdmin):
 	#list_display = ('Family', 'family_common_name', 'genus', 'species', 'variety', 'common_name', 'EndemicStatus', 'tags', 'urltags')
-	list_display = ('genus', 'species', 'variety', 'common_name', 'get_endemic_status', 'tags')
-	fields = ['genus', 'species', 'variety', 'common_name', 'tags']
+	list_display = ('family', 'family_common_name', 'genus', 'species', 'variety', 'common_name', 'get_endemic_status', 'tags')
+	fields = ['family', 'family_common_name','genus', 'species', 'variety', 'common_name', 'tags']
 	# readonly_fields= ('common_name',)
 	exclude = ('height','spread')
 	inlines = [PlantEndemicStatusByRegionInline]
 	def get_endemic_status(self, obj):
 		return ','.join([str(a) for a in obj.endemic_status.all()])
 	get_endemic_status.short_description = 'Endemic Status'
-
-	def get_family(self, obj):
-		return obj.family
-	get_family.short_description = 'Family'
-	#get_family.admin_order_field = 'family__value'
 
 class PlantCharacteristic(Plant):
 	class Meta:
@@ -415,7 +410,30 @@ class PlantBehaviorAdmin(admin.ModelAdmin):
 		return ','.join([str(a) for a in obj.plants_animal_regulator.all()])
 	get_animal_regulator.short_description = 'Animal Regulator'
 
-#admin.site.register(Layer)
+
+
+fcn = FamilyCommonName.objects.all().values_list('value','plants')
+for i in fcn:
+	p = Plant.objects.get(pk=i[1])
+	s = TheFamilyCommonName.objects.get(value=i[0])
+	print(p.id, s.id)
+	p.family_common_name = s
+	p.save()
+
+
+# f = Family.objects.all().values_list('value','plants')[:5]
+# for i in f:
+# 	print('1')
+# 	p = Plant.objects.get(pk=i[1])
+# 	s = TheFamily.objects.get(id=415)
+# 	print(len(str(s.value)), len(str(i[0])))
+# 	for j,c in enumerate(i[0]):
+# 		print(c, s.value[j], c==s.value[j])
+# 	print('3')
+# 	# print(s.id)
+# 	# p.family = s.id
+# 	# p.save()
+
 admin.site.register(Plant, PlantsAdmin)
 admin.site.register(PlantID, PlantIDAdmin)
 admin.site.register(PlantCharacteristic, PlantCharacteristicAdmin)
@@ -425,7 +443,7 @@ admin.site.register(PlantProduct, PlantProductAdmin)
 admin.site.register(PlantBehavior, PlantBehaviorAdmin)
 
 #admin.site.register([Actions, ActiveGrowthPeriod, Allelopathic, Animals, BiochemicalMaterialProd, CanopyDensity, CulturalAndAmenityProd, DroughtTol, EndemicStatus, ErosionControl, Family, FloodTol, FoodProd, FlowerColor, FoliageColor, FruitColor, HarvestPeriod, HumidityTol, Insects, Layer, Lifespan, LeafRetention, MedicinalsProd, MineralNutrientsProd, RawMaterialsProd, Region, SaltTol, ShadeTol, SunNeeds, ToxinRemoval, Toxicity, Transactions, Users, WaterNeeds, WindTol])
-
+#admin.site.register([TheFamily, TheFamilyCommonName, FireTol])
 #admin.site.register([Actions, Animals, Family, Region, Transactions, Users, DjangoAdminLog])
 
 # for name, var in allModels.__dict__.items():

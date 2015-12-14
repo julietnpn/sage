@@ -214,7 +214,7 @@ class DroughtTol(models.Model):
         db_table = 'drought_tol'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Duration(models.Model):
@@ -225,7 +225,7 @@ class Duration(models.Model):
         db_table = 'duration'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class EndemicStatus(models.Model):
@@ -236,7 +236,7 @@ class EndemicStatus(models.Model):
         db_table = 'endemic_status'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class ErosionControl(models.Model):
@@ -247,7 +247,7 @@ class ErosionControl(models.Model):
         db_table = 'erosion_control'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Family(models.Model):
@@ -260,12 +260,12 @@ class Family(models.Model):
         #unique_together = (('value', 'plants'),)
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class FamilyCommonName(models.Model):
     value = models.CharField(max_length=160, blank=True, null=True)
-    plants = models.ForeignKey('Plant', related_name='plants_plant_family_common_name_related',blank=True, null=True)
+    plants = models.ForeignKey('Plant',blank=True, null=True)
 
     class Meta:
         managed = True
@@ -273,7 +273,29 @@ class FamilyCommonName(models.Model):
         unique_together = (('value', 'plants'),)
 
     def __str__(self):
-    	return self.value
+        return self.value
+
+
+class TheFamily(models.Model):
+    value = models.CharField(max_length=160, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'the_family'
+
+    def __str__(self):
+        return self.value
+
+
+class TheFamilyCommonName(models.Model):
+    value = models.CharField(max_length=160, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'the_family_common_name'
+
+    def __str__(self):
+        return self.value
 
 
 class NutrientRquirements(models.Model):
@@ -284,7 +306,7 @@ class NutrientRquirements(models.Model):
         db_table = 'fertility_needs'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class FireTol(models.Model):
@@ -295,7 +317,7 @@ class FireTol(models.Model):
         db_table = 'fire_tol'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class FloodTol(models.Model):
@@ -307,7 +329,7 @@ class FloodTol(models.Model):
         db_table = 'flood_tol'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class FlowerColor(models.Model):
@@ -318,7 +340,7 @@ class FlowerColor(models.Model):
         db_table = 'flower_color'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class FoliageColor(models.Model):
@@ -329,7 +351,7 @@ class FoliageColor(models.Model):
         db_table = 'foliage_color'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class FoodProd(models.Model):
@@ -340,7 +362,7 @@ class FoodProd(models.Model):
         db_table = 'food_prod'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class FruitColor(models.Model):
@@ -351,7 +373,7 @@ class FruitColor(models.Model):
         db_table = 'fruit_color'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class HarvestPeriod(models.Model):
@@ -362,7 +384,7 @@ class HarvestPeriod(models.Model):
         db_table = 'harvest_period'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class HumidityTol(models.Model):
@@ -374,7 +396,7 @@ class HumidityTol(models.Model):
         db_table = 'humidity_tol'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Insects(models.Model):
@@ -385,7 +407,7 @@ class Insects(models.Model):
         db_table = 'insects'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Layer(models.Model):
@@ -396,7 +418,7 @@ class Layer(models.Model):
         db_table = 'layer'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class LeafRetention(models.Model):
@@ -407,7 +429,7 @@ class LeafRetention(models.Model):
         db_table = 'leaf_retention'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Lifespan(models.Model):
@@ -419,7 +441,7 @@ class Lifespan(models.Model):
         db_table = 'lifespan'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class LivestockBloat(models.Model):
@@ -430,7 +452,7 @@ class LivestockBloat(models.Model):
         db_table = 'livestock_bloat'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class MedicinalsProd(models.Model):
@@ -441,7 +463,7 @@ class MedicinalsProd(models.Model):
         db_table = 'medicinals_prod'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class MineralNutrientsProd(models.Model):
@@ -452,7 +474,7 @@ class MineralNutrientsProd(models.Model):
         db_table = 'mineral_nutrients_prod'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Plant(models.Model):
@@ -463,6 +485,9 @@ class Plant(models.Model):
     # family_common_name = models.ForeignKey('FamilyCommonName', blank=True, null=True) # why foreign keys? why not columns?
     # def get_family_common_name(self):
     #     return ','.join([str(a) for a in self.plants_plant_family_common_name_related.all()])
+
+    family = models.ForeignKey('TheFamily', blank=True, null=True)
+    family_common_name = models.ForeignKey('TheFamilyCommonName', blank=True, null=True)
     genus = models.CharField(max_length=160, blank=True, null=True)
     species = models.CharField(max_length=160, blank=True, null=True)
     variety = models.CharField(max_length=160, blank=True, null=True)
@@ -493,7 +518,7 @@ class Plant(models.Model):
     ph_max = models.DecimalField(db_column='pH_max', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase.
     layer = models.ManyToManyField(Layer, through='PlantLayer')#, blank=True, null=True) #not sure testing
     # def get_layer(self):
-    # 	return ','.join([str(a) for a in self.layer.all()])
+    #   return ','.join([str(a) for a in self.layer.all()])
     #CanopyDensity
     canopy_density = models.ManyToManyField(CanopyDensity, through='PlantCanopyDensityByRegion')
     # def get_canopy_density(self):
@@ -922,7 +947,7 @@ class RawMaterialsProd(models.Model):
         db_table = 'raw_materials_prod'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Region(models.Model):
@@ -933,7 +958,7 @@ class Region(models.Model):
         db_table = 'regions'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class SaltTol(models.Model):
@@ -945,7 +970,7 @@ class SaltTol(models.Model):
         db_table = 'salt_tol'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 class Serotiny(models.Model):
     value = models.TextField(blank=True, null=True)
@@ -977,7 +1002,7 @@ class ShadeTol(models.Model):
         db_table = 'shade_tol'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class SoilDrainageTol(models.Model):
@@ -989,7 +1014,7 @@ class SoilDrainageTol(models.Model):
         db_table = 'soil_drainage_tol'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class SunNeeds(models.Model):
@@ -1000,7 +1025,7 @@ class SunNeeds(models.Model):
         db_table = 'sun_needs'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Toxicity(models.Model):
@@ -1011,7 +1036,7 @@ class Toxicity(models.Model):
         db_table = 'toxicity'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class ToxinRemoval(models.Model):
@@ -1022,7 +1047,7 @@ class ToxinRemoval(models.Model):
         db_table = 'toxin_removal'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class Transactions(models.Model):
@@ -1037,7 +1062,7 @@ class Transactions(models.Model):
         db_table = 'transactions'
 
     def __str__(self):
-    	return str(self.plants_id)
+        return str(self.plants_id)
 
 
 class UrlTags(models.Model):
@@ -1050,7 +1075,7 @@ class UrlTags(models.Model):
         unique_together = (('value', 'plants'),)
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 #---------------should use django user table--------------------
 class Users(models.Model):
@@ -1065,7 +1090,7 @@ class Users(models.Model):
         db_table = 'users'
 
     def __str__(self):
-    	return self.username
+        return self.username
 
 
 class WaterNeeds(models.Model):
@@ -1076,7 +1101,7 @@ class WaterNeeds(models.Model):
         db_table = 'water_needs'
 
     def __str__(self):
-    	return self.value
+        return self.value
 
 
 class WindTol(models.Model):
@@ -1088,4 +1113,4 @@ class WindTol(models.Model):
         db_table = 'wind_tol'
 
     def __str__(self):
-    	return self.value
+        return self.value
