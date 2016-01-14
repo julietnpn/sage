@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'plants',
     'login',
+    'frontend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -82,8 +83,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'django-plants',
-        'USER': 'pacificsage',
-        'PASSWORD': 'plants',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
     }
