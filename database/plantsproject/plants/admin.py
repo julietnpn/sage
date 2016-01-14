@@ -412,13 +412,13 @@ class PlantBehaviorAdmin(admin.ModelAdmin):
 
 
 
-fcn = FamilyCommonName.objects.all().values_list('value','plants')
-for i in fcn:
-	p = Plant.objects.get(pk=i[1])
-	s = TheFamilyCommonName.objects.get(value=i[0])
-	print(p.id, s.id)
-	p.family_common_name = s
-	p.save()
+# fcn = FamilyCommonName.objects.all().values_list('value','plants')
+# for i in fcn:
+# 	p = Plant.objects.get(pk=i[1])
+# 	s = TheFamilyCommonName.objects.get(value=i[0])
+# 	print(p.id, s.id)
+# 	p.family_common_name = s
+# 	p.save()
 
 
 # f = Family.objects.all().values_list('value','plants')[:5]
