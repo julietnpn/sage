@@ -1,0 +1,14 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'frontend/main.css' %}" />
+
+{% if plant_list %}
+	<p>True</p>
+    <ul>
+    {% for plant in plant_list %}
+        <li><a href="google.com">{{ plant.id }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No plants are available.</p>
+{% endif %}
