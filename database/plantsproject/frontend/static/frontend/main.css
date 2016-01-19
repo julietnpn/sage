@@ -1,5 +1,7 @@
 html {
-	padding: 30px;
+	/*padding: 30px;*/
+	width:100%;
+	height:100%;
 }
 
 section#contain {
@@ -8,7 +10,7 @@ section#contain {
 }
 
 h1 {
-	font-family: opensans, helvetica, serif;
+	font-family: 'Karla', sans-serif;
 	font-size: 28px;
 	font-weight: normal;
 	line-height: 28px;
@@ -16,7 +18,7 @@ h1 {
 }
 
 h2 {
-	font-family: opensans, helvetica, serif;
+	font-family: 'Karla', sans-serif;
 	font-size: 20px;
 	font-weight: normal;
 	line-height: 20px;
@@ -25,7 +27,7 @@ h2 {
 }
 
 h3 {
-	font-family: opensans, helvetica, serif;
+	font-family: 'Karla', sans-serif;
 	font-size: 14px;
 	font-weight: bold;
 	line-height: 14px;
@@ -33,11 +35,16 @@ h3 {
 }
 
 p {
-	font-family: opensans, helvetica, serif;
+	display:inline-block;
+	font-family: 'Karla', sans-serif;
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 22px;
 	margin-bottom: 13px;
+}
+
+.value{
+	font-weight:bold;
 }
 
 section#contain a img {
@@ -49,6 +56,46 @@ section#contain a img {
 	font-style: italic;
 }
 
+.cardimg{
+	height:125px;
+	width:125px;
+	border-radius:25px;
+
+}
+
+.plantcard{
+	padding-top:20px;
+	padding-bottom:20px;
+	padding-left:5px;
+	padding-right:5px;
+}
+
+.plantname{
+	font-family: 'Karla', sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	line-height:16px;
+	padding-top:10px;
+	padding-bottom:5px;
+}
+
+/*#sidebar{
+	background:#2b2b2b;
+	position:absolute;
+	top:0px;
+	left:0px;
+	height:100%;
+	width:250px;
+}*/
+
+#sidebar-top{
+	background-color:gray;
+}
+
+#temp{
+	height:50vh;
+
+}
 
 
 /* fluidbox CSS */
