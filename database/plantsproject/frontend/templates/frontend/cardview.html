@@ -1,0 +1,53 @@
+{% extends 'frontend/sidebar.html' %}
+
+{% block maincontent %}
+{% if plant_list %}
+{% for plant in plant_list %}
+<div class='row plantcard'>
+	<div class="col-sm-2">
+		<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
+	</div>
+	<div class="col-sm-10">
+		<div class='row plantname'>{{ plant.genus }} {{ plant.species }}</div>
+		<div class='row plantdetails'>
+			<div class='row'>
+				<div class='col-sm-6'>
+					<p>Characteristics: 
+						{% if plant.height %}
+						<p>height {{ plant.height }}, </p>
+						{% endif %}
+
+						{% if plant.layer %}
+						<p>layer {{  plant.layer }}, </p>
+						{% endif %}
+
+						{% if plant.ph_min %}
+						<p class='key'> phMin </p><p class="value"> {{ plant.ph_min }}, </p>
+						{% endif %}
+
+						{% if plant.ph_max %}
+						<p class="key">phMax </p><p class="value">{{ plant.ph_max }}</p>
+						{% endif %}
+					</p>
+				</div>
+				<div class='col-sm-6'>
+					<p>Products:</p>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-sm-6'>
+					<p>Needs:</p>
+				</div>
+				<div class='col-sm-6'>
+					<p>Behaviors:</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> <!-- end plantcard -->
+
+{% endfor %}
+{% else %}
+	<p>No plants are available.</p>
+{% endif %}
+{% endblock %}
