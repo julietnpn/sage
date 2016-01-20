@@ -66,7 +66,7 @@ section#contain a img {
 .plantcard{
 	padding-top:20px;
 	padding-bottom:20px;
-	padding-left:5px;
+	padding-left:10px;
 	padding-right:5px;
 }
 
@@ -79,24 +79,89 @@ section#contain a img {
 	padding-bottom:5px;
 }
 
-/*#sidebar{
-	background:#2b2b2b;
-	position:absolute;
+#sidebar{
+	/*background:#2b2b2b;*/
+	position:fixed;
 	top:0px;
 	left:0px;
 	height:100%;
-	width:250px;
-}*/
+	/*width:250px;*/
+	box-shadow: 0px 0px 10px #DBDBDB;
+}
 
 #sidebar-top{
-	background-color:gray;
+	background-color:#8A8A8A;
 }
 
-#temp{
-	height:50vh;
-
+#sidebar-top > #nav, #sidebar-bottom > div{
+	padding:30px;
 }
 
+#sidebar-top > #nav > #nav-title{
+	font-weight:bold;
+	color:white;
+	padding-bottom:30px;
+}
+
+#sidebar-top > #nav > .nav-header{
+	font-weight:bold;
+	font-size:10px;
+	letter-spacing:1px;
+	color:#BDBDBD;
+	padding-bottom:10px;
+}
+
+#sidebar-top > #nav > ul{
+	list-style-type:none;
+	font-family: 'Karla', sans-serif;
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 22px;
+	margin-bottom: 13px;
+	padding-left:0px;
+	color:white;
+	font-size:10px;
+	letter-spacing:1px;
+	font-weight:bold;
+	padding-bottom:8px;
+}
+
+#sidebar-bottom > div > .header {
+	font-family: 'Karla', sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 13px;
+	margin-top: 20px;
+	margin-bottom:10px;
+}
+
+#sidebar-bottom > div > input {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid black;
+    width: 75%;
+    margin-top:25px;
+}
+
+.input-label{
+	color:#999;
+	font-size:11px;
+	margin:0px;
+	line-height:8px;
+}
+
+#btm-header{
+	color:#66CD00;
+}
+
+/*#sidebar-bottom > div > #bottom-label {
+	font-family: 'Karla', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 14px;
+	margin-top: 24px;
+}*/
 
 /* fluidbox CSS */
 

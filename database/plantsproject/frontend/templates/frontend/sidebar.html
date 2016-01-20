@@ -1,3 +1,31 @@
 {% extends 'frontend/index.html' %}
 
-{% block title %}sidebar.html{% endblock %}
+{% block sidebartop %}
+<div id="nav">
+	<h2 id="nav-title">PDB.</h2>
+	<p class="nav-header">BROWSE</p>
+	<ul>
+		<li>Everything</li>
+		<li>New stuff</li>
+		<li>Endangered</li>
+		<li>Curated by the NSF</li>
+	</ul>
+	<p class="nav-header">DOCS</p>
+	<ul>
+		<li>Database Structure</li>
+		<li>Basic Plant Theory</li>
+	</ul>
+</div>
+{% endblock %}
+
+
+{% block sidebarbottom %}
+<div>
+	<p class="header" id="btm-header">Resume Plantiferous...</p>
+	<p class="header">Add Plant</p>
+	<input type="text"></input>
+	<p class="input-label italic">latin name</p>
+	<input type="text"></input>
+	<p class="input-label italic">common name</p>
+</div>
+{% endblock %}
