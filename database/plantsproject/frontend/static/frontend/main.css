@@ -155,6 +155,19 @@ section#contain a img {
 	color:#66CD00;
 }
 
+.thumbnail{
+	border: 1px solid #999;
+	height: 42px;
+	width: 42px;
+	float:left;
+	margin-right: 5px;
+	margin-bottom:5px;
+	padding:0px;
+}
+
+#add-plant-go{
+	float:right;
+}
 /*#sidebar-bottom > div > #bottom-label {
 	font-family: 'Karla', sans-serif;
 	font-size: 14px;

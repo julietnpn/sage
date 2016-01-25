@@ -1,0 +1,38 @@
+{% extends 'frontend/base.html' %}
+
+{% block sidebartop %}
+<div id="nav">
+	<h2 id="nav-title">PDB.</h2>
+	<p class="nav-header">BROWSE</p>
+	<ul>
+		<li>Everything</li>
+		<li>New stuff</li>
+	</ul>
+	<p class="nav-header">DOCS</p>
+	<ul>
+		<li>Database Structure</li>
+		<li>Basic Plant Theory</li>
+	</ul>
+</div>
+{% endblock %}
+
+
+{% block sidebarbottom %}
+<div id="sidebar-bottom-content">
+	<p class="header" id="btm-header">Add Plant</p><br>
+	<!--<p class="header">Add Plant</p><br>-->
+	<input type="text" id="add-plant-latin-name"></input><br>
+	<p class="input-label italic">latin name</p><br>
+	<input type="text" id="add-plant-common-name"></input><br>
+	<p class="input-label italic">common name</p><br>
+	<br>
+	<div id="thumbnails">
+		<div class="thumbnail" id="1"></div>
+		<div class="thumbnail" id="2"></div>
+		<div class="thumbnail" id="3"></div>
+	</div>
+	<p class="thumbnail-img-label italic">latin name</p><br>
+	<br>
+	<p><a href="#" id="add-plant-go">Add This</a></p>
+</div>
+{% endblock %}

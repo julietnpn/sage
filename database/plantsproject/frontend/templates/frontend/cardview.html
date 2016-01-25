@@ -1,4 +1,4 @@
-{% extends 'frontend/sidebar.html' %}
+{% extends 'frontend/sidebar-addplant.html' %}
 
 {% block maincontent %}
 {% if plant_list %}
@@ -12,7 +12,7 @@
 		<div class='row plantdetails'>
 			<div class='row'>
 				<div class='col-sm-6'>
-					<p>Characteristics: 
+					<p>Characteristics: {% spaceless %}
 						{% if plant.height %}
 						<p>height {{ plant.height }}, </p>
 						{% endif %}
@@ -28,6 +28,7 @@
 						{% if plant.ph_max %}
 						<p class="key">phMax </p><p class="value">{{ plant.ph_max }}</p>
 						{% endif %}
+						{% endspaceless %}
 					</p>
 				</div>
 				<div class='col-sm-6'>
