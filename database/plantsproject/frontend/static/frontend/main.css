@@ -126,20 +126,18 @@ section#contain a img {
 	padding-bottom:8px;
 }
 
-#sidebar-bottom > div > .header {
-	font-family: 'Karla', sans-serif;
-	font-size: 15px;
-	font-weight: bold;
-	line-height: 13px;
-	margin-top: 20px;
-	margin-bottom:10px;
-}
 
-#sidebar-bottom > div > input {
+
+input {
     border: 0;
     outline: 0;
     background: transparent;
     border-bottom: 1px solid black;
+    width: 75%;
+    margin-top:25px;
+}
+
+#sidebar-bottom > div >  input {
     width: 75%;
     margin-top:25px;
 }
@@ -151,30 +149,84 @@ section#contain a img {
 	line-height:8px;
 }
 
+
 #btm-header{
+	font-family: 'Karla', sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 13px;
+	margin-top: 20px;
+	margin-bottom:10px;
 	color:#66CD00;
+	letter-spacing:1.5px;
 }
 
-.thumbnail{
+/*Sidebar Thumbnail CSS*/
+#thumbnail-container > div,
+#thumbnail-container > p{
+	visibility:hidden;
+}
+.img-thumbnail{
 	border: 1px solid #999;
 	height: 42px;
 	width: 42px;
 	float:left;
-	margin-right: 5px;
+	margin-right:5px;
 	margin-bottom:5px;
 	padding:0px;
 }
 
-#add-plant-go{
-	float:right;
+#thumbnail-container > div:hover,
+#thumbnail-container > div:focus{
+	border-color:#66CD00;
 }
-/*#sidebar-bottom > div > #bottom-label {
+
+
+
+#add-plant-submit-container > a,
+#header-container > #sidebar-clear{
+	display:inline-block;
 	font-family: 'Karla', sans-serif;
-	font-size: 14px;
-	font-weight: bold;
-	line-height: 14px;
-	margin-top: 24px;
-}*/
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 13px;
+	visibility:hidden;
+	float:right;
+	margin-right:20px;
+	margin-top: 20px;
+	margin-bottom:10px;
+	color:gray;
+}
+
+#page-header{
+	position:fixed;
+	top:0px;
+	right:0px;
+	width:100%;
+	margin-top:30px;
+}
+
+#sidebar-edit-content > #header-container{
+	height:200px;
+	text-align:center;
+	display:table-cell;
+	vertical-align:middle;
+}
+
+#sidebar-edit-content > #header-container > a {
+	display:inline-block;
+	font-family: 'Karla', sans-serif;
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 13px;
+	margin-right:20px;
+	margin-top: 20px;
+	margin-bottom:10px;
+	color:gray;
+}
+
+
+
 
 /* fluidbox CSS */
 

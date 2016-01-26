@@ -24,7 +24,29 @@ var AddPlant = function(){
     	setThumbnailSize();
 
 		jqueryMap.$addThis.click(function () {
-            alert(jqueryMap.$latinName.val());
+            //get info from form 
+            //send to new page
+        });
+
+        jqueryMap.$commonName.blur(function () {
+           displayElements(jqueryMap.$thumbnails.children());
+           displayElements(jqueryMap.$clearAddPlant);
+        });
+
+        jqueryMap.$thumbnailImages.click(function(){
+            resetBorderColor($(this).siblings());
+            $(this).css('border-color', '#66CD00');
+            displayElements(jqueryMap.$addThis.children());
+        });
+
+
+        jqueryMap.$clearAddPlant.click(function(){
+            jqueryMap.$latinName.val("");
+            jqueryMap.$commonName.val("");
+            hideElements(jqueryMap.$thumbnails.children());
+            hideElements(jqueryMap.$clearAddPlant);
+            hideElements(jqueryMap.$addThis.children());
+            resetBorderColor(jqueryMap.$thumbnails.children(".img-thumbnail"));
         });
     	
     }
@@ -37,16 +59,36 @@ var AddPlant = function(){
         jqueryMap = {
         	$latinName : $("#add-plant-latin-name"),
         	$commonName : $("#add-plant-common-name"),
-        	$addThis: $("#add-plant-go"),
+        	$addThis: $("#add-plant-submit-container"),
         	$sidebarSection: $('#sidebar-bottom-content'),
-        	$thumbnails:$(".thumbnail")
+        	$thumbnailImages:$(".img-thumbnail"),
+            $thumbnails:$("#thumbnail-container"),
+            $clearAddPlant:$('#sidebar-clear')
         };
     }
 
     function setThumbnailSize(){
     	var width = jqueryMap.$sidebarSection.width() - 81;
-    	jqueryMap.$thumbnails.width(width/3);
-    	jqueryMap.$thumbnails.height(width/3);
+    	jqueryMap.$thumbnailImages.width(width/3);
+    	jqueryMap.$thumbnailImages.height(width/3);
+    }
+
+    function displayElements(elements){
+        for(var i=0; i < elements.length; i++){
+            elements[i].style.visibility='visible';
+        }
+    }
+
+    function hideElements(elements){
+        for(var i=0; i < elements.length; i++){
+            elements[i].style.visibility='hidden';
+        }
+    }
+
+    function resetBorderColor(elements){
+        for(var i=0; i < elements.length; i++){
+            $(elements[i]).css('borderColor', '#ddd');
+        }
     }
 
     //----------------- BEGIN DOM METHODS -----------------------

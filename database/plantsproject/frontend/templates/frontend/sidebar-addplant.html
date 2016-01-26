@@ -1,8 +1,16 @@
 {% extends 'frontend/base.html' %}
 
+{% block maincontentheader %}
+<!--<div class="row" id="page-header">
+	<div="col-md-4 col-md-offset-8">
+		<input type="text" id="search-string"></input>
+	<!--why didnt the closing div tag work here 
+</div>-->
+{% endblock %}
+
 {% block sidebartop %}
 <div id="nav">
-	<h2 id="nav-title">PDB.</h2>
+	<h2 id="nav-title">PDB.</h2> 
 	<p class="nav-header">BROWSE</p>
 	<ul>
 		<li>Everything</li>
@@ -19,20 +27,24 @@
 
 {% block sidebarbottom %}
 <div id="sidebar-bottom-content">
-	<p class="header" id="btm-header">Add Plant</p><br>
+	<div id="header-container">
+		<p id="btm-header">Add Plant</p>
+		<a href="#" id="sidebar-clear" class="clear">clear</a><br>
+	</div>
 	<!--<p class="header">Add Plant</p><br>-->
 	<input type="text" id="add-plant-latin-name"></input><br>
 	<p class="input-label italic">latin name</p><br>
 	<input type="text" id="add-plant-common-name"></input><br>
 	<p class="input-label italic">common name</p><br>
 	<br>
-	<div id="thumbnails">
-		<div class="thumbnail" id="1"></div>
-		<div class="thumbnail" id="2"></div>
-		<div class="thumbnail" id="3"></div>
+	<div id="thumbnail-container">
+		<div class="img-thumbnail" id="1"></div>
+		<div class="img-thumbnail" id="2"></div>
+		<div class="img-thumbnail" id="3"></div>
+		<p class="input-label italic">results from...</p>
 	</div>
-	<p class="thumbnail-img-label italic">latin name</p><br>
-	<br>
-	<p><a href="#" id="add-plant-go">Add This</a></p>
+	<div id="add-plant-submit-container">
+		<a href="#">Add This</a>
+	</div>
 </div>
 {% endblock %}
