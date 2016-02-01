@@ -5,10 +5,11 @@
 {% if plant_list %}
 {% for plant in plant_list %}
 <div class='row plantcard'>
+	<div class="col-sm-1"></div>
 	<div class="col-sm-2">
 		<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
 	</div>
-	<div class="col-sm-10">
+	<div class="col-sm-9">
 		<div class='row plantname'>{{ plant.genus }} {{ plant.species }}</div>
 		<div class='row plantdetails'>
 			<div class='row'>

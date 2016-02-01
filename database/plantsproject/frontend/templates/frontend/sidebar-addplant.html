@@ -1,11 +1,7 @@
 {% extends 'frontend/base.html' %}
 
 {% block maincontentheader %}
-<!--<div class="row" id="page-header">
-	<div="col-md-4 col-md-offset-8">
-		<input type="text" id="search-string"></input>
-	<!--why didnt the closing div tag work here 
-</div>-->
+	<div class="col-md-12" style="height:125px;width:100%;background-color:yellow;"></div>
 {% endblock %}
 
 {% block sidebartop %}
@@ -26,6 +22,13 @@
 
 
 {% block sidebarbottom %}
+<script>
+function submitAddPlant(){
+	window.location = "/home/edit/" + document.getElementById("add-plant-latin-name").value
+		+ "/" + document.getElementById("add-plant-common-name").value;
+}
+</script>
+
 <div id="sidebar-bottom-content">
 	<div id="header-container">
 		<p id="btm-header">Add Plant</p>
@@ -33,18 +36,13 @@
 	</div>
 	<!--<p class="header">Add Plant</p><br>-->
 	<input type="text" id="add-plant-latin-name"></input><br>
-	<p class="input-label italic">latin name</p><br>
+	<p id="latin-name-label" class="input-label italic">latin name</p><br>
 	<input type="text" id="add-plant-common-name"></input><br>
-	<p class="input-label italic">common name</p><br>
+	<p id="common-name-label" class="input-label italic">common name</p><br>
 	<br>
-	<div id="thumbnail-container">
-		<div class="img-thumbnail" id="1"></div>
-		<div class="img-thumbnail" id="2"></div>
-		<div class="img-thumbnail" id="3"></div>
-		<p class="input-label italic">results from...</p>
-	</div>
+	<div id="thumbnail-container"></div>
 	<div id="add-plant-submit-container">
-		<a href="#">Add This</a>
+		<button id="add-plant" onclick="submitAddPlant();">Add This</button>
 	</div>
 </div>
 {% endblock %}

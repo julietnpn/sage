@@ -13,10 +13,7 @@
 </head>
 
 <body>
-
-
-
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row">
 			<div id="sidebar" class="col-md-2">
 				<!--begin top of sidebar -->
@@ -48,11 +45,16 @@
 			</div>
 
 			<!--begin main content -->
+			
 			<div id="content" class="col-md-10 col-md-offset-2">
+				<div class="row">
 				{% block maincontentheader %}
 				{% endblock %}
+				</div>
+				<div class="row">
 				{% block maincontent %}
 				{% endblock %}
+				</div>
 			</div><!--end main content -->
 		</div><!--end row-->
 	</div> <!--end container-fluid-->

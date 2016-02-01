@@ -14,6 +14,21 @@ def cardview(request):
 	}
 	return render(request, 'frontend/cardview.html', context)
 
-def editPlant(request):
-	context = {}
+def editPlant(request, genus=None, species=None, variety=None, commonName=None, imgUrl=None):
+	#genus = latinName.split()[0]
+	#species = latinName.split()[1]
+	#variety = latinName.split()[2]
+
+	#transaction = Transactions(users_id=1, transaction_type='INSERT', ignore=False)
+	#transaction.save()
+	#actions = []
+	#actions.append(Actions(transaction=transaction.id, action_type="INSERT", property='genus', value=genus))
+	#actions.append(Actions(transaction=transaction.id, action_type="INSERT", property='species', value=species))
+	#actions.append(Actions(transaction=transaction.id, action_type="INSERT", property='variety', value=variety))
+	#actions.append(Actions(transaction=transaction.id, action_type="INSERT", property='common_name', value=commonName))
+	#actions.append(Actions(transaction=transaction.id, action_type="INSERT", property='img_url', value=imgUrl))
+	#Actions.objects.bulk_create(actions)
+	context = {
+	#	'plant_id': transaction.plant_id,
+	}
 	return render(request, 'frontend/editplant.html', context)

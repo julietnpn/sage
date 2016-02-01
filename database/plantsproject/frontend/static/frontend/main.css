@@ -85,7 +85,6 @@ section#contain a img {
 	top:0px;
 	left:0px;
 	height:100%;
-	/*width:250px;*/
 	box-shadow: 0px 0px 10px #DBDBDB;
 }
 
@@ -162,14 +161,14 @@ input {
 }
 
 /*Sidebar Thumbnail CSS*/
-#thumbnail-container > div,
+/*#thumbnail-container > div,
 #thumbnail-container > p{
 	visibility:hidden;
-}
-.img-thumbnail{
-	border: 1px solid #999;
-	height: 42px;
-	width: 42px;
+}*/
+
+.thumbnail-img{
+	display:inline-block;
+	border: 2px solid #ddd;
 	float:left;
 	margin-right:5px;
 	margin-bottom:5px;
@@ -179,11 +178,12 @@ input {
 #thumbnail-container > div:hover,
 #thumbnail-container > div:focus{
 	border-color:#66CD00;
+
 }
 
 
 
-#add-plant-submit-container > a,
+#add-plant-submit-container > button,
 #header-container > #sidebar-clear{
 	display:inline-block;
 	font-family: 'Karla', sans-serif;
@@ -196,6 +196,15 @@ input {
 	margin-top: 20px;
 	margin-bottom:10px;
 	color:gray;
+
+	background:none!important;
+	border:none;
+	padding:0!important;
+	cursor:pointer;
+}
+
+.selected{
+border-color:#66CD00;
 }
 
 #page-header{
@@ -208,6 +217,7 @@ input {
 
 #sidebar-edit-content > #header-container{
 	height:200px;
+	width:100%;
 	text-align:center;
 	display:table-cell;
 	vertical-align:middle;
