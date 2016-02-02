@@ -1,10 +1,11 @@
-{% extends 'frontend/base.html' %}
+{% extends 'frontend/maincontent-hdr.html' %}
 
 {% block sidebarbottom %}
 <div id="sidebar-edit-content" style="width:100%;">
 	<div id="header-container">
 		<p id="btm-header">Now editing plant . . .</p>
-		<br><a href="#">cancel</a>
+		<br><a href="/home">cancel</a>
+		<!--FIGURE OUT HOW TO GO TO PREVIOUS PAGE HERE: set form.next before getting here????-->
 	</div>
 </div>
 {% endblock %}

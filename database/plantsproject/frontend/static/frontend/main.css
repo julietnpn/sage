@@ -104,7 +104,7 @@ section#contain a img {
 
 #sidebar-top > #nav > .nav-header{
 	font-weight:bold;
-	font-size:10px;
+	font-size:12px;
 	letter-spacing:1px;
 	color:#BDBDBD;
 	padding-bottom:10px;
@@ -113,7 +113,7 @@ section#contain a img {
 #sidebar-top > #nav > ul{
 	list-style-type:none;
 	font-family: 'Karla', sans-serif;
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: normal;
 	line-height: 22px;
 	margin-bottom: 13px;
@@ -127,31 +127,61 @@ section#contain a img {
 
 
 
-input {
+/*input {
     border: 0;
     outline: 0;
     background: transparent;
     border-bottom: 1px solid black;
     width: 75%;
     margin-top:25px;
+}*/
+
+.formsubmit{
+	border: 0;
+    outline: 0;
+    background: transparent;
+    margin-top:30px;
+    float:right;
+
+    display:inline-block;
+	font-family: 'Karla', sans-serif;
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 13px;
+	visibility:hidden;
+	float:right;
+	margin-right:20px;
+	margin-top: 20px;
+	margin-bottom:10px;
+	color:#66CD00;
+
+	
 }
 
-#sidebar-bottom > div >  input {
+.formtxt {
     width: 75%;
     margin-top:25px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid black;
+    width: 75%;
+    margin-top:25px;
+    margin-bottom:5px;
 }
 
 .input-label{
 	color:#999;
 	font-size:11px;
 	margin:0px;
-	line-height:8px;
+	line-height:16px;
+	display:block;
 }
 
 
 #btm-header{
 	font-family: 'Karla', sans-serif;
-	font-size: 15px;
+	font-size: 18px;
 	font-weight: bold;
 	line-height: 13px;
 	margin-top: 20px;

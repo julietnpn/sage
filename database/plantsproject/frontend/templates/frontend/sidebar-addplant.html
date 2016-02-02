@@ -1,8 +1,6 @@
-{% extends 'frontend/base.html' %}
+{% extends 'frontend/maincontent-hdr.html' %}
 
-{% block maincontentheader %}
-	<div class="col-md-12" style="height:125px;width:100%;background-color:yellow;"></div>
-{% endblock %}
+
 
 {% block sidebartop %}
 <div id="nav">
@@ -22,27 +20,32 @@
 
 
 {% block sidebarbottom %}
-<script>
-function submitAddPlant(){
-	window.location = "/home/edit/" + document.getElementById("add-plant-latin-name").value
-		+ "/" + document.getElementById("add-plant-common-name").value;
-}
-</script>
-
 <div id="sidebar-bottom-content">
 	<div id="header-container">
 		<p id="btm-header">Add Plant</p>
 		<a href="#" id="sidebar-clear" class="clear">clear</a><br>
 	</div>
+
+	<form action="" method="post">
+		{% csrf_token %}
+		{% for field in form %}
+		{{ field }}
+		<p class="input-label italic">{{ field.label_tag }}</p>
+		{% endfor %}
+		<div id="add-plant-submit-container">
+			<input type="submit" id="add-plant" class="formsubmit" value="Add This" />
+		</div>
+	</form>
+
 	<!--<p class="header">Add Plant</p><br>-->
-	<input type="text" id="add-plant-latin-name"></input><br>
+	<!--<input type="text"  class="formtxt" id="add-plant-latin-name"></input><br>
 	<p id="latin-name-label" class="input-label italic">latin name</p><br>
-	<input type="text" id="add-plant-common-name"></input><br>
+	<input type="text" class="formtxt" id="add-plant-common-name"></input><br>
 	<p id="common-name-label" class="input-label italic">common name</p><br>
 	<br>
 	<div id="thumbnail-container"></div>
 	<div id="add-plant-submit-container">
 		<button id="add-plant" onclick="submitAddPlant();">Add This</button>
-	</div>
+	</div>-->
 </div>
 {% endblock %}

@@ -1,1 +1,16 @@
 {% extends 'frontend/sidebar-editplant.html' %}
+
+{% block maincontent %}
+{% if plant %}
+	<p>Working on: {{ plant.genus }} {{ plant.species }}</p>
+	
+	<div class="row">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-11">
+			<text>{{ plant.genus }} {{ plant.species }} </text><text class="italic">{{ plant.common_name }}</text>
+		</div>
+	</div>
+{% else %}
+	<p>No plant</p>
+{% endif %}
+{% endblock %}
