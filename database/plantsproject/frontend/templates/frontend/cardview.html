@@ -4,7 +4,7 @@
 
 {% if plant_list %}
 {% for plant in plant_list %}
-<div class='row plantcard'>
+<div class='row plantcard' onclick="location.href='edit/{{plant.id}}'">
 	<div class="col-sm-1"></div>
 	<div class="col-sm-2">
 		<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
@@ -14,35 +14,109 @@
 		<div class='row plantdetails'>
 			<div class='row'>
 				<div class='col-sm-6'>
-					<p>Characteristics: {% spaceless %}
-						{% if plant.height %}
-						<p>height {{ plant.height }}, </p>
+					<p><text>Characteristics: </text>{% spaceless %}
+						{% if plant.height.all %}
+							<text><i>Height&nbsp;</i>
+							{% for height in plant.height.all %}
+								<b>{{ height }} </b>
+							{% endfor %}
+							</text>
 						{% endif %}
 
-						{% if plant.layer %}
-						<p>layer {{  plant.layer }}, </p>
+						{% if plant.layer.all %}
+							<text><i>Layer&nbsp;</i>
+							{% for layer in plant.layer.all %}
+								<b>{{ layer }} </b>
+							{% endfor %}
+							</text>
 						{% endif %}
 
 						{% if plant.ph_min %}
-						<p class='key'> phMin </p><p class="value"> {{ plant.ph_min }}, </p>
+							<text><i>phMin&nbsp;</i><b>{{ plant.ph_min }} </b></text>
 						{% endif %}
 
 						{% if plant.ph_max %}
-						<p class="key">phMax </p><p class="value">{{ plant.ph_max }}</p>
+							<text><i>phMax&nbsp;</i><b>{{ plant.ph_max }} </b></text>
 						{% endif %}
 						{% endspaceless %}
 					</p>
 				</div>
 				<div class='col-sm-6'>
-					<p>Products:</p>
+					<p><text>Products: </text>{% spaceless %}
+						
+						{% if plant.food_prod.all %}
+							<text><i>Food&nbsp;</i><b>{{ plant.get_food_prod }} </b></text>
+						{% endif %}
+
+						{% if plant.raw_materials_prod.all %}
+							<text><i>Raw&nbsp;Materials</i>&nbsp;<b>{{ plant.get_raw_materials_prod }} </b></text>
+						{% endif %}
+
+						{% if plant.medicinals_prod.all %}
+							<text><i> Medicinals&nbsp;</i><b>{{ plant.medicinals_prod }}</b></text>
+						{% endif %}
+
+						{% if plant.get_biochemical_material_prod.all %}
+							<text><i> Biochemical&nbsp;Matieral&nbsp;</i><b>{{ plant.get_biochemical_material_prod }}</b></text>
+						{% endif %}
+						{% endspaceless %}
+					</p>
 				</div>
 			</div>
 			<div class='row'>
 				<div class='col-sm-6'>
-					<p>Needs:</p>
+					<p><text>Needs: </text>{% spaceless %}
+						{% if plant.water_needs.all %}
+							<text><i>Water&nbsp;</i>
+							{% for water in plant.water_needs.all %}
+								<b>{{ water }} </b>
+							{% endfor %}
+							</text>
+						{% endif %}
+
+						{% if plant.sun_needs.all %}
+							<text><i>Sun&nbsp;</i>
+							{% for sun in plant.sun_needs.all %}
+								<b>{{ sun }} </b>
+							{% endfor %}
+							</text>
+						{% endif %}
+
+						{% if plant.fertility_needs.all %}
+							<text><i>Nutrient&nbsp;Requirements&nbsp;</i>
+							{% for nutrient in plant.fertility_needs.all %}
+								<b>{{ nutrient }} </b>
+							{% endfor %}
+							</text>
+						{% endif %}
+
+						{% if plant.serotiny %}
+							<text><i> Serotiny&nbsp;</i><b>{{ plant.serotiny.value }}</b></text> <!--This foreign key hasn't been checked-->
+						{% endif %}
+
+						{% if plant.innoculant %}
+							<text><i> Innoculant&nbsp;</i><b>{{ plant.innoculant }}</b></text>
+						{% endif %}
+						{% endspaceless %}
+					</p>
 				</div>
 				<div class='col-sm-6'>
-					<p>Behaviors:</p>
+					<p><text>Behaviors: </text>{% spaceless %}
+						
+						{% if plant.erosion_control.all %}
+							<text><i>Erosion&nbsp;Control&nbsp;</i><b>{{ plant.get_erosion_control }} </b></text>
+						{% endif %}
+
+						{% if plant.plants_insect_attractor.all %}
+							<text><i>Insect&nbsp;Attraactor&nbsp;</i><b>{{ plant.get_insect_attractor }} </b></text>
+						{% endif %}
+
+						{% if plant.plants_insect_regulator.all %}
+							<text><i> Insect&nbsp;Regulator&nbsp;</i><b>{{ plant.get_insect_regulator }}</b></text>
+						{% endif %}
+
+						{% endspaceless %}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -53,4 +127,7 @@
 {% else %}
 	<p>No plants are available.</p>
 {% endif %}
+
+
+
 {% endblock %}

@@ -9,12 +9,13 @@ section#contain {
 	display: block;
 }
 
-h1 {
+h1, .edit-plant-title {
 	font-family: 'Karla', sans-serif;
 	font-size: 28px;
-	font-weight: normal;
+	font-weight: bold;
 	line-height: 28px;
 	margin-bottom: 25px;
+	color:#3F3F3F;
 }
 
 h2 {
@@ -34,7 +35,7 @@ h3 {
 	margin-top: 24px;
 }
 
-p {
+p{
 	display:inline-block;
 	font-family: 'Karla', sans-serif;
 	font-size: 13px;
@@ -43,7 +44,21 @@ p {
 	margin-bottom: 13px;
 }
 
-.value{
+text{
+	display:inline-block;
+	font-family: 'Karla', sans-serif;
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 14px;
+	margin-bottom: 0px;
+	white-space:pre;
+}
+
+text > b{
+	font-size: 15px;
+}
+
+.bold{ /*Is this used*/
 	font-weight:bold;
 }
 
@@ -56,6 +71,11 @@ section#contain a img {
 	font-style: italic;
 }
 
+.attribute{
+	font-weight:bold;
+	font-size:15px;
+}
+
 .cardimg{
 	height:125px;
 	width:125px;
@@ -63,11 +83,24 @@ section#contain a img {
 
 }
 
+.editplantrow{
+	padding-top:20px;
+	padding-bottom:20px;
+}
+
 .plantcard{
 	padding-top:20px;
 	padding-bottom:20px;
 	padding-left:10px;
 	padding-right:5px;
+}
+
+.plantcard:hover{
+	padding-top:20px;
+	padding-bottom:20px;
+	padding-left:10px;
+	padding-right:5px;
+	cursor:pointer;
 }
 
 .plantname{

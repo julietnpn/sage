@@ -1,16 +1,81 @@
 {% extends 'frontend/sidebar-editplant.html' %}
 
 {% block maincontent %}
+
+{% if test %}
+<p>{{ test }}</p>
+{% endif %}
+
+
 {% if plant %}
-	<p>Working on: {{ plant.genus }} {{ plant.species }}</p>
-	
-	<div class="row">
-		<div class="col-sm-1"></div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
-			<text>{{ plant.genus }} {{ plant.species }} </text><text class="italic">{{ plant.common_name }}</text>
+			<text class="edit-plant-title">{{ plant.genus }} {{ plant.species }} </text>
+			<text class="edit-plant-title italic">{{ plant.common_name }}</text>
+		</div>
+	</div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-11">
+			<text>~Images Here~</text>
+		</div>
+	</div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-5">
+			<div class="row italic attribute">Characteristics</div>
+			<div class="row">
+				{% if plant.height.all %}
+					<text><i>Height&nbsp;</i>
+						{% for height in plant.height.all %}
+							<b>{{ height }} </b>
+						{% endfor %}
+					</text>
+				{% endif %}
+			</div>
+			<div class="row">
+
+						{% if plant.layer.all %}
+							<text><i>Layer&nbsp;</i>
+							{% for layer in plant.layer.all %}
+								<b>{{ layer }} </b>
+							{% endfor %}
+							</text>
+						{% endif %}
+			</div>
+			<div class="row">
+
+						{% if plant.ph_min %}
+							<text><i>phMin&nbsp;</i><b>{{ plant.ph_min }} </b></text>
+						{% endif %}
+			</div>
+			<div class="row">
+
+						{% if plant.ph_max %}
+							<text><i>phMax&nbsp;</i><b>{{ plant.ph_max }} </b></text>
+						{% endif %}
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<p class="italic attribute">Needs</p>
+		</div>
+	</div>
+
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-11">
+			<p class="italic attribute">Products</p>
+		</div>
+	</div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-11">
+			<p class="italic attribute">Behaviors</p>
 		</div>
 	</div>
 {% else %}
-	<p>No plant</p>
+	<p>No plant</p> <!--fancy this up a bit-->
 {% endif %}
+
 {% endblock %}
