@@ -7,3 +7,7 @@ class AddPlantForm(forms.Form):
 
 class EditPlantForm(forms.Form):
 	characteristics = forms.CharField(label='characteristics');
+
+class SearchPlant(forms.Form):
+	searchString = forms.CharField(widget=forms.TextInput(attrs={'class': 'formtxt', 'id':'search-plant'}), label='', label_suffix='')
+	

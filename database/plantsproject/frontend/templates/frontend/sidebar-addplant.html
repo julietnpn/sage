@@ -1,24 +1,5 @@
 {% extends 'frontend/maincontent-hdr.html' %}
 
-
-
-{% block sidebartop %}
-<div id="nav">
-	<h2 id="nav-title">PDB.</h2> 
-	<p class="nav-header">BROWSE</p>
-	<ul>
-		<li>Everything</li>
-		<li>New stuff</li>
-	</ul>
-	<p class="nav-header">DOCS</p>
-	<ul>
-		<li>Database Structure</li>
-		<li>Basic Plant Theory</li>
-	</ul>
-</div>
-{% endblock %}
-
-
 {% block sidebarbottom %}
 <div id="sidebar-bottom-content">
 	<div id="header-container">
@@ -28,12 +9,12 @@
 
 	<form action="" method="post">
 		{% csrf_token %}
-		{% for field in form %}
+		{% for field in addPlantForm %}
 		{{ field }}
 		<p class="input-label italic">{{ field.label_tag }}</p>
 		{% endfor %}
 		<div id="add-plant-submit-container">
-			<input type="submit" id="add-plant" class="formsubmit" value="Add This" />
+			<input type="submit" id="add-plant" class="formsubmit" name="add" value="Add This" />
 		</div>
 	</form>
 

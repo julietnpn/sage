@@ -2,6 +2,11 @@ html {
 	/*padding: 30px;*/
 	width:100%;
 	height:100%;
+
+}
+
+div{
+	font-family: 'Karla', sans-serif;
 }
 
 section#contain {
@@ -16,6 +21,7 @@ h1, .edit-plant-title {
 	line-height: 28px;
 	margin-bottom: 25px;
 	color:#3F3F3F;
+	display:inline-block;
 }
 
 h2, .edit-plant-subtitle {
@@ -23,6 +29,7 @@ h2, .edit-plant-subtitle {
 	font-size: 20px;
 	font-weight: normal;
 	line-height: 20px;
+	display:inline-block;
 	/*margin-bottom: 15px;
 	padding-top: 20px;*/
 }
@@ -199,15 +206,24 @@ section#contain a img {
 }
 
 .formtxt {
-    width: 75%;
+
     margin-top:25px;
     border: 0;
     outline: 0;
     background: transparent;
     border-bottom: 1px solid black;
-    width: 75%;
+    
     margin-top:25px;
     margin-bottom:5px;
+}
+
+#search-plant{
+	width:20px;
+}
+
+#add-plant-latin-name, 
+#add-plant-common-name{
+	width: 75%;
 }
 
 .input-label{

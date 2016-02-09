@@ -6,15 +6,15 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from datetime import datetime
 from .models import Plant, Transactions, Actions
-from .forms import AddPlantForm, EditPlantForm
+from .forms import AddPlantForm, EditPlantForm, SearchPlant
 
 
-def cardview(request):	
-	plant_list = Plant.objects.filter(id__gte=8667).order_by('id')
-	context = {
-		'plant_list': plant_list,
-	}
-	return render(request, 'frontend/cardview.html', context)
+#def cardview(request):	
+#	plant_list = Plant.objects.filter(id__gte=8667).order_by('id')
+#	context = {
+#		'plant_list': plant_list,
+#	}
+#	return render(request, 'frontend/cardview.html', context)
 
 def editPlant(request, plantId=None):
 	if request.method == 'POST':
@@ -33,8 +33,11 @@ def editPlant(request, plantId=None):
 
 def addPlant(request):
 	if request.method == 'POST':
-		form = AddPlantForm(request.POST)
-		if form.is_valid():
+		addPlantForm = AddPlantForm(request.POST)
+		searchForm = SearchPlant(request.POST)
+
+
+		if 'add' in request.POST and addPlantForm.is_valid():
 			nameArray = str(request.POST["latinName"]).split()
 			commonName = request.POST["commonName"]
 
@@ -67,11 +70,18 @@ def addPlant(request):
 
 			#add plant id to url below
 			return HttpResponseRedirect('/home/edit/1234')
+		elif 'search' in request.POST and searchForm.is_valid():
+			searchString = request.POST["searchString"]
+			return HttpResponseRedirect('/home/edit/' + searchString)
+
 	else:
-		form = AddPlantForm()
+		add_plant_form = AddPlantForm()
+		search_form = SearchPlant()
 		plant_list = Plant.objects.filter(id__gte=5000, id__lte=5100).order_by('id')
+
 		context = {
-			'form': form,
+			'addPlantForm': add_plant_form,
+			'searchForm': search_form,
 			'plant_list': plant_list,
 		}
 		return render(request, 'frontend/cardview.html', context)

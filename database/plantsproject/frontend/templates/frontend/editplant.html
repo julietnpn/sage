@@ -6,22 +6,30 @@
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
-			<text class="edit-plant-title">{{ plant.genus }}&nbsp;{{ plant.species }}&nbsp;{{ plant.variety }}&nbsp;&nbsp;</text>
-			<text class="edit-plant-title italic">{{ plant.common_name }}</text>
+			<div class="edit-plant-title">{{ plant.genus }}&nbsp;{{ plant.species }}&nbsp;{{ plant.variety }}&nbsp;&nbsp;</div>
+			<div class="edit-plant-title italic">{{ plant.common_name }}</div>
 			<br>
 			{% if plant.family %}
-			<text class="edit-plant-subtitle">{{ plant.family }}&nbsp;</text>
-			<text class="edit-plant-subtitle italic">{{ plant.family_common_name }}</text>
+			<div class="edit-plant-subtitle">{{ plant.family }}&nbsp;</div>
+			<div class="edit-plant-subtitle italic">{{ plant.family_common_name }}</div>
 			{% endif %}
 			<br>
 			{% if plant.endemic_status %}
-				<text>Endemic Status: {{ plant.get_endemic_status }}</text>
+				<div>Endemic Status: {{ plant.get_endemic_status }}</div>
 			{% endif %}
 		</div>
 	</div>
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
+			<!--{% if plant.height.all %}
+					<text><i>Height&nbsp;</i>
+						{% for height in plant.height.all %}
+							<b>{{ height }} </b>
+						{% endfor %}
+						</text>
+				{% endif %}-->
+
 			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
 			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
 			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
@@ -34,67 +42,80 @@
 			<div class="row italic attribute">Characteristics</div>
 			<div class="row">
 				{% if plant.height.all %}
-					<text><i>Height&nbsp;</i><b>{{ plant.get_height }}</b></text>
+					<div class="col-xs-4 italic">Height</div>
+					<div class="col-xs-8 bold">{{ plant.get_height }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.layer.all %}
-					<text><i>Layer&nbsp;</i><b>{{ plant.get_layer }}</b></text>
+					<div class="col-xs-4 italic">Layer</div>
+					<div class="col-xs-8 bold">{{ plant.get_layer }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.duration.all %}
-					<text><i>Duration&nbsp;</i><b>{{ plant.get_duration }}</b></text>
+					<div class="col-xs-4 italic">Duration</div>
+					<div class="col-xs-8 bold">{{ plant.get_duration }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.spread.all %}
-					<text><i>Spread&nbsp;</i><b>{{ plant.get_spread }}</b></text>
+					<div class="col-xs-4 italic">Spread</div>
+					<div class="col-xs-8 bold">{{ plant.get_spread }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.ph_min %}
-					<text><i>phMin&nbsp;</i><b>{{ plant.ph_min }} </b></text>
+					<div class="col-xs-4 italic">phMin</div>
+					<div class="col-xs-8 bold">{{ plant.ph_min }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.ph_max %}
-					<text><i>phMax&nbsp;</i><b>{{ plant.ph_max }} </b></text>
+					<div class="col-xs-4 italic">phMax</div>
+					<div class="col-xs-8 bold">{{ plant.ph_max }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.canopy_density.all %}
-					<text><i>Canopy&nbsp;Density&nbsp;</i><b>{{ plant.get_canopy_density }}</b></text>
+					<div class="col-xs-4 italic">Canopy Density</div>
+					<div class="col-xs-8 bold">{{ plant.get_canopy_density }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.active_growth_period.all %}
-					<text><i>Layer&nbsp;</i><b>{{ plant.get_active_growth_period }}</b></text>
+					<div class="col-xs-4 italic">Active Growth Period</div>
+					<div class="col-xs-8 bold">{{ plant.get_active_growth_period }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
-				{% if plant.hargest_period.all %}
-					<text><i>Harvest&nbsp;Period&nbsp;</i><b>{{ plant.get_harvest_period }}</b></text>
+				{% if plant.harvest_period.all %}
+					<div class="col-xs-4 italic">Harvest Period</div>
+					<div class="col-xs-8 bold">{{ plant.get_harvest_period }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.leaf_retention.all %}
-					<text><i>Leaf&nbsp;Retention&nbsp;</i><b>{{ plant.get_leaf_retention }}</b></text>
+					<div class="col-xs-4 italic">Leaf Retention</div>
+					<div class="col-xs-8 bold">{{ plant.get_leaf_retention }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.flower_color.all %}
-					<text><i>Flower&nbsp;Color&nbsp;</i><b>{{ plant.get_flower_color }}</b></text>
+					<div class="col-xs-4 italic">Flower Color</div>
+					<div class="col-xs-8 bold">{{ plant.get_flower_color }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.foilage_color.all %}
-					<text><i>Foilage&nbsp;Color&nbsp;</i><b>{{ plant.get_foilage_color }}</b></text>
+					<div class="col-xs-4 italic">Foilage Color</div>
+					<div class="col-xs-8 bold">{{ plant.get_foilage_color }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.fruit_color.all %}
-					<text><i>Fruit&nbsp;Color&nbsp;</i><b>{{ plant.get_fruit_color }}</b></text>
+					<div class="col-xs-4 italic">Fruit Color</div>
+					<div class="col-xs-8 bold">{{ plant.get_fruit_color }}</div>
 				{% endif %}
 			</div>
 		</div>
@@ -102,32 +123,32 @@
 			<div class="row italic attribute">Needs</div>
 			<div class="row pair">
 				{% if plant.water_needs.all %}
-					<div class="col-xs-3 italic">Water</div>
-					<div class="col-xs-9 bold">{{ plant.get_water_needs }}</div>
+					<div class="col-xs-4 italic">Water</div>
+					<div class="col-xs-8 bold">{{ plant.get_water_needs }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.sun_needs.all %}
-					<div class="col-xs-3 italic">Sun</div>
-					<div class="col-xs-9 bold">{{ plant.get_sun_needs }}</div>
+					<div class="col-xs-4 italic">Sun</div>
+					<div class="col-xs-8 bold">{{ plant.get_sun_needs }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.fertility_needs.all %}
-					<div class="col-xs-3 italic">Nutrients</div>
-					<div class="col-xs-9 bold">{{ plant.get_fertility_needs }}</div>
+					<div class="col-xs-4 italic">Nutrients</div>
+					<div class="col-xs-8 bold">{{ plant.get_fertility_needs }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.serotiny %}
-					<div class="col-xs-3 italic">Serotiny</div>
-					<div class="col-xs-9 bold">{{ plant.serotiny.value }}</div> 
+					<div class="col-xs-4 italic">Serotiny</div>
+					<div class="col-xs-8 bold">{{ plant.serotiny.value }}</div> 
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.innoculant %}
-					<div class="col-xs-3 italic">Innoculant</div>
-					<div class="col-xs-9 bold">{{ plant.innoculant }}</div>
+					<div class="col-xs-4 italic">Innoculant</div>
+					<div class="col-xs-8 bold">{{ plant.innoculant }}</div>
 				{% endif %}
 			</div>
 		</div>
@@ -138,47 +159,56 @@
 			<div class="row italic attribute">Tolerances</div>
 			<div class="row">
 				{% if plant.shade_tol.all %}
-					<text><i>Shade&nbsp;</i><b>{{ plant.get_shade_tol }} </b></text>
+					<div class="col-xs-4 italic">Shade</div>
+					<div class="col-xs-8 bold">{{ plant.get_shade_tol }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.salt_tol %}
-					<text><i>Salt&nbsp;</i><b>{{ plant.salt_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+					<div class="col-xs-4 italic">Salt</div>
+					<div class="col-xs-8 bold">{{ plant.salt_tol.value }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.flood_tol %}
-					<text><i>Flood&nbsp;</i><b>{{ plant.flood_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+					<div class="col-xs-4 italic">Flood</div>
+					<div class="col-xs-8 bold">{{ plant.flood_tol.value }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.drought_tol %}
-					<text><i>Drought&nbsp;</i><b>{{ plant.drought_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+					<div class="col-xs-4 italic">Drought</div>
+					<div class="col-xs-8 bold">{{ plant.drought_tol.value }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.humidity_tol %}
-					<text><i>Humidity&nbsp;</i><b>{{ plant.humidity_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+					<div class="col-xs-4 italic">Humidity</div>
+					<div class="col-xs-8 bold">{{ plant.humidity_tol.value }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.wind_tol %}
-					<text><i>Wind&nbsp;</i><b>{{ plant.wind_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+					<div class="col-xs-4 italic">Wind</div>
+					<div class="col-xs-8 bold">{{ plant.wind_tol.value }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.fire_tol %}
-					<text><i>Fire&nbsp;</i><b>{{ plant.fire_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+					<div class="col-xs-4 italic">Fire</div>
+					<div class="col-xs-8 bold">{{ plant.fire_tol.value }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
-				{% if plant.soil_drainage_tol %}
-					<text><i>Soil&nbsp;Drainage&nbsp;</i><b>{{ plant.get_soil_drainage_tol }}</b></text>
+				{% if plant.soil_drainage_tol.all %}
+					<div class="col-xs-4 italic">Soil Drainage</div>
+					<div class="col-xs-8 bold">{{ plant.get_soil_drainage_tol }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
-				{% if plant.minimum_temparature_tol %}
-					<text><i>Miniumum&nbsp;Temperature&nbsp;</i><b>{{ plant.minimum_temperature_tol }}</b></text>
+				{% if plant.minimum_temperature_tol %}
+					<div class="col-xs-4 italic">Minimum Temperature</div>
+					<div class="col-xs-8 bold">{{ plant.minimum_temperature_tol }}</div>
 				{% endif %}
 			</div>
 		</div>
@@ -186,37 +216,44 @@
 			<div class="row italic attribute">Behaviors</div>
 			<div class="row">
 				{% if plant.erosion_control.all %}
-					<text><i>Erosion&nbsp;Control&nbsp;</i><b>{{ plant.get_erosion_control }} </b></text>
+					<div class="col-xs-4 italic">Erosion Control</div>
+					<div class="col-xs-8 bold">{{ plant.get_erosion_control }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.plants_insect_attractor.all %}
-					<text><i>Insect&nbsp;Attraactor&nbsp;</i><b>{{ plant.get_insect_attractor }} </b></text>
+					<div class="col-xs-4 italic">Insect Attractor</div>
+					<div class="col-xs-8 bold">{{ plant.get_insect_attractor }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.plants_insect_regulator.all %}
-					<text><i>Insect&nbsp;Regulator&nbsp;</i><b>{{ plant.get_insect_regulator }}</b></text>
+					<div class="col-xs-4 italic">Insect Regulator</div>
+					<div class="col-xs-8 bold">{{ plant.get_insect_regulator }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.plants_animal_attractor.all %}
-					<text><i>Amimal&nbsp;Attraactor&nbsp;</i><b>{{ plant.get_animal_attractor }} </b></text>
+					<div class="col-xs-4 italic">Animal Attractor</div>
+					<div class="col-xs-8 bold">{{ plant.get_animal_attractor }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.plants_animal_regulator.all %}
-					<text><i>Animal&nbsp;Regulator&nbsp;</i><b>{{ plant.get_animal_regulator }}</b></text>
+					<div class="col-xs-4 italic">Animal Regulator</div>
+					<div class="col-xs-8 bold">{{ plant.get_animal_regulator }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.livestock_bloat %}
-					<text><i>Livestock&nbsp;Bloat&nbsp;</i><b>{{ plant.livestock_bloat.value }}</b></text> <!--This foreign key hasn't been checked-->
+					<div class="col-xs-4 italic">Livestock Bloat</div>
+					<div class="col-xs-8 bold">{{ plant.livestock_bloat.value }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.toxicity %}
-					<text><i>Toxicity&nbsp;</i><b>{{ plant.toxicity.value }}</b></text> <!--This foreign key hasn't been checked-->
+					<div class="col-xs-4 italic">Toxicity</div>
+					<div class="col-xs-8 bold">{{ plant.toxicity.value }}</div>
 				{% endif %}
 			</div>
 		</div>
@@ -228,37 +265,44 @@
 			<div class="row italic attribute">Products</div>
 				<div class="row">
 					{% if plant.food_prod.all %}
-						<text><i>Food&nbsp;</i><b>{{ plant.get_food_prod }} </b></text>
+						<div class="col-xs-4 italic">Food</div>
+						<div class="col-xs-8 bold">{{ plant.get_food_prod }}</div>
 					{% endif %}
 				</div>
 				<div class="row">
 					{% if plant.raw_materials_prod.all %}
-						<text><i>Raw&nbsp;Materials</i>&nbsp;<b>{{ plant.get_raw_materials_prod }} </b></text>
+						<div class="col-xs-4 italic">Raw Materials</div>
+						<div class="col-xs-8 bold">{{ plant.get_raw_materials_prod }}</div>
 					{% endif %}
 				</div>
 				<div class="row">
 					{% if plant.medicinals_prod.all %}
-						<text><i>Medicinals&nbsp;</i><b>{{ plant.get_medicinals_prod }}</b></text>
+						<div class="col-xs-4 italic">Medicinals</div>
+						<div class="col-xs-8 bold">{{ plant.get_medicinals_prod }}</div>
 					{% endif %}
 				</div>
 				<div class="row">
 					{% if plant.get_biochemical_material_prod.all %}
-						<text><i>Biochemical&nbsp;Matieral&nbsp;</i><b>{{ plant.get_biochemical_material_prod }}</b></text>
+						<div class="col-xs-4 italic">Biochemical Material</div>
+						<div class="col-xs-8 bold">{{ plant.get_biochemical_material_prod }}</div>
 					{% endif %}
 				</div>
 				<div class="row">
 					{% if plant.cultural_and_amenity_prod.all %}
-						<text><i>Cultural&nbsp;and&nbsp;Amenity&nbsp;</i><b>{{ plant.get_cultural_and_amenity_prod }}</b></text>
+						<div class="col-xs-4 italic">Cultural and Amenity</div>
+						<div class="col-xs-8 bold">{{ plant.get_cultural_and_amenity_prod }}</div>
 					{% endif %}
 				</div>
 				<div class="row">
 					{% if plant.mineral_nutrients_prod.all %}
-						<text><i>Mineral&nbsp;Nutrients&nbsp;</i><b>{{ plant.get_mineral_nutrients_prod }}</b></text>
+						<div class="col-xs-4 italic">Mineral Nutrients</div>
+						<div class="col-xs-8 bold">{{ plant.get_mineral_nutrients_prod }}</div>
 					{% endif %}
 				</div>
 				<div class="row">
 					{% if plant.allelochemicals %}
-						<text><i>Allelochemicals&nbsp;</i><b>{{ plant.allelochemicals }} </b></text>
+						<div class="col-xs-4 italic">Allelochemicals</div>
+						<div class="col-xs-8 bold">{{ plant.allelochemicals }}</div>
 					{% endif %}
 				</div>
 		</div>
