@@ -18,13 +18,13 @@ h1, .edit-plant-title {
 	color:#3F3F3F;
 }
 
-h2 {
+h2, .edit-plant-subtitle {
 	font-family: 'Karla', sans-serif;
 	font-size: 20px;
 	font-weight: normal;
 	line-height: 20px;
-	margin-bottom: 15px;
-	padding-top: 20px;
+	/*margin-bottom: 15px;
+	padding-top: 20px;*/
 }
 
 h3 {
@@ -44,22 +44,26 @@ p{
 	margin-bottom: 13px;
 }
 
-text{
+/*text{
 	display:inline-block;
 	font-family: 'Karla', sans-serif;
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 14px;
 	margin-bottom: 0px;
-	white-space:pre;
-}
+}*/
 
-text > b{
+
+
+
+
+/*text > b{
 	font-size: 15px;
-}
+}*/
 
 .bold{ /*Is this used*/
 	font-weight:bold;
+	font-size: 15px;
 }
 
 section#contain a img {
@@ -74,12 +78,15 @@ section#contain a img {
 .attribute{
 	font-weight:bold;
 	font-size:15px;
+	margin-bottom:10px;
 }
 
 .cardimg{
 	height:125px;
 	width:125px;
 	border-radius:25px;
+	margin-left:10px;
+	margin-right:10px;
 
 }
 

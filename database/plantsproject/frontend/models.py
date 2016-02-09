@@ -494,8 +494,9 @@ class Plant(models.Model):
     common_name = models.CharField(max_length=160, blank=True, null=True)
     #endemic_status
     endemic_status = models.ManyToManyField(EndemicStatus, through='PlantEndemicStatusByRegion')
-    # def get_endemic_status(self):
-    #     return ','.join([str(a) for a in self.endemic_status.all()])
+    @property
+    def get_endemic_status(self):
+        return ', '.join([str(a) for a in self.endemic_status.all()])
 
     tags = models.CharField(max_length=160, blank=True, null=True)
     # urltags = models.ForeignKey('UrlTags', blank=True, null=True)
@@ -503,55 +504,69 @@ class Plant(models.Model):
     #--------------------------characteristic------------------------
     #duration
     duration = models.ManyToManyField('Duration', through='PlantDurationByRegion')
-    # def get_duration(self):
-    #     return ','.join([str(a) for a in self.duration.all()])
+    @property
+    def get_duration(self):
+        return ', '.join([str(a) for a in self.duration.all()])
     #height
     height = models.ManyToManyField('PlantHeightAtMaturityByRegion')
-    # def get_height(self):
-    #     return ','.join([str(a) for a in self.height.all()])# ???????????????????????????
+    @property
+    def get_height(self):
+        return ', '.join([str(a) for a in self.height.all()])# ???????????????????????????
     #spread
     spread = models.ManyToManyField('PlantSpreadAtMaturityByRegion')
-    # def get_spread(self):
-    #     return ','.join([str(a) for a in self.spread.all()])# ???????????????????????????
+    @property
+    def get_spread(self):
+        return ', '.join([str(a) for a in self.spread.all()])# ???????????????????????????
 
     ph_min = models.DecimalField(db_column='pH_min', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase. #
     ph_max = models.DecimalField(db_column='pH_max', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase.
     layer = models.ManyToManyField(Layer, through='PlantLayer')#, blank=True, null=True) #not sure testing
-    # def get_layer(self):
-    #   return ','.join([str(a) for a in self.layer.all()])
+    @property
+    def get_layer(self):
+      return ', '.join([str(a) for a in self.layer.all()])
     #CanopyDensity
     canopy_density = models.ManyToManyField(CanopyDensity, through='PlantCanopyDensityByRegion')
-    # def get_canopy_density(self):
-    #     return ','.join([str(a) for a in self.canopy_density.all()])
+    @property
+    def get_canopy_density(self):
+        return ', '.join([str(a) for a in self.canopy_density.all()])
     #ActiveGrowthPeriod
     active_growth_period = models.ManyToManyField(ActiveGrowthPeriod, through='PlantActiveGrowthPeriodByRegion')
+    @property
     def get_active_growth_period(self):
-        return ','.join([str(a) for a in self.active_growth_period.all()])
+        return ', '.join([str(a) for a in self.active_growth_period.all()])
     #HarvestPeriod
     harvest_period = models.ManyToManyField(HarvestPeriod, through='PlantHarvestPeriodByRegion')
+    @property
     def get_harvest_period(self):
-        return ','.join([str(a) for a in self.harvest_period.all()])
+        return ', '.join([str(a) for a in self.harvest_period.all()])
     #LeafRetention
     leaf_retention = models.ManyToManyField(LeafRetention, through='PlantLeafRetentionByRegion')
+    @property
     def get_leaf_retention(self):
-        return ','.join([str(a) for a in self.leaf_retention.all()])
+        return ', '.join([str(a) for a in self.leaf_retention.all()])
     #FlowerColor
     flower_color = models.ManyToManyField(FlowerColor, through='PlantFlowerColor')
+    @property
     def get_flower_color(self):
-        return ','.join([str(a) for a in self.flower_color.all()])
+        return ', '.join([str(a) for a in self.flower_color.all()])
     #FoliageColor
     foliage_color = models.ManyToManyField(FoliageColor, through='PlantFoliageColor')
+    @property
     def get_foliage_color(self):
-        return ','.join([str(a) for a in self.foliage_color.all()])
+        return ', '.join([str(a) for a in self.foliage_color.all()])
     #FruitColor
     fruit_color = models.ManyToManyField(FruitColor, through='PlantFruitColor')
+    @property
+    def get_fruit_color(self):
+        return ', '.join([str(a) for a in self.fruit_color.all()])
     degree_of_serotiny = models.ForeignKey('DegreeOfSerotiny', blank=True, null=True)
 
     #--------------------------Tolerance-----------------------------
     #shade_tol
     shade_tol = models.ManyToManyField('ShadeTol', through='PlantShadeTolByRegion')
+    @property
     def get_shade_tol(self):
-        return ','.join([str(a) for a in self.shade_tol.all()])
+        return ', '.join([str(a) for a in self.shade_tol.all()])
     salt_tol = models.ForeignKey('SaltTol', blank=True, null=True)
     flood_tol = models.ForeignKey('FloodTol', blank=True, null=True)
     drought_tol = models.ForeignKey('DroughtTol', blank=True, null=True)
@@ -559,8 +574,9 @@ class Plant(models.Model):
     wind_tol = models.ForeignKey('WindTol', blank=True, null=True)
     #soil_drainage_tol
     soil_drainage_tol = models.ManyToManyField('SoilDrainageTol', through='PlantSoilDrainageTolByRegion')
+    @property
     def get_soil_drainage_tol(self):
-        return ','.join([str(a) for a in self.soil_drainage_tol.all()])
+        return ', '.join([str(a) for a in self.soil_drainage_tol.all()])
 
     fire_tol = models.ForeignKey('FireTol', blank=True, null=True)
     minimum_temperature_tol = models.IntegerField(blank=True, null=True)
@@ -568,66 +584,84 @@ class Plant(models.Model):
     #-------------------------needs--------------------------------
     #FertilityNeeds
     fertility_needs = models.ManyToManyField(NutrientRquirements, through='PlantNutrientRquirementsByRegion', verbose_name='Nutrient Rquirements')
-    # def get_fertility_needs(self):
-    #     return ','.join([str(a) for a in self.fertility_needs.all()])
+    @property
+    def get_fertility_needs(self):
+        return ',' .join([str(a) for a in self.fertility_needs.all()])
     #WaterNeeds
     water_needs = models.ManyToManyField('WaterNeeds', through='PlantWaterNeedsByRegion')
-    # def get_water_needs(self):
-    #     return ','.join([str(a) for a in self.water_needs.all()])
+    @property
+    def get_water_needs(self):
+        return ', '.join([str(a) for a in self.water_needs.all()])
 
     innoculant = models.CharField(max_length=160, blank=True, null=True)
     #SunNeeds
     sun_needs = models.ManyToManyField('SunNeeds', through='PlantSunNeedsByRegion')
+    @property
+    def get_sun_needs(self):
+        return ', '.join([str(a) for a in self.sun_needs.all()])
+
     serotiny = models.ForeignKey('Serotiny', blank=True, null=True)
 
     #-------------------------products----------------------------
     allelochemicals = models.CharField(max_length=160, blank=True, null=True)
     #FoodProd
     food_prod = models.ManyToManyField(FoodProd, through='PlantFoodProd')
+    @property
     def get_food_prod(self):
-        return ','.join([str(a) for a in self.food_prod.all()])
+        return ', '.join([str(a) for a in self.food_prod.all()])
     #RawMaterialsProd
     raw_materials_prod = models.ManyToManyField('RawMaterialsProd', through='PlantRawMaterialsProd')
+    @property
     def get_raw_materials_prod(self):
-        return ','.join([str(a) for a in self.raw_materials_prod.all()])
+        return ', '.join([str(a) for a in self.raw_materials_prod.all()])
     #MedicinalsProd
     medicinals_prod = models.ManyToManyField(MedicinalsProd, through='PlantMedicinalsProd')
+    @property
     def get_medicinals_prod(self):
-        return ','.join([str(a) for a in self.medicinals_prod.all()])
+        return ', '.join([str(a) for a in self.medicinals_prod.all()])
     #BiochemicalMaterialProd
     biochemical_material_prod = models.ManyToManyField(BiochemicalMaterialProd, through='PlantBiochemicalMaterialProd')
+    @property
     def get_biochemical_material_prod(self):
-        return ','.join([str(a) for a in self.biochemical_material_prod.all()])
+        return ', '.join([str(a) for a in self.biochemical_material_prod.all()])
     #CulturalAndAmenityProd
     cultural_and_amenity_prod = models.ManyToManyField(CulturalAndAmenityProd, through='PlantCulturalAndAmenityProd')
+    @property
     def get_cultural_and_amenity_prod(self):
-        return ','.join([str(a) for a in self.cultural_and_amenity_prod.all()])
+        return ', '.join([str(a) for a in self.cultural_and_amenity_prod.all()])
     #MineralNutrientsProd
     mineral_nutrients_prod = models.ManyToManyField(MineralNutrientsProd, through='PlantMineralNutrientsProd')
+    
+    @property
     def get_mineral_nutrients_prod(self):
-        return ','.join([str(a) for a in self.mineral_nutrients_prod.all()])
+        return ', '.join([str(a) for a in self.mineral_nutrients_prod.all()])
 
     #------------------------behavior---------------------------
     #erosion_control
     erosion_control = models.ManyToManyField(ErosionControl, through='PlantErosionControlByRegion')
+    @property
     def get_erosion_control(self):
-        return ','.join([str(a) for a in self.erosion_control.all()])
+        return ', '.join([str(a) for a in self.erosion_control.all()])
     #plants_insect_attractor
     plants_insect_attractor = models.ManyToManyField(Insects, through='PlantInsectAttractorByRegion', related_name='a_plants_insect_attractor_related')
+    @property
     def get_insect_attractor(self):
-        return ','.join([str(a) for a in self.plants_insect_attractor.all()])
+        return ', '.join([str(a) for a in self.plants_insect_attractor.all()])
     #plants_insect_regulator
     plants_insect_regulator = models.ManyToManyField(Insects, through='PlantInsectRegulatorByRegion')
+    @property
     def get_insect_regulator(self):
-        return ','.join([str(a) for a in self.plants_insect_regulator.all()])
+        return ', '.join([str(a) for a in self.plants_insect_regulator.all()])
     #plants_animal_regulator
     plants_animal_regulator = models.ManyToManyField(Animals, through='PlantAnimalRegulatorByRegion')
+    @property
     def get_animal_regulator(self):
-        return ','.join([str(a) for a in self.plants_animal_regulator.all()])
+        return ', '.join([str(a) for a in self.plants_animal_regulator.all()])
     #plants_animal_attractor
     plants_animal_attractor = models.ManyToManyField(Animals, through='PlantAnimalAttractorByRegion', related_name='a_plants_animal_attractor_related')
+    @property
     def get_animal_attractor(self):
-        return ','.join([str(a) for a in self.plants_animal_attractor.all()])
+        return ', '.join([str(a) for a in self.plants_animal_attractor.all()])
 
     livestock_bloat = models.ForeignKey(LivestockBloat, blank=True, null=True)
     toxicity = models.ForeignKey('Toxicity', blank=True, null=True)

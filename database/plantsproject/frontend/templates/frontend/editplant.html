@@ -2,23 +2,30 @@
 
 {% block maincontent %}
 
-{% if test %}
-<p>{{ test }}</p>
-{% endif %}
-
-
 {% if plant %}
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
-			<text class="edit-plant-title">{{ plant.genus }} {{ plant.species }} </text>
+			<text class="edit-plant-title">{{ plant.genus }}&nbsp;{{ plant.species }}&nbsp;{{ plant.variety }}&nbsp;&nbsp;</text>
 			<text class="edit-plant-title italic">{{ plant.common_name }}</text>
+			<br>
+			{% if plant.family %}
+			<text class="edit-plant-subtitle">{{ plant.family }}&nbsp;</text>
+			<text class="edit-plant-subtitle italic">{{ plant.family_common_name }}</text>
+			{% endif %}
+			<br>
+			{% if plant.endemic_status %}
+				<text>Endemic Status: {{ plant.get_endemic_status }}</text>
+			{% endif %}
 		</div>
 	</div>
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
-			<text>~Images Here~</text>
+			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
+			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
+			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
+			<img src="" class="cardimg" alt="Plant Image" />
 		</div>
 	</div>
 	<div class="row editplantrow">
@@ -27,53 +34,236 @@
 			<div class="row italic attribute">Characteristics</div>
 			<div class="row">
 				{% if plant.height.all %}
-					<text><i>Height&nbsp;</i>
-						{% for height in plant.height.all %}
-							<b>{{ height }} </b>
-						{% endfor %}
-					</text>
+					<text><i>Height&nbsp;</i><b>{{ plant.get_height }}</b></text>
 				{% endif %}
 			</div>
 			<div class="row">
-
-						{% if plant.layer.all %}
-							<text><i>Layer&nbsp;</i>
-							{% for layer in plant.layer.all %}
-								<b>{{ layer }} </b>
-							{% endfor %}
-							</text>
-						{% endif %}
+				{% if plant.layer.all %}
+					<text><i>Layer&nbsp;</i><b>{{ plant.get_layer }}</b></text>
+				{% endif %}
 			</div>
 			<div class="row">
-
-						{% if plant.ph_min %}
-							<text><i>phMin&nbsp;</i><b>{{ plant.ph_min }} </b></text>
-						{% endif %}
+				{% if plant.duration.all %}
+					<text><i>Duration&nbsp;</i><b>{{ plant.get_duration }}</b></text>
+				{% endif %}
 			</div>
 			<div class="row">
-
-						{% if plant.ph_max %}
-							<text><i>phMax&nbsp;</i><b>{{ plant.ph_max }} </b></text>
-						{% endif %}
+				{% if plant.spread.all %}
+					<text><i>Spread&nbsp;</i><b>{{ plant.get_spread }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.ph_min %}
+					<text><i>phMin&nbsp;</i><b>{{ plant.ph_min }} </b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.ph_max %}
+					<text><i>phMax&nbsp;</i><b>{{ plant.ph_max }} </b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.canopy_density.all %}
+					<text><i>Canopy&nbsp;Density&nbsp;</i><b>{{ plant.get_canopy_density }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.active_growth_period.all %}
+					<text><i>Layer&nbsp;</i><b>{{ plant.get_active_growth_period }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.hargest_period.all %}
+					<text><i>Harvest&nbsp;Period&nbsp;</i><b>{{ plant.get_harvest_period }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.leaf_retention.all %}
+					<text><i>Leaf&nbsp;Retention&nbsp;</i><b>{{ plant.get_leaf_retention }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.flower_color.all %}
+					<text><i>Flower&nbsp;Color&nbsp;</i><b>{{ plant.get_flower_color }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.foilage_color.all %}
+					<text><i>Foilage&nbsp;Color&nbsp;</i><b>{{ plant.get_foilage_color }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.fruit_color.all %}
+					<text><i>Fruit&nbsp;Color&nbsp;</i><b>{{ plant.get_fruit_color }}</b></text>
+				{% endif %}
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<p class="italic attribute">Needs</p>
+			<div class="row italic attribute">Needs</div>
+			<div class="row pair">
+				{% if plant.water_needs.all %}
+					<div class="col-xs-3 italic">Water</div>
+					<div class="col-xs-9 bold">{{ plant.get_water_needs }}</div>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.sun_needs.all %}
+					<div class="col-xs-3 italic">Sun</div>
+					<div class="col-xs-9 bold">{{ plant.get_sun_needs }}</div>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.fertility_needs.all %}
+					<div class="col-xs-3 italic">Nutrients</div>
+					<div class="col-xs-9 bold">{{ plant.get_fertility_needs }}</div>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.serotiny %}
+					<div class="col-xs-3 italic">Serotiny</div>
+					<div class="col-xs-9 bold">{{ plant.serotiny.value }}</div> 
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.innoculant %}
+					<div class="col-xs-3 italic">Innoculant</div>
+					<div class="col-xs-9 bold">{{ plant.innoculant }}</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-5">
+			<div class="row italic attribute">Tolerances</div>
+			<div class="row">
+				{% if plant.shade_tol.all %}
+					<text><i>Shade&nbsp;</i><b>{{ plant.get_shade_tol }} </b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.salt_tol %}
+					<text><i>Salt&nbsp;</i><b>{{ plant.salt_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.flood_tol %}
+					<text><i>Flood&nbsp;</i><b>{{ plant.flood_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.drought_tol %}
+					<text><i>Drought&nbsp;</i><b>{{ plant.drought_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.humidity_tol %}
+					<text><i>Humidity&nbsp;</i><b>{{ plant.humidity_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.wind_tol %}
+					<text><i>Wind&nbsp;</i><b>{{ plant.wind_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.fire_tol %}
+					<text><i>Fire&nbsp;</i><b>{{ plant.fire_tol.value }}</b></text> <!--This foreign key hasn't been checked-->
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.soil_drainage_tol %}
+					<text><i>Soil&nbsp;Drainage&nbsp;</i><b>{{ plant.get_soil_drainage_tol }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.minimum_temparature_tol %}
+					<text><i>Miniumum&nbsp;Temperature&nbsp;</i><b>{{ plant.minimum_temperature_tol }}</b></text>
+				{% endif %}
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="row italic attribute">Behaviors</div>
+			<div class="row">
+				{% if plant.erosion_control.all %}
+					<text><i>Erosion&nbsp;Control&nbsp;</i><b>{{ plant.get_erosion_control }} </b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.plants_insect_attractor.all %}
+					<text><i>Insect&nbsp;Attraactor&nbsp;</i><b>{{ plant.get_insect_attractor }} </b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.plants_insect_regulator.all %}
+					<text><i>Insect&nbsp;Regulator&nbsp;</i><b>{{ plant.get_insect_regulator }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.plants_animal_attractor.all %}
+					<text><i>Amimal&nbsp;Attraactor&nbsp;</i><b>{{ plant.get_animal_attractor }} </b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.plants_animal_regulator.all %}
+					<text><i>Animal&nbsp;Regulator&nbsp;</i><b>{{ plant.get_animal_regulator }}</b></text>
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.livestock_bloat %}
+					<text><i>Livestock&nbsp;Bloat&nbsp;</i><b>{{ plant.livestock_bloat.value }}</b></text> <!--This foreign key hasn't been checked-->
+				{% endif %}
+			</div>
+			<div class="row">
+				{% if plant.toxicity %}
+					<text><i>Toxicity&nbsp;</i><b>{{ plant.toxicity.value }}</b></text> <!--This foreign key hasn't been checked-->
+				{% endif %}
+			</div>
 		</div>
 	</div>
 
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
-			<p class="italic attribute">Products</p>
+			<div class="row italic attribute">Products</div>
+				<div class="row">
+					{% if plant.food_prod.all %}
+						<text><i>Food&nbsp;</i><b>{{ plant.get_food_prod }} </b></text>
+					{% endif %}
+				</div>
+				<div class="row">
+					{% if plant.raw_materials_prod.all %}
+						<text><i>Raw&nbsp;Materials</i>&nbsp;<b>{{ plant.get_raw_materials_prod }} </b></text>
+					{% endif %}
+				</div>
+				<div class="row">
+					{% if plant.medicinals_prod.all %}
+						<text><i>Medicinals&nbsp;</i><b>{{ plant.get_medicinals_prod }}</b></text>
+					{% endif %}
+				</div>
+				<div class="row">
+					{% if plant.get_biochemical_material_prod.all %}
+						<text><i>Biochemical&nbsp;Matieral&nbsp;</i><b>{{ plant.get_biochemical_material_prod }}</b></text>
+					{% endif %}
+				</div>
+				<div class="row">
+					{% if plant.cultural_and_amenity_prod.all %}
+						<text><i>Cultural&nbsp;and&nbsp;Amenity&nbsp;</i><b>{{ plant.get_cultural_and_amenity_prod }}</b></text>
+					{% endif %}
+				</div>
+				<div class="row">
+					{% if plant.mineral_nutrients_prod.all %}
+						<text><i>Mineral&nbsp;Nutrients&nbsp;</i><b>{{ plant.get_mineral_nutrients_prod }}</b></text>
+					{% endif %}
+				</div>
+				<div class="row">
+					{% if plant.allelochemicals %}
+						<text><i>Allelochemicals&nbsp;</i><b>{{ plant.allelochemicals }} </b></text>
+					{% endif %}
+				</div>
 		</div>
 	</div>
-	<div class="row editplantrow">
-		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
-		<div class="col-sm-11">
-			<p class="italic attribute">Behaviors</p>
-		</div>
-	</div>
+	
 {% else %}
 	<p>No plant</p> <!--fancy this up a bit-->
 {% endif %}

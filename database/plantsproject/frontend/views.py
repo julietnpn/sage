@@ -10,7 +10,7 @@ from .forms import AddPlantForm, EditPlantForm
 
 
 def cardview(request):	
-	plant_list = Plant.objects.filter(genus__startswith='Ag')
+	plant_list = Plant.objects.filter(id__gte=8667).order_by('id')
 	context = {
 		'plant_list': plant_list,
 	}
@@ -25,7 +25,8 @@ def editPlant(request, plantId=None):
 	else:
 		form = EditPlantForm()
 		context = {
-			'plant': Plant.objects.filter(id=8665)[0]
+			'plant': Plant.objects.filter(id=8667)[0],
+			'test': "THIS IS A GET"
 		}
 		redirectURL = 'frontend/editplant.html'
 		return render(request, redirectURL, context)
@@ -64,11 +65,11 @@ def addPlant(request):
 				actions.append(Actions(transactions=transaction , action_type="INSERT", property='common_name', value=commonName))
 			Actions.objects.bulk_create(actions)
 
-			redirectURL = '/home/edit/' + str(transaction.id)
-			return HttpResponseRedirect(redirectURL)
+			#add plant id to url below
+			return HttpResponseRedirect('/home/edit/1234')
 	else:
 		form = AddPlantForm()
-		plant_list = Plant.objects.filter(genus__startswith='Ag')
+		plant_list = Plant.objects.filter(id__gte=5000, id__lte=5100).order_by('id')
 		context = {
 			'form': form,
 			'plant_list': plant_list,

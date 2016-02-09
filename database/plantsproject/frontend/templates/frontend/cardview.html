@@ -67,27 +67,15 @@
 				<div class='col-sm-6'>
 					<p><text>Needs: </text>{% spaceless %}
 						{% if plant.water_needs.all %}
-							<text><i>Water&nbsp;</i>
-							{% for water in plant.water_needs.all %}
-								<b>{{ water }} </b>
-							{% endfor %}
-							</text>
+							<text><i>Water&nbsp;</i><b>{{ plant.get_water_needs }} </b></text>
 						{% endif %}
 
 						{% if plant.sun_needs.all %}
-							<text><i>Sun&nbsp;</i>
-							{% for sun in plant.sun_needs.all %}
-								<b>{{ sun }} </b>
-							{% endfor %}
-							</text>
+							<text><i>Sun&nbsp;</i><b>{{ plant.get_sun_needs }} </b></text>
 						{% endif %}
 
 						{% if plant.fertility_needs.all %}
-							<text><i>Nutrient&nbsp;Requirements&nbsp;</i>
-							{% for nutrient in plant.fertility_needs.all %}
-								<b>{{ nutrient }} </b>
-							{% endfor %}
-							</text>
+							<text><i>Nutrients&nbsp;</i><b>{{ plant.get_fertility_needs }} </b></text>
 						{% endif %}
 
 						{% if plant.serotiny %}
@@ -102,7 +90,6 @@
 				</div>
 				<div class='col-sm-6'>
 					<p><text>Behaviors: </text>{% spaceless %}
-						
 						{% if plant.erosion_control.all %}
 							<text><i>Erosion&nbsp;Control&nbsp;</i><b>{{ plant.get_erosion_control }} </b></text>
 						{% endif %}
