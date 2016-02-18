@@ -7,11 +7,13 @@
 			<div class="col-md-6"></div>
 			<div class="col-md-6" >
 				<form action="" method="post">
-					{% csrf_token %}
+					<!--{% csrf_token %}
 					{% for field in searchForm %}
 					{{ field }}
-					{% endfor %}
-			
+					{% endfor %}-->
+					<select class="js-example-basic-multiple" multiple="multiple" id="searchbar">
+
+					</select>
   					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 			
 					<div id="">
@@ -21,4 +23,7 @@
 			</div>
 		</div>
 	</div>
+
+
 {% endblock %}
+

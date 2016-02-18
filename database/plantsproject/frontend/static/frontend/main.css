@@ -19,7 +19,7 @@ h1, .edit-plant-title {
 	font-size: 28px;
 	font-weight: bold;
 	line-height: 28px;
-	margin-bottom: 25px;
+	margin-bottom: 15px;
 	color:#3F3F3F;
 	display:inline-block;
 }
@@ -51,6 +51,16 @@ p{
 	margin-bottom: 13px;
 }
 
+.mdl-body>form>label,
+.mdl-body>form>select{
+	text-align: center;
+}
+
+#mdl-select2,
+#mdl-select2-multi{
+	width:200px;
+}
+
 /*text{
 	display:inline-block;
 	font-family: 'Karla', sans-serif;
@@ -59,9 +69,6 @@ p{
 	line-height: 14px;
 	margin-bottom: 0px;
 }*/
-
-
-
 
 
 /*text > b{
@@ -86,6 +93,11 @@ section#contain a img {
 	font-weight:bold;
 	font-size:15px;
 	margin-bottom:10px;
+}
+
+.edit-attribute:hover,
+.edit-value:hover{
+	cursor:pointer;
 }
 
 .cardimg{
@@ -157,6 +169,7 @@ section#contain a img {
 	padding-bottom:10px;
 }
 
+
 #sidebar-top > #nav > ul{
 	list-style-type:none;
 	font-family: 'Karla', sans-serif;
@@ -217,8 +230,8 @@ section#contain a img {
     margin-bottom:5px;
 }
 
-#search-plant{
-	width:20px;
+#searchbar{
+	width:250px;
 }
 
 #add-plant-latin-name, 

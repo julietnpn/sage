@@ -9,6 +9,8 @@
 	<!--<link rel="stylesheet" href="{% static 'frontend/bootstrap.css' %}">-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+
 
 	<title>Plant Guild Database</title>
 </head>
@@ -58,19 +60,61 @@
 				</div>
 			</div><!--end main content -->
 		</div><!--end row-->
+
+		<!-- BEGIN EDIT ATTRIBUTE MODAL -->
+		<div id="editAttributeModal" class="modal fade" tabindex="-1" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <!--<div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title">Modal title</h4>
+		      </div>-->
+		      <div class="modal-body">
+		      	<form id='mdl-form' action="" method="post" >
+				</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-success">Save</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<!-- END EDIt ATTRIBUTE MODAL -->
 	</div> <!--end container-fluid-->
 
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-	<!--<script src="{% static 'frontend/bootstrap.min.js' %}" type="text/javascript"></script>-->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<script scr="{% static 'frontend/jquery-1.10.2.min.js' %}" type="text/javascript"></script>
 	<script src="{% static 'frontend/addPlant.js' %}" type="text/javascript"></script>
-	<script src="{% static 'frontend/PlantCardView.js' %}" type="text/javascript"></script>
-	<!--<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-	<!--<script type="text/javascript">
-		AddPlant.init();
-	</script>-->
+	<script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+	<script type="text/javascript">
+		EditPlant.init();
+		//var searchTerms = JSON.parse('{{ searchForThis|escapejs }}');
+		var searchTerms = {'genus':[]};
+		$('.js-example-basic-multiple').select2({
+			data: searchTerms.genus// + searchTerms.species + searchTerms.variety
+			//query: function (q) {
+            // pageSize is number of results to show in dropdown
+            //    var pageSize,
+            //        results;
+            //        pageSize = 20;
+            //        results  = _.filter(this.data, function (e) {
+            //            return (q.term === "" || e.text.toUpperCase().indexOf(q.term.toUpperCase()) >= 0);
+            //     });
+            //    q.callback({
+            //        results: results.slice((q.page - 1) * pageSize, q.page * pageSize),
+                    // retrieve more when user hits bottom
+            //        more   : results.length >= q.page * pageSize
+            //    });
+            //}
+		});
+		// $('#searchbar').change(function(){
+		// });
+	</script>
+
 </body>
 
 </html>
