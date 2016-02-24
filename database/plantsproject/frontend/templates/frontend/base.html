@@ -12,7 +12,7 @@
 	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 
 
-	<title>Plant Guild Database</title>
+	<title>{% block title %}{% endblock %}</title>
 </head>
 
 <body>
@@ -62,7 +62,7 @@
 		</div><!--end row-->
 
 		<!-- BEGIN EDIT ATTRIBUTE MODAL -->
-		<div id="editAttributeModal" class="modal fade" tabindex="-1" role="dialog">
+		<div id="updateAttributeModal" class="modal fade" tabindex="-1" role="dialog">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <!--<div class="modal-header">
@@ -70,7 +70,7 @@
 		        <h4 class="modal-title">Modal title</h4>
 		      </div>-->
 		      <div class="modal-body">
-		      	<form id='mdl-form' action="" method="post" >
+		      	<form id='mdl-update-form' action="" method="post" >
 				</form>
 		      </div>
 		      <div class="modal-footer">
@@ -81,6 +81,28 @@
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 		<!-- END EDIt ATTRIBUTE MODAL -->
+
+
+		<!-- BEGIN EDIT ADD IMG MODAL -->
+		<div id="addImg" class="modal fade" tabindex="-1" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		    	<div class="modal-header">
+		    		<h4 class="modal-title">Add a New Image</h4>
+		    	</div>
+		      	
+		      	<div class="modal-body" id="img-mdl-content">
+		      
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-success">Choose</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<!-- END EDIt ADD IMG MODAL -->
+
 	</div> <!--end container-fluid-->
 
 
@@ -89,31 +111,17 @@
 	<script scr="{% static 'frontend/jquery-1.10.2.min.js' %}" type="text/javascript"></script>
 	<script src="{% static 'frontend/addPlant.js' %}" type="text/javascript"></script>
 	<script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
+	<script src="{% static 'frontend/search.js' %}" type="text/javascript"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+	<!--<script src="image.js" type="text/javascript"></script>-->
 	<script type="text/javascript">
-		EditPlant.init();
-		//var searchTerms = JSON.parse('{{ searchForThis|escapejs }}');
-		var searchTerms = {'genus':[]};
+		var searchTerms = JSON.parse('{{ searchForThis|escapejs }}');
 		$('.js-example-basic-multiple').select2({
-			data: searchTerms.genus// + searchTerms.species + searchTerms.variety
-			//query: function (q) {
-            // pageSize is number of results to show in dropdown
-            //    var pageSize,
-            //        results;
-            //        pageSize = 20;
-            //        results  = _.filter(this.data, function (e) {
-            //            return (q.term === "" || e.text.toUpperCase().indexOf(q.term.toUpperCase()) >= 0);
-            //     });
-            //    q.callback({
-            //        results: results.slice((q.page - 1) * pageSize, q.page * pageSize),
-                    // retrieve more when user hits bottom
-            //        more   : results.length >= q.page * pageSize
-            //    });
-            //}
+			data: searchTerms.genus//.concat(searchTerms.species).concat(searchTerms.variety)
 		});
-		// $('#searchbar').change(function(){
-		// });
 	</script>
+	{% block script %}
+	{% endblock %}
 
 </body>
 

@@ -5,37 +5,84 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from datetime import datetime
-from .models import Plant, Transactions, Actions
-from .forms import AddPlantForm, EditPlantForm, SearchPlant
+from .models import *
+from django.apps import apps
+from .forms import AddPlantForm
+import json
 
+def getAttributeValues(request, attribute=None, default=None):
+	if request.method == 'GET':
+		response_data = {'dropdownvals':[], 'defaultIds':[]}
+		defaults = default.split()
 
-#def cardview(request):	
-#	plant_list = Plant.objects.filter(id__gte=8667).order_by('id')
-#	context = {
-#		'plant_list': plant_list,
-#	}
-#	return render(request, 'frontend/cardview.html', context)
+		class_name = attribute
+		cls = globals()[class_name]
+		cls_model = apps.get_model('frontend', attribute)
+		values = cls_model.objects.values_list("value")
+
+		for i in range(0, len(list(values))):
+			if list(values)[i][0] in defaults:
+				response_data['defaultIds'].append(i)
+			p = dict(id=i, text=list(values)[i][0])
+			response_data['dropdownvals'].append(p)
+		
+		return JsonResponse(response_data)
+
+def populateSearchDropDown():
+	choices = {'genus':[], 'species':[], 'variety':[]}
+	
+	plants = Plant.objects
+	plant_list = plants.all()
+
+	genus_list = plants.distinct('genus')
+	for plant in genus_list: 
+		if plant.genus:
+			p = dict(id=plant.id, text=plant.genus, field='genus')
+			choices['genus'].append(p)
+
+	species_list = plants.distinct('species')
+	for plant in species_list: 
+		if plant.species:
+			p = dict(id=plant.id, text=plant.species, field='species')
+			choices['species'].append(p)
+
+	variety_list = plants.distinct('variety')
+	for plant in variety_list: 
+		if plant.variety:
+			p = dict(id=plant.id, text=plant.variety, field='variety')
+			choices['variety'].append(p)
+	
+	return choices
+
+# def search(request, searchString=None):
+# 	add_plant_form = AddPlantForm()
+# 	plant_list = Plant.objects.filter(id__gte=5000, id__lte=5005).order_by('id')
+
+# 	context = {
+# 		'addPlantForm': add_plant_form,
+# 		'plant_list': plant_list,
+# 		'searchForThis': json.dumps(populateSearchDropDown()),
+# 	}
+# 	return render(request, 'frontend/cardview.html', context)
 
 def editPlant(request, plantId=None):
-	if request.method == 'POST':
-		form = EditPlantForm(request.POST)
-		if form.is_valid():
-
-			return HttpResponseRedirect('POST')
-	else:
-		form = EditPlantForm()
+	# if request.method == 'POST':
+	# 	form = EditPlantForm(request.POST)
+	# 	if form.is_valid():
+	# 		return HttpResponseRedirect('POST')
+	# else:
+	# 	form = EditPlantForm()
 		context = {
-			'plant': Plant.objects.filter(id=8667)[0],
-			'test': "THIS IS A GET"
+			'plant': Plant.objects.filter(id=plantId)[0],
+			'test': "THIS IS A GET",
+			'searchForThis':json.dumps(populateSearchDropDown()),
 		}
 		redirectURL = 'frontend/editplant.html'
 		return render(request, redirectURL, context)
 
-def addPlant(request):
+def addPlant(request, searchString=None):
 	if request.method == 'POST':
 		addPlantForm = AddPlantForm(request.POST)
-		searchForm = SearchPlant(request.POST)
-
 
 		if 'add' in request.POST and addPlantForm.is_valid():
 			nameArray = str(request.POST["latinName"]).split()
@@ -70,18 +117,18 @@ def addPlant(request):
 
 			#add plant id to url below
 			return HttpResponseRedirect('/home/edit/1234')
-		elif 'search' in request.POST and searchForm.is_valid():
-			searchString = request.POST["searchString"]
-			return HttpResponseRedirect('/home/edit/' + searchString)
+
 
 	else:
 		add_plant_form = AddPlantForm()
-		search_form = SearchPlant()
-		plant_list = Plant.objects.filter(id__gte=5000, id__lte=5100).order_by('id')
-
+		if searchString == None:
+			plant_list = Plant.objects.filter(id__gte=5000, id__lte=5005).order_by('id')
+		else:
+			plant_list = Plant.objects.filter(id__gte=6000, id__lte=6005).order_by('id')
 		context = {
 			'addPlantForm': add_plant_form,
-			'searchForm': search_form,
+			#'searchForm': search_form,
 			'plant_list': plant_list,
+			'searchForThis': json.dumps(populateSearchDropDown()),
 		}
 		return render(request, 'frontend/cardview.html', context)

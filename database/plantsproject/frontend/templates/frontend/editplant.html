@@ -1,36 +1,58 @@
 {% extends 'frontend/sidebar-editplant.html' %}
 
+{% block title %}
+	{% if plant.common_name %}
+		{{ plant.common_name }}
+	{% else %}
+		{% if plant.genus %}
+			{{ plant.genus }}&nbsp;
+		{% endif %}
+		{% if plant.species %}
+			{{ plant.species }}&nbsp;
+		{% endif %}
+		{% if plant.variety %}
+			{{ plant.variety }}&nbsp;&nbsp;
+		{% endif %}
+	{% endif %}
+{% endblock %}
+
 {% block maincontent %}
 
 {% if plant %}
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
-			<div class="edit-plant-title">{% spaceless %}
-				{% if plant.genus %}
-					{{ plant.genus }}&nbsp;
-				{% endif %}
-				{% if plant.genus %}
-					{{ plant.species }}&nbsp;
-				{% endif %}
-				{% if plant.variety %}
-					{{ plant.variety }}&nbsp;&nbsp;
-				{% endif %}
+			<div class="edit-plant-title latin">{% spaceless %}
+				<div class="genus">
+					{% if plant.genus %}
+						{{ plant.genus }}
+					{% endif %}
+				</div>
+				<div class="species">
+					{% if plant.species %}
+						{{ plant.species }}
+					{% endif %}
+				</div>
+				<div class="variety">
+					{% if plant.variety %}
+						{{ plant.variety }}
+					{% endif %}
+				</div>
 			</div>
-			<div class="edit-plant-title italic">
+			<div class="edit-plant-title common italic">
 				{% if plant.common_name %}
-					{{ plant.common_name }}
+					<div class="commonName">{{ plant.common_name }}</div>
 				{% endif %}
 			</div> 
 			<br>
 			<div class="edit-plant-subtitle">
 				{% if plant.family %}
-					{{ plant.family }}&nbsp;
+					<div>{{ plant.family }}</div>
 				{% endif %}
 			</div>
 			<div class="edit-plant-subtitle italic">
 				{% if plant.family_common_name %}
-					{{ plant.family_common_name }}
+					<div>{{ plant.family_common_name }}</div>
 				{% endif %}
 			</div>
 			{% endspaceless %}
@@ -42,17 +64,18 @@
 	</div>
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
-		<div class="col-sm-11">
+		<div id="plant-images" class="col-sm-11">
+			<!--<a href="#"></a>-->
 			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
 			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
 			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
-			<img src="" class="cardimg" alt="Plant Image" />
+			<div id ="add-new-img" src="" class="cardimg"/><div id="add-new-img2"><div>+ add new</div></div></div>
 		</div>
 	</div>
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-5">
-			<div class="row italic attribute">Characteristics</div>
+			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" id="characteristics" aria-hidden="true"></span>Characteristics</div>
 			<div class="row">
 				{% if plant.height.all %}
 					<div class="col-xs-4 italic edit-attribute" id="height">Height</div> <!--prob-->
@@ -133,7 +156,7 @@
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<div class="row italic attribute">Needs</div>
+			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Needs</div>
 			<div class="row pair">
 				{% if plant.water_needs.all %}
 					<div class="col-xs-4 italic edit-attribute" id="WaterNeeds">Water</div>
@@ -169,7 +192,7 @@
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-5">
-			<div class="row italic attribute">Tolerances</div>
+			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Tolerances</div>
 			<div class="row">
 				{% if plant.shade_tol.all %}
 					<div class="col-xs-4 italic edit-attribute" id="ShadeTol">Shade</div>
@@ -226,7 +249,7 @@
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<div class="row italic attribute">Behaviors</div>
+			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Behaviors</div>
 			<div class="row">
 				{% if plant.erosion_control.all %}
 					<div class="col-xs-4 italic edit-attribute" id="ErosionControl">Erosion Control</div>
@@ -241,19 +264,19 @@
 			</div>
 			<div class="row">
 				{% if plant.plants_insect_regulator.all %}
-					<div class="col-xs-4 italic edit-attribute">Insect Regulator</div><!--prob-->
+					<div class="col-xs-4 italic edit-attribute" id="PlantInsectRegulatorByRegion">>Insect Regulator</div><!--prob-->
 					<div class="col-xs-8 bold">{{ plant.get_insect_regulator }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.plants_animal_attractor.all %}
-					<div class="col-xs-4 italic edit-attribute">Animal Attractor</div><!--prob-->
+					<div class="col-xs-4 italic edit-attribute" id="PlantAnimalAttractorByRegion">Animal Attractor</div><!--prob-->
 					<div class="col-xs-8 bold">{{ plant.get_animal_attractor }}</div>
 				{% endif %}
 			</div>
 			<div class="row">
 				{% if plant.plants_animal_regulator.all %}
-					<div class="col-xs-4 italic edit-attribute">Animal Regulator</div><!--prob-->
+					<div class="col-xs-4 italic edit-attribute" id="PlantAnimalRegulatorByRegion">Animal Regulator</div><!--prob-->
 					<div class="col-xs-8 bold">{{ plant.get_animal_regulator }}</div>
 				{% endif %}
 			</div>
@@ -275,7 +298,7 @@
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
-			<div class="row italic attribute">Products</div>
+			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Products</div>
 				<div class="row">
 					{% if plant.food_prod.all %}
 						<div class="col-xs-4 italic edit-attribute" id="FoodProd">Food</div>
@@ -320,9 +343,57 @@
 				</div>
 		</div>
 	</div>
+
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-11">
+			<div class="add-attribute-container"><div class="add-attribute-center"><div class="add-attribute-label" id="characteristic">+ add new characteristic</div></div></div>
+		</div>
+	</div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-11">
+			<div class="add-attribute-container"><div class="add-attribute-center"><div>+ add new characteristic</div></div></div>
+		</div>
+	</div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-11">
+			<div class="add-attribute-container"><div class="add-attribute-center"><div>+ add new characteristic</div></div></div>
+		</div>
+	</div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-11">
+			<div class="add-attribute-container"><div class="add-attribute-center"><div>+ add new characteristic</div></div></div>
+		</div>
+	</div>
+	<div class="row editplantrow">
+		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
+		<div class="col-sm-11">
+			<div class="add-attribute-container"><div class="add-attribute-center"><div>+ add new characteristic</div></div></div>
+		</div>
+	</div>
+
 	
 {% else %}
 	<p>No plant</p> <!--fancy this up a bit-->
 {% endif %}
+
+{% endblock %}
+
+{% block script %}
+{% load staticfiles %}
+<script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+	var common_name, genus, species, variety;
+	common_name = "{{ plant.common_name }}";
+	genus = "{{ plant.genus }}";
+	species = "{{ plant.species }}";
+	variety = "{{ plant.variety }}";
+
+	//alert("Initializing plant in editplant.html " + common_name + " " + genus + " " + species + " " + variety);
+	EditPlant.init(common_name, genus, species, variety);
+</script>
 
 {% endblock %}
