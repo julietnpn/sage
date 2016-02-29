@@ -59,23 +59,32 @@ var EditPlant = function(){
 
 
         jqueryMap.$attribute.click(function(){
-            var attribute = $(this).attr('id')
-            var isMulti = isMultiSelect(attribute);
+            var attribute = $(this).attr('data-className');//$(this).attr('id');
+
+
             var $select;
-            if(isMulti){
-                jqueryMap.$updateMdlForm.html('<label id="mdl-label" for="mdl-select2-multi"></label><select class="js-example-basic-multiple" multiple="multiple" id="mdl-select2-multi"></select>');
-                $select = $('#mdl-select2-multi');
+            if ($(this).attr('data-fieldType') == 'other'){
+                $('#mdl-label').html($(this).text());
+                $('#mdl-label').attr("data-propertyName", $(this).attr("id"));
+                $('#new-attribute-text').attr("placeholder", $(this).next().text());
+                $('#new-attribute-text').show().siblings().not("#mdl-label").hide();
+                jqueryMap.$updateMdl.modal();
+                return;
             }
-            else{
-                jqueryMap.$updateMdlForm.html('<label id="mdl-label" for="mdl-select2"></label><select class="js-example-basic-single" id="mdl-select2" ></select>');
-                $select = $('#mdl-select2');
+            else if($(this).attr('data-fieldType') == 'many_to_many'){
+                $select = $('#new-attribute-multiselect');
+            }
+            else {
+                $select = $('#new-attribute-select');
             }
 
+            $select.siblings().not("#mdl-label").hide();
             $select.html("");
             $select.select2({
                 placeholder: "Loading..."
             });
 
+            
 
             $.ajax({
                 type: "GET",
@@ -96,6 +105,24 @@ var EditPlant = function(){
 
             jqueryMap.$updateMdl.modal();
             $('#mdl-label').html($(this).text());
+
+        });
+
+        $('#update-submit').click(function(){
+            var field = $('#mdl-label').attr('data-propertyName');
+            //var valueSelect = $('#new-attribute-select').select2("val");
+            //var valueMultiSelect = $('#new-attribute-multiselect').select2("val");
+            var valueText = $("#new-attribute-text").val();
+            //alert(field + ' ' + valueText)
+            $("#mdl-update-form").submit();
+           // $.ajax({
+           //      type: "POST",
+           //      url:"/home/update/" + field + "/" +valueText + "/",
+           //      dataType:"json"
+           //  }).then(function (data) {
+           //      options = data.dropdownvals
+           //      alert("itworked")
+           //  }); 
         });
 
         jqueryMap.$addNewImg.click(function(){
@@ -224,23 +251,23 @@ var EditPlant = function(){
     //----------------- BEGIN DOM METHODS -----------------------
 
 
-    function isMultiSelect(attribute){
-        return attribute == 'Layer' 
-            || attribute == 'ActiveGrowthPeriod'
-            || attribute == 'HarvestPeriod'
-            || attribute == 'FlowerColor'
-            || attribute == 'FoliageColor'
-            || attribute == 'FruitColor'
-            || attribute == 'PlantInsectAttractorByRegion'
-            || attribute == 'PlantInsectRegulatorByRegion'
-            || attribute == 'PlantAnimalAttractorByRegion'
-            || attribute == 'PlantAnimalRegulatorByRegion'
-            || attribute == 'FoodProd'
-            || attribute == 'RawMaterialsProd'
-            || attribute == 'MedicinalsProd'
-            || attribute == 'BioChemicalMaterialProd'
-            || attribute == 'CulturalAndAmenityProd'
-            || attribute == 'MineralNutrientsProd';
-    }
+    // function isMultiSelect(attribute){
+    //     return attribute == 'Layer' 
+    //         || attribute == 'ActiveGrowthPeriod'
+    //         || attribute == 'HarvestPeriod'
+    //         || attribute == 'FlowerColor'
+    //         || attribute == 'FoliageColor'
+    //         || attribute == 'FruitColor'
+    //         || attribute == 'PlantInsectAttractorByRegion'
+    //         || attribute == 'PlantInsectRegulatorByRegion'
+    //         || attribute == 'PlantAnimalAttractorByRegion'
+    //         || attribute == 'PlantAnimalRegulatorByRegion'
+    //         || attribute == 'FoodProd'
+    //         || attribute == 'RawMaterialsProd'
+    //         || attribute == 'MedicinalsProd'
+    //         || attribute == 'BioChemicalMaterialProd'
+    //         || attribute == 'CulturalAndAmenityProd'
+    //         || attribute == 'MineralNutrientsProd';
+    // }
 
 }(); 

@@ -59,8 +59,9 @@ p{
 	text-align: center;
 }
 
-#mdl-select2,
-#mdl-select2-multi{
+#new-attribute-select,
+#new-attribute-multiselect,
+#new-attribute-text{
 	width:200px;
 }
 

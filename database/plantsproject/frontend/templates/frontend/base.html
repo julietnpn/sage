@@ -69,14 +69,28 @@
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		        <h4 class="modal-title">Modal title</h4>
 		      </div>-->
+		      <form id='mdl-update-form' action="/home/update/" method="post" >
 		      <div class="modal-body">
-		      	<form id='mdl-update-form' action="" method="post" >
-				</form>
+		      	
+		      		
+		      		<label id="mdl-label" data-propertyName=""></label>
+		      		{% csrf_token %}
+		      		{% for field in updateForm %}
+		      		{{ field }} 
+		      		{% endfor %}
+		      		<select class="js-example-basic-multiple" multiple="multiple" id="new-attribute-multiselect" style="display:none;"></select>
+		      		<input type="text" id="new-attribute-text" placeholder="temp" style="display:none;"></input>
+		      		<select class="js-example-basic-single" id="new-attribute-select" style="display:none;"></select>
+		      		<div id="add-plant-submit-container">
+						<input type="submit" id="add-plant" class="formsubmit" name="add" value="Add This" />
+					</div>
+				
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		        <button type="button" class="btn btn-success">Save</button>
+		        <button type="button" class="btn btn-success" id="update-submit">Save</button>
 		      </div>
+		      </form>
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->

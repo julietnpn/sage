@@ -1,67 +1,69 @@
 {% extends 'frontend/sidebar-editplant.html' %}
 
-{% block title %}
-	{% if plant.common_name %}
-		{{ plant.common_name }}
+{% block title %}{% spaceless %}
+
+	{% if common_name %}
+		{{ common_name }}
 	{% else %}
-		{% if plant.genus %}
-			{{ plant.genus }}&nbsp;
+		{% if genus %}
+			{{ genus }}&nbsp;
 		{% endif %}
-		{% if plant.species %}
-			{{ plant.species }}&nbsp;
+		{% if species %}
+			{{ species }}&nbsp;
 		{% endif %}
-		{% if plant.variety %}
-			{{ plant.variety }}&nbsp;&nbsp;
+		{% if variety %}
+			{{ variety }}
 		{% endif %}
 	{% endif %}
-{% endblock %}
+{% endspaceless %}{% endblock %}
 
 {% block maincontent %}
 
-{% if plant %}
+{% if result %}	
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
 			<div class="edit-plant-title latin">{% spaceless %}
 				<div class="genus">
-					{% if plant.genus %}
-						{{ plant.genus }}
+					{% if genus %}
+						{{ genus }}
 					{% endif %}
 				</div>
 				<div class="species">
-					{% if plant.species %}
-						{{ plant.species }}
+					{% if species %}
+						{{ species }}
 					{% endif %}
 				</div>
 				<div class="variety">
-					{% if plant.variety %}
-						{{ plant.variety }}
+					{% if variety %}
+						{{ variety }}
 					{% endif %}
 				</div>
 			</div>
 			<div class="edit-plant-title common italic">
-				{% if plant.common_name %}
-					<div class="commonName">{{ plant.common_name }}</div>
+				{% if common_name %}
+					<div class="commonName">{{ common_name }}</div>
 				{% endif %}
 			</div> 
 			<br>
 			<div class="edit-plant-subtitle">
-				{% if plant.family %}
-					<div>{{ plant.family }}</div>
+				{% if family %}
+					<div>{{ family }}</div>
 				{% endif %}
 			</div>
 			<div class="edit-plant-subtitle italic">
-				{% if plant.family_common_name %}
-					<div>{{ plant.family_common_name }}</div>
+				{% if family_common_name %}
+					<div>{{ family_common_name }}</div>
 				{% endif %}
 			</div>
 			{% endspaceless %}
 			<br>
-			{% if plant.endemic_status.all %}
-				<div>Endemic Status: {{ plant.get_endemic_status }}</div>
+			{% if endemic_status %}
+				<div>Endemic Status: {{ endemic_status }}</div>
 			{% endif %}
 		</div>
 	</div>
+
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div id="plant-images" class="col-sm-11">
@@ -76,222 +78,42 @@
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-5">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" id="characteristics" aria-hidden="true"></span>Characteristics</div>
+			{% for f in result.Characteristics %}
 			<div class="row">
-				{% if plant.height.all %}
-					<div class="col-xs-4 italic edit-attribute" id="height">Height</div> <!--prob-->
-					<div class="col-xs-8 bold">{{ plant.get_height }}</div>
-				{% endif %}
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div>
+					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
-			<div class="row">
-				{% if plant.layer.all %}
-					<div class="col-xs-4 italic edit-attribute" id="Layer">Layer</div>
-					<div class="col-xs-8 bold">{{ plant.get_layer }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.duration.all %}
-					<div class="col-xs-4 italic edit-attribute" id="Duration">Duration</div>
-					<div class="col-xs-8 bold">{{ plant.get_duration }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.spread.all %}
-					<div class="col-xs-4 italic edit-attribute" id="spread">Spread</div> <!--prob-->
-					<div class="col-xs-8 bold">{{ plant.get_spread }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.ph_min %}
-					<div class="col-xs-4 italic edit-attribute" id="ph_min">phMin</div> <!--prob-->
-					<div class="col-xs-8 bold">{{ plant.ph_min }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.ph_max %}
-					<div class="col-xs-4 italic edit-attribute" id="ph_max">phMax</div><!--prob-->
-					<div class="col-xs-8 bold">{{ plant.ph_max }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.canopy_density.all %}
-					<div class="col-xs-4 italic edit-attribute" id="CanopyDensity">Canopy Density</div>
-					<div class="col-xs-8 bold">{{ plant.get_canopy_density }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.active_growth_period.all %}
-					<div class="col-xs-4 italic edit-attribute" id="ActiveGrowthPeriod">Active Growth Period</div>
-					<div class="col-xs-8 bold">{{ plant.get_active_growth_period }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.harvest_period.all %}
-					<div class="col-xs-4 italic edit-attribute" id="HarvestPeriod">Harvest Period</div>
-					<div class="col-xs-8 bold">{{ plant.get_harvest_period }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.leaf_retention.all %}
-					<div class="col-xs-4 italic edit-attribute" id="LeafRetention">Leaf Retention</div>
-					<div class="col-xs-8 bold">{{ plant.get_leaf_retention }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.flower_color.all %}
-					<div class="col-xs-4 italic edit-attribute" id="FlowerColor">Flower Color</div>
-					<div class="col-xs-8 bold">{{ plant.get_flower_color }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.foliage_color.all %}
-					<div class="col-xs-4 italic edit-attribute" id="FoliageColor">Foliage Color</div>
-					<div class="col-xs-8 bold">{{ plant.get_foliage_color }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.fruit_color.all %}
-					<div class="col-xs-4 italic edit-attribute" id="FruitColor">Fruit Color</div>
-					<div class="col-xs-8 bold">{{ plant.get_fruit_color }}</div>
-				{% endif %}
-			</div>
+			{% endfor %}
 		</div>
 		<div class="col-sm-6">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Needs</div>
-			<div class="row pair">
-				{% if plant.water_needs.all %}
-					<div class="col-xs-4 italic edit-attribute" id="WaterNeeds">Water</div>
-					<div class="col-xs-8 bold">{{ plant.get_water_needs }}</div>
-				{% endif %}
-			</div>
+			{% for f in result.Needs %}
 			<div class="row">
-				{% if plant.sun_needs.all %}
-					<div class="col-xs-4 italic edit-attribute" id="SunNeeds">Sun</div>
-					<div class="col-xs-8 bold">{{ plant.get_sun_needs }}</div>
-				{% endif %}
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div>
+					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
-			<div class="row">
-				{% if plant.fertility_needs.all %}
-					<div class="col-xs-4 italic edit-attribute">Nutrients</div> <!--prob-->
-					<div class="col-xs-8 bold">{{ plant.get_fertility_needs }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.serotiny %}
-					<div class="col-xs-4 italic edit-attribute" id="Serotiny">Serotiny</div> <!--prob-->
-					<div class="col-xs-8 bold">{{ plant.serotiny.value }}</div> 
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.innoculant %}
-					<div class="col-xs-4 italic edit-attribute">Innoculant</div> <!--prob-->
-					<div class="col-xs-8 bold">{{ plant.innoculant }}</div>
-				{% endif %}
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-5">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Tolerances</div>
+			{% for f in result.Tolerances %}
 			<div class="row">
-				{% if plant.shade_tol.all %}
-					<div class="col-xs-4 italic edit-attribute" id="ShadeTol">Shade</div>
-					<div class="col-xs-8 bold">{{ plant.get_shade_tol }}</div>
-				{% endif %}
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
-			<div class="row">
-				{% if plant.salt_tol %}
-					<div class="col-xs-4 italic edit-attribute" id="SaltTol">Salt</div>
-					<div class="col-xs-8 bold">{{ plant.salt_tol.value }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.flood_tol %}
-					<div class="col-xs-4 italic edit-attribute" id="FloodTol">Flood</div>
-					<div class="col-xs-8 bold">{{ plant.flood_tol.value }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.drought_tol %}
-					<div class="col-xs-4 italic edit-attribute" id="DroughtTol">Drought</div>
-					<div class="col-xs-8 bold">{{ plant.drought_tol.value }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.humidity_tol %}
-					<div class="col-xs-4 italic edit-attribute" id="HumidityTol">Humidity</div>
-					<div class="col-xs-8 bold">{{ plant.humidity_tol.value }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.wind_tol %}
-					<div class="col-xs-4 italic edit-attribute" id="WindTol">Wind</div>
-					<div class="col-xs-8 bold">{{ plant.wind_tol.value }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.fire_tol %}
-					<div class="col-xs-4 italic edit-attribute" id="FireTol">Fire</div>
-					<div class="col-xs-8 bold">{{ plant.fire_tol.value }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.soil_drainage_tol.all %}
-					<div class="col-xs-4 italic edit-attribute" id="SoilDrainageTol">Soil Drainage</div>
-					<div class="col-xs-8 bold">{{ plant.get_soil_drainage_tol }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.minimum_temperature_tol %}
-					<div class="col-xs-4 italic edit-attribute">Minimum Temperature</div> <!--prob-->
-					<div class="col-xs-8 bold">{{ plant.minimum_temperature_tol }}</div>
-				{% endif %}
-			</div>
+			{% endfor %}
 		</div>
 		<div class="col-sm-6">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Behaviors</div>
+			{% for f in result.Behaviors %}
 			<div class="row">
-				{% if plant.erosion_control.all %}
-					<div class="col-xs-4 italic edit-attribute" id="ErosionControl">Erosion Control</div>
-					<div class="col-xs-8 bold">{{ plant.get_erosion_control }}</div>
-				{% endif %}
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
-			<div class="row">
-				{% if plant.plants_insect_attractor.all %}
-					<div class="col-xs-4 italic edit-attribute" id="PlantInsectAttractorByRegion">Insect Attractor</div><!--prob-->
-					<div class="col-xs-8 bold">{{ plant.get_insect_attractor }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.plants_insect_regulator.all %}
-					<div class="col-xs-4 italic edit-attribute" id="PlantInsectRegulatorByRegion">>Insect Regulator</div><!--prob-->
-					<div class="col-xs-8 bold">{{ plant.get_insect_regulator }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.plants_animal_attractor.all %}
-					<div class="col-xs-4 italic edit-attribute" id="PlantAnimalAttractorByRegion">Animal Attractor</div><!--prob-->
-					<div class="col-xs-8 bold">{{ plant.get_animal_attractor }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.plants_animal_regulator.all %}
-					<div class="col-xs-4 italic edit-attribute" id="PlantAnimalRegulatorByRegion">Animal Regulator</div><!--prob-->
-					<div class="col-xs-8 bold">{{ plant.get_animal_regulator }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.livestock_bloat %}
-					<div class="col-xs-4 italic edit-attribute" id="LivestockBloat">Livestock Bloat</div>
-					<div class="col-xs-8 bold">{{ plant.livestock_bloat.value }}</div>
-				{% endif %}
-			</div>
-			<div class="row">
-				{% if plant.toxicity %}
-					<div class="col-xs-4 italic edit-attribute" id="Toxicity">Toxicity</div>
-					<div class="col-xs-8 bold">{{ plant.toxicity.value }}</div>
-				{% endif %}
-			</div>
+			{% endfor %}
 		</div>
 	</div>
 
@@ -299,50 +121,16 @@
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Products</div>
-				<div class="row">
-					{% if plant.food_prod.all %}
-						<div class="col-xs-4 italic edit-attribute" id="FoodProd">Food</div>
-						<div class="col-xs-8 bold">{{ plant.get_food_prod }}</div>
-					{% endif %}
-				</div>
-				<div class="row">
-					{% if plant.raw_materials_prod.all %}
-						<div class="col-xs-4 italic edit-attribute" id="RawMaterialsProd">Raw Materials</div>
-						<div class="col-xs-8 bold">{{ plant.get_raw_materials_prod }}</div>
-					{% endif %}
-				</div>
-				<div class="row">
-					{% if plant.medicinals_prod.all %}
-						<div class="col-xs-4 italic edit-attribute" id="MedicinalsProd">Medicinals</div>
-						<div class="col-xs-8 bold">{{ plant.get_medicinals_prod }}</div>
-					{% endif %}
-				</div>
-				<div class="row">
-					{% if plant.get_biochemical_material_prod.all %}
-						<div class="col-xs-4 italic edit-attribute" id="BiochemicalMaterialProd">Biochemical Material</div>
-						<div class="col-xs-8 bold">{{ plant.get_biochemical_material_prod }}</div>
-					{% endif %}
-				</div>
-				<div class="row">
-					{% if plant.cultural_and_amenity_prod.all %}
-						<div class="col-xs-4 italic edit-attribute" id="CulturalAndAmenityProd">Cultural and Amenity</div>
-						<div class="col-xs-8 bold">{{ plant.get_cultural_and_amenity_prod }}</div>
-					{% endif %}
-				</div>
-				<div class="row">
-					{% if plant.mineral_nutrients_prod.all %}
-						<div class="col-xs-4 italic edit-attribute" id="MineralNutrientsProd">Mineral Nutrients</div>
-						<div class="col-xs-8 bold">{{ plant.get_mineral_nutrients_prod }}</div>
-					{% endif %}
-				</div>
-				<div class="row">
-					{% if plant.allelochemicals %}
-						<div class="col-xs-4 italic edit-attribute">Allelochemicals</div> <!--prob-->
-						<div class="col-xs-8 bold">{{ plant.allelochemicals }}</div>
-					{% endif %}
-				</div>
+			{% for f in result.Products %}
+			<div class="row">
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+					<div class="col-xs-8 bold">{{ f.value }}</div>
+			</div>
+			{% endfor %}
 		</div>
 	</div>
+
+	<!--################################################### ADDING NEW ATTRIBUTES ################################################################### -->
 
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
