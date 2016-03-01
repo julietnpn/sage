@@ -22,107 +22,88 @@ var EditPlant = function(){
         species =pSpecies;
         variety = pVariety;
 
-
-        // jqueryMap.$addAttribute.click(function(e){
-        //     // e.preventDefault();
-        //     // e.stopPropagation();
-        //     var attributes = {
-        //         'characteristic':[
-        //             {'id':0, 'class':'Duration', 'text':'Duration'},
-        //             {'id':1, 'class':'ActiveGrowthPeriod', 'text':'Active Growth Period'},
-        //             {'id':2, 'class':'ph_min', 'text':'phMin'}
-        //             ],
-        //         'need':['need'],
-        //         'behavior':['behaviors'],
-        //         'tolerance':['tolerances'],
-        //         'product':['prod']
-        //     };
-        //     var category = $(this).attr('id');
-
-        //     // ----------------------------------------------------------------------------
-        //     var select = $("<select class='add-new-attribute' id='add" + category + "' style='width:90%;height:100%;border:0;outline:none;'/>");
-        //     for(i=0; i < attributes[category].length; i++){
-        //         //alert(attributes[category][i])
-        //         $("<option />",  {value: attributes[category][i].id, text:attributes[category][i].text}).appendTo(select);
-        //     }
-        //     $(this).replaceWith(select);
-        //     //---------------------------------------------------------------------------------
-        //     // $(this).html("<select class='js-example-basic-single' id='add-new-attribute'></select>")
-        //     // $('#add-new-attribute').select2({
-        //     //     placeholder: "Loading...",
-        //     //     data:attributes[category]
-        //     // });
-            
-        // });
-
-
-
-
         jqueryMap.$attribute.click(function(){
-            var attribute = $(this).attr('data-className');//$(this).attr('id');
-
-
-            var $select;
-            if ($(this).attr('data-fieldType') == 'other'){
-                $('#mdl-label').html($(this).text());
-                $('#mdl-label').attr("data-propertyName", $(this).attr("id"));
-                $('#new-attribute-text').attr("placeholder", $(this).next().text());
-                $('#new-attribute-text').show().siblings().not("#mdl-label").hide();
-                jqueryMap.$updateMdl.modal();
-                return;
-            }
-            else if($(this).attr('data-fieldType') == 'many_to_many'){
-                $select = $('#new-attribute-multiselect');
-            }
-            else {
-                $select = $('#new-attribute-select');
-            }
-
-            $select.siblings().not("#mdl-label").hide();
-            $select.html("");
-            $select.select2({
-                placeholder: "Loading..."
-            });
-
-            
+            var attribute_className = $(this).attr('data-className');
+            var attribute_prop = $(this).attr('id');
+            var attribute_displayName = $(this).val();
+            var attribute_fieldType = $(this).attr("data-fieldType");
 
             $.ajax({
-                type: "GET",
-                url:"/home/getValues/" + attribute + "/" + $(this).next().text().replace(","," "),
-                dataType:"json"
-            }).then(function (data) {
-                options = data.dropdownvals
-                for(var i=0;i < options.length; i++){
-                    //if(options[i].id == data.defaultId)
-                    if(data.defaultIds.indexOf(options[i].id) > -1)
-                        $select.append("<option selected value='" + options[i].text + "'' id='" + options[i].id + "'>"+options[i].text+"</option>")
-                    else
-                        $select.append("<option value='" + options[i].text + "'' id='" + options[i].id + "'>"+options[i].text+"</option>")
+                type:"GET",
+                url:"/home/getForm/" + attribute_className + "/" + attribute_fieldType,
+                dataType:"json",
+                success: function(context){
+                    alert("success");
+                },
+                error: function(){
+                    alert("error");
                 }
-
-                $select.trigger('change');
             });
 
-            jqueryMap.$updateMdl.modal();
-            $('#mdl-label').html($(this).text());
-
         });
+
+        // jqueryMap.$attribute.click(function(){
+        //     var attribute_display = $(this).attr('data-className');
+        //     var attribute_prop = $(this).attr('id')
+
+
+        //     var $select;
+        //     alert("I'm a " + $(this).attr('data-fieldType') + " field");
+        //     if ($(this).attr('data-fieldType') == 'other'){
+        //         $('#mdl-label').html($(this).text());
+        //         $('#mdl-label').attr("data-propertyName", attribute_prop);
+        //         $('#new-attribute-text').attr("placeholder", $(this).next().text());
+        //         $('#new-attribute-text').show().siblings().not("#mdl-label").hide();
+        //         //jqueryMap.$updateMdlText.modal();
+        //         return;
+        //     }
+        //     else if($(this).attr('data-fieldType') == 'many_to_many'){
+        //         $select = $('#new-attribute-multiselect');
+        //     }
+        //     else { //many_to_one
+        //         $select = $('#new-attribute-select');
+        //     }
+
+        //     $select.siblings().not("#mdl-label").hide();
+        //     $("#mdl-label").attr("data-propertyName", attribute_prop)
+        //     $select.html("");
+        //     $select.select2({
+        //         placeholder: "Loading..."
+        //     });
+
+            
+
+        //     // $.ajax({
+        //     //     type: "GET",
+        //     //     url:"/home/getValues/" + attribute_display + "/" + $(this).next().text().replace(","," "),
+        //     //     dataType:"json"
+        //     // }).then(function (data) {
+        //     //     options = data.dropdownvals
+        //     //     for(var i=0;i < options.length; i++){
+        //     //         //if(options[i].id == data.defaultId)
+        //     //         if(data.defaultIds.indexOf(options[i].id) > -1)
+        //     //             $select.append("<option selected value='" + options[i].text + "'' id='" + options[i].id + "'>"+options[i].text+"</option>")
+        //     //         else
+        //     //             $select.append("<option value='" + options[i].text + "'' id='" + options[i].id + "'>"+options[i].text+"</option>")
+        //     //     }
+
+        //     //     $select.trigger('change');
+        //     // });
+
+        //     // jqueryMap.$updateMdlText.modal();
+        //     // $('#mdl-label').html($(this).text());
+
+        // });
 
         $('#update-submit').click(function(){
             var field = $('#mdl-label').attr('data-propertyName');
             //var valueSelect = $('#new-attribute-select').select2("val");
             //var valueMultiSelect = $('#new-attribute-multiselect').select2("val");
             var valueText = $("#new-attribute-text").val();
-            //alert(field + ' ' + valueText)
+
+            alert(field + ' ' + valueText)
             $("#mdl-update-form").submit();
-           // $.ajax({
-           //      type: "POST",
-           //      url:"/home/update/" + field + "/" +valueText + "/",
-           //      dataType:"json"
-           //  }).then(function (data) {
-           //      options = data.dropdownvals
-           //      alert("itworked")
-           //  }); 
+           
         });
 
         jqueryMap.$addNewImg.click(function(){
@@ -180,7 +161,7 @@ var EditPlant = function(){
             $commonTitle : $('.common'),
             //$addAttribute : $('.add-att-btn'),
             $updateMdlForm : $('#mdl-update-form'),
-            $updateMdl : $("#updateAttributeModal"),
+            $updateMdlText : $("#updatePropertyText"),
             //$addAttributeMdlForm : $('#mdl-add-att-form'),
             //$addNewMdl : $('#addNewAttributeMdl')
             $addAttribute : $('.add-attribute-label'),

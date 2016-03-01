@@ -62,6 +62,40 @@
 		</div><!--end row-->
 
 		<!-- BEGIN EDIT ATTRIBUTE MODAL -->
+		<div id="updatePropertyText" class="modal fade" tabindex="-1" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <!--<div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title">Modal title</h4>
+		      </div>-->
+		      
+		      <div class="modal-body">
+		      	<form id='mdl-update-form' action="/home/update/" method="post" >
+		      		
+		      		<label id="mdl-label" data-propertyName=""></label>
+		      		{% csrf_token %}
+		      		{% for field in updateForm %}
+		      		{{ field }} 
+		      		{% endfor %}
+		      		<!-- <select class="js-example-basic-multiple" multiple="multiple" id="new-attribute-multiselect" style="display:none;"></select>
+		      		<input type="text" id="new-attribute-text" placeholder="temp" style="display:none;"></input>
+		      		<select class="js-example-basic-single" id="new-attribute-select" style="display:none;"></select> -->
+
+					<input type="submit" class="formsubmit" value="Save" />
+				</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-success" id="update-submit">Save</button>
+		      </div>
+		      
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<!-- END EDIt ATTRIBUTE MODAL -->
+
+		<!-- BEGIN EDIT ATTRIBUTE MODAL -->
 		<div id="updateAttributeModal" class="modal fade" tabindex="-1" role="dialog">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
@@ -69,28 +103,27 @@
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		        <h4 class="modal-title">Modal title</h4>
 		      </div>-->
-		      <form id='mdl-update-form' action="/home/update/" method="post" >
+		      
 		      <div class="modal-body">
-		      	
+		      	<form id='mdl-update-form' action="/home/update/" method="post" >
 		      		
 		      		<label id="mdl-label" data-propertyName=""></label>
 		      		{% csrf_token %}
 		      		{% for field in updateForm %}
 		      		{{ field }} 
 		      		{% endfor %}
-		      		<select class="js-example-basic-multiple" multiple="multiple" id="new-attribute-multiselect" style="display:none;"></select>
+		      		<!-- <select class="js-example-basic-multiple" multiple="multiple" id="new-attribute-multiselect" style="display:none;"></select>
 		      		<input type="text" id="new-attribute-text" placeholder="temp" style="display:none;"></input>
-		      		<select class="js-example-basic-single" id="new-attribute-select" style="display:none;"></select>
-		      		<div id="add-plant-submit-container">
-						<input type="submit" id="add-plant" class="formsubmit" name="add" value="Add This" />
-					</div>
-				
+		      		<select class="js-example-basic-single" id="new-attribute-select" style="display:none;"></select> -->
+
+					<input type="submit" class="formsubmit" value="Save" />
+				</form>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 		        <button type="button" class="btn btn-success" id="update-submit">Save</button>
 		      </div>
-		      </form>
+		      
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->

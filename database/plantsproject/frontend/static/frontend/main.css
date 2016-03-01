@@ -232,8 +232,6 @@ section#contain a img {
 	margin-top: 20px;
 	margin-bottom:10px;
 	color:#66CD00;
-
-	
 }
 
 .formtxt {
@@ -243,8 +241,6 @@ section#contain a img {
     outline: 0;
     background: transparent;
     border-bottom: 1px solid black;
-    
-    margin-top:25px;
     margin-bottom:5px;
 }
 
@@ -252,10 +248,10 @@ section#contain a img {
 	width:250px;
 }
 
-#add-plant-latin-name, 
+/*#add-plant-latin-name, 
 #add-plant-common-name{
 	width: 75%;
-}
+}*/
 
 .input-label{
 	color:#999;
