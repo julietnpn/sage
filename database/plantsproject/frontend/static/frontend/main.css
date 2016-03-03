@@ -118,6 +118,10 @@ section#contain a img {
 	
 }
 
+#getFormButton{
+	visibility: hidden;
+}
+
 .cardimg{
 	height:125px;
 	width:125px;

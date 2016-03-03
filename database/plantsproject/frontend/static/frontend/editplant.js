@@ -22,26 +22,6 @@ var EditPlant = function(){
         species =pSpecies;
         variety = pVariety;
 
-        jqueryMap.$attribute.click(function(){
-            var attribute_className = $(this).attr('data-className');
-            var attribute_prop = $(this).attr('id');
-            var attribute_displayName = $(this).val();
-            var attribute_fieldType = $(this).attr("data-fieldType");
-
-            $.ajax({
-                type:"GET",
-                url:"/home/getForm/" + attribute_className + "/" + attribute_fieldType,
-                dataType:"json",
-                success: function(context){
-                    alert("success");
-                },
-                error: function(){
-                    alert("error");
-                }
-            });
-
-        });
-
         // jqueryMap.$attribute.click(function(){
         //     var attribute_display = $(this).attr('data-className');
         //     var attribute_prop = $(this).attr('id')
@@ -71,40 +51,53 @@ var EditPlant = function(){
         //         placeholder: "Loading..."
         //     });
 
-            
-
-        //     // $.ajax({
-        //     //     type: "GET",
-        //     //     url:"/home/getValues/" + attribute_display + "/" + $(this).next().text().replace(","," "),
-        //     //     dataType:"json"
-        //     // }).then(function (data) {
-        //     //     options = data.dropdownvals
-        //     //     for(var i=0;i < options.length; i++){
-        //     //         //if(options[i].id == data.defaultId)
-        //     //         if(data.defaultIds.indexOf(options[i].id) > -1)
-        //     //             $select.append("<option selected value='" + options[i].text + "'' id='" + options[i].id + "'>"+options[i].text+"</option>")
-        //     //         else
-        //     //             $select.append("<option value='" + options[i].text + "'' id='" + options[i].id + "'>"+options[i].text+"</option>")
-        //     //     }
-
-        //     //     $select.trigger('change');
-        //     // });
-
-        //     // jqueryMap.$updateMdlText.modal();
-        //     // $('#mdl-label').html($(this).text());
-
         // });
 
-        $('#update-submit').click(function(){
-            var field = $('#mdl-label').attr('data-propertyName');
-            //var valueSelect = $('#new-attribute-select').select2("val");
-            //var valueMultiSelect = $('#new-attribute-multiselect').select2("val");
-            var valueText = $("#new-attribute-text").val();
+        jqueryMap.$attribute.click(function(){
+            var attribute_className = $(this).attr('data-className');
+            var attribute_prop = $(this).attr('id');
+            var attribute_displayName = $(this).text();
+            var attribute_fieldType = $(this).attr("data-fieldType");
+            var defaultVal = $(this).next().text().replace(",", " ");
 
-            alert(field + ' ' + valueText)
-            $("#mdl-update-form").submit();
-           
+            if(attribute_fieldType == 'other'){
+                $("#text").show();
+                $("#select").hide();
+                // $("#mutli").hide();
+                // $("#multi").next().hide();
+                hideElements($("#multi").children());
+                $("#mdl-label").html(attribute_displayName);
+            }
+            else if(attribute_fieldType == 'many_to_many'){
+                $("#multi").show().addClass("js-example-basic-multiple");
+                $("#select").hide();
+                $("#text").hide();
+                $("#mdl-label").html(attribute_displayName);
+                load_values(true, attribute_className, defaultVal);
+
+            }
+            else {
+                $("#select").show();
+                $("#text").hide();
+                $("#mutli").hide();
+                $("#multi").next().hide();
+                $("#mdl-label").html(attribute_displayName);
+                load_values(false, attribute_className, defaultVal);
+            }
+            
+            $('#updateProperty').modal();
         });
+
+        // $('#update-submit').click(function(){
+        //     var field = $('#mdl-label').attr('data-propertyName');
+        //     //var valueSelect = $('#new-attribute-select').select2("val");
+        //     //var valueMultiSelect = $('#new-attribute-multiselect').select2("val");
+        //     var valueText = $("#new-attribute-text").val();
+
+        //     alert(field + ' ' + valueText)
+        //     $("#mdl-update-form").submit();
+           
+        // });
 
         jqueryMap.$addNewImg.click(function(){
             searchFlickrPictures()
@@ -213,11 +206,11 @@ var EditPlant = function(){
     //     }
     // }
 
-    // function hideElements(elements){
-    //     for(var i=0; i < elements.length; i++){
-    //         elements[i].style.visibility='hidden';
-    //     }
-    // }
+    function hideElements(elements){
+        for(var i=0; i < elements.length; i++){
+            elements[i].style.visibility='hidden';
+        }
+    }
 
     function resetBorderColor(elements){
         for(var i=0; i < elements.length; i++){
@@ -226,29 +219,45 @@ var EditPlant = function(){
         }
     }
 
-    // function displayImages(data){
-    //     displayElements(jqueryMap.$thumbnails.children());
-    // }
+    function load_values(isMultiSelect, className, defaultVal){
+        $select = $("#id_select");
+        if(isMultiSelect){
+            $select = $("#id_multi")
+        }
+        $.ajax({
+            type: 'GET',
+            url: "/home/reload_controls/" + className+ "/" + defaultVal,
+            dataType: 'json',
+            contentType: 'json',
+            //data: {"className":className, "default":""},
+            success: function(result)
+            {
+                 //empty month drop down list
+                $select.empty()
+
+                // //add months with no report
+                for(var i = 0; i < result.dropdownvals.length; i++){
+                    var dictionary = result.dropdownvals[i]
+                    //$('#id_select').append('<option id="'+dictionary.id+'"value="'+dictionary.text+'">'+dictionary.text+'</option>')
+                    if(result.defaultIds.indexOf(dictionary.id) > -1)
+                        $select.append("<option selected value='" + dictionary.text + "'' id='" + dictionary.id + "'>"+dictionary.text+"</option>")
+                    else
+                        $select.append("<option value='" + dictionary.text + "'' id='" + dictionary.id + "'>"+dictionary.text+"</option>")
+                }
+                $select.select2();
+
+            },
+            error: function(xhr, status, error) 
+            {
+                alert("error");
+            }
+        });
+    }
+
+
+
+
     //----------------- BEGIN DOM METHODS -----------------------
 
-
-    // function isMultiSelect(attribute){
-    //     return attribute == 'Layer' 
-    //         || attribute == 'ActiveGrowthPeriod'
-    //         || attribute == 'HarvestPeriod'
-    //         || attribute == 'FlowerColor'
-    //         || attribute == 'FoliageColor'
-    //         || attribute == 'FruitColor'
-    //         || attribute == 'PlantInsectAttractorByRegion'
-    //         || attribute == 'PlantInsectRegulatorByRegion'
-    //         || attribute == 'PlantAnimalAttractorByRegion'
-    //         || attribute == 'PlantAnimalRegulatorByRegion'
-    //         || attribute == 'FoodProd'
-    //         || attribute == 'RawMaterialsProd'
-    //         || attribute == 'MedicinalsProd'
-    //         || attribute == 'BioChemicalMaterialProd'
-    //         || attribute == 'CulturalAndAmenityProd'
-    //         || attribute == 'MineralNutrientsProd';
-    // }
 
 }(); 

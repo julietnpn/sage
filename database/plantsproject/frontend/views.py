@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from datetime import datetime
 from .models import *
 from django.apps import apps
-from .forms import AddPlantForm, UpdateFormWithText
+from .forms import AddPlantForm, UpdateForm
 from django.core import serializers
 import json
 
@@ -89,7 +89,7 @@ def getAttributeValues(request, attribute=None, default=None):
 
 		class_name = attribute
 		cls = globals()[class_name]
-		cls_model = apps.get_model('frontend', attribute)
+		cls_model = apps.get_model('frontend', class_name)
 		values = cls_model.objects.values_list("value")
 
 		for i in range(0, len(list(values))):
@@ -99,6 +99,27 @@ def getAttributeValues(request, attribute=None, default=None):
 			response_data['dropdownvals'].append(p)
 		
 		return JsonResponse(response_data)
+
+def reload_attribute_vals_view(request, className=None, default=None):
+
+	response_data = {'dropdownvals':[], 'defaultIds':[]}
+	defaults = default.split()
+
+
+	class_name = className
+	#class_name = PropertyToClassName[field[attribute]]
+	cls = globals()[class_name]
+	cls_model = apps.get_model('frontend', class_name)
+	values = cls_model.objects.values_list("value")
+
+	for i in range(0, len(list(values))):
+			if list(values)[i][0] in defaults:
+				response_data['defaultIds'].append(i)
+			p = dict(id=i, text=list(values)[i][0])
+			response_data['dropdownvals'].append(p)
+
+
+	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def update(request):
 	if request.method == 'POST':
@@ -114,31 +135,31 @@ def update(request):
 		return JsonResponse(response_data)
 
 
-def populateSearchDropDown():
-	choices = {'genus':[], 'species':[], 'variety':[]}
+# def populateSearchDropDown():
+# 	choices = {'genus':[], 'species':[], 'variety':[]}
 	
-	plants = Plant.objects
-	plant_list = plants.all()
+# 	plants = Plant.objects
+# 	plant_list = plants.all()
 
-	genus_list = plants.distinct('genus')
-	for plant in genus_list: 
-		if plant.genus:
-			p = dict(id=plant.id, text=plant.genus, field='genus')
-			choices['genus'].append(p)
+# 	genus_list = plants.distinct('genus')
+# 	for plant in genus_list: 
+# 		if plant.genus:
+# 			p = dict(id=plant.id, text=plant.genus, field='genus')
+# 			choices['genus'].append(p)
 
-	species_list = plants.distinct('species')
-	for plant in species_list: 
-		if plant.species:
-			p = dict(id=plant.id, text=plant.species, field='species')
-			choices['species'].append(p)
+# 	species_list = plants.distinct('species')
+# 	for plant in species_list: 
+# 		if plant.species:
+# 			p = dict(id=plant.id, text=plant.species, field='species')
+# 			choices['species'].append(p)
 
-	variety_list = plants.distinct('variety')
-	for plant in variety_list: 
-		if plant.variety:
-			p = dict(id=plant.id, text=plant.variety, field='variety')
-			choices['variety'].append(p)
+# 	variety_list = plants.distinct('variety')
+# 	for plant in variety_list: 
+# 		if plant.variety:
+# 			p = dict(id=plant.id, text=plant.variety, field='variety')
+# 			choices['variety'].append(p)
 	
-	return choices
+# 	return choices
 
 # def search(request, searchString=None):
 # 	add_plant_form = AddPlantForm()
@@ -151,29 +172,15 @@ def populateSearchDropDown():
 # 	}
 # 	return render(request, 'frontend/cardview.html', context)
 
-def getFormForProperty(request, className=None, fieldType=None):
-
-	if fieldType is "many_to_many":
-		if "region" in className.lower():
-			form = UpdateFormWithSelect
-		else:
-			form = UpdateFormWithMultiSelect
-	elif fieldType is "many_to_one":
-		form = UpdateFormWithSelect
-	else:
-		form = UpdateFormWithText
-
-	return HttpResponse({"form":form})
-
 
 
 def editPlant(request, plantId=None):
-	# if request.method == 'POST':
-	# 	form = EditPlantForm(request.POST)
-	# 	if form.is_valid():
-	# 		return HttpResponseRedirect('POST')
-	# else:
-	# 	form = EditPlantForm()
+					# if request.method == 'POST':
+					# 	form = EditPlantForm(request.POST)
+					# 	if form.is_valid():
+					# 		return HttpResponseRedirect('POST')
+					# else:
+					# 	form = EditPlantForm()
 	plant = Plant.objects.get(id=plantId)
 	result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
 	for field in plant.get_all_fields:
@@ -212,10 +219,9 @@ def editPlant(request, plantId=None):
 		'family_common_name' : family_common_name,
 		'endemic_status' : endemic_status,
 		'searchForThis': {},#json.dumps(populateSearchDropDown()),
-		'updateForm' : UpdateFormWithText(),
+		'updateForm' : UpdateForm(),
 	}
-	redirectURL = 'frontend/editplant.html'
-	return render(request, redirectURL, context)
+	return render(request, 'frontend/editplant.html', context)
 
 def addPlant(request, searchString=None):
 	if request.method == 'POST':
@@ -263,8 +269,7 @@ def addPlant(request, searchString=None):
 			plant_list = Plant.objects.filter(Q()).order_by('id')
 		context = {
 			'addPlantForm': add_plant_form,
-			#'searchForm': search_form,
 			'plant_list': plant_list,
-			'searchForThis': json.dumps(populateSearchDropDown()),
+			'searchForThis': [],#json.dumps(populateSearchDropDown()),
 		}
 		return render(request, 'frontend/cardview.html', context)
