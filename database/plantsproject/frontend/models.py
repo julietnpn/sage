@@ -645,22 +645,22 @@ class Plant(models.Model):
     #plants_insect_attractor
     plants_insect_attractor = models.ManyToManyField(Insects, through='PlantInsectAttractorByRegion', related_name='a_plants_insect_attractor_related')
     @property
-    def get_insect_attractor(self):
+    def get_plants_insect_attractor(self):
         return ', '.join([str(a) for a in self.plants_insect_attractor.all()])
     #plants_insect_regulator
     plants_insect_regulator = models.ManyToManyField(Insects, through='PlantInsectRegulatorByRegion')
     @property
-    def get_insect_regulator(self):
+    def get_plants_insect_regulator(self):
         return ', '.join([str(a) for a in self.plants_insect_regulator.all()])
     #plants_animal_regulator
     plants_animal_regulator = models.ManyToManyField(Animals, through='PlantAnimalRegulatorByRegion')
     @property
-    def get_animal_regulator(self):
+    def get_plants_animal_regulator(self):
         return ', '.join([str(a) for a in self.plants_animal_regulator.all()])
     #plants_animal_attractor
     plants_animal_attractor = models.ManyToManyField(Animals, through='PlantAnimalAttractorByRegion', related_name='a_plants_animal_attractor_related')
     @property
-    def get_animal_attractor(self):
+    def get_plants_animal_attractor(self):
         return ', '.join([str(a) for a in self.plants_animal_attractor.all()])
 
     livestock_bloat = models.ForeignKey(LivestockBloat, blank=True, null=True)
@@ -680,6 +680,46 @@ class Plant(models.Model):
             return self.common_name
         else:
             return self.genus
+    @property
+    def get_all_fields(self):
+        fields = []
+
+        for f in self._meta.get_fields():
+            fname = f.name
+            get_choice = 'get_' + fname 
+            # if hasattr(self, get_choice)():
+            #    value = getattr(self, get_choice)()
+            # else:
+            #     try:
+            #         value = getattr(self, fname)
+            #     except User.DoesNotExist:
+            #         value = None
+            if hasattr(self, get_choice):
+                value = getattr(self, get_choice)
+            else:
+                try:
+                    value = getattr(self, fname)
+                except:
+                    value = "DOESNT HAVE"
+
+            if f.many_to_many:
+                
+                fields.append({'label':f.verbose_name, 'name':f.name, 'value':value, 'field_type':'many_to_many',})
+            elif f.many_to_one:
+                fields.append({'label':f.verbose_name, 'name':f.name, 'value':value, 'field_type':'many_to_one'})
+            #many to many fields are repeated with one_to_many fields
+            #elif f.one_to_many:
+            #    fields.append({'label':'onetomany', 'name':f.name, 'value':'test', 'field_type':'one_to_many'})
+            #elif f.one_to_one:
+            #    fields.append({'label':'onetoone', 'name':f.name, 'value':value, 'field_type':'one_to_one'})
+            elif not f.one_to_many:
+                fields.append({'label':f.verbose_name, 'name':f.name, 'value':value,'field_type':'other'})
+            
+            
+            # fields.append({'label':f.vebose_name, 'name':f.name, 'value':value,})
+
+
+        return fields
 
 
 class PlantActiveGrowthPeriodByRegion(models.Model):

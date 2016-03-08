@@ -7,9 +7,10 @@ from django.utils.decorators import method_decorator
 from datetime import datetime
 from .models import *
 from django.apps import apps
-from .forms import AddPlantForm, UpdateForm
+from .forms import AddPlantForm, UpdateTextForm, UpdateSelectForm, UpdateMultiForm
 from django.core import serializers
 import json
+import pdb
 
 Characteristics = [
 	'duration', 'height', 'spread', 'ph_min', 'ph_max', 'layer', 'canopy_density', 'active_growth_period', 'harvest_period', 'leaf_retention', 'flower_color',
@@ -91,6 +92,8 @@ def getAttributeValues(request, attribute=None, default=None):
 		cls = globals()[class_name]
 		cls_model = apps.get_model('frontend', class_name)
 		values = cls_model.objects.values_list("value")
+		# values = cls_model.objects.all()
+		# print("loading values " + values)
 
 		for i in range(0, len(list(values))):
 			if list(values)[i][0] in defaults:
@@ -105,35 +108,85 @@ def reload_attribute_vals_view(request, className=None, default=None):
 	response_data = {'dropdownvals':[], 'defaultIds':[]}
 	defaults = default.split()
 
-
 	class_name = className
-	#class_name = PropertyToClassName[field[attribute]]
 	cls = globals()[class_name]
 	cls_model = apps.get_model('frontend', class_name)
-	values = cls_model.objects.values_list("value")
+	values = cls_model.objects.values_list("value", "id")
 
 	for i in range(0, len(list(values))):
 			if list(values)[i][0] in defaults:
-				response_data['defaultIds'].append(i)
-			p = dict(id=i, text=list(values)[i][0])
+				response_data['defaultIds'].append(list(values)[i][1])
+			p = dict(id=list(values)[i][1], text=list(values)[i][0])
 			response_data['dropdownvals'].append(p)
 
 
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-def update(request):
+def updateText(request):
 	if request.method == 'POST':
-		form = UpdateFormWithText(request.POST)
+		form = UpdateTextForm(request.POST)
+
 		if form.is_valid():
-			response_data = {'dropdownvals':[], 'defaultIds':['post']}
-			return JsonResponse(response_data)
+			property = request.POST['property_name']
+			value = request.POST['text']
+			plantId = request.POST['plant_id']
+			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+			transaction.save()
+			actions = []
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property=property, value=value))
+			Actions.objects.bulk_create(actions)
+			response_data = {"Success":"success"}
 		else:
-			response_data = {'dropdownvals':[], 'defaultIds':['post - invalid']}
-			return JsonResponse(response_data)
-	else:
-		response_data = {'dropdownvals':[], 'defaultIds':['get']}
+			response_data = {'dropdownvals':[request.POST['select']], 'defaultIds':['post select- invalid']}
 		return JsonResponse(response_data)
 
+
+def updateSelect(request):
+	if request.method == 'POST':
+		cls_name = request.POST['class_name']
+		form = UpdateSelectForm(request.POST, class_name=cls_name)
+		#pdb.set_trace()
+		
+		if form.is_valid():
+			property = request.POST['property_name']
+			value = request.POST['select']
+			plantId = request.POST['plant_id']
+			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+			transaction.save()
+			#print(transaction.id)
+			actions = []
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property=property, value=value))
+			Actions.objects.bulk_create(actions)
+			response_data = {"Success":"success"}
+		else:
+			response_data = {'dropdownvals':[request.POST['select']], 'defaultIds':['post select- invalid']}
+		return JsonResponse(response_data)
+
+
+def updateMulti(request):
+	if request.method == 'POST':
+		form = UpdateMultiForm(request.POST)
+		
+		if form.is_valid():
+			property = request.POST['property_name']
+			values = dict(request.POST)['multi']
+			plantId = request.POST['plant_id']
+			oldVals = request.POST['old_vals']
+			oldVals = oldVals.split(",")
+			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+			transaction.save()
+			actions = []
+
+			for i in range(0, len(values)):
+				actions.append(Actions(transactions=transaction , action_type="INSERT", property=property, value=values[i]))
+			Actions.objects.bulk_create(actions)
+
+			response_data = {"Success":"success"}
+		else:
+			response_data = {'dropdownvals':[], 'defaultIds':['post multi- invalid', ]}
+		return JsonResponse(response_data)
+
+#Plant.imageurl_set
 
 # def populateSearchDropDown():
 # 	choices = {'genus':[], 'species':[], 'variety':[]}
@@ -211,6 +264,7 @@ def editPlant(request, plantId=None):
 
 	context = {
 		'result': result,
+		'plantId': plantId, 
 		'genus' : genus,
 		'species' : species,
 		'variety' : variety,
@@ -219,7 +273,10 @@ def editPlant(request, plantId=None):
 		'family_common_name' : family_common_name,
 		'endemic_status' : endemic_status,
 		'searchForThis': {},#json.dumps(populateSearchDropDown()),
-		'updateForm' : UpdateForm(),
+		#'updateForm' : UpdateForm(),
+		'updateTextForm': UpdateTextForm(),
+		'updateSelectForm': UpdateSelectForm(class_name='Plant'),
+		'updateMulitForm': UpdateMultiForm(),
 	}
 	return render(request, 'frontend/editplant.html', context)
 

@@ -22,38 +22,8 @@ var EditPlant = function(){
         species =pSpecies;
         variety = pVariety;
 
-        // jqueryMap.$attribute.click(function(){
-        //     var attribute_display = $(this).attr('data-className');
-        //     var attribute_prop = $(this).attr('id')
-
-
-        //     var $select;
-        //     alert("I'm a " + $(this).attr('data-fieldType') + " field");
-        //     if ($(this).attr('data-fieldType') == 'other'){
-        //         $('#mdl-label').html($(this).text());
-        //         $('#mdl-label').attr("data-propertyName", attribute_prop);
-        //         $('#new-attribute-text').attr("placeholder", $(this).next().text());
-        //         $('#new-attribute-text').show().siblings().not("#mdl-label").hide();
-        //         //jqueryMap.$updateMdlText.modal();
-        //         return;
-        //     }
-        //     else if($(this).attr('data-fieldType') == 'many_to_many'){
-        //         $select = $('#new-attribute-multiselect');
-        //     }
-        //     else { //many_to_one
-        //         $select = $('#new-attribute-select');
-        //     }
-
-        //     $select.siblings().not("#mdl-label").hide();
-        //     $("#mdl-label").attr("data-propertyName", attribute_prop)
-        //     $select.html("");
-        //     $select.select2({
-        //         placeholder: "Loading..."
-        //     });
-
-        // });
-
         jqueryMap.$attribute.click(function(){
+            clearForms();
             var attribute_className = $(this).attr('data-className');
             var attribute_prop = $(this).attr('id');
             var attribute_displayName = $(this).text();
@@ -61,43 +31,42 @@ var EditPlant = function(){
             var defaultVal = $(this).next().text().replace(",", " ");
 
             if(attribute_fieldType == 'other'){
-                $("#text").show();
-                $("#select").hide();
-                // $("#mutli").hide();
-                // $("#multi").next().hide();
-                hideElements($("#multi").children());
-                $("#mdl-label").html(attribute_displayName);
+                document.getElementById("mdl-label-text").innerHTML = attribute_displayName;
+                $("#new-attribute-text").attr("placeholder", $(this).next().text());
+                $("#hidden-className-t").val(attribute_className);
+                $("#hidden-propName-t").val(attribute_prop);
+                $("#hidden-plantId-t").val(getPlantId());
+
+                $("#updateTextMdl").modal();
+                
             }
             else if(attribute_fieldType == 'many_to_many'){
-                $("#multi").show().addClass("js-example-basic-multiple");
-                $("#select").hide();
-                $("#text").hide();
-                $("#mdl-label").html(attribute_displayName);
-                load_values(true, attribute_className, defaultVal);
 
+                load_values(true, attribute_className, defaultVal);
+                document.getElementById("mdl-label-multi").innerHTML = attribute_displayName
+
+                $("#hidden-className-m").val(attribute_className);
+                $("#hidden-propName-m").val(attribute_prop);
+                $("#hidden-plantId-m").val(getPlantId());
+
+                $("#updateMultiMdl").modal();
             }
             else {
-                $("#select").show();
-                $("#text").hide();
-                $("#mutli").hide();
-                $("#multi").next().hide();
-                $("#mdl-label").html(attribute_displayName);
+                document.getElementById("mdl-label-select").innerHTML = attribute_displayName
+
                 load_values(false, attribute_className, defaultVal);
+                $("#hidden-className-s").val(attribute_className);
+                $("#hidden-propName-s").val(attribute_prop);
+                $("#hidden-plantId-s").val(getPlantId());
+
+                $("#updateSelectMdl").modal();
             }
-            
-            $('#updateProperty').modal();
         });
 
-        // $('#update-submit').click(function(){
-        //     var field = $('#mdl-label').attr('data-propertyName');
-        //     //var valueSelect = $('#new-attribute-select').select2("val");
-        //     //var valueMultiSelect = $('#new-attribute-multiselect').select2("val");
-        //     var valueText = $("#new-attribute-text").val();
-
-        //     alert(field + ' ' + valueText)
-        //     $("#mdl-update-form").submit();
-           
-        // });
+        $('.submitBtn').click(function(){
+            var $form = $(this).closest(".modal-content").find("form");
+            $form.submit();
+        });
 
         jqueryMap.$addNewImg.click(function(){
             searchFlickrPictures()
@@ -126,16 +95,8 @@ var EditPlant = function(){
 
         jqueryMap.$latinTitle.on("click", function(){
             alert($(this).val());
-            // var currentValue = $(this).innerHTML;
-            // currentEdit = currentValue;
-            // $self.innerHTML = "<input type='text' size='30' style='width:30px; height:20px;' value='" + currentValue + "'></input> ";
-            // $self.firstChild.select();
         });
-
-
     }
-
-
 
     return pub;
     //----------------- END PUBLIC METHODS --------------------
@@ -152,16 +113,17 @@ var EditPlant = function(){
             $imgContainer : $('#plant-images'),
             $latinTitle : $('.latin'),
             $commonTitle : $('.common'),
-            //$addAttribute : $('.add-att-btn'),
             $updateMdlForm : $('#mdl-update-form'),
             $updateMdlText : $("#updatePropertyText"),
-            //$addAttributeMdlForm : $('#mdl-add-att-form'),
-            //$addNewMdl : $('#addNewAttributeMdl')
             $addAttribute : $('.add-attribute-label'),
             $addNewAttribute : $('.add-new-attribute')
         };
 
 
+    }
+
+    function getPlantId(){
+        return $("#hiddenPlantId").text();
     }
 
 
@@ -182,19 +144,10 @@ var EditPlant = function(){
                 $("<img />").attr("src", src).addClass('cardimg').appendTo(jqueryMap.$imgMdlContent);
             });
             jqueryMap.$addImgModal.modal();
-            //$("<br><p class='input-label italic'>results from flickr</p>").appendTo('#thumbnail-container');
-            //setThumbnailSize();
-            //setJqueryMap(); 
         });
     }
 
-    // function setThumbnailSize(){
-    // 	var width = jqueryMap.$sidebarSection.width() - 81;
-    //     for(var i = 0; i < jqueryMap.$thumbnails.children().length; i++){
-    //         jqueryMap.$thumbnails.children('#' + i).width(width/3);
-    //         jqueryMap.$thumbnails.children('#' + i).height(width/3);
-    //     }
-    // }
+
 
     function escapeString(s){
         return s.split(' ').join('%2C');
@@ -220,9 +173,14 @@ var EditPlant = function(){
     }
 
     function load_values(isMultiSelect, className, defaultVal){
-        $select = $("#id_select");
+        var $select
         if(isMultiSelect){
+            $("#id_multi").addClass("js-example-basic-multiple");
             $select = $("#id_multi")
+        }
+        else{
+            $("#id_select").addClass("js-example-basic-single");
+            $select = $("#id_select")
         }
         $.ajax({
             type: 'GET',
@@ -232,19 +190,23 @@ var EditPlant = function(){
             //data: {"className":className, "default":""},
             success: function(result)
             {
+                $("#hidden-oldVals-m").val(result.defaultIds);
                  //empty month drop down list
                 $select.empty()
 
                 // //add months with no report
                 for(var i = 0; i < result.dropdownvals.length; i++){
                     var dictionary = result.dropdownvals[i]
+                    //alert(dictionary.id + " " + dictionary.text)
                     //$('#id_select').append('<option id="'+dictionary.id+'"value="'+dictionary.text+'">'+dictionary.text+'</option>')
                     if(result.defaultIds.indexOf(dictionary.id) > -1)
-                        $select.append("<option selected value='" + dictionary.text + "'' id='" + dictionary.id + "'>"+dictionary.text+"</option>")
+                        $select.append("<option selected value='" + dictionary.id + "''>"+dictionary.text+"</option>")
                     else
-                        $select.append("<option value='" + dictionary.text + "'' id='" + dictionary.id + "'>"+dictionary.text+"</option>")
+                        $select.append("<option value='" + dictionary.id + "''>"+dictionary.text+"</option>")
                 }
+
                 $select.select2();
+
 
             },
             error: function(xhr, status, error) 
@@ -254,6 +216,9 @@ var EditPlant = function(){
         });
     }
 
+    function clearForms(){
+        $('form').find("input[type=text], input[type=select]").val("");
+    }
 
 
 

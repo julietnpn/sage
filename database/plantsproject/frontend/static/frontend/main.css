@@ -5,6 +5,10 @@ html {
 
 }
 
+.formdiv{
+	display:inline-block;
+}
+
 div{
 	font-family: 'Karla', sans-serif;
 }

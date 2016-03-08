@@ -10,4 +10,8 @@ urlpatterns= [
     #url(r'^update/$', views.update, name='update'),
     #url(r'^getForm/(?P<className>\w+)/(?P<fieldType>\w+)/$', views.getFormForProperty, name='getForm'),
     url(r'^reload_controls/(?P<className>\w+)/(?P<default>([\w ]+))/$', views.reload_attribute_vals_view, name='reload_controls'),
+    #url(r'^update/$', views.update, name='update'),
+    url(r'^updateText/$', views.updateText, name='updateText'),
+    url(r'^updateSelect/$', views.updateSelect, name='updateSelect'),
+    url(r'^updateMulti/$', views.updateMulti, name='updateMulti'),
 ]
