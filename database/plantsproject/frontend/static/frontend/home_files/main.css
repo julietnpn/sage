@@ -5,10 +5,6 @@ html {
 
 }
 
-.formdiv{
-	display:inline-block;
-}
-
 div{
 	font-family: 'Karla', sans-serif;
 }
@@ -63,9 +59,8 @@ p{
 	text-align: center;
 }
 
-#new-attribute-select,
-#new-attribute-multiselect,
-#new-attribute-text{
+#mdl-select2,
+#mdl-select2-multi{
 	width:200px;
 }
 
@@ -120,10 +115,6 @@ section#contain a img {
 #img-mdl-content > .cardimg{
 	cursor:pointer;
 	
-}
-
-#getFormButton{
-	visibility: hidden;
 }
 
 .cardimg{
@@ -240,6 +231,8 @@ section#contain a img {
 	margin-top: 20px;
 	margin-bottom:10px;
 	color:#66CD00;
+
+	
 }
 
 .formtxt {
@@ -249,6 +242,8 @@ section#contain a img {
     outline: 0;
     background: transparent;
     border-bottom: 1px solid black;
+    
+    margin-top:25px;
     margin-bottom:5px;
 }
 
@@ -256,10 +251,10 @@ section#contain a img {
 	width:250px;
 }
 
-/*#add-plant-latin-name, 
+#add-plant-latin-name, 
 #add-plant-common-name{
 	width: 75%;
-}*/
+}
 
 .input-label{
 	color:#999;

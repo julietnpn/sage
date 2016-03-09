@@ -1,0 +1,12 @@
+direct mapped cache
+fully associatvive cache
+set associative cache
+how do they relate to one another
+advantages and disadvantages
+
+To process programs, a CPU utilizes its internal cache. This cache needs to be fast, and so can be implemented in a couple different ways with different tradeoffs. 
+1) A direct mapped cache is an implementation where each address in the cache in the prior level is mapped to one and only one slot of the internal cache.
+	-many pages belong in the cace in the same spot.Need to swap every time you hit a collision 
+2) A fully associative cache is an implementation where any address in the prior-level cache can be mapped to any slot of the internal cache. A tag and valid bit are associated with each slot, and checked against the logical address that the CPU is looking for. If there's a hit, that page is resident in the internal cache. If there's a miss, the page at that address needs to be loaded into the internal cache. 
+	-location independent
+3) A set associative cache is an implementation that mixes direct mapped and fully associative cache implementations. Cache slots are grouped into sets, and each set   
