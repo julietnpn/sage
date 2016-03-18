@@ -1,0 +1,31 @@
+{% extends 'frontend/sidebar-editplant.html' %}
+
+{% block title %}{% spaceless %}
+
+	{% if common_name %}
+		{{ common_name }}
+	{% else %}
+		{% if genus %}
+			{{ genus }}&nbsp;
+		{% endif %}
+		{% if species %}
+			{{ species }}&nbsp;
+		{% endif %}
+		{% if variety %}
+			{{ variety }}
+		{% endif %}
+	{% endif %}
+{% endspaceless %}{% endblock %}
+
+{% block maincontent %}
+
+{% if result %}	
+	
+{% else %}
+	<p>No plant</p> <!--fancy this up a bit-->
+{% endif %}
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}
