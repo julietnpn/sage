@@ -11,6 +11,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import Q
+
+
 
 class Actions(models.Model):
     transactions = models.ForeignKey('Transactions', blank=True, null=True)
@@ -475,7 +478,6 @@ class MineralNutrientsProd(models.Model):
 
     def __str__(self):
         return self.value
-
 
 class Plant(models.Model):
     #-----------------------------id-----------------------------
@@ -971,6 +973,8 @@ class SaltTol(models.Model):
 
     def __str__(self):
         return self.value
+
+
 
 class Serotiny(models.Model):
     value = models.TextField(blank=True, null=True)
