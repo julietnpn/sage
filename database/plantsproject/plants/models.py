@@ -307,7 +307,7 @@ class TheFamilyCommonName(models.Model):
         return self.value
 
 
-class NutrientRquirements(models.Model):
+class NutrientRequirements(models.Model):
     value = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -537,6 +537,9 @@ class Plant(models.Model):
 
     pH_min = models.DecimalField(db_column='ph_min', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase. #
     pH_max = models.DecimalField(db_column='ph_max', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase.
+    
+    #Layer
+    layer = models.ManyToManyField(Layer, through='PlantLayer')#, blank=True, null=True) #not sure testing
     @property
     def get_layer(self):
       return ', '.join([str(a) for a in self.layer.all()])
@@ -599,7 +602,7 @@ class Plant(models.Model):
 
     #-------------------------needs--------------------------------
     #FertilityNeeds
-    fertility_needs = models.ManyToManyField(NutrientRquirements, through='PlantNutrientRquirementsByRegion', verbose_name='Nutrient Rquirements')
+    fertility_needs = models.ManyToManyField(NutrientRequirements, through='PlantNutrientRequirementsByRegion', verbose_name='Nutrient Requirements')
     @property
     def get_fertility_needs(self):
         return ',' .join([str(a) for a in self.fertility_needs.all()])
@@ -847,10 +850,10 @@ class PlantBarrier(models.Model):# BarrierByRegion
         db_table = 'plants_barrier_by_region'
         unique_together = (('plants', 'regions'),)
 
-class PlantNutrientRquirementsByRegion(models.Model):
+class PlantNutrientRequirementsByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
     regions = models.ForeignKey('Region', blank=True, null=True)
-    fertility_needs = models.ForeignKey(NutrientRquirements, blank=True, null=True, verbose_name='Nutrient Rquirements') #####
+    fertility_needs = models.ForeignKey(NutrientRequirements, blank=True, null=True, verbose_name='Nutrient Requirements') #####
 
     class Meta:
         managed = True
@@ -1205,7 +1208,6 @@ class Transactions(models.Model):
         return str(self.plants_id)
 
 
-
 class UrlTags(models.Model):
     value = models.TextField(blank=True, null=True)
     plants = models.ForeignKey('Plant', blank=True, null=True)# related_name='Plants_plant_url_tags_related',
@@ -1267,3 +1269,4 @@ class PlantRegion(models.Model):
         managed = True
         db_table = 'plants_region'
         unique_together = (('plants', 'regions'),)
+

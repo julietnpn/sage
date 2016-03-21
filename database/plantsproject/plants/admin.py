@@ -209,8 +209,8 @@ class PlantSoilDrainageTolByRegionInline(admin.TabularInline):
 	model = PlantSoilDrainageTolByRegion
 	extra = 1
 
-class PlantNutrientRquirementsByRegionInline(admin.TabularInline):
-	model = PlantNutrientRquirementsByRegion
+class PlantNutrientRequirementsByRegionInline(admin.TabularInline):
+	model = PlantNutrientRequirementsByRegion
 	extra = 1
 
 class PlantWaterNeedsByRegionInline(admin.TabularInline):
@@ -223,6 +223,10 @@ class PlantSunNeedsByRegionInline(admin.TabularInline):
 
 class PlantFoodProdInline(admin.TabularInline):
 	model = PlantFoodProd
+	extra = 1
+
+class PlantAnimalFoodInline(admin.TabularInline):
+	model = PlantAnimalFood
 	extra = 1
 
 class PlantRawMaterialsProdInline(admin.TabularInline):
@@ -265,6 +269,10 @@ class PlantAnimalAttractorByRegionInline(admin.TabularInline):
 	model = PlantAnimalAttractorByRegion
 	extra = 1
 
+class PlantBarrierInline(admin.TabularInline):
+	model = PlantBarrier
+	extra = 1
+
 class ReadonlyTabularInline(admin.TabularInline):
     can_delete = False
     extra = 0
@@ -299,8 +307,8 @@ class PlantsAdmin(admin.ModelAdmin):
 	# def related_family(self, obj):
 	# 	return obj.family
 	# related_family.short_description = 'family'
-#[PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantHeightAtMaturityByRegionInline, PlantSpreadAtMaturityByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantFertilityNeedsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
-	inlines = [PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantNutrientRquirementsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
+#[PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantHeightAtMaturityByRegionInline, PlantSpreadAtMaturityByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantFertilityNeedsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantAnimalFoodInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
+	inlines = [PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantNutrientRequirementsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantAnimalFoodInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantBarrierInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
 
 
 class PlantID(Plant):
@@ -325,8 +333,8 @@ class PlantCharacteristic(Plant):
 
 class PlantCharacteristicAdmin(admin.ModelAdmin):
 	# list_display = ('duration', 'height', 'spread', 'pH', 'layer', 'CanopyDensity', 'ActiveGrowthPeriod', 'HarvestPeriod', 'LeafRetention', 'FlowerColor', 'FoliageColor', 'FruitColor')
-	list_display = ('id', 'genus', 'species','get_duration', 'pH_min', 'pH_max', 'get_layer', 'get_canopy_density', 'get_active_growth_period', 'get_harvest_period', 'get_leaf_retention', 'get_flower_color', 'get_foliage_color', 'get_fruit_color', 'degree_of_serotiny')
-	fields = ['id', 'common_name', 'ph_min', 'ph_max', 'degree_of_serotiny']
+	list_display = ('id', 'genus', 'species','get_duration', 'pH_min', 'pH_max', 'get_layer','get_canopy_density', 'get_active_growth_period', 'get_harvest_period', 'get_leaf_retention', 'get_flower_color', 'get_foliage_color', 'get_fruit_color', 'degree_of_serotiny')
+	fields = ['id', 'common_name', 'pH_min', 'pH_max', 'degree_of_serotiny']
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
 	exclude = ('height','spread')
@@ -338,6 +346,7 @@ class PlantCharacteristicAdmin(admin.ModelAdmin):
 		return ','.join([str(a) for a in obj.duration.all()])
 	get_duration.short_description = 'Durations'
 
+
 	# def get_height(self, obj):
 	# 	my_list = PlantHeightAtMaturityByRegion.objects.filter(plants=obj.id)
 	# 	return ','.join([str(a.height) for a in my_list])
@@ -347,6 +356,8 @@ class PlantCharacteristicAdmin(admin.ModelAdmin):
 	# 	my_list = PlantSpreadAtMaturityByRegion.objects.filter(plants=obj.id)
 	# 	return ','.join([str(a) for a in my_list])
 	# get_spread.short_description = 'Spread At Maturity'
+
+
 
 	def get_layer(self, obj):
 		return ','.join([str(a) for a in obj.layer.all()])
@@ -415,7 +426,7 @@ class PlantNeedAdmin(admin.ModelAdmin):
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
 	exclude = ('height','spread')
-	inlines = [PlantNutrientRquirementsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline]
+	inlines = [PlantNutrientRequirementsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline]
 
 	def get_fertility_needs(self, obj):
 		return ','.join([str(a) for a in obj.fertility_needs.all()])
@@ -439,7 +450,7 @@ class PlantProductAdmin(admin.ModelAdmin):
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
 	exclude = ('height','spread')
-	inlines = [PlantFoodProdInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline]
+	inlines = [PlantFoodProdInline, PlantAnimalFoodInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline]
 
 	def get_food_prod(self, obj):
 		return ','.join([str(a) for a in obj.food_prod.all()])
@@ -476,7 +487,7 @@ class PlantBehaviorAdmin(admin.ModelAdmin):
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
 	exclude = ('height','spread')
-	inlines = [PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
+	inlines = [PlantErosionControlByRegionInline, PlantBarrierInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
 
 	def get_erosion_control(self, obj):
 		return ','.join([str(a) for a in obj.erosion_control.all()])
@@ -646,14 +657,11 @@ def csv_import3(path,trans_type):
 				actions.append(Actions(transactions=transactions, action_type=trans_type, property='height', value=float(plant['Height'].strip())))
 			if plant['Spread'].strip():
 				actions.append(Actions(transactions=transactions, action_type=trans_type, property='spread', value=float(plant['Spread'].strip())))
-
-			# if plant['Root Depth'].strip():
-			# 	actions.append(Actions(transactions=transactions, action_type=trans_type, property='root_depth', value=float(plant['Root Depth'].strip())))
+			if plant['Root Depth'].strip():
+				actions.append(Actions(transactions=transactions, action_type=trans_type, property='root_depth', value=float(plant['Root Depth'].strip())))
 			if plant['Flower Color'].strip():
 				colors=plant['Flower Color'].split(',')
 				for color in colors:
-					if color.strip().lower()in'pink cream lavender rose rust gray': # TODO fix: Should I add these colors to the flower_color table? automatically/manually?
-						continue
 					flower_color_id = FlowerColor.objects.filter(value=color.strip().lower()).first().id
 					actions.append(Actions(transactions=transactions, action_type=trans_type, property='flower_color', value=flower_color_id))
 
@@ -707,7 +715,7 @@ def csv_import3(path,trans_type):
 
 			if plant['Soil pH']:
 				actions.append(Actions(transactions=transactions , action_type=trans_type, property='pH_min', value=float(plant['Soil pH'].strip()[:3])))
-				actions.append(Actions(transactions=transactions , action_type=trans_type, property='pH_min', value=float(plant['Soil pH'].strip()[6:])))
+				actions.append(Actions(transactions=transactions , action_type=trans_type, property='pH_max', value=float(plant['Soil pH'].strip()[6:])))
 
 			if plant['Ecological Function']:
 				ecos = plant['Ecological Function'].strip()#.lower()
@@ -1006,12 +1014,12 @@ def csv_import2(path,trans_type):############################serotiny, degree_of
 				toxicity_id = Toxicity.objects.filter(value=plant['Toxicity'].strip().lower()).first().id
 				actions.append(Actions(transactions=transactions, action_type=trans_type, property='toxicity_id', value=toxicity_id))
 
-			# 26. fertility requirement/NutrientRquirements maps directly (NOTE FROM JOHN: 'Medium' needs to be mapped to 'moderate')
+			# 26. fertility requirement/NutrientRequirements maps directly (NOTE FROM JOHN: 'Medium' needs to be mapped to 'moderate')
 			if plant['Fertility Requirement'].strip():
 				nutrient_requirement_map = {'Low': 'low',
 								 'Medium': 'moderate',
 								 'High': 'high'}
-				nutrient_requirements_id = NutrientRquirements.objects.filter(value=nutrient_requirement_map[plant['Fertility Requirement'].strip()]).first().id
+				nutrient_requirements_id = NutrientRequirements.objects.filter(value=nutrient_requirement_map[plant['Fertility Requirement'].strip()]).first().id
 				actions.append(Actions(transactions=transactions, action_type=trans_type, property='fertility_needs', value=nutrient_requirements_id))# fertility needs -> nutrient_req
 
 			# 27. IGNORE
@@ -1163,27 +1171,53 @@ def process_updates():
 
 	for plant, updates in plants.items():
 		for property, value in updates.items():
-			the_plant = Plant.objects.get(pk=plant)
-			if property in properties_1_to_1:
+			if Plant.objects.get(pk=plant):
+				the_plant = Plant.objects.get(pk=plant)
+			else:
+				raise ValueError("Invalid property plant id = " + plant)
+			print(property, property=='height', property in 'heightspreadroot_depth')
+			if property in 'heightspreadroot_depth':
+				if PlantRegion.objects.filter(plants=the_plant.id, regions=value[1]):# TODO check for region Null----------------------------------
+					plant_region = PlantRegion.objects.filter(plants=the_plant.id, regions=value[1]).first()#filter(transaction.plants_id, action.regions)
+				else:
+					plant_region = PlantRegion()
+					plant_region.plants = the_plant
+					plant_region.regions = value[1]
+					plant_region.save()
+
+				# somthing nice to learn------- how to dynamically choose the attribute that we want to set?!
+				if property == 'height':
+					plant_region.height = float(value[0])
+				elif property == 'spread':
+					plant_region.spread = float(value[0])
+				elif property == 'root_depth':
+					plant_region.root_depth = float(value[0])
+				else:
+					raise ValueError("Invalid property name = " + property)
+				plant_region.save()
+
+			elif property in properties_1_to_1:
 				print('T_id={0}, property={1}, value={2}'.format(transaction.id, property, value[0]))
 				setattr(the_plant, property, value[0]) # pH or ph... not being saved!
 				the_plant.save()
-			elif property in properties_many_with_region:# TODO height
+			elif property in properties_many_with_region:# TODO PlantBarrierByRegion
 				print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, property, value[1], value[0]))
 				class_name = 'Plant' + property.title().replace('_', '') + 'ByRegion'
 				if class_name=='PlantFertilityNeedsByRegion':
-					class_name='PlantNutrientRquirementsByRegion'
+					class_name='PlantNutrientRequirementsByRegion'
+				if class_name=='PlantBarrierByRegion':
+					class_name='PlantBarrier'
 				cls = globals()[class_name]
 				attributes, is_region_last = get_attributes(cls)
 				filter_args = {attributes[0]:the_plant.id, attributes[2]:value[0], attributes[1]:value[1]}
-				cls_instance = cls.objects.filter(**filter_args)# TODO make sure get works instead of filter().firts() which also may carry bugs
+				cls_instance = cls.objects.filter(**filter_args)# TODO make sure get() works instead of filter().first() which also may carry bugs
 				if not(cls_instance):
 					cls_instance = cls()
 					cls_instance.save()
 				else:
 					cls_instance = cls_instance.first()
 				
-				if is_region_last:# TODO ----------------------------------------do the same for process_transactions--------------------------
+				if is_region_last:
 					cls_instance = cls(cls_instance.id ,the_plant.id, value[0], value[1])
 				else:
 					cls_instance = cls(cls_instance.id ,the_plant.id, value[1], value[0])
@@ -1238,9 +1272,27 @@ def process_transactions():
 
 		for action in transaction.actions_set.all():# transaction.actions:
 			the_plant=Plant.objects.get(pk=transaction.plants_id)
-			if action.property in 'height spread Height Spread':
-				continue
-			if action.property in properties_1_to_1:# TODO check for INSERT DELETE UPDATE??????????????????
+			if action.property in 'height spread root_depth':
+				if PlantRegion.objects.filter(plants=the_plant.id, regions=action.regions):# TODO check for region Null----------------------------------
+					plant_region = PlantRegion.objects.filter(plants=the_plant.id, regions=action.regions).first()#transaction.plants_id
+				else:
+					plant_region = PlantRegion()
+					plant_region.plants = the_plant
+					plant_region.regions = action.regions
+					plant_region.save()
+				# somthing nice to learn------- how to dynamically choose the attribute that we want to set?!
+				if action.property == 'height':
+					plant_region.height = float(action.value)
+				elif action.property == 'spread':
+					plant_region.spread = float(action.value)
+				elif action.property == 'root_depth':
+					plant_region.root_depth = float(action.value)
+				else:
+					raise ValueError("Invalid property name = " + action.property)
+
+				plant_region.save()
+
+			elif action.property in properties_1_to_1:# TODO check for INSERT DELETE UPDATE??????????????????
 													# TODO height
 				print('T_id={0}, property={1}, value={2}'.format(transaction.id, action.property, action.value))
 				setattr(the_plant, action.property, action.value)# pH or ph... not being saved!
@@ -1249,7 +1301,7 @@ def process_transactions():
 				print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, action.property, action.regions, action.value))
 				class_name = 'Plant' + action.property.title().replace('_', '') + 'ByRegion'
 				if class_name=='PlantFertilityNeedsByRegion':
-					class_name='PlantNutrientRquirementsByRegion'
+					class_name='PlantNutrientRequirementsByRegion'
 				if class_name=='PlantBarrierByRegion':#TODO change renameModel PlantBarrier -> PLnatbarrierByRegion
 					class_name='PlantBarrier'
 				cls = globals()[class_name]
@@ -1259,7 +1311,7 @@ def process_transactions():
 					cls_instance = cls()
 					cls_instance.save()
 					print (cls_instance.id ,the_plant.id, action.regions, action.value)
-					if is_region_last:# TODO ----------------------------------------do the same for process_transactions--------------------------
+					if is_region_last:
 						cls_instance = cls(cls_instance.id ,the_plant.id, action.value, action.regions)# no regions added?
 					else:
 						cls_instance = cls(cls_instance.id ,the_plant.id, action.regions, action.value)
