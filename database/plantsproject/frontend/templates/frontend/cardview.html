@@ -2,8 +2,23 @@
 
 {% block maincontent %}
 
-{% if plant_list %}
-{% for plant in plant_list %}
+{% if plants %}
+<div class="pagination">
+    <span class="step-links">
+        {% if plants.has_previous %}
+            <a href="?page={{ plants.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ plants.number }} of {{ plants.paginator.num_pages }}
+        </span>
+
+        {% if plants.has_next %}
+            <a href="?page={{ plants.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% for plant in plants %}
 <div class='row plantcard' onclick="location.href='edit/{{plant.id}}'">
 	<div class="col-sm-1"></div>
 	<div class="col-sm-2">
@@ -109,8 +124,26 @@
 		</div>
 	</div>
 </div> <!-- end plantcard -->
-
 {% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if plants.has_previous %}
+            <a href="?page={{ plants.previous_page_number }}">previous</a>
+        {% endif %}
+
+
+
+        <span class="current">
+            Page {{ plants.number }} of {{ plants.paginator.num_pages }}
+        </span>
+
+        {% if plants.has_next %}
+            <a href="?page={{ plants.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
 {% else %}
 	<p>No plants are available.</p>
 {% endif %}

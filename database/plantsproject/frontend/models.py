@@ -298,7 +298,7 @@ class TheFamilyCommonName(models.Model):
         return self.value
 
 
-class NutrientRquirements(models.Model):
+class NutrientRequirements(models.Model):
     value = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -511,12 +511,14 @@ class Plant(models.Model):
     height = models.ManyToManyField('PlantHeightAtMaturityByRegion')
     @property
     def get_height(self):
-        return ', '.join([str(a) for a in self.height.all()])# ???????????????????????????
+        return self.height.all()
+        #return ', '.join([str(a) for a in self.height.all()])# ???????????????????????????
     #spread
     spread = models.ManyToManyField('PlantSpreadAtMaturityByRegion')
     @property
     def get_spread(self):
-        return ', '.join([str(a) for a in self.spread.all()])# ???????????????????????????
+        return self.spread.all()
+        #return ', '.join([str(a) for a in self.spread.all()])# ???????????????????????????
 
     ph_min = models.DecimalField(db_column='pH_min', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase. #
     ph_max = models.DecimalField(db_column='pH_max', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase.
@@ -583,7 +585,7 @@ class Plant(models.Model):
 
     #-------------------------needs--------------------------------
     #FertilityNeeds
-    fertility_needs = models.ManyToManyField(NutrientRquirements, through='PlantNutrientRquirementsByRegion', verbose_name='Nutrient Rquirements')
+    fertility_needs = models.ManyToManyField(NutrientRequirements, through='PlantNutrientRequirementsByRegion', verbose_name='nutrient requirements')
     @property
     def get_fertility_needs(self):
         return ',' .join([str(a) for a in self.fertility_needs.all()])
@@ -813,10 +815,10 @@ class PlantErosionControlByRegion(models.Model):
         unique_together = (('plants', 'regions'),)
 
 
-class PlantNutrientRquirementsByRegion(models.Model):
+class PlantNutrientRequirementsByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
     regions = models.ForeignKey('Region', blank=True, null=True)
-    fertility_needs = models.ForeignKey(NutrientRquirements, blank=True, null=True, verbose_name='Nutrient Rquirements') #####
+    fertility_needs = models.ForeignKey(NutrientRequirements, blank=True, null=True, verbose_name='Nutrient Requirements') #####
 
     class Meta:
         managed = False

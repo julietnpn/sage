@@ -61,24 +61,12 @@
 			</div><!--end main content -->
 		</div><!--end row-->
 
-
-
-
-
-
-
-
-
-		<!-- TESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTINGTESTING-->
-
-
-
 		<!-- BEGIN EDIT ATTRIBUTE WITH TEXT MODAL -->
 		<div id="updateTextMdl" class="modal fade" tabindex="-1" role="dialog">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-body">
-		      	<form action="/home/updateText/" method="post" >
+		      	<form action="" method="post">
 		      		{% csrf_token %}
 					<label id="mdl-label-text"></label>
 		      		{% for field in updateTextForm %}
@@ -101,16 +89,12 @@
 		</div><!-- /.modal -->
 		<!-- END EDIT ATTRIBUTE WITH TEXTMODAL -->
 
-
-
-
-
 		<!-- BEGIN EDIT ATTRIBUTE WITH SELECT MODAL -->
 		<div id="updateSelectMdl" class="modal fade" tabindex="-1" role="dialog">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-body">
-		      	<form action="/home/updateSelect/" method="post" >
+		      	<form action="/frontend/updateSelect/" method="post" >
 		      		{% csrf_token %}
 
 					<label id="mdl-label-select"></label>
@@ -134,22 +118,12 @@
 		</div><!-- /.modal -->
 		<!-- END EDIT ATTRIBUTE WITH SELECT MODAL -->
 
-
-
-
-
-
-
-
-
-
-
 		<!-- BEGIN EDIT ATTRIBUTE WITH MULTISELECT MODAL -->
 		<div id="updateMultiMdl" class="modal fade" tabindex="-1" role="dialog">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-body">
-		      	<form action="/home/updateMulti/" method="post" >
+		      	<form action="/frontend/updateMulti/" method="post" >
 		      		{% csrf_token %}
 					<label id="mdl-label-multi"></label>
 		      		{% for field in updateMulitForm %}
@@ -175,14 +149,15 @@
 
 		<!-- BEGIN EDIT ADD IMG MODAL -->
 		<div id="addImg" class="modal fade" tabindex="-1" role="dialog">
-		  <div class="modal-dialog">
+		  <div class="modal-dialog modal-lg">
 		    <div class="modal-content">
 		    	<div class="modal-header">
 		    		<h4 class="modal-title">Add a New Image</h4>
 		    	</div>
 		      	
-		      	<div class="modal-body" id="img-mdl-content">
-		      
+		      	<div class="modal-body">
+		      		<div id="img-mdl-content"></div>
+		      		<div>Add your own by pasting the image URL Here: <input type="text"></input></div>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -192,6 +167,41 @@
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 		<!-- END EDIt ADD IMG MODAL -->
+
+
+		<!-- BEGIN EDIT PLANT NAMES MODAL -->
+		<div id="updateNamesMdl" class="modal fade" tabindex="-1" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		      	<form action="/frontend/updateNames/" method="post">
+		      		{% csrf_token %}
+					
+		      		{% for field in updatePlantNamesForm %}
+		      		<label id="mdl-label-text">{{ field.label }}</label>
+		      		<div id="{{field.label}}" class="formdiv">{{ field }}</div><br>
+		      		{% endfor %}
+					<input type="submit" class="formsubmit" value="Save" />
+					<input type="hidden" id="hidden-plantId" name="plant_id" value=""/>
+
+					<input type="hidden" id="genus-flag" name="genus_flag" value="0"/>
+					<input type="hidden" id="species-flag" name="species_flag" value="0"/>
+					<input type="hidden" id="variety-flag" name="variety_flag" value="0"/>
+					<input type="hidden" id="commonName-flag" name="commonName_flag" value="0"/>
+					<input type="hidden" id="family-flag" name="family_flag" value="0"/>
+					<input type="hidden" id="familyCommonName-flag" name="familyCommonName_flag" value="0"/>
+					<input type="hidden" id="endemicStatus-flag" name="endemicStatus_flag" value="0"/>
+				</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-success submitBtn">Save</button>
+		      </div>
+		      
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<!-- END EDIT PLANT NAMES MODAL -->
 
 	</div> <!--end container-fluid-->
 
@@ -209,6 +219,11 @@
 		$('.js-example-basic-multiple').select2({
 			data: searchTerms.genus//.concat(searchTerms.species).concat(searchTerms.variety)
 		});
+
+
+		function displayAttribute(){
+			alert("displaying");
+		}
 	</script>
 	{% block script %}
 	{% endblock %}

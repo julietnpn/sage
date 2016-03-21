@@ -7,8 +7,9 @@ from django.utils.decorators import method_decorator
 from datetime import datetime
 from .models import *
 from django.apps import apps
-from .forms import AddPlantForm, UpdateTextForm, UpdateSelectForm, UpdateMultiForm
+from .forms import AddPlantForm, UpdateTextForm, UpdateSelectForm, UpdateMultiForm, UpdatePlantNamesForm
 from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 import pdb
 
@@ -83,44 +84,146 @@ PropertyToClassName={
 	'mineral_nutrients_prod' : 'MineralNutrientsProd',
 	}
 
-def getAttributeValues(request, attribute=None, default=None):
-	if request.method == 'GET':
-		response_data = {'dropdownvals':[], 'defaultIds':[]}
-		defaults = default.split()
-
-		class_name = attribute
-		cls = globals()[class_name]
-		cls_model = apps.get_model('frontend', class_name)
-		values = cls_model.objects.values_list("value")
-		# values = cls_model.objects.all()
-		# print("loading values " + values)
-
-		for i in range(0, len(list(values))):
-			if list(values)[i][0] in defaults:
-				response_data['defaultIds'].append(i)
-			p = dict(id=i, text=list(values)[i][0])
-			response_data['dropdownvals'].append(p)
-		
-		return JsonResponse(response_data)
-
 def reload_attribute_vals_view(request, className=None, default=None):
-
 	response_data = {'dropdownvals':[], 'defaultIds':[]}
 	defaults = default.split()
 
-	class_name = className
-	cls = globals()[class_name]
-	cls_model = apps.get_model('frontend', class_name)
-	values = cls_model.objects.values_list("value", "id")
-
-	for i in range(0, len(list(values))):
-			if list(values)[i][0] in defaults:
+	if "insect" in className.lower():
+		insects = Insects.objects.all()
+		for i in range(0, len(insects)):
+			if insects[i].value in defaults: ## THE WAY THIS IS EVALUATED NEEDS TO BE CHANGED EX. AMBROSIA BEETLE
+				response_data['defaultIds'].append(insects[i].value)
+			p = dict(id=insects[i].id, text = insects[i].value)
+			response_data['dropdownvals'].append(p)
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
+	elif "animal" in className.lower():
+		animals = Animals.objects.all()
+		for i in range(0, len(animals)):
+			if animals[i].value in defaults: ## THE WAY THIS IS EVALUATED NEEDS TO BE CHANGED EX. AMBROSIA BEETLE
+				response_data['defaultIds'].append(animals[i].value)
+			p = dict(id=animals[i].id, text = animals[i].value)
+			response_data['dropdownvals'].append(p)
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
+	else:
+		cls = globals()[className]
+		cls_model = apps.get_model('frontend', className)
+		values = cls_model.objects.values_list("value", "id")
+		for i in range(0, len(list(values))):
+			if list(values)[i][0] in defaults: ## THE WAY THIS IS EVALUATED NEEDS TO BE CHANGED MANY TO MANY DEFAULTS NOT WORKING
 				response_data['defaultIds'].append(list(values)[i][1])
 			p = dict(id=list(values)[i][1], text=list(values)[i][0])
 			response_data['dropdownvals'].append(p)
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def updateNames(request):
+	if request.method == 'POST': 
+		form = UpdatePlantNamesForm(request.POST)
+		plantId = request.POST['plant_id']
+		#pdb.set_trace();
+		transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+		transaction.save()
+		actions = []
+		
+		if int(request.POST['genus_flag']) == 1:
+			print("changing genus")
+			genus = request.POST['genus']
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='genus', value=genus))
+		if int(request.POST['species_flag']) == 1:
+			print("changing species")
+			species = request.POST['species']
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='species', value=species))
+		if int(request.POST['variety_flag']) == 1:
+			print("changing variety")
+			variety = request.POST['variety']
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='variety', value=variety))
+		if int(request.POST['commonName_flag']) == 1:
+			print("changing cn")
+			common_name = request.POST['commonName']
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='common_name', value=common_name))
+		if int(request.POST['family_flag']) == 1:
+			print("changing family")
+			family = request.POST['family']
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='family_name', value=family))
+		if int(request.POST['familyCommonName_flag']) == 1:
+			print("changing fcn")
+			family_common_name = request.POST['familyCommonName']
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='family_common_name', value=family_common_name))
+		if int(request.POST['endemicStatus_flag']) == 1:
+			print("changing endemicStatus")
+			endemic_status = request.POST['endemicStatus']
+			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='endemic_status', value=endemic_status))
+
+		Actions.objects.bulk_create(actions)
+
+		plant = Plant.objects.get(id=plantId)
+		result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
+		for field in plant.get_all_fields:
+			if field['name'] in Characteristics:
+				field.update({'class_name':PropertyToClassName[field['name']]})
+				result['Characteristics'].append(field)
+			elif field['name'] in Needs:
+				field.update({'class_name':PropertyToClassName[field['name']]})
+				result['Needs'].append(field)
+			elif field['name'] in Tolerances:
+				field.update({'class_name':PropertyToClassName[field['name']]})
+				result['Tolerances'].append(field)
+			elif field['name'] in Products:
+				field.update({'class_name':PropertyToClassName[field['name']]})
+				result['Products'].append(field)
+			elif field['name'] in Behaviors:
+				field.update({'class_name':PropertyToClassName[field['name']]})
+				result['Behaviors'].append(field)
+			else:
+				result['About'].append(field)
+
+		try:
+			genus
+		except NameError:
+			genus = plant.genus
+		try:
+			species
+		except NameError:
+			species = plant.species
+		try:
+			variety
+		except NameError:
+			variety = plant.variety
+		try:
+			common_name
+		except NameError:
+			common_name = plant.common_name
+		try:
+			family 
+		except NameError:
+			family = plant.family
+		try:
+			family_common_name
+		except NameError:
+			family_common_name = plant.family_common_name
+		try:
+			endemic_status
+		except NameError:
+			endemic_status = plant.get_endemic_status
 
 
-	return HttpResponse(json.dumps(response_data), content_type="application/json")
+		context = {
+			'isNew': 0,
+			'result': result,
+			'plantId': plantId, 
+			'genus' : genus,
+			'species' : species,
+			'variety' : variety,
+			'common_name' : common_name,
+			'family' : family,
+			'family_common_name' : family_common_name,
+			'endemic_status' : endemic_status,
+			'searchForThis': {},#json.dumps(populateSearchDropDown()),
+			'updateTextForm': UpdateTextForm(),
+			'updateSelectForm': UpdateSelectForm(class_name='Plant'),
+			'updateMulitForm': UpdateMultiForm(),
+			'updatePlantNamesForm':UpdatePlantNamesForm(),
+		}
+		return render(request, 'frontend/editplant.html', context)
 
 def updateText(request):
 	if request.method == 'POST':
@@ -138,7 +241,10 @@ def updateText(request):
 			response_data = {"Success":"success"}
 		else:
 			response_data = {'dropdownvals':[request.POST['select']], 'defaultIds':['post select- invalid']}
-		return JsonResponse(response_data)
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
+	else:
+		response_data = {"get":"get"}
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 def updateSelect(request):
@@ -188,6 +294,144 @@ def updateMulti(request):
 
 #Plant.imageurl_set
 
+def editPlant(request, plantId=None):
+	plant = Plant.objects.get(id=plantId)
+	result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
+	for field in plant.get_all_fields:
+		if field['name'] in Characteristics:
+			field.update({'class_name':PropertyToClassName[field['name']]})
+			result['Characteristics'].append(field)
+		elif field['name'] in Needs:
+			field.update({'class_name':PropertyToClassName[field['name']]})
+			result['Needs'].append(field)
+		elif field['name'] in Tolerances:
+			field.update({'class_name':PropertyToClassName[field['name']]})
+			result['Tolerances'].append(field)
+		elif field['name'] in Products:
+			field.update({'class_name':PropertyToClassName[field['name']]})
+			result['Products'].append(field)
+		elif field['name'] in Behaviors:
+			field.update({'class_name':PropertyToClassName[field['name']]})
+			result['Behaviors'].append(field)
+		else:
+			result['About'].append(field)
+
+	context = {
+		'isNew': 1,
+		'result': result,
+		'plantId': plantId, 
+		'genus' : plant.genus,
+		'species' : plant.species,
+		'variety' : plant.variety,
+		'common_name' : plant.common_name,
+		'family' : plant.family,
+		'family_common_name' : plant.family_common_name,
+		'endemic_status' : plant.get_endemic_status,
+		'searchForThis': {},#json.dumps(populateSearchDropDown()),
+		'updateTextForm': UpdateTextForm(),
+		'updateSelectForm': UpdateSelectForm(class_name='Plant'),
+		'updateMulitForm': UpdateMultiForm(),
+		'updatePlantNamesForm':UpdatePlantNamesForm(),
+	}
+	return render(request, 'frontend/editplant.html', context)
+
+
+#@login_required
+def addPlant(request):
+	if request.method == 'POST':
+		addPlantForm = AddPlantForm(request.POST)
+
+		if 'add' in request.POST and addPlantForm.is_valid():
+			nameArray = str(request.POST["latinName"]).split()
+			commonName = request.POST["commonName"]
+
+			# IF EITHER OF THE ABOVE ARE "NONE" RETURN ERRORS!!!!!!!
+
+			genus = None
+			species = None
+			variety = None
+
+			if len(nameArray) > 0:
+				genus = nameArray[0]
+			if len(nameArray) > 1:
+				species = nameArray[1]
+			if len(nameArray) > 2:
+				variety = nameArray[2]
+
+			# transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, transaction_type='INSERT', ignore=False)
+			# transaction.save()
+			# #print(transaction.id)
+			# actions = []
+			# if genus:
+			# 	actions.append(Actions(transactions=transaction , action_type="INSERT", property='genus', value=genus))
+			# if species: 
+			# 	actions.append(Actions(transactions=transaction , action_type="INSERT", property='species', value=species))
+			# if variety:
+			# 	actions.append(Actions(transactions=transaction , action_type="INSERT", property='variety', value=variety))
+			# if commonName:
+			# 	actions.append(Actions(transactions=transaction , action_type="INSERT", property='common_name', value=commonName))
+			# Actions.objects.bulk_create(actions)
+
+
+
+			plant = Plant.objects.create()
+			result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
+			for field in plant.get_all_fields:
+				if field['name'] in Characteristics:
+					field.update({'class_name':PropertyToClassName[field['name']]})
+					result['Characteristics'].append(field)
+				elif field['name'] in Needs:
+					field.update({'class_name':PropertyToClassName[field['name']]})
+					result['Needs'].append(field)
+				elif field['name'] in Tolerances:
+					field.update({'class_name':PropertyToClassName[field['name']]})
+					result['Tolerances'].append(field)
+				elif field['name'] in Products:
+					field.update({'class_name':PropertyToClassName[field['name']]})
+					result['Products'].append(field)
+				elif field['name'] in Behaviors:
+					field.update({'class_name':PropertyToClassName[field['name']]})
+					result['Behaviors'].append(field)
+				else:
+					result['About'].append(field)
+
+			context = {
+				'isNew': 1,
+				'result': result,
+				'plantId': 0, 
+				'genus' : genus,
+				'species' : species,
+				'variety' : variety,
+				'common_name' : commonName,
+				'family' : plant.family,
+				'family_common_name' : plant.family_common_name,
+				'endemic_status' : plant.get_endemic_status,
+				'searchForThis': {},#json.dumps(populateSearchDropDown()),
+				'updateTextForm': UpdateTextForm(),
+				'updateSelectForm': UpdateSelectForm(class_name='Plant'),
+				'updateMulitForm': UpdateMultiForm(),
+				'updatePlantNamesForm':UpdatePlantNamesForm(),
+			}
+			return render(request, 'frontend/editplant.html', context)
+	else:
+		plant_list = Plant.objects.all()
+		paginator = Paginator(plant_list, 35)
+		page = request.GET.get('page')
+
+		try:
+			plants = paginator.page(page)
+		except PageNotAnInteger:
+			plants = paginator.page(1)
+		except EmptyPage:
+			plants = paginator.page(paginator.num_pages)
+
+		context = {
+			'addPlantForm': AddPlantForm(),
+			'plants':plants,
+			'searchForThis': [],#json.dumps(populateSearchDropDown()),
+		}
+		return render(request, 'frontend/cardview.html', context)
+
 # def populateSearchDropDown():
 # 	choices = {'genus':[], 'species':[], 'variety':[]}
 	
@@ -224,109 +468,3 @@ def updateMulti(request):
 # 		'searchForThis': json.dumps(populateSearchDropDown()),
 # 	}
 # 	return render(request, 'frontend/cardview.html', context)
-
-
-
-def editPlant(request, plantId=None):
-					# if request.method == 'POST':
-					# 	form = EditPlantForm(request.POST)
-					# 	if form.is_valid():
-					# 		return HttpResponseRedirect('POST')
-					# else:
-					# 	form = EditPlantForm()
-	plant = Plant.objects.get(id=plantId)
-	result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
-	for field in plant.get_all_fields:
-		if field['name'] in Characteristics:
-			field.update({'class_name':PropertyToClassName[field['name']]})
-			result['Characteristics'].append(field)
-		elif field['name'] in Needs:
-			field.update({'class_name':PropertyToClassName[field['name']]})
-			result['Needs'].append(field)
-		elif field['name'] in Tolerances:
-			field.update({'class_name':PropertyToClassName[field['name']]})
-			result['Tolerances'].append(field)
-		elif field['name'] in Products:
-			field.update({'class_name':PropertyToClassName[field['name']]})
-			result['Products'].append(field)
-		elif field['name'] in Behaviors:
-			field.update({'class_name':PropertyToClassName[field['name']]})
-			result['Behaviors'].append(field)
-		else:
-			result['About'].append(field)
-	genus = plant.genus
-	species = plant.species
-	variety = plant.variety
-	common_name = plant.common_name
-	family = plant.family
-	family_common_name = plant.family_common_name
-	endemic_status = plant.get_endemic_status
-
-	context = {
-		'result': result,
-		'plantId': plantId, 
-		'genus' : genus,
-		'species' : species,
-		'variety' : variety,
-		'common_name' : common_name,
-		'family' : family,
-		'family_common_name' : family_common_name,
-		'endemic_status' : endemic_status,
-		'searchForThis': {},#json.dumps(populateSearchDropDown()),
-		#'updateForm' : UpdateForm(),
-		'updateTextForm': UpdateTextForm(),
-		'updateSelectForm': UpdateSelectForm(class_name='Plant'),
-		'updateMulitForm': UpdateMultiForm(),
-	}
-	return render(request, 'frontend/editplant.html', context)
-
-def addPlant(request, searchString=None):
-	if request.method == 'POST':
-		addPlantForm = AddPlantForm(request.POST)
-
-		if 'add' in request.POST and addPlantForm.is_valid():
-			nameArray = str(request.POST["latinName"]).split()
-			commonName = request.POST["commonName"]
-
-			# IF EITHER OF THE ABOVE ARE "NONE" RETURN ERRORS!!!!!!!
-
-			genus = None
-			species = None
-			variety = None
-
-			if len(nameArray) > 0:
-				genus = nameArray[0]
-			if len(nameArray) > 1:
-				species = nameArray[1]
-			if len(nameArray) > 2:
-				variety = nameArray[2]
-
-			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, transaction_type='INSERT', ignore=False)
-			transaction.save()
-			#print(transaction.id)
-			actions = []
-			if genus:
-				actions.append(Actions(transactions=transaction , action_type="INSERT", property='genus', value=genus))
-			if species: 
-				actions.append(Actions(transactions=transaction , action_type="INSERT", property='species', value=species))
-			if variety:
-				actions.append(Actions(transactions=transaction , action_type="INSERT", property='variety', value=variety))
-			if commonName:
-				actions.append(Actions(transactions=transaction , action_type="INSERT", property='common_name', value=commonName))
-			Actions.objects.bulk_create(actions)
-
-			#add plant id to url below
-			return HttpResponseRedirect('/home/edit/8667' )#+ transaction.id)
-
-
-	else:
-		add_plant_form = AddPlantForm()
-		plant_list = Plant.objects.filter(id__gte=5000, id__lte=5005).order_by('id')[:5]
-		if searchString != None:
-			plant_list = Plant.objects.filter(Q()).order_by('id')
-		context = {
-			'addPlantForm': add_plant_form,
-			'plant_list': plant_list,
-			'searchForThis': [],#json.dumps(populateSearchDropDown()),
-		}
-		return render(request, 'frontend/cardview.html', context)
