@@ -11,6 +11,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import Q
+
+
 
 class Actions(models.Model):
     transactions = models.ForeignKey('Transactions', blank=True, null=True)
@@ -249,6 +252,15 @@ class ErosionControl(models.Model):
     def __str__(self):
         return self.value
 
+class Barrier(models.Model):
+    value = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'barrier'
+
+    def __str__(self):
+        return self.value
 
 class Family(models.Model):
     value = models.CharField(max_length=160, blank=True, null=True)
@@ -364,6 +376,15 @@ class FoodProd(models.Model):
     def __str__(self):
         return self.value
 
+class AnimalFood(models.Model):
+    value = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'animal_food'
+
+    def __str__(self):
+        return self.value
 
 class FruitColor(models.Model):
     value = models.TextField(blank=True, null=True)
@@ -476,7 +497,6 @@ class MineralNutrientsProd(models.Model):
     def __str__(self):
         return self.value
 
-
 class Plant(models.Model):
     #-----------------------------id-----------------------------
     # family = models.ForeignKey('Family', blank=True, null=True) # why foreign keys? why not columns?
@@ -498,7 +518,7 @@ class Plant(models.Model):
     def get_endemic_status(self):
         return ', '.join([str(a) for a in self.endemic_status.all()])
 
-    tags = models.CharField(max_length=160, blank=True, null=True)
+    tags = models.URLField(max_length=160, blank=True, null=True)# CharField
     # urltags = models.ForeignKey('UrlTags', blank=True, null=True)
 
     #--------------------------characteristic------------------------
@@ -507,21 +527,25 @@ class Plant(models.Model):
     @property
     def get_duration(self):
         return ', '.join([str(a) for a in self.duration.all()])
-    #height
-    height = models.ManyToManyField('PlantHeightAtMaturityByRegion')
-    @property
-    def get_height(self):
-        return self.height.all()
-        #return ', '.join([str(a) for a in self.height.all()])# ???????????????????????????
-    #spread
-    spread = models.ManyToManyField('PlantSpreadAtMaturityByRegion')
-    @property
-    def get_spread(self):
-        return self.spread.all()
-        #return ', '.join([str(a) for a in self.spread.all()])# ???????????????????????????
 
-    ph_min = models.DecimalField(db_column='pH_min', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase. #
-    ph_max = models.DecimalField(db_column='pH_max', max_digits=6, decimal_places=4, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='pH should be in range 0-14')])  # Field name made lowercase.
+    #height
+    # height = models.ManyToManyField('PlantHeightAtMaturityByRegion')
+    # @property
+    # def get_height(self):
+    #     return ', '.join([str(a) for a in self.height.all()])# ???????????????????????????
+    # #spread
+    # spread = models.ManyToManyField('PlantSpreadAtMaturityByRegion')
+    # @property
+    # def get_spread(self):
+    #     return ', '.join([str(a) for a in self.spread.all()])# ???????????????????????????
+
+    region = models.ManyToManyField('Region', through='PlantRegion')
+    def get_region(self):
+        return ', '.join([str(a) for a in self.region.all()])
+
+    pH_min = models.DecimalField(db_column='ph_min', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase. #
+    pH_max = models.DecimalField(db_column='ph_max', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase.
+    
     layer = models.ManyToManyField(Layer, through='PlantLayer')#, blank=True, null=True) #not sure testing
     @property
     def get_layer(self):
@@ -585,7 +609,7 @@ class Plant(models.Model):
 
     #-------------------------needs--------------------------------
     #FertilityNeeds
-    fertility_needs = models.ManyToManyField(NutrientRequirements, through='PlantNutrientRequirementsByRegion', verbose_name='nutrient requirements')
+    fertility_needs = models.ManyToManyField(NutrientRequirements, through='PlantNutrientRequirementsByRegion', verbose_name='Nutrient Requirements')
     @property
     def get_fertility_needs(self):
         return ',' .join([str(a) for a in self.fertility_needs.all()])
@@ -611,6 +635,11 @@ class Plant(models.Model):
     @property
     def get_food_prod(self):
         return ', '.join([str(a) for a in self.food_prod.all()])
+    #AnimalFood
+    animal_food = models.ManyToManyField('AnimalFood', through='PlantAnimalFood')
+    @property
+    def get_animal_food(self):
+        return ','.join([str(a) for a in self.animal_food.all()])
     #RawMaterialsProd
     raw_materials_prod = models.ManyToManyField('RawMaterialsProd', through='PlantRawMaterialsProd')
     @property
@@ -633,12 +662,16 @@ class Plant(models.Model):
         return ', '.join([str(a) for a in self.cultural_and_amenity_prod.all()])
     #MineralNutrientsProd
     mineral_nutrients_prod = models.ManyToManyField(MineralNutrientsProd, through='PlantMineralNutrientsProd')
-    
     @property
     def get_mineral_nutrients_prod(self):
         return ', '.join([str(a) for a in self.mineral_nutrients_prod.all()])
 
     #------------------------behavior---------------------------
+    #barrier
+    barrier = models.ManyToManyField(Barrier, through='PlantBarrier')#ByRegion
+    @property
+    def get_barrier(self):
+        return ','.join([str(a) for a in self.barrier.all()])
     #erosion_control
     erosion_control = models.ManyToManyField(ErosionControl, through='PlantErosionControlByRegion')
     @property
@@ -722,7 +755,6 @@ class Plant(models.Model):
 
 
         return fields
-
 
 class PlantActiveGrowthPeriodByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
@@ -814,6 +846,15 @@ class PlantErosionControlByRegion(models.Model):
         db_table = 'plants_erosion_control_by_region'
         unique_together = (('plants', 'regions'),)
 
+class PlantBarrier(models.Model):# BarrierByRegion
+    plants = models.ForeignKey(Plant, blank=True, null=True)
+    regions = models.ForeignKey('Region', blank=True, null=True)
+    barrier = models.ForeignKey(Barrier, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'plants_barrier' # TODO
+        unique_together = (('plants', 'regions'),)
 
 class PlantNutrientRequirementsByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
@@ -821,7 +862,7 @@ class PlantNutrientRequirementsByRegion(models.Model):
     fertility_needs = models.ForeignKey(NutrientRequirements, blank=True, null=True, verbose_name='Nutrient Requirements') #####
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'plants_fertility_needs_by_region'
         unique_together = (('plants', 'regions'),)
 
@@ -852,6 +893,13 @@ class PlantFoodProd(models.Model):
         managed = False
         db_table = 'plants_food_prod'
 
+class PlantAnimalFood(models.Model):
+    plants = models.ForeignKey(Plant, blank=True, null=True)
+    animal_food = models.ForeignKey(AnimalFood, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'plants_animal_food'
 
 class PlantFruitColor(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
@@ -872,18 +920,18 @@ class PlantHarvestPeriodByRegion(models.Model):
         db_table = 'plants_harvest_period_by_region'
 
 
-class PlantHeightAtMaturityByRegion(models.Model):
-    plants = models.ForeignKey(Plant, blank=True, null=True)
-    regions = models.ForeignKey('Region', blank=True, null=True)
-    height = models.DecimalField(max_digits=8, decimal_places=5, blank=True, null=True)
+# class PlantHeightAtMaturityByRegion(models.Model):
+#     plants = models.ForeignKey(Plant, blank=True, null=True)
+#     regions = models.ForeignKey('Region', blank=True, null=True)
+#     height = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = 'plants_height_at_maturity_by_region'
-        unique_together = (('plants', 'regions'),)
+#     class Meta:
+#         managed = False
+#         db_table = 'plants_height_at_maturity_by_region'
+#         unique_together = (('plants', 'regions'),)
 
-    # def __str__(self):
-    #     return str(self.height)
+#     def __str__(self):
+#         return str(self.height)
 
 
 class PlantInsectAttractorByRegion(models.Model):
@@ -979,19 +1027,32 @@ class PlantSoilDrainageTolByRegion(models.Model):
         db_table = 'plants_soil_drainage_tol_by_region'
 
 
-class PlantSpreadAtMaturityByRegion(models.Model):
-    plants = models.ForeignKey(Plant, blank=True, null=True)
-    regions = models.ForeignKey('Region', blank=True, null=True)
-    spread = models.IntegerField(blank=True, null=True)
+# class PlantSpreadAtMaturityByRegion(models.Model):
+#     plants = models.ForeignKey(Plant, blank=True, null=True)
+#     regions = models.ForeignKey('Region', blank=True, null=True)
+#     spread = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = 'plants_spread_at_maturity_by_region'
-        unique_together = (('plants', 'regions'),)
+#     class Meta:
+#         managed = False
+#         db_table = 'plants_spread_at_maturity_by_region'
+#         unique_together = (('plants', 'regions'),)
 
-    def __str__(self):
-        return str(self.spread)
+#     def __str__(self):
+#         return str(self.spread)
 
+
+# class PlantRootDepthAtMaturityByRegion(models.Model):
+#     plants = models.ForeignKey(Plant, blank=True, null=True)
+#     regions = models.ForeignKey('Region', blank=True, null=True)
+#     root_depth = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+
+#     class Meta:
+#         managed = True
+#         db_table = 'plants_root_depth_at_maturity_by_region'
+#         unique_together = (('plants', 'regions'),)
+
+#     def __str__(self):
+#         return str(self.spread)
 
 class PlantSunNeedsByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
@@ -1048,6 +1109,8 @@ class SaltTol(models.Model):
     def __str__(self):
         return self.value
 
+
+
 class Serotiny(models.Model):
     value = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -1066,6 +1129,17 @@ class DegreeOfSerotiny(models.Model):
     class Meta:
         managed = True
         db_table = 'degree_of_serotiny'
+
+    def __str__(self):
+        return self.value
+
+class ImageURL(models.Model):
+    plants = models.ForeignKey('Plant', blank=True, null=True)
+    value = models.URLField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'image_urls'
 
     def __str__(self):
         return self.value
@@ -1127,8 +1201,9 @@ class ToxinRemoval(models.Model):
 
 
 class Transactions(models.Model):
-    timestamp = models.DateTimeField()
-    users = models.ForeignKey('Users')
+    timestamp = models.DateTimeField(auto_now=True)
+    #timestamp_add = models.DateTimeField(auto_now_add=True)
+    users = models.ForeignKey('AuthUser')#Users
     transaction_type = models.TextField(blank=True, null=True)
     plants_id = models.IntegerField(blank=True, null=True)
     ignore = models.BooleanField()
@@ -1141,9 +1216,10 @@ class Transactions(models.Model):
         return str(self.plants_id)
 
 
+
 class UrlTags(models.Model):
     value = models.TextField(blank=True, null=True)
-    plants = models.ForeignKey('Plant', related_name='Plants_plant_url_tags_related', blank=True, null=True)
+    plants = models.ForeignKey('Plant', blank=True, null=True)# related_name='Plants_plant_url_tags_related',
 
     class Meta:
         managed = False
@@ -1190,3 +1266,15 @@ class WindTol(models.Model):
 
     def __str__(self):
         return self.value
+
+class PlantRegion(models.Model):
+    plants = models.ForeignKey('Plant', blank=True, null=True)
+    regions = models.ForeignKey('Region', blank=True, null=True)
+    height = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    spread = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    root_depth = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'plants_region'
+        unique_together = (('plants', 'regions'),)

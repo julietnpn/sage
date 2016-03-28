@@ -3,23 +3,45 @@ var EditPlant = function(){
 	var pub = {},
         jqueryMap = {},
         setJqueryMap,
-        common_name,
-        species,
-        genus, 
-        variety;
+        transactionId,
+        isNew;
+        // common_name,
+        // species,
+        // genus, 
+        // variety;
 	//----------------- END MODULE SCOPE VARIABLES ------------
 
 	//----------------- BEGIN PUBLIC METHODS --------------------
-    pub.init = function(pCommonName, pGenus, pSpecies, pVariety){
+    pub.init = function(pCommonName, pGenus, pSpecies, pVariety, transactionId){
     	setJqueryMap();
+        transactionId = transactionId;
+        isNew = transactionId != 0;
         common_name = pCommonName;
         genus = pGenus;
         species =pSpecies;
         variety = pVariety;
 
         //resetNameChangeFlags();
+        jqueryMap.$plantNames.click(function(){
+            $("#hidden-plantId").val(getPlantId());
+            $("#transaction-id").val(transactionId);
+            $("#input-genus").val($("#genus").text().trim());
+            $("#input-species").val($("#species").text().trim());
+            $("#input-variety").val($("#variety").text().trim());
+            $("#input-commonName").val($("#commonName").text().trim());
+            $("#input-family").val($("#family").text().trim());
+            $("#input-familyCommonName").val($("#familyCommonName").text().trim());
+            var val = $("#endemicStatus").text().trim();
+            if(val != ""){
+                $("#id_endemicStatus").find('option:contains("'+ val+ '")').attr("selected",true);
+                $("#endemicStatus-text").val(val);
+            }
 
-        jqueryMap.$attribute.click(function(){
+            jqueryMap.$updateNamesMdl.modal();
+        });
+
+        //jqueryMap.$attribute.on('click', function(){
+        $(document).on('click', '.edit-attribute', function(){
             clearForms();
             var attribute_className = $(this).attr('data-className');
             var attribute_prop = $(this).attr('id');
@@ -29,6 +51,8 @@ var EditPlant = function(){
 
             if(attribute_fieldType == 'other'){
                 document.getElementById("mdl-label-text").innerHTML = attribute_displayName;
+                $("#mdl-label-text").attr("data-block", $(this).attr("data-block"));
+                $("#mdl-label-text").attr("data-isNewAttribute", $(this).attr("data-isNewAttribute"));
                 $("#new-attribute-text").attr("placeholder", $(this).next().text());
 
                 $("#hidden-className-t").val(attribute_className);
@@ -42,6 +66,7 @@ var EditPlant = function(){
                 load_values(true, attribute_className, defaultVal);
                 document.getElementById("mdl-label-multi").innerHTML = attribute_displayName
 
+                $("#mdl-label-multi").attr("data-block", $(this).attr("data-block"));
                 $("#hidden-className-m").val(attribute_className);
                 $("#hidden-propName-m").val(attribute_prop);
                 $("#hidden-plantId-m").val(getPlantId());
@@ -50,7 +75,7 @@ var EditPlant = function(){
             }
             else {
                 document.getElementById("mdl-label-select").innerHTML = attribute_displayName
-
+                $("#mdl-label-select").attr("data-block", $(this).attr("data-block"));
                 load_values(false, attribute_className, defaultVal);
                 $("#hidden-className-s").val(attribute_className);
                 $("#hidden-propName-s").val(attribute_prop);
@@ -83,20 +108,6 @@ var EditPlant = function(){
             }
         }, '.cardimg');
 
-        jqueryMap.$name.click(function(){
-            $("#hidden-plantId").val(getPlantId());
-            $("#input-genus").val($("#genus").text().trim());
-            $("#input-species").val($("#species").text().trim());
-            $("#input-variety").val($("#variety").text().trim());
-            $("#input-commonName").val($("#commonName").text().trim());
-            $("#input-family").val($("#family").text().trim());
-            $("#input-familyCommonName").val($("#familyCommonName").text().trim());
-            var val = $("#endemicStatus").text().trim();
-            $('#id_endemicStatus option:selected').removeAttr('selected');
-            $("#id_endemicStatus").find('option:contains("'+ val+ '")').attr("selected",true);
-
-            jqueryMap.$updateNamesMdl.modal();
-        });
 
         $("#input-genus").on('keydown', function(){
              $("#genus-flag").val(1);
@@ -105,7 +116,8 @@ var EditPlant = function(){
              $("#species-flag").val(1);
         });
         $("#input-variety").on('keydown', function(){
-             $("#variety-flag").val(1);
+             //$("#variety-flag").val(1);
+             setFlag($("#variety-flag"));
         });
         $("#input-commonName").on('keydown', function(){
              $("#commonName-flag").val(1);
@@ -116,103 +128,156 @@ var EditPlant = function(){
         $("#input-familyCommonName").on('keydown', function(){
              $("#familyCommonName-flag").val(1);
         });
-        $("#id_endemicStatus").on('keydown', function(){
-             $("#endemicStatus-flag").val(1);
+        $("#id_endemicStatus").on('change', function(){
+            $("#endemicStatus-text").val( $("#id_endemicStatus option:selected").text());
+            $("#endemicStatus-flag").val(1);
         }); 
 
         $("#updateTextMdl form").submit(function(e){
             var value = $("#new-attribute-text").val();
-            $.post('/frontend/updateText/', $(this).serialize(), function(data){
+            var isNewAttribute = $("#new-attribute-text").attr("data-isNewAttribute");
+            var url = '/frontend/updateText/' + transactionId + "/";
+            url += isNewAttribute = "1" ? "INSERT/" : "UPDATE/";
+
+            $.post(url, $(this).serialize(), function(data){
                 var label = $("#mdl-label-text").text();
                 var className = $("#hidden-className-t").val();
                 var propertyName = $("#hidden-propName-t").val();
                 
                 $("#updateTextMdl").modal('hide');
-                var newRow = '<div class="row">' +
-                    '<div class="col-xs-4 italic edit-attribute" id="'+propertyName+'" data-fieldType="other" data-className="'+className+'">'+label+'</div>' +
-                    '<div class="col-xs-8 bold">'+value+'</div></div>';
 
-                //GET CATEGORY SOMEHOW
+                var $newRow = $("<div>")
+                $newRow.addClass("row");
+                var $attributeName = $('<div>');
+                $attributeName
+                    .addClass("col-xs-4 italic edit-attribute")
+                    .attr("id", propertyName)
+                    .attr("data-fieldType", "other")
+                    .attr("data-className", className)
+                    .attr("data-block",$("#mdl-label-text").attr("data-block"))
+                    .html(label)
+                    .appendTo($newRow);
+                var $attributeVal = $('<div>');
+                $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                $('#characteristics-block').find('#' + propertyName).next().remove();
-                $('#characteristics-block').find('#' + propertyName).remove();
-                $("#characteristics-block").append(newRow);
+                var block = "#" + $("#mdl-label-text").attr("data-block");
+
+                $(block).find('#' + propertyName).next().remove();
+                $(block).find('#' + propertyName).remove();
+
+                $newRow.appendTo($(block));
                 $('.undefined-attributes').find('#' + propertyName).remove();
+
+                transactionId = data;
             });
             e.preventDefault();
         });
 
-        $("#updateTextMdl form").submit(function(e){
-            var value = $("#new-attribute-text").val();
-            $.post('/frontend/updateText/', $(this).serialize(), function(data){
-                var label = $("#mdl-label-text").text();
-                var className = $("#hidden-className-t").val();
-                var propertyName = $("#hidden-propName-t").val();
+        $("#updateSelectMdl form").submit(function(e){
+            var url = '/frontend/updateSelect/' + transactionId + "/";
+            url += isNew ? "INSERT/" : "UPDATE/";
+
+            $.post(url, $(this).serialize(), function(data){
+                var label = $("#mdl-label-select").text();
+                var className = $("#hidden-className-s").val();
+                var propertyName = $("#hidden-propName-s").val();
+                var value = $('#id_select').select2('data')[0].text;
                 
-                $("#updateTextMdl").modal('hide');
-                var newRow = '<div class="row">' +
-                    '<div class="col-xs-4 italic edit-attribute" id="'+propertyName+'" data-fieldType="other" data-className="'+className+'">'+label+'</div>' +
-                    '<div class="col-xs-8 bold">'+value+'</div></div>';
+                $("#updateSelectMdl").modal('hide');
+                var $newRow = $("<div>")
+                $newRow.addClass("row");
+                var $attributeName = $('<div>');
+                $attributeName
+                    .addClass("col-xs-4 italic edit-attribute")
+                    .attr("id", propertyName)
+                    .attr("data-fieldType", "one_to_many")
+                    .attr("data-className", className)
+                    .attr("data-block",$("#mdl-label-select").attr("data-block"))
+                    .html(label)
+                    .appendTo($newRow);
+                var $attributeVal = $('<div>');
+                $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                //GET CATEGORY SOMEHOW
+                var block = "#" + $("#mdl-label-select").attr("data-block");
 
-                $('#characteristics-block').find('#' + propertyName).next().remove();
-                $('#characteristics-block').find('#' + propertyName).remove();
-                $("#characteristics-block").append(newRow);
+                $(block).find('#' + propertyName).next().remove();
+                $(block).find('#' + propertyName).remove();
+                $newRow.appendTo($(block));
                 $('.undefined-attributes').find('#' + propertyName).remove();
+
+                transactionId = data;
             });
             e.preventDefault();
         });
 
-        $("#updateTextMdl form").submit(function(e){
-            var value = $("#new-attribute-text").val();
-            $.post('/frontend/updateText/', $(this).serialize(), function(data){
-                var label = $("#mdl-label-text").text();
-                var className = $("#hidden-className-t").val();
-                var propertyName = $("#hidden-propName-t").val();
+
+        $("#updateMultiMdl form").submit(function(e){
+
+            var url = '/frontend/updateMulti/' + transactionId + "/";
+            url += isNew ? "INSERT/" : "UPDATE/";
+
+            $.post(url, $(this).serialize(), function(data){
+                var label = $("#mdl-label-multi").text();
+                var className = $("#hidden-className-m").val();
+                var propertyName = $("#hidden-propName-m").val();
+                var selections = $('#id_multi').select2('data');
+                var value = selections[0].text;
+                for(var i = 1; i < selections.length; i++){
+                    value += ", " + selections[i].text;
+                }
                 
-                $("#updateTextMdl").modal('hide');
-                var newRow = '<div class="row">' +
-                    '<div class="col-xs-4 italic edit-attribute" id="'+propertyName+'" data-fieldType="other" data-className="'+className+'">'+label+'</div>' +
-                    '<div class="col-xs-8 bold">'+value+'</div></div>';
+                $("#updateMultiMdl").modal('hide');
+                var $newRow = $("<div>")
+                $newRow.addClass("row");
+                var $attributeName = $('<div>');
+                $attributeName
+                    .addClass("col-xs-4 italic edit-attribute")
+                    .attr("id", propertyName)
+                    .attr("data-fieldType", "many_to_many")
+                    .attr("data-className", className)
+                    .attr("data-block",$("#mdl-label-select").attr("data-block"))
+                    .html(label)
+                    .appendTo($newRow);
+                var $attributeVal = $('<div>');
+                $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                //GET CATEGORY SOMEHOW
+                var block = "#" + $("#mdl-label-multi").attr("data-block");
 
-                $('#characteristics-block').find('#' + propertyName).next().remove();
-                $('#characteristics-block').find('#' + propertyName).remove();
-                $("#characteristics-block").append(newRow);
+                $(block).find('#' + propertyName).next().remove();
+                $(block).find('#' + propertyName).remove();
+                $newRow.appendTo($(block));
                 $('.undefined-attributes').find('#' + propertyName).remove();
+
+                transactionId = data;
             });
             e.preventDefault();
         });
 
-        $("#updateTextMdl form").submit(function(e){
-            var value = $("#new-attribute-text").val();
-            $.post('/frontend/updateText/', $(this).serialize(), function(data){
-                var label = $("#mdl-label-text").text();
-                var className = $("#hidden-className-t").val();
-                var propertyName = $("#hidden-propName-t").val();
-                
-                $("#updateTextMdl").modal('hide');
-                var newRow = '<div class="row">' +
-                    '<div class="col-xs-4 italic edit-attribute" id="'+propertyName+'" data-fieldType="other" data-className="'+className+'">'+label+'</div>' +
-                    '<div class="col-xs-8 bold">'+value+'</div></div>';
+        jqueryMap.$chooseImg.on("click", function(){
+            url = jqueryMap.$addImgModal.find(".selected").attr("src");
 
-                //GET CATEGORY SOMEHOW
+            $("#hidden-plantId-img").val(getPlantId());
+            $("#hidden-url-img").val(url);
 
-                $('#characteristics-block').find('#' + propertyName).next().remove();
-                $('#characteristics-block').find('#' + propertyName).remove();
-                $("#characteristics-block").append(newRow);
-                $('.undefined-attributes').find('#' + propertyName).remove();
+
+            $.post('/frontend/addImg/', $("#addImg form").serialize(), function(data){
+                $("<img />").attr("src", url).addClass('cardimg').appendTo($("#populated-images"));
+                jqueryMap.$addImgModal.modal('hide');
+            })
+            .fail(function(){
+                alert("Error - Could not add image.");
             });
-            e.preventDefault();
         });
+
     }
     return pub;
 
     //----------------- END PUBLIC METHODS --------------------
 
     //----------------- BEGIN DOM METHODS -----------------------
+    function setFlag($flag){
+        $flag.val(1);
+    }
 
     function resetNameChangeFlags(){
             $("#genus-flag").val(0);
@@ -230,27 +295,62 @@ var EditPlant = function(){
             $addNewImg : $('#add-new-img'),
             $addImgModal : $('#addImg'),
             $imgMdlContent : $("#img-mdl-content"),
-            $name : $(".name"),
-            $updateNamesMdl : $("#updateNamesMdl")
+            $plantNames : $(".name"),
+            $updateNamesMdl : $("#updateNamesMdl"),
+            $chooseImg : $("#choose-img")
         };
     }
 
     function searchFlickrPictures(){
-        var searchString;
-        if(typeof common_name === "undefined")
+        var pageNumber = 1;
+        var searchString = "";
+        var searchStringDisplay = "";
+
+        if(common_name != "None"){
             searchString = escapeString(common_name);
-        else
-            searchString = escapeString(genus) + "%2C" + escapeString(species);
+            searchStringDisplay = common_name;
+        }
+        if(genus != "None"){
+            searchString += searchString.length > 0 ? "," + escapeString(genus) : escapeString(genus);
+            searchStringDisplay += searchStringDisplay.length > 0 ? " " + genus : genus;
+        }
+        if(species != "None"){
+            searchString += searchString.length > 0 ? "," + escapeString(species) : escapeString(species);
+            searchStringDisplay += searchStringDisplay.length > 0 ? " " + species : species;
+        }
+
+        $("#addImg-tag").attr('placeholder', searchStringDisplay);
+        $(".back").hide();
+        loadNewImages(searchString, pageNumber);
+        jqueryMap.$addImgModal.modal();
+
+        jqueryMap.$addImgModal.on("click", ".forward", function(){
+            loadNewImages(searchString, ++pageNumber);
+            $(".back").show();
+        });
+
+        jqueryMap.$addImgModal.on("click", ".back", function(){
+            if(pageNumber == 1){
+                return;
+            }
+            else{
+                loadNewImages(searchString, --pageNumber);
+                if(pageNumber == 1)
+                    $(".back").hide();
+            }
+        });
+    }
+
+    function loadNewImages(searchString, pageNumber){
         var url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=0dde4e72b0091627e13df41e631b85ec&tags="
-                    +searchString+"&safe_search=1&per_page=3";
+                    +searchString+"&safe_search=1&per_page=3&page=" + pageNumber+ "&format=json&nojsoncallback=1";
         var src;
-        $.getJSON(url + "&format=json&nojsoncallback=1", function(data){
+        $.getJSON(url, function(data){
             jqueryMap.$imgMdlContent.html("");
             $.each(data.photos.photo, function(i,item){
                 src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_m.jpg";
                 $("<img />").attr("src", src).addClass('cardimg').appendTo(jqueryMap.$imgMdlContent);
             });
-            jqueryMap.$addImgModal.modal();
         });
     }
 
@@ -276,9 +376,9 @@ var EditPlant = function(){
                 for(var i = 0; i < result.dropdownvals.length; i++){
                     var dictionary = result.dropdownvals[i]
                     if(result.defaultIds.indexOf(dictionary.id) > -1)
-                        $select.append("<option selected value='" + dictionary.id + "''>"+dictionary.text+"</option>")
+                        $select.append("<option selected value='" + dictionary.id + "'>"+dictionary.text+"</option>")
                     else
-                        $select.append("<option value='" + dictionary.id + "''>"+dictionary.text+"</option>")
+                        $select.append("<option value='" + dictionary.id + "'>"+dictionary.text+"</option>")
                 }
                 $select.select2();
             },

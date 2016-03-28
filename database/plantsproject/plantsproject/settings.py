@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-# import django.contrib.auth
-# django.contrib.auth.LOGIN_URL = '/'
+#import django.contrib.auth
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -45,9 +45,9 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'plantsproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django-plants',
+        'NAME': 'plants2',
         'USER': 'postgres',
         'PASSWORD': 'plants',
         'HOST': 'localhost',
@@ -109,3 +109,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+#django.contrib.auth.LOGIN_URL = '/frontend/login'
+#django.contrib.auth.LOGIN_REDIRECT_URL = '/frontend/home'
+LOGIN_REDIRECT_URL = '/frontend/'
+LOGIN_URL="/frontend/"

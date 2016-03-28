@@ -23,11 +23,11 @@ from login.views import *
 
 urlpatterns = patterns('',
 	url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'django.contrib.auth.views.login'),
-    url(r'^logout/$', logout_page),
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login'), # If user is not login it will redirect to login page
     url(r'^register/$', register),
     url(r'^register/success/$', register_success),
-    url(r'^home/$', home),
+    #url(r'^home/$', home),
+    #url(r'^home/', include('frontend.urls')),
+    url(r'^home/login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^home/logout/$', 'django.contrib.auth.views.logout', {'next_page':'frontend'}, name='logout'),
     url(r'^frontend/', include('frontend.urls')),
 )

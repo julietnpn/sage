@@ -25,10 +25,8 @@ var AddPlant = function(){
         jqueryMap.$clearAddPlant.click(function(){
             jqueryMap.$latinName.val("");
             jqueryMap.$commonName.val("");
-            // hideElements(jqueryMap.$thumbnails.children());
             hideElements(jqueryMap.$clearAddPlant);
             hideElements(jqueryMap.$addThis.children());
-            // resetBorderColor(jqueryMap.$thumbnails.children(".thumbnail-img"));
         });
     }
 

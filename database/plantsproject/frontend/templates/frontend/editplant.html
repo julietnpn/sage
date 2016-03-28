@@ -19,7 +19,18 @@
 
 {% block maincontent %}
 
-{% if result %}	
+{% if newPlant %}
+<div id="hiddenTransactionId" style="visibility:hidden;">{{ transactionId }}</div>
+<div class="row editplantrow">
+	<div class="col-sm-1"></div>
+	<div class="col-sm-8">You are adding a plant to the database. Continue to add any new attributes before pressing "Save" for your changes to be saved. Please allow 24 hours for your change to be reflected.</div>
+	<div class="col-sm-3"> <a href="#">cancel</a><a href="#">save</a></div>
+</div>
+
+{% endif %}
+
+{% if result %}
+	<div id="hiddenTransactionId" style="visibility:hidden;">{{ transactionId }}</div> <!--do we really need these - should be object vars -->
 	<div id="hiddenPlantId" style="visibility:hidden;">{{plantId}}</div>
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
@@ -65,18 +76,23 @@
 			{% endspaceless %}
 			<br>
 			{% if endemic_status %}
+				{% if endemic_status != 0 %}
 				<div>Endemic Status: <p id="endemicStatus">{{ endemic_status }}</p></div>
+				{% endif %}
 			{% endif %}
 		</div>
 	</div>
 
+
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div id="plant-images" class="col-sm-11">
+			<div id="populated-images">
+			{% for img in images %}
+			<img src="{{ img.value }}" class='cardimg' alt="Plant Image" />
+			{% endfor %}
+		</div>
 			<!--<a href="#"></a>-->
-			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
-			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
-			<img src="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg" class='cardimg' alt="Plant Image" />
 			<div id ="add-new-img" src="" class="cardimg"/><div id="add-new-img2"><div>+ add new</div></div></div>
 		</div>
 	</div>
@@ -85,9 +101,10 @@
 		<div class="col-sm-5" id="characteristics-block">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" id="characteristics" aria-hidden="true"></span>Characteristics</div>
 			{% for f in result.Characteristics %}
+			 
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div>
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="1">{{ f.label }}</div>
 					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -152,14 +169,20 @@
 		<div class="col-md-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-md-2">
 			<div class="add-attribute-container"><div class="add-attribute-center">+ add new characteristic</div>
-			<div class="undefined-attributes">
+			<div class="undefined-attributes" data-block="characteristics-block"> <!--Do we need this data-blocl -->
 				{% for f in result.Characteristics %}
 				{% if "ph" in f.label %}
 				found ph
 				{% endif %}
 				{% if not f.value %}
 				<div class="row">
-					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+					<div class="col-xs-10 italic edit-attribute" 
+						id="{{f.name}}" 
+						data-fieldType="{{f.field_type}}" 
+						data-className="{{ f.class_name }}"
+						data-block="characteristics-block"
+						data-isNewAttribute="1">{{ f.label }}
+					</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
 				{% endif %}
@@ -173,10 +196,14 @@
 				{% for f in result.Needs %}
 				{% if not f.value %}
 				<div class="row">
-					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+					<div class="col-xs-10 italic edit-attribute" 
+					id="{{f.name}}" 
+					data-fieldType="{{f.field_type}}" 
+					data-className="{{ f.class_name }}"
+					data-block="needs-block">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
-				{% endif %}
+				{% endif %} 
 				{% endfor %}
 			</div>
 			</div>
@@ -187,7 +214,7 @@
 				{% for f in result.Tolerances %}
 				{% if not f.value %}
 				<div class="row">
-					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-block="tolerances-block">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
 				{% endif %}
@@ -201,7 +228,7 @@
 				{% for f in result.Behaviors %}
 				{% if not f.value %}
 				<div class="row">
-					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-block="behaviors-block">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
 				{% endif %}
@@ -215,7 +242,7 @@
 				{% for f in result.Products %}
 				{% if not f.value %}
 				<div class="row">
-					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-block="products-block">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
 				{% endif %}
@@ -235,17 +262,22 @@
 {% endblock %}
 
 {% block script %}
+
 {% load staticfiles %}
 <script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
+
+
 <script type="text/javascript">
 	var common_name, genus, species, variety;
-	common_name = "{{ plant.common_name }}";
-	genus = "{{ plant.genus }}";
-	species = "{{ plant.species }}";
-	variety = "{{ plant.variety }}";
-
-	//alert("Initializing plant in editplant.html " + common_name + " " + genus + " " + species + " " + variety);
-	EditPlant.init(common_name, genus, species, variety);
+	common_name = "{{ common_name }}";
+	genus = "{{ genus }}";
+	species = "{{ species }}";
+	variety = "{{ variety }}";
+	EditPlant.init(common_name, genus, species, variety, {{ transactionId }}); //pass transactionId as 0?
 </script>
+
+
+
+
 
 {% endblock %}

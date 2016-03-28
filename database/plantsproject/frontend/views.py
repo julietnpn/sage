@@ -14,7 +14,7 @@ import json
 import pdb
 
 Characteristics = [
-	'duration', 'height', 'spread', 'ph_min', 'ph_max', 'layer', 'canopy_density', 'active_growth_period', 'harvest_period', 'leaf_retention', 'flower_color',
+	'duration', 'region' 'ph_min', 'ph_max', 'layer', 'canopy_density', 'active_growth_period', 'harvest_period', 'leaf_retention', 'flower_color',
 	'foliage_color', 'fruit_color', 'degree_of_serotiny', 
 ]
 Needs = [
@@ -115,50 +115,75 @@ def reload_attribute_vals_view(request, className=None, default=None):
 			response_data['dropdownvals'].append(p)
 		return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+def addImg(request):
+	if request.method == 'POST':
+		plant = Plant.objects.get(id=request.POST['plant_id'])
+		relation = ImageURL(plants=plant, value=request.POST['image_url'])
+		relation.save()
+
+		#transaction/action instead??
+
+		response_data = "post"
+	else:
+		response_data = "get"
+
+	return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+#def updateNames(request, transaction_id, action_type):
 def updateNames(request):
 	if request.method == 'POST': 
 		form = UpdatePlantNamesForm(request.POST)
-		plantId = request.POST['plant_id']
-		#pdb.set_trace();
-		transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-		transaction.save()
+		plantId = int(request.POST['plant_id'])
+
+		transaction_id = int(request.POST['transaction_id'])
+		action_type = "UPDATE"
+
+		if transaction_id == 0:
+			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type=action_type, ignore=False)
+			transaction.save()
+		else:
+			transaction = Transactions.objects.get(id=transaction_id)
+
 		actions = []
 		
-		if int(request.POST['genus_flag']) == 1:
-			print("changing genus")
-			genus = request.POST['genus']
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='genus', value=genus))
-		if int(request.POST['species_flag']) == 1:
-			print("changing species")
-			species = request.POST['species']
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='species', value=species))
-		if int(request.POST['variety_flag']) == 1:
-			print("changing variety")
-			variety = request.POST['variety']
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='variety', value=variety))
-		if int(request.POST['commonName_flag']) == 1:
-			print("changing cn")
-			common_name = request.POST['commonName']
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='common_name', value=common_name))
-		if int(request.POST['family_flag']) == 1:
-			print("changing family")
-			family = request.POST['family']
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='family_name', value=family))
-		if int(request.POST['familyCommonName_flag']) == 1:
-			print("changing fcn")
-			family_common_name = request.POST['familyCommonName']
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='family_common_name', value=family_common_name))
-		if int(request.POST['endemicStatus_flag']) == 1:
-			print("changing endemicStatus")
-			endemic_status = request.POST['endemicStatus']
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property='endemic_status', value=endemic_status))
+		genus = request.POST['genus']
+		species = request.POST['species']
+		variety = request.POST['variety']
+		common_name = request.POST['commonName']
+		family = request.POST['family']
+		family_common_name = request.POST['familyCommonName']
+		endemic_status_text = request.POST['endemicStatus_text']
+		if endemic_status_text == '0' or '---' in endemic_status_text:
+			endemic_status_text = None
 
+		if int(request.POST['genus_flag']) == 1:
+			actions.append(Actions(transactions=transaction , action_type=action_type, property='genus', value=genus))
+		if int(request.POST['species_flag']) == 1:
+			actions.append(Actions(transactions=transaction , action_type=action_type, property='species', value=species))
+		if int(request.POST['variety_flag']) == 1:
+			actions.append(Actions(transactions=transaction , action_type=action_type, property='variety', value=variety))
+		if int(request.POST['commonName_flag']) == 1:
+			actions.append(Actions(transactions=transaction , action_type=action_type, property='common_name', value=common_name))
+		if int(request.POST['family_flag']) == 1:
+			actions.append(Actions(transactions=transaction , action_type=action_type, property='family_name', value=family))
+		if int(request.POST['familyCommonName_flag']) == 1:
+			actions.append(Actions(transactions=transaction , action_type=action_type, property='family_common_name', value=family_common_name))
+		if int(request.POST['endemicStatus_flag']) == 1:
+			endemic_status = request.POST['endemicStatus']
+			if endemic_status != '':
+				actions.append(Actions(transactions=transaction , action_type=action_type, property='endemic_status', value=endemic_status))
 		Actions.objects.bulk_create(actions)
 
-		plant = Plant.objects.get(id=plantId)
+		if plantId == 0:
+			plant = Plant.objects.create()
+		else:
+			plant = Plant.objects.get(id=plantId)
 		result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
 		for field in plant.get_all_fields:
 			if field['name'] in Characteristics:
+				if field['name'] is 'region':
+					print("found region")
+					print(field.height)
 				field.update({'class_name':PropertyToClassName[field['name']]})
 				result['Characteristics'].append(field)
 			elif field['name'] in Needs:
@@ -176,38 +201,10 @@ def updateNames(request):
 			else:
 				result['About'].append(field)
 
-		try:
-			genus
-		except NameError:
-			genus = plant.genus
-		try:
-			species
-		except NameError:
-			species = plant.species
-		try:
-			variety
-		except NameError:
-			variety = plant.variety
-		try:
-			common_name
-		except NameError:
-			common_name = plant.common_name
-		try:
-			family 
-		except NameError:
-			family = plant.family
-		try:
-			family_common_name
-		except NameError:
-			family_common_name = plant.family_common_name
-		try:
-			endemic_status
-		except NameError:
-			endemic_status = plant.get_endemic_status
 
-
-		context = {
-			'isNew': 0,
+		context = { #NEED TO RETURN TRANS ID!!!!!!
+			'transactionId':transaction.id,
+			#'isNew': 0,
 			'result': result,
 			'plantId': plantId, 
 			'genus' : genus,
@@ -216,7 +213,7 @@ def updateNames(request):
 			'common_name' : common_name,
 			'family' : family,
 			'family_common_name' : family_common_name,
-			'endemic_status' : endemic_status,
+			'endemic_status' : endemic_status_text,
 			'searchForThis': {},#json.dumps(populateSearchDropDown()),
 			'updateTextForm': UpdateTextForm(),
 			'updateSelectForm': UpdateSelectForm(class_name='Plant'),
@@ -225,7 +222,10 @@ def updateNames(request):
 		}
 		return render(request, 'frontend/editplant.html', context)
 
-def updateText(request):
+
+
+
+def updateText(request, transaction_id, action_type):
 	if request.method == 'POST':
 		form = UpdateTextForm(request.POST)
 
@@ -233,12 +233,16 @@ def updateText(request):
 			property = request.POST['property_name']
 			value = request.POST['text']
 			plantId = request.POST['plant_id']
-			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-			transaction.save()
+
+			if int(transaction_id) == 0:
+				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				transaction.save()
+			else:
+				transaction = Transactions.objects.get(id = transaction_id)
 			actions = []
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property=property, value=value))
+			actions.append(Actions(transactions=transaction , action_type=action_type, property=property, value=value))
 			Actions.objects.bulk_create(actions)
-			response_data = {"Success":"success"}
+			response_data = transaction.id
 		else:
 			response_data = {'dropdownvals':[request.POST['select']], 'defaultIds':['post select- invalid']}
 		return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -247,29 +251,31 @@ def updateText(request):
 		return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
-def updateSelect(request):
+def updateSelect(request, transaction_id, action_type):
 	if request.method == 'POST':
 		cls_name = request.POST['class_name']
 		form = UpdateSelectForm(request.POST, class_name=cls_name)
-		#pdb.set_trace()
 		
 		if form.is_valid():
 			property = request.POST['property_name']
 			value = request.POST['select']
 			plantId = request.POST['plant_id']
-			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-			transaction.save()
-			#print(transaction.id)
+
+			if int(transaction_id) == 0:
+				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				transaction.save()
+			else:
+				transaction = Transactions.objects.get(id = transaction_id)
 			actions = []
-			actions.append(Actions(transactions=transaction , action_type="UPDATE", property=property, value=value))
+			actions.append(Actions(transactions=transaction , action_type=action_type, property=property, value=value))
 			Actions.objects.bulk_create(actions)
-			response_data = {"Success":"success"}
+			response_data = transaction.id
 		else:
 			response_data = {'dropdownvals':[request.POST['select']], 'defaultIds':['post select- invalid']}
-		return JsonResponse(response_data)
+		return HttpResponse(json.dumps(response_data))
 
 
-def updateMulti(request):
+def updateMulti(request, transaction_id, action_type):
 	if request.method == 'POST':
 		form = UpdateMultiForm(request.POST)
 		
@@ -279,18 +285,22 @@ def updateMulti(request):
 			plantId = request.POST['plant_id']
 			oldVals = request.POST['old_vals']
 			oldVals = oldVals.split(",")
-			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-			transaction.save()
+
+			if int(transaction_id) == 0: 
+				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				transaction.save()
+			else:
+				transaction = Transactions.objects.get(id = transaction_id)
 			actions = []
 
 			for i in range(0, len(values)):
-				actions.append(Actions(transactions=transaction , action_type="INSERT", property=property, value=values[i]))
+				actions.append(Actions(transactions=transaction , action_type=action_type , property=property, value=values[i]))
 			Actions.objects.bulk_create(actions)
 
-			response_data = {"Success":"success"}
+			response_data = transaction.id
 		else:
 			response_data = {'dropdownvals':[], 'defaultIds':['post multi- invalid', ]}
-		return JsonResponse(response_data)
+		return HttpResponse(json.dumps(response_data))
 
 #Plant.imageurl_set
 
@@ -298,6 +308,10 @@ def editPlant(request, plantId=None):
 	plant = Plant.objects.get(id=plantId)
 	result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
 	for field in plant.get_all_fields:
+		# if field['name'] is 'barrier':
+		# 	continue
+		if field['name'] is 'region':
+			print(field)
 		if field['name'] in Characteristics:
 			field.update({'class_name':PropertyToClassName[field['name']]})
 			result['Characteristics'].append(field)
@@ -317,7 +331,8 @@ def editPlant(request, plantId=None):
 			result['About'].append(field)
 
 	context = {
-		'isNew': 1,
+		# 'isNew': 1,
+		'transactionId' : 0,
 		'result': result,
 		'plantId': plantId, 
 		'genus' : plant.genus,
@@ -327,6 +342,7 @@ def editPlant(request, plantId=None):
 		'family' : plant.family,
 		'family_common_name' : plant.family_common_name,
 		'endemic_status' : plant.get_endemic_status,
+		'images': ImageURL.objects.filter(plants_id=plantId),
 		'searchForThis': {},#json.dumps(populateSearchDropDown()),
 		'updateTextForm': UpdateTextForm(),
 		'updateSelectForm': UpdateSelectForm(class_name='Plant'),
@@ -358,21 +374,19 @@ def addPlant(request):
 			if len(nameArray) > 2:
 				variety = nameArray[2]
 
-			# transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, transaction_type='INSERT', ignore=False)
-			# transaction.save()
-			# #print(transaction.id)
-			# actions = []
-			# if genus:
-			# 	actions.append(Actions(transactions=transaction , action_type="INSERT", property='genus', value=genus))
-			# if species: 
-			# 	actions.append(Actions(transactions=transaction , action_type="INSERT", property='species', value=species))
-			# if variety:
-			# 	actions.append(Actions(transactions=transaction , action_type="INSERT", property='variety', value=variety))
-			# if commonName:
-			# 	actions.append(Actions(transactions=transaction , action_type="INSERT", property='common_name', value=commonName))
-			# Actions.objects.bulk_create(actions)
+			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
+			transaction.save()
+			actions = []
 
-
+			if genus:
+				actions.append(Actions(transactions=transaction , action_type='INSERT', property='genus', value=genus))
+			if species:
+				actions.append(Actions(transactions=transaction , action_type='INSERT', property='species', value=species))
+			if variety:
+				actions.append(Actions(transactions=transaction , action_type='INSERT', property='variety', value=variety))
+			if commonName:
+				actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
+			Actions.objects.bulk_create(actions)
 
 			plant = Plant.objects.create()
 			result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
@@ -396,7 +410,13 @@ def addPlant(request):
 					result['About'].append(field)
 
 			context = {
-				'isNew': 1,
+				'newPlant':{
+					'genus': genus,
+					'species': species,
+					'variety': variety,
+					'common_name': commonName
+				},
+				'transactionId' : transaction.id,
 				'result': result,
 				'plantId': 0, 
 				'genus' : genus,
@@ -406,6 +426,7 @@ def addPlant(request):
 				'family' : plant.family,
 				'family_common_name' : plant.family_common_name,
 				'endemic_status' : plant.get_endemic_status,
+				#'images': ImageURL.objects.get(plant.id=4121),
 				'searchForThis': {},#json.dumps(populateSearchDropDown()),
 				'updateTextForm': UpdateTextForm(),
 				'updateSelectForm': UpdateSelectForm(class_name='Plant'),
@@ -424,6 +445,10 @@ def addPlant(request):
 			plants = paginator.page(1)
 		except EmptyPage:
 			plants = paginator.page(paginator.num_pages)
+
+		# for p in plants:
+		# 	img = ImageURL.objects.filter(plants_id=p.id)
+		# 	p.update({'image':img.value[0]})
 
 		context = {
 			'addPlantForm': AddPlantForm(),

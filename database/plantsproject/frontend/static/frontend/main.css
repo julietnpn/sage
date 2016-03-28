@@ -105,7 +105,8 @@ section#contain a img {
 }
 
 
-#plant-images > .cardimg{
+#plant-images > .cardimg,
+#plant-images > #populated-images > .cardimg{
 	display:inline-block;
 	float:left;
 }
@@ -237,17 +238,26 @@ section#contain a img {
 }
 
 .formtxt {
-
     margin-top:25px;
     border: 0;
     outline: 0;
     background: transparent;
     border-bottom: 1px solid black;
     margin-bottom:5px;
+    width:70%;
 }
 
 #searchbar{
 	width:250px;
+}
+
+.img-mdl-div{
+	display:inline-block;
+}
+
+.back,
+.forward{
+	cursor:pointer;
 }
 
 
