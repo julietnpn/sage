@@ -154,6 +154,9 @@
 			<div class="add-attribute-container"><div class="add-attribute-center">+ add new characteristic</div>
 			<div class="undefined-attributes">
 				{% for f in result.Characteristics %}
+				{% if "ph" in f.label %}
+				found ph
+				{% endif %}
 				{% if not f.value %}
 				<div class="row">
 					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
