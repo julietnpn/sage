@@ -22,8 +22,8 @@
 {% if newPlant %}
 <div id="hiddenTransactionId" style="visibility:hidden;">{{ transactionId }}</div>
 <div class="row editplantrow">
-	<div class="col-sm-1"></div>
-	<div class="col-sm-8">You are adding a plant to the database. Continue to add any new attributes before pressing "Save" for your changes to be saved. Please allow 24 hours for your change to be reflected.</div>
+	<div class="col-sm-1"></div> 
+	<div class="col-sm-8 add-attribute-container">You are adding a plant to the database. Continue to add any new attributes before pressing "Save" for your changes to be saved. Please allow 24 hours for your change to be reflected.</div>
 	<div class="col-sm-3"> <a href="#">cancel</a><a href="#">save</a></div>
 </div>
 
@@ -32,6 +32,12 @@
 {% if result %}
 	<div id="hiddenTransactionId" style="visibility:hidden;">{{ transactionId }}</div> <!--do we really need these - should be object vars -->
 	<div id="hiddenPlantId" style="visibility:hidden;">{{plantId}}</div>
+	<div class="row editplantrow" id="edit-msg">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-8">Thanks for your contribution! Changes will be reflected on this page, but please allow 24 hours for your changes to be reflected across the site.</div>
+		<div class="col-sm-3"> </div>
+	</div>
+
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
@@ -75,11 +81,7 @@
 			</div>
 			{% endspaceless %}
 			<br>
-			{% if endemic_status %}
-				{% if endemic_status != 0 %}
-				<div>Endemic Status: <p id="endemicStatus">{{ endemic_status }}</p></div>
-				{% endif %}
-			{% endif %}
+				<div>{% if endemic_status %}{% if endemic_status != 0 %}Endemic Status: {% endif %}{% endif %}<p id="endemicStatus">{% if endemic_status %}{% if endemic_status != 0 %}{{ endemic_status }}{% endif %}{% endif %}</p></div>
 		</div>
 	</div>
 
@@ -268,12 +270,18 @@
 
 
 <script type="text/javascript">
+	$("#edit-msg").hide();
 	var common_name, genus, species, variety;
 	common_name = "{{ common_name }}";
 	genus = "{{ genus }}";
 	species = "{{ species }}";
 	variety = "{{ variety }}";
-	EditPlant.init(common_name, genus, species, variety, {{ transactionId }}); //pass transactionId as 0?
+	{% if userId %}
+		EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, {{ userId }});
+	{% else %}
+		EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, -1);
+	{% endif %} 
+	//EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, id); //pass transactionId as 0?
 </script>
 
 

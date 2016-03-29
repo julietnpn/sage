@@ -7,7 +7,7 @@
 		<a href="#" id="sidebar-clear" class="clear">clear</a><br>
 	</div>
 
-	<form action="" method="post">
+	<form action="/frontend/addPlant/" method="post">
 		{% csrf_token %}
 		{% for field in addPlantForm %}
 		{{ field }}

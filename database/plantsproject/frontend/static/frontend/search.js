@@ -7,7 +7,6 @@ $("#search-magnifying-glass").on('click', function(){
 	searchValue = $(this).siblings("#searchbar").value;
 	$("#searchbar :selected").val();
 	$("#searchbar :selected").text();
-	alert(searchValue);
 
 	$.ajax({
 		

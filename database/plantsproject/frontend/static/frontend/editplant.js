@@ -12,7 +12,7 @@ var EditPlant = function(){
 	//----------------- END MODULE SCOPE VARIABLES ------------
 
 	//----------------- BEGIN PUBLIC METHODS --------------------
-    pub.init = function(pCommonName, pGenus, pSpecies, pVariety, transactionId){
+    pub.init = function(pCommonName, pGenus, pSpecies, pVariety, transactionId, userId){
     	setJqueryMap();
         transactionId = transactionId;
         isNew = transactionId != 0;
@@ -20,9 +20,16 @@ var EditPlant = function(){
         genus = pGenus;
         species =pSpecies;
         variety = pVariety;
+        userId = userId;
+
 
         //resetNameChangeFlags();
-        jqueryMap.$plantNames.click(function(){
+        jqueryMap.$plantNames.click(function(e){
+            if (userId < 0){
+                userNotAuthenticated();
+                e.stopPropagation();
+                return;
+            }
             $("#hidden-plantId").val(getPlantId());
             $("#transaction-id").val(transactionId);
             $("#input-genus").val($("#genus").text().trim());
@@ -42,6 +49,10 @@ var EditPlant = function(){
 
         //jqueryMap.$attribute.on('click', function(){
         $(document).on('click', '.edit-attribute', function(){
+            if (userId < 0){
+                userNotAuthenticated();
+                return;
+            }
             clearForms();
             var attribute_className = $(this).attr('data-className');
             var attribute_prop = $(this).attr('id');
@@ -63,6 +74,7 @@ var EditPlant = function(){
                 
             }
             else if(attribute_fieldType == 'many_to_many'){
+                
                 load_values(true, attribute_className, defaultVal);
                 document.getElementById("mdl-label-multi").innerHTML = attribute_displayName
 
@@ -86,10 +98,41 @@ var EditPlant = function(){
         });
 
         $('.submitBtn').click(function(){
+            if (userId < 0){
+                userNotAuthenticated();
+                return;
+            }
             var $form = $(this).closest(".modal-content").find("form").submit();
         });
 
+        $("#updateNames-submit").on("click", function(){
+            if (userId < 0){
+                userNotAuthenticated();
+
+                return;
+            }
+            $.post('/frontend/updateNames/', $("#updateNamesMdl form").serialize(), function(data){
+                $("#genus").html($("#input-genus").val());
+                $("#species").html($("#input-species").val());
+                $("#variety").html($("#input-variety").val());
+                $("#commonName").html($("#input-commonName").val());
+                $("#familyCommonName").html($("#input-familyCommonName").val());
+                $("#family").html($("#input-family").val());
+                if($("#id_endemicStatus option:selected").text().indexOf("--") < 0)
+                    $("#endemicStatus").html( $("#id_endemicStatus option:selected").text());
+                $("#updateNamesMdl").modal("hide");
+                displayMessage();
+            })
+            .fail(function(){
+                alert("Error - Could not update names.");
+            });
+        });
+
         jqueryMap.$addNewImg.click(function(){
+            if (userId < 0){
+                userNotAuthenticated();
+                return;
+            }
             searchFlickrPictures()
         });
 
@@ -134,6 +177,10 @@ var EditPlant = function(){
         }); 
 
         $("#updateTextMdl form").submit(function(e){
+            if (userId < 0){
+                userNotAuthenticated();
+                return;
+            }
             var value = $("#new-attribute-text").val();
             var isNewAttribute = $("#new-attribute-text").attr("data-isNewAttribute");
             var url = '/frontend/updateText/' + transactionId + "/";
@@ -169,11 +216,16 @@ var EditPlant = function(){
                 $('.undefined-attributes').find('#' + propertyName).remove();
 
                 transactionId = data;
+                displayMessage();
             });
             e.preventDefault();
         });
 
         $("#updateSelectMdl form").submit(function(e){
+            if (userId < 0){
+                userNotAuthenticated();
+                return;
+            }
             var url = '/frontend/updateSelect/' + transactionId + "/";
             url += isNew ? "INSERT/" : "UPDATE/";
 
@@ -206,13 +258,17 @@ var EditPlant = function(){
                 $('.undefined-attributes').find('#' + propertyName).remove();
 
                 transactionId = data;
+                displayMessage();
             });
             e.preventDefault();
         });
 
 
         $("#updateMultiMdl form").submit(function(e){
-
+            if (userId < 0){
+                userNotAuthenticated();
+                return;
+            }
             var url = '/frontend/updateMulti/' + transactionId + "/";
             url += isNew ? "INSERT/" : "UPDATE/";
 
@@ -249,11 +305,16 @@ var EditPlant = function(){
                 $('.undefined-attributes').find('#' + propertyName).remove();
 
                 transactionId = data;
+                displayMessage();
             });
             e.preventDefault();
         });
 
         jqueryMap.$chooseImg.on("click", function(){
+            if (userId < 0){
+                userNotAuthenticated();
+                return;
+            }
             url = jqueryMap.$addImgModal.find(".selected").attr("src");
 
             $("#hidden-plantId-img").val(getPlantId());
@@ -263,6 +324,7 @@ var EditPlant = function(){
             $.post('/frontend/addImg/', $("#addImg form").serialize(), function(data){
                 $("<img />").attr("src", url).addClass('cardimg').appendTo($("#populated-images"));
                 jqueryMap.$addImgModal.modal('hide');
+                displayMessage();
             })
             .fail(function(){
                 alert("Error - Could not add image.");
@@ -280,14 +342,14 @@ var EditPlant = function(){
     }
 
     function resetNameChangeFlags(){
-            $("#genus-flag").val(0);
-            $("#species-flag").val(0);
-            $("#variety-flag").val(0);
-            $("#commonName-flag").val(0);
-            $("#family-flag").val(0);
-            $("#familyCommonName-flag").val(0);
-            $("#endemicStatus-flag").val(0);
-        }
+        $("#genus-flag").val(0);
+        $("#species-flag").val(0);
+        $("#variety-flag").val(0);
+        $("#commonName-flag").val(0);
+        $("#family-flag").val(0);
+        $("#familyCommonName-flag").val(0);
+        $("#endemicStatus-flag").val(0);
+     }
 
     function setJqueryMap() {
         jqueryMap = {
@@ -389,11 +451,19 @@ var EditPlant = function(){
         });
     }
 
+    function displayMessage(){
+        $("#edit-msg").show(400).delay(5000).hide(400);
+    }
+
     function resetBorderColor(elements){
         for(var i=0; i < elements.length; i++){
             $(elements[i]).removeClass("selected");
             $(elements[i]).css('borderColor', '#ddd');
         }
+    }
+
+    function userNotAuthenticated(){
+        alert("Please log in before editing plant attributes.");
     }
 
     function escapeString(s){

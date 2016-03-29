@@ -3,7 +3,6 @@ var AddPlant = function(){
 	var pub = {},
         jqueryMap = {},
         setJqueryMap;
-
 	//----------------- END MODULE SCOPE VARIABLES ------------
 
 	//----------------- BEGIN PUBLIC METHODS --------------------
@@ -33,9 +32,7 @@ var AddPlant = function(){
     return pub;
     //----------------- END PUBLIC METHODS --------------------
 
-    //----------------- BEGIN DOM METHODS -----------------------
-
-        
+    //----------------- BEGIN DOM METHODS -----------------------        
     function setJqueryMap() {
         jqueryMap = {
         	$latinName : $("#add-plant-latin-name"),
@@ -47,7 +44,6 @@ var AddPlant = function(){
         	$thumbnailImages:$(".thumbnail-img"),
             $thumbnails:$("#thumbnail-container"),
             $clearAddPlant:$('#sidebar-clear')
-
         };
     }
 
