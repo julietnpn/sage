@@ -12,7 +12,6 @@ var AddPlant = function(){
     /// </summary>
     pub.init = function(){
     	setJqueryMap();
-
         jqueryMap.$commonName.blur(function(){
             validateNames();
         });
@@ -20,6 +19,22 @@ var AddPlant = function(){
         jqueryMap.$latinName.blur(function () {
             validateNames();
         });
+
+        jqueryMap.$commonName.keydown(function(e){
+            if(e.keyCode == 13 && validateNames() != 2){
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+        });
+
+        jqueryMap.$latinName.keydown(function(e){
+            if(e.keyCode == 13 && validateNames() != 2)
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+        });
+
 
         jqueryMap.$clearAddPlant.click(function(){
             jqueryMap.$latinName.val("");
@@ -69,6 +84,8 @@ var AddPlant = function(){
         if(isValidated == 2){
             displayElements(jqueryMap.$addThis.children());
         }
+
+        return isValidated;
     }
 
     function displayElements(elements){

@@ -221,6 +221,7 @@ var EditPlant = function(){
                     $(block).find('#' + propertyName).next().remove();
                     $(block).find('#' + propertyName).remove();
 
+
                     $newRow.appendTo($(block));
                     $('.undefined-attributes').find('#' + propertyName).remove();
                 }
@@ -483,7 +484,8 @@ var EditPlant = function(){
     }
 
     function displayMessage(){
-        $("#edit-msg").show(400).delay(5000).hide(400);
+        if(!isNew)
+            $("#edit-msg").show(400).delay(5000).hide(400);
     }
 
     function resetBorderColor(elements){

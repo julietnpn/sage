@@ -160,7 +160,7 @@
 		      			{% csrf_token %}
 		      			<input type="hidden" id="hidden-plantId-img" name="plant_id" value=""/>
 						<input type="hidden" id="hidden-url-img" name="image_url" value=""/>
-						<input type="submit" class="formsubmit" value="Save" />
+						<input type="submit" class="formsubmit" value="Save" style="display:none;"/>
 		      			<div class="img-mdl-div back"><</div><div id="img-mdl-content" class="img-mdl-div"></div><div class="img-mdl-div forward">></div>
 		      		</form>
 		      </div>
@@ -217,21 +217,11 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<script scr="{% static 'frontend/jquery-1.10.2.min.js' %}" type="text/javascript"></script>
-	<script src="{% static 'frontend/addPlant.js' %}" type="text/javascript"></script>
 	<script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
 	<script src="{% static 'frontend/search.js' %}" type="text/javascript"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
-	<!--<script src="image.js" type="text/javascript"></script>-->
 	<script type="text/javascript">
-		var searchTerms = JSON.parse('{{ searchForThis|escapejs }}');
-		$('.js-example-basic-multiple').select2({
-			data: searchTerms.genus//.concat(searchTerms.species).concat(searchTerms.variety)
-		});
-
-
-		function displayAttribute(){
-			alert("displaying");
-		}
+		//search.js?
 	</script>
 	{% block script %}
 	{% endblock %}

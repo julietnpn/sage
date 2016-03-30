@@ -4,26 +4,11 @@
 
 {% if plants %}
 
-<div class="pagination">
-    <span class="step-links">
-        {% if plants.has_previous %}
-            <a href="?page={{ plants.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ plants.number }} of {{ plants.paginator.num_pages }}
-        </span>
-
-        {% if plants.has_next %}
-            <a href="?page={{ plants.next_page_number }}">next</a>
-        {% endif %}
-    </span>
-</div>
 {% for plant in plants %}
 <div class='row plantcard'>
 	<div class="col-sm-1"></div>
 	<div class="col-sm-2">
-		<div id ="add-new-img" class="cardimg" onclick="location.href='edit/{{plant.id}}'"/>
+		<div id ="add-new-img" class="cardimg" onclick="location.href='/frontend/edit/{{plant.id}}'"/>
 			{% if plant.id in images %}
 				<img src="{{ images|get_item:plant.id }}" id="add-new-img2" alt="Plant Image" />
 				{% else %}
@@ -32,7 +17,10 @@
 		</div>
 	</div>
 	<div class="col-sm-9">
-		<div class='row plantname' onclick="location.href='edit/{{plant.id}}'">{{ plant.genus }} {{ plant.species }}</div>
+		<div class='row plantname' onclick="location.href='/frontend/edit/{{plant.id}}'">{% spaceless %}
+			{% if plant.genus %}{{ plant.genus }}{% endif %}
+			{% if plant.species %}&nbsp;{{ plant.species }}{% endif %}
+			{%if plant.variety %}&nbsp;{{plant.variety}}{% endif %}{% endspaceless %}</div>
 		<div class='row plantdetails'>
 			<div class='row'>
 				<div class='col-sm-6'>
@@ -132,8 +120,9 @@
 	</div>
 </div> <!-- end plantcard -->
 {% endfor %}
-
-<div class="pagination">
+<div class='row plantcard'>
+	<div class="col-sm-1"></div>
+<div class="col-sm-11 pagination">
     <span class="step-links">
         {% if plants.has_previous %}
             <a href="?page={{ plants.previous_page_number }}">previous</a>
@@ -148,11 +137,18 @@
         {% endif %}
     </span>
 </div>
-
+</div>
 {% else %}
 	<p>No plants are available.</p>
 {% endif %}
 
 
 
+{% endblock %}
+{% block script %}
+{% load staticfiles %}
+<script src="{% static 'frontend/addPlant.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+	AddPlant.init();
+</script>
 {% endblock %}

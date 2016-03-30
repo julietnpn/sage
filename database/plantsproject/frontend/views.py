@@ -353,7 +353,19 @@ def addPlant(request):
 			plant = Plant.objects.create()
 			result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
 			for field in plant.get_all_fields:
-
+				if field['name'] is 'region':
+					if plant.get_region() is None:
+						height = dict(name='height', field_type='other', value=None, label='height', class_name = 'FIXME')
+						spread = dict(name='spread', field_type='other', value=None, label='spread', class_name = 'FIXME')
+						root_depth = dict(name='root_depth', field_type='other', value=None, label='root depth', class_name = 'FIXME')
+					else:
+						height = dict(name='height', field_type='other', value=plant.get_region()['height'], label='height', class_name = 'FIXME')
+						spread = dict(name='spread', field_type='other', value=plant.get_region()['spread'], label='spread', class_name = 'FIXME')
+						root_depth = dict(name='root_depth', field_type='other', value=plant.get_region()['root_depth'], label='root depth', class_name = 'FIXME')
+					
+					result['Characteristics'].append(height)
+					result['Characteristics'].append(spread)
+					result['Characteristics'].append(root_depth)
 				if field['name'] in Characteristics:
 					field.update({'class_name':PropertyToClassName[field['name']]})
 					result['Characteristics'].append(field)
@@ -461,13 +473,63 @@ def viewPlants(request):
 	
 # 	return choices
 
-# def search(request, searchString=None):
-# 	add_plant_form = AddPlantForm()
-# 	plant_list = Plant.objects.filter(id__gte=5000, id__lte=5005).order_by('id')
+from itertools import chain
 
-# 	context = {
-# 		'addPlantForm': add_plant_form,
-# 		'plant_list': plant_list,
-# 		'searchForThis': json.dumps(populateSearchDropDown()),
-# 	}
-# 	return render(request, 'frontend/cardview.html', context)
+
+def search(request):
+	searchString = request.POST['searchVal']
+	plants = Plant.objects
+	#plant_list = Plant.objects.all()
+
+
+	layer_results = Plant.objects.filter(layer__in=Layer.objects.filter(value__icontains=searchString))
+	food_results = Plant.objects.filter(food_prod__in=FoodProd.objects.filter(value__icontains=searchString))
+	rawmat_results = Plant.objects.filter(raw_materials_prod__in=RawMaterialsProd.objects.filter(value__icontains=searchString))
+	med_results = Plant.objects.filter(medicinals_prod__in=MedicinalsProd.objects.filter(value__icontains=searchString))
+	biomed_results = Plant.objects.filter(biochemical_material_prod__in=BiochemicalMaterialProd.objects.filter(value__icontains=searchString))
+	water_results = Plant.objects.filter(water_needs__in=WaterNeeds.objects.filter(value__icontains=searchString))
+	sun_results = Plant.objects.filter(sun_needs__in=SunNeeds.objects.filter(value__icontains=searchString))
+	nutrients_results = Plant.objects.filter(fertility_needs__in=NutrientRequirements.objects.filter(value__icontains=searchString))
+	serotiny_results = Plant.objects.filter(serotiny__in=Serotiny.objects.filter(value__icontains=searchString))
+	erosion_results = Plant.objects.filter(erosion_control__in=ErosionControl.objects.filter(value__icontains=searchString))
+	
+	insect_attract_results = Plant.objects.filter(plants_insect_attractor__in=Insects.objects.filter(value__icontains=searchString))
+	insect_reg_results = Plant.objects.filter(plants_insect_regulator__in=Insects.objects.filter(value__icontains=searchString))
+
+	name_matches = Plant.objects.filter(Q(genus__icontains=searchString) | 
+		Q(species__icontains=searchString) | 
+		Q(variety__icontains=searchString) |
+		Q(common_name__icontains=searchString) |
+		Q(innoculant__icontains=searchString))
+	results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
+
+
+
+
+
+
+
+	paginator = Paginator(results_list, 35)
+	page = request.GET.get('page')
+	try:
+		plants = paginator.page(page)
+	except PageNotAnInteger:
+		plants = paginator.page(1)
+	except EmptyPage:
+		plants = paginator.page(paginator.num_pages)
+	iterableImages = ImageURL.objects.all()
+	images = {}
+	plantIdsAlreadyUsed = []
+	for img in iterableImages:
+		if img.plants.id not in plantIdsAlreadyUsed:
+			images[img.plants.id] = img.value
+			plantIdsAlreadyUsed.append(img.plants.id)
+
+
+	context = {
+		'addPlantForm': AddPlantForm(),
+		'plants':plants,
+		'images': images,
+		'searchForThis': [],#json.dumps(populateSearchDropDown()),
+	}
+	return render(request, 'frontend/cardview.html', context)

@@ -4,8 +4,8 @@ from django.apps import apps
 
 class AddPlantForm(forms.Form):
 	#not sure we need ID's anymore
-	latinName = forms.CharField(widget=forms.TextInput(attrs={'class': 'formtxt'}), label='latin name', label_suffix='')
-	commonName = forms.CharField(widget=forms.TextInput(attrs={'class': 'formtxt'}), label='common name', label_suffix='')
+	latinName = forms.CharField(widget=forms.TextInput(attrs={'id':'add-plant-latin-name', 'class': 'formtxt'}), label='latin name', label_suffix='')
+	commonName = forms.CharField(widget=forms.TextInput(attrs={'id':'add-plant-common-name','class': 'formtxt'}), label='common name', label_suffix='')
 
 class UpdateTextForm(forms.Form):
 	text= forms.CharField(widget=forms.TextInput(attrs={'id': 'new-attribute-text'}), label='text', label_suffix='')

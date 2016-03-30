@@ -9,10 +9,11 @@
 
 	<form action="/frontend/addPlant/" method="post">
 		{% csrf_token %}
-		{% for field in addPlantForm %}
-		{{ field }}
-		<p class="input-label italic">{{ field.label_tag }}</p>
-		{% endfor %}
+		{{ addPlantForm.latinName }}
+		<p class="input-label italic" id="latin-name-label">{{ addPlantForm.latinName.label_tag }}</p>
+		{{ addPlantForm.commonName }}
+		<p class="input-label italic" id="common-name-label">{{ addPlantForm.commonName.label_tag }}</p>
+
 		<div id="add-plant-submit-container">
 			<input type="submit" id="add-plant" class="formsubmit" name="add" value="Add This" />
 		</div>
