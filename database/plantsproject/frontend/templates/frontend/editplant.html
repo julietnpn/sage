@@ -95,7 +95,9 @@
 			{% endfor %}
 		</div>
 			<!--<a href="#"></a>-->
+			{% if images|length < 5 %}
 			<div id ="add-new-img" src="" class="cardimg"/><div id="add-new-img2"><div>+ add new</div></div></div>
+			{% endif %}
 		</div>
 	</div>
 	<div class="row editplantrow">
@@ -106,7 +108,7 @@
 			 
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="1">{{ f.label }}</div>
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div>
 					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -117,7 +119,7 @@
 			{% for f in result.Needs %}
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div>
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div>
 					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -131,7 +133,7 @@
 			{% for f in result.Tolerances %}
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div> 
 					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -142,7 +144,7 @@
 			{% for f in result.Behaviors %}
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div> 
 				<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -156,7 +158,7 @@
 			{% for f in result.Products %}
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}">{{ f.label }}</div> 
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div> 
 				<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -202,7 +204,8 @@
 					id="{{f.name}}" 
 					data-fieldType="{{f.field_type}}" 
 					data-className="{{ f.class_name }}"
-					data-block="needs-block">{{ f.label }}</div> 
+					data-block="needs-block"
+					data-isNewAttribute="1">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
 				{% endif %} 
@@ -216,7 +219,12 @@
 				{% for f in result.Tolerances %}
 				{% if not f.value %}
 				<div class="row">
-					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-block="tolerances-block">{{ f.label }}</div> 
+					<div class="col-xs-10 italic edit-attribute" 
+					id="{{f.name}}" 
+					data-fieldType="{{f.field_type}}" 
+					data-className="{{ f.class_name }}" 
+					data-block="tolerances-block"
+					data-isNewAttribute="1">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
 				{% endif %}
@@ -230,7 +238,12 @@
 				{% for f in result.Behaviors %}
 				{% if not f.value %}
 				<div class="row">
-					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-block="behaviors-block">{{ f.label }}</div> 
+					<div class="col-xs-10 italic edit-attribute" 
+					id="{{f.name}}" 
+					data-fieldType="{{f.field_type}}" 
+					data-className="{{ f.class_name }}" 
+					data-block="behaviors-block"
+					data-isNewAttribute="1">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
 				{% endif %}
@@ -244,7 +257,12 @@
 				{% for f in result.Products %}
 				{% if not f.value %}
 				<div class="row">
-					<div class="col-xs-10 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-block="products-block">{{ f.label }}</div> 
+					<div class="col-xs-10 italic edit-attribute" 
+					id="{{f.name}}" 
+					data-fieldType="{{f.field_type}}" 
+					data-className="{{ f.class_name }}" 
+					data-block="products-block"
+					data-isNewAttribute="1">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
 				{% endif %}

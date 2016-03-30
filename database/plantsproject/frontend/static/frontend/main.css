@@ -105,6 +105,8 @@ section#contain a img {
 }
 
 
+
+
 #plant-images > .cardimg,
 #plant-images > #populated-images > .cardimg{
 	display:inline-block;
@@ -128,6 +130,30 @@ section#contain a img {
 	margin-left:10px;
 	margin-right:10px;
 	border: 2px solid #ddd;
+	display:table;
+}
+
+.cardimg > img{
+	border-radius:25px;
+}
+
+.plantname:hover,
+#add-new-img:hover{
+	cursor:pointer;
+
+}
+
+#add-new-img2{
+	display:table;
+	width:100%;
+	height:100%;
+}
+
+#add-new-img2 > div{
+	color:#ddd;
+	display:table-cell;
+	text-align:center;
+	vertical-align:middle;
 }
 
 .editplantrow{
@@ -140,14 +166,6 @@ section#contain a img {
 	padding-bottom:20px;
 	padding-left:10px;
 	padding-right:5px;
-}
-
-.plantcard:hover{
-	padding-top:20px;
-	padding-bottom:20px;
-	padding-left:10px;
-	padding-right:5px;
-	cursor:pointer;
 }
 
 .plantname{
@@ -334,23 +352,7 @@ border-color:#66CD00;
 	color:gray;
 }
 
-#add-new-img:hover{
-	cursor:pointer;
 
-}
-
-#add-new-img2{
-	display:table;
-	width:100%;
-	height:100%;
-}
-
-#add-new-img2 > div{
-	color:#ddd;
-	display:table-cell;
-	text-align:center;
-	vertical-align:middle;
-}
 
 #search-magnifying-glass{
 	cursor:pointer;

@@ -3,6 +3,7 @@
 {% block maincontent %}
 
 {% if plants %}
+
 <div class="pagination">
     <span class="step-links">
         {% if plants.has_previous %}
@@ -19,13 +20,19 @@
     </span>
 </div>
 {% for plant in plants %}
-<div class='row plantcard' onclick="location.href='edit/{{plant.id}}'">
+<div class='row plantcard'>
 	<div class="col-sm-1"></div>
 	<div class="col-sm-2">
-		<div id ="add-new-img" src="" class="cardimg"/><div id="add-new-img2"><div>image not available</div></div></div>
+		<div id ="add-new-img" class="cardimg" onclick="location.href='edit/{{plant.id}}'"/>
+			{% if plant.id in images %}
+				<img src="{{ images|get_item:plant.id }}" id="add-new-img2" alt="Plant Image" />
+				{% else %}
+				<div id="add-new-img2"><div>image not available</div></div>
+			{% endif %}
+		</div>
 	</div>
 	<div class="col-sm-9">
-		<div class='row plantname'>{{ plant.genus }} {{ plant.species }}</div>
+		<div class='row plantname' onclick="location.href='edit/{{plant.id}}'">{{ plant.genus }} {{ plant.species }}</div>
 		<div class='row plantdetails'>
 			<div class='row'>
 				<div class='col-sm-6'>
@@ -131,8 +138,6 @@
         {% if plants.has_previous %}
             <a href="?page={{ plants.previous_page_number }}">previous</a>
         {% endif %}
-
-
 
         <span class="current">
             Page {{ plants.number }} of {{ plants.paginator.num_pages }}

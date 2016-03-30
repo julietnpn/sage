@@ -23,7 +23,7 @@ var EditPlant = function(){
         userId = userId;
 
 
-        //resetNameChangeFlags();
+        // Opens modal to edit the general plant information
         jqueryMap.$plantNames.click(function(e){
             if (userId < 0){
                 userNotAuthenticated();
@@ -47,7 +47,7 @@ var EditPlant = function(){
             jqueryMap.$updateNamesMdl.modal();
         });
 
-        //jqueryMap.$attribute.on('click', function(){
+        //Opens modal to edit an attribute
         $(document).on('click', '.edit-attribute', function(){
             if (userId < 0){
                 userNotAuthenticated();
@@ -79,6 +79,7 @@ var EditPlant = function(){
                 document.getElementById("mdl-label-multi").innerHTML = attribute_displayName
 
                 $("#mdl-label-multi").attr("data-block", $(this).attr("data-block"));
+                $("#mdl-label-text").attr("data-isNewAttribute", $(this).attr("data-isNewAttribute"));
                 $("#hidden-className-m").val(attribute_className);
                 $("#hidden-propName-m").val(attribute_prop);
                 $("#hidden-plantId-m").val(getPlantId());
@@ -88,6 +89,7 @@ var EditPlant = function(){
             else {
                 document.getElementById("mdl-label-select").innerHTML = attribute_displayName
                 $("#mdl-label-select").attr("data-block", $(this).attr("data-block"));
+                $("#mdl-label-text").attr("data-isNewAttribute", $(this).attr("data-isNewAttribute"));
                 load_values(false, attribute_className, defaultVal);
                 $("#hidden-className-s").val(attribute_className);
                 $("#hidden-propName-s").val(attribute_prop);
@@ -97,6 +99,7 @@ var EditPlant = function(){
             }
         });
 
+        // Submits form when modal save button is pressed.
         $('.submitBtn').click(function(){
             if (userId < 0){
                 userNotAuthenticated();
@@ -105,10 +108,10 @@ var EditPlant = function(){
             var $form = $(this).closest(".modal-content").find("form").submit();
         });
 
+        // Submits general plant information form when modal button is clicked
         $("#updateNames-submit").on("click", function(){
             if (userId < 0){
                 userNotAuthenticated();
-
                 return;
             }
             $.post('/frontend/updateNames/', $("#updateNamesMdl form").serialize(), function(data){
@@ -128,6 +131,7 @@ var EditPlant = function(){
             });
         });
 
+        // Opens modal and displays flickr image options
         jqueryMap.$addNewImg.click(function(){
             if (userId < 0){
                 userNotAuthenticated();
@@ -136,6 +140,7 @@ var EditPlant = function(){
             searchFlickrPictures()
         });
 
+        // Changes CSS on images displayed in the modal
         jqueryMap.$imgMdlContent.on({ //these arent visible enough
             click: function(){
                 resetBorderColor($(this).siblings());
@@ -176,15 +181,18 @@ var EditPlant = function(){
             $("#endemicStatus-flag").val(1);
         }); 
 
+
+        //I THINK THESE ARE ALL THE SAME WITH DIFFERENT ATTR VALS......
         $("#updateTextMdl form").submit(function(e){
             if (userId < 0){
                 userNotAuthenticated();
                 return;
             }
             var value = $("#new-attribute-text").val();
-            var isNewAttribute = $("#new-attribute-text").attr("data-isNewAttribute");
+            var isNewAttribute = $("#mdl-label-text").attr("data-isNewAttribute");
             var url = '/frontend/updateText/' + transactionId + "/";
-            url += isNewAttribute = "1" ? "INSERT/" : "UPDATE/";
+            url += isNewAttribute == "1" ? "INSERT/" : "UPDATE/";
+
 
             $.post(url, $(this).serialize(), function(data){
                 var label = $("#mdl-label-text").text();
@@ -193,27 +201,32 @@ var EditPlant = function(){
                 
                 $("#updateTextMdl").modal('hide');
 
-                var $newRow = $("<div>")
-                $newRow.addClass("row");
-                var $attributeName = $('<div>');
-                $attributeName
-                    .addClass("col-xs-4 italic edit-attribute")
-                    .attr("id", propertyName)
-                    .attr("data-fieldType", "other")
-                    .attr("data-className", className)
-                    .attr("data-block",$("#mdl-label-text").attr("data-block"))
-                    .html(label)
-                    .appendTo($newRow);
-                var $attributeVal = $('<div>');
-                $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
+                if(isNewAttribute == "1" ){
+                    var $newRow = $("<div>")
+                    $newRow.addClass("row");
+                    var $attributeName = $('<div>');
+                    $attributeName
+                        .addClass("col-xs-4 italic edit-attribute")
+                        .attr("id", propertyName)
+                        .attr("data-fieldType", "other")
+                        .attr("data-className", className)
+                        .attr("data-block",$("#mdl-label-text").attr("data-block"))
+                        .html(label)
+                        .appendTo($newRow);
+                    var $attributeVal = $('<div>');
+                    $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                var block = "#" + $("#mdl-label-text").attr("data-block");
+                    var block = "#" + $("#mdl-label-text").attr("data-block");
 
-                $(block).find('#' + propertyName).next().remove();
-                $(block).find('#' + propertyName).remove();
+                    $(block).find('#' + propertyName).next().remove();
+                    $(block).find('#' + propertyName).remove();
 
-                $newRow.appendTo($(block));
-                $('.undefined-attributes').find('#' + propertyName).remove();
+                    $newRow.appendTo($(block));
+                    $('.undefined-attributes').find('#' + propertyName).remove();
+                }
+                else{
+                    $("#" + propertyName).next().text(value);
+                }
 
                 transactionId = data;
                 displayMessage();
@@ -226,36 +239,44 @@ var EditPlant = function(){
                 userNotAuthenticated();
                 return;
             }
+            var isNewAttribute = $("#mdl-label-text").attr("data-isNewAttribute");
+            var label = $("#mdl-label-select").text();
+            var className = $("#hidden-className-s").val();
+            var propertyName = $("#hidden-propName-s").val();
+            var value = $('#id_select').select2('data')[0].text;
             var url = '/frontend/updateSelect/' + transactionId + "/";
-            url += isNew ? "INSERT/" : "UPDATE/";
+            url += isNewAttribute == "1" ? "INSERT/" : "UPDATE/";
+
 
             $.post(url, $(this).serialize(), function(data){
-                var label = $("#mdl-label-select").text();
-                var className = $("#hidden-className-s").val();
-                var propertyName = $("#hidden-propName-s").val();
-                var value = $('#id_select').select2('data')[0].text;
                 
                 $("#updateSelectMdl").modal('hide');
-                var $newRow = $("<div>")
-                $newRow.addClass("row");
-                var $attributeName = $('<div>');
-                $attributeName
-                    .addClass("col-xs-4 italic edit-attribute")
-                    .attr("id", propertyName)
-                    .attr("data-fieldType", "one_to_many")
-                    .attr("data-className", className)
-                    .attr("data-block",$("#mdl-label-select").attr("data-block"))
-                    .html(label)
-                    .appendTo($newRow);
-                var $attributeVal = $('<div>');
-                $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                var block = "#" + $("#mdl-label-select").attr("data-block");
+                if(isNewAttribute == "1"){
+                    var $newRow = $("<div>")
+                    $newRow.addClass("row");
+                    var $attributeName = $('<div>');
+                    $attributeName
+                        .addClass("col-xs-4 italic edit-attribute")
+                        .attr("id", propertyName)
+                        .attr("data-fieldType", "one_to_many")
+                        .attr("data-className", className)
+                        .attr("data-block",$("#mdl-label-select").attr("data-block"))
+                        .html(label)
+                        .appendTo($newRow);
+                    var $attributeVal = $('<div>');
+                    $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                $(block).find('#' + propertyName).next().remove();
-                $(block).find('#' + propertyName).remove();
-                $newRow.appendTo($(block));
-                $('.undefined-attributes').find('#' + propertyName).remove();
+                    var block = "#" + $("#mdl-label-select").attr("data-block");
+
+                    $(block).find('#' + propertyName).next().remove();
+                    $(block).find('#' + propertyName).remove();
+                    $newRow.appendTo($(block));
+                    $('.undefined-attributes').find('#' + propertyName).remove();
+                }
+                else{
+                    $("#" + propertyName).next().text(value);
+                }
 
                 transactionId = data;
                 displayMessage();
@@ -269,40 +290,46 @@ var EditPlant = function(){
                 userNotAuthenticated();
                 return;
             }
+            var isNewAttribute = $("#mdl-label-text").attr("data-isNewAttribute");
+            var label = $("#mdl-label-multi").text();
+            var className = $("#hidden-className-m").val();
+            var propertyName = $("#hidden-propName-m").val();
+            var selections = $('#id_multi').select2('data');
+            var value = selections[0].text;
+            for(var i = 1; i < selections.length; i++){
+                value += ", " + selections[i].text;
+            }
             var url = '/frontend/updateMulti/' + transactionId + "/";
-            url += isNew ? "INSERT/" : "UPDATE/";
+            url += isNewAttribute == "1" ? "INSERT/" : "UPDATE/";
 
             $.post(url, $(this).serialize(), function(data){
-                var label = $("#mdl-label-multi").text();
-                var className = $("#hidden-className-m").val();
-                var propertyName = $("#hidden-propName-m").val();
-                var selections = $('#id_multi').select2('data');
-                var value = selections[0].text;
-                for(var i = 1; i < selections.length; i++){
-                    value += ", " + selections[i].text;
-                }
-                
                 $("#updateMultiMdl").modal('hide');
-                var $newRow = $("<div>")
-                $newRow.addClass("row");
-                var $attributeName = $('<div>');
-                $attributeName
-                    .addClass("col-xs-4 italic edit-attribute")
-                    .attr("id", propertyName)
-                    .attr("data-fieldType", "many_to_many")
-                    .attr("data-className", className)
-                    .attr("data-block",$("#mdl-label-select").attr("data-block"))
-                    .html(label)
-                    .appendTo($newRow);
-                var $attributeVal = $('<div>');
-                $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                var block = "#" + $("#mdl-label-multi").attr("data-block");
+                if(isNewAttribute == "1"){
+                    var $newRow = $("<div>")
+                    $newRow.addClass("row");
+                    var $attributeName = $('<div>');
+                    $attributeName
+                        .addClass("col-xs-4 italic edit-attribute")
+                        .attr("id", propertyName)
+                        .attr("data-fieldType", "many_to_many")
+                        .attr("data-className", className)
+                        .attr("data-block",$("#mdl-label-select").attr("data-block"))
+                        .html(label)
+                        .appendTo($newRow);
+                    var $attributeVal = $('<div>');
+                    $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                $(block).find('#' + propertyName).next().remove();
-                $(block).find('#' + propertyName).remove();
-                $newRow.appendTo($(block));
-                $('.undefined-attributes').find('#' + propertyName).remove();
+                    var block = "#" + $("#mdl-label-multi").attr("data-block");
+
+                    $(block).find('#' + propertyName).next().remove();
+                    $(block).find('#' + propertyName).remove();
+                    $newRow.appendTo($(block));
+                    $('.undefined-attributes').find('#' + propertyName).remove();
+                }
+                else{
+                    $("#" + propertyName).next().text(value);
+                }
 
                 transactionId = data;
                 displayMessage();
@@ -325,6 +352,10 @@ var EditPlant = function(){
                 $("<img />").attr("src", url).addClass('cardimg').appendTo($("#populated-images"));
                 jqueryMap.$addImgModal.modal('hide');
                 displayMessage();
+
+                if($("#populated-images").children().length >= 5){
+                    $("#add-new-img").remove();
+                }
             })
             .fail(function(){
                 alert("Error - Could not add image.");

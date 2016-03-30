@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
+import json
 
 
 
@@ -541,7 +542,17 @@ class Plant(models.Model):
 
     region = models.ManyToManyField('Region', through='PlantRegion')
     def get_region(self):
-        return ', '.join([str(a) for a in self.region.all()])
+        try:
+            pr = PlantRegion.objects.get(plants_id=self.id)
+        except PlantRegion.DoesNotExist:
+            return None
+
+        height = float(json.dumps(str(pr.height)).strip('"'));
+        spread = float(json.dumps(str(pr.spread)).strip('"'));
+        root_depth = float(json.dumps(str(pr.root_depth)).strip('"'));
+
+        return {'height': height, 'spread': spread, 'root_depth': root_depth}
+        #return ', '.join([str(a) for a in self.region.all()])
 
     pH_min = models.DecimalField(db_column='ph_min', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase. #
     pH_max = models.DecimalField(db_column='ph_max', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase.

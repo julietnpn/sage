@@ -14,7 +14,7 @@ import json
 import pdb
 
 Characteristics = [
-	'duration', 'region' 'ph_min', 'ph_max', 'layer', 'canopy_density', 'active_growth_period', 'harvest_period', 'leaf_retention', 'flower_color',
+	'duration', 'pH_min', 'pH_max', 'layer', 'canopy_density', 'active_growth_period', 'harvest_period', 'leaf_retention', 'flower_color',
 	'foliage_color', 'fruit_color', 'degree_of_serotiny', 
 ]
 Needs = [
@@ -35,8 +35,9 @@ PropertyToClassName={
 	'duration':'Duration', #was multiselect but should be only one
 	'height':'PlantHeightAtMaturityByRegion', #didnt work
 	'spread':'PlantSpreadAtMaturityByRegion', #didnt work
-	'ph_min': 'fixthis', 
-	'ph_max' :'fixthis', 
+	'pH_min': 'fixthis', 
+	'pH_max' :'fixthis', 
+	'region':'fixthis',
 	'layer' : 'Layer', 
 	'canopy_density' : 'CanopyDensity', #was multiselect but should be only one
 	'active_growth_period' : 'ActiveGrowthPeriod', 
@@ -259,10 +260,19 @@ def editPlant(request, plantId=None):
 	plant = Plant.objects.get(id=plantId)
 	result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
 	for field in plant.get_all_fields:
-		# if field['name'] is 'barrier':
-		# 	continue
 		if field['name'] is 'region':
-			print(field)
+			if plant.get_region() is None:
+				height = dict(name='height', field_type='other', value=None, label='height', class_name = 'FIXME')
+				spread = dict(name='spread', field_type='other', value=None, label='spread', class_name = 'FIXME')
+				root_depth = dict(name='root_depth', field_type='other', value=None, label='root depth', class_name = 'FIXME')
+			else:
+				height = dict(name='height', field_type='other', value=plant.get_region()['height'], label='height', class_name = 'FIXME')
+				spread = dict(name='spread', field_type='other', value=plant.get_region()['spread'], label='spread', class_name = 'FIXME')
+				root_depth = dict(name='root_depth', field_type='other', value=plant.get_region()['root_depth'], label='root depth', class_name = 'FIXME')
+			
+			result['Characteristics'].append(height)
+			result['Characteristics'].append(spread)
+			result['Characteristics'].append(root_depth)
 		if field['name'] in Characteristics:
 			field.update({'class_name':PropertyToClassName[field['name']]})
 			result['Characteristics'].append(field)
@@ -343,6 +353,7 @@ def addPlant(request):
 			plant = Plant.objects.create()
 			result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
 			for field in plant.get_all_fields:
+
 				if field['name'] in Characteristics:
 					field.update({'class_name':PropertyToClassName[field['name']]})
 					result['Characteristics'].append(field)
@@ -388,6 +399,12 @@ def addPlant(request):
 			}
 			return render(request, 'frontend/editplant.html', context)
 
+from django.template.defaulttags import register
+
+@register.filter
+def get_item(dictionary, key):
+	return dictionary.get(key)
+
 def viewPlants(request):
 	if request.method == 'GET':
 		plant_list = Plant.objects.all()
@@ -401,13 +418,19 @@ def viewPlants(request):
 		except EmptyPage:
 			plants = paginator.page(paginator.num_pages)
 
-		# for p in plants:
-		# 	img = ImageURL.objects.filter(plants_id=p.id)
-		# 	p.update({'image':img.value[0]})
+		iterableImages = ImageURL.objects.all()
+		images = {}
+		plantIdsAlreadyUsed = []
+		for img in iterableImages:
+			if img.plants.id not in plantIdsAlreadyUsed:
+				images[img.plants.id] = img.value
+				plantIdsAlreadyUsed.append(img.plants.id)
+
 
 		context = {
 			'addPlantForm': AddPlantForm(),
 			'plants':plants,
+			'images': images,
 			'searchForThis': [],#json.dumps(populateSearchDropDown()),
 		}
 		return render(request, 'frontend/cardview.html', context)
