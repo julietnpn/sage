@@ -540,10 +540,7 @@ class Plant(models.Model):
     pH_min = models.DecimalField(db_column='ph_min', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase. #
     pH_max = models.DecimalField(db_column='ph_max', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase.
     
-<<<<<<< Updated upstream
     #Layer
-=======
->>>>>>> Stashed changes
     layer = models.ManyToManyField(Layer, through='PlantLayer')#, blank=True, null=True) #not sure testing
     @property
     def get_layer(self):
@@ -852,7 +849,7 @@ class PlantBarrier(models.Model):# BarrierByRegion
 
     class Meta:
         managed = True
-        db_table = 'plants_barrier' # TODO
+        db_table = 'plants_barrier_by_region' # TODO
         unique_together = (('plants', 'regions'),)
 
 class PlantNutrientRequirementsByRegion(models.Model):
@@ -1208,7 +1205,7 @@ class Transactions(models.Model):
     ignore = models.BooleanField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'transactions'
 
     def __str__(self):
