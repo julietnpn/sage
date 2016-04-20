@@ -1225,19 +1225,19 @@ class UrlTags(models.Model):
         return self.value
 
 #---------------should use django user table--------------------
-class Users(models.Model):
-    username = models.TextField()
-    creation_timestamp = models.DateTimeField()
-    email = models.TextField()
-    enabled = models.BooleanField()
-    real_name = models.TextField()
+# class Users(models.Model):
+#     username = models.TextField()
+#     creation_timestamp = models.DateTimeField()
+#     email = models.TextField()
+#     enabled = models.BooleanField()
+#     real_name = models.TextField()
 
-    class Meta:
-        managed = False
-        db_table = 'users'
+#     class Meta:
+#         managed = True
+#         db_table = 'users'
 
-    def __str__(self):
-        return self.username
+#     def __str__(self):
+#         return self.username
 
 
 class WaterNeeds(models.Model):
