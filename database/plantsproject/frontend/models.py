@@ -864,7 +864,7 @@ class PlantBarrier(models.Model):# BarrierByRegion
 
     class Meta:
         managed = True
-        db_table = 'plants_barrier' # TODO
+        db_table = 'plants_barrier_by_region' # TODO
         unique_together = (('plants', 'regions'),)
 
 class PlantNutrientRequirementsByRegion(models.Model):

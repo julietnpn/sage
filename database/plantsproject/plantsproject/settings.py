@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'plantsproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'plants2',
+        'NAME': 'django-plants',
         'USER': 'postgres',
-        'PASSWORD': 'plants',
+        'PASSWORD': '123456',
         'HOST': 'localhost',
         'PORT': '5432',
     }
