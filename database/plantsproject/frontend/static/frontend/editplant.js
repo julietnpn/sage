@@ -129,7 +129,7 @@ var EditPlant = function(){
         });
 
         // Submits form when modal save button is pressed.
-        $('.submitBtn').click(function(){
+        $('.submitBtn').click(function(){ //not update names
             if (userId < 0){
                 userNotAuthenticated();
                 return;
@@ -155,12 +155,19 @@ var EditPlant = function(){
                 $("#commonName").html($("#input-commonName").val());
                 //$("#familyCommonName").html($("#input-familyCommonName").val());
                 //$("#family").html($("#input-family").val());
-                if($("#id_family option:selected").text().indexOf("--") < 0)
+                var family = $("#id_family option:selected").text();
+                if($("#id_family option:selected").text().indexOf("--") < 0){
                     $("#family").html( $("#id_family option:selected").text());
-                if($("#id_familyCommonName option:selected").text().indexOf("--") < 0)
+                    $("#family").show();
+                }
+                if($("#id_familyCommonName option:selected").text().indexOf("--") < 0){
                     $("#familyCommonName").html( $("#id_familyCommonName option:selected").text());
-                if($("#id_endemicStatus option:selected").text().indexOf("--") < 0)
+                    $("#familyCommonName").show();
+                }
+                if($("#id_endemicStatus option:selected").text().indexOf("--") < 0){
                     $("#endemicStatus").html( $("#id_endemicStatus option:selected").text());
+                    $("#endemicStatus").show();
+                }
                 $("#updateNamesMdl").modal("hide");
                 displayMessage();
             })

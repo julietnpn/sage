@@ -71,32 +71,32 @@
 					<div class="name" id="commonName"></div>
 				</div> 
 			{% endif %}
-			<br>
+			
 
 			{% if family %}
-				<div class="edit-plant-subtitle name">
-					<div class="name" id="family">{{ family }}</div>
+				<div class="edit-plant-subtitle name" id="family">{{ family }}
+					<!-- <div class="name" id="family">{{ family }}</div> -->
 				</div>
 			{% else %}
-				<div class="edit-plant-subtitle name" style="display:none;">
-					<div class="name" id="family"></div>
+				<div class="edit-plant-subtitle name" id="family" style="display:none;">
+					<!-- <div class="name" id="family"></div> -->
 				</div> 
 			{% endif %}
-			<br>
+			
 
 			{% if family_common_name %}
-				<div class="edit-plant-subtitle name italic">
-					<div class="name" id="familyCommonName">{{ family_common_name }}</div>
+				<div class="edit-plant-subtitle name italic" id="familyCommonName">
+					<!-- <div class="name" id="familyCommonName">{{ family_common_name }}</div> -->
 				</div>
 			{% else %}
-				<div class="edit-plant-subtitle name italic" style="display:none;">
-					<div class="name" id="familyCommonName"></div>
+				<div class="edit-plant-subtitle name italic" id="familyCommonName" style="display:none;">
+					<!-- <div class="name" id="familyCommonName"></div> -->
 				</div> 
 			{% endif %}
 			
 			{% endspaceless %}
-			<br>
-				<div>{% if endemic_status %}{% if endemic_status != 0 %}Endemic Status: {% endif %}{% endif %}<p id="endemicStatus">{% if endemic_status %}{% if endemic_status != 0 %}{{ endemic_status }}{% endif %}{% endif %}</p></div>
+			
+				<div style="display:none;">{% if endemic_status %}{% if endemic_status != 0 %}Endemic Status: {% endif %}{% endif %}<p id="endemicStatus">{% if endemic_status %}{% if endemic_status != 0 %}{{ endemic_status }}{% endif %}{% endif %}</p></div>
 		</div>
 	</div>
 
