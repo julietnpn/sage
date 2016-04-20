@@ -13,6 +13,20 @@ html {
 	display:inline-block;
 }
 
+.message{
+	display:none;
+	position:fixed;
+	width:400px;
+	color: white;
+	border:1px solid #ebccd1;
+	border-radius:25px;
+	background:#cc060c;
+	padding:5px;
+	right:100px;
+	top : 100px;
+	text-align: center;
+}
+
 div{
 	font-family: 'Karla', sans-serif;
 }

@@ -1,3 +1,5 @@
+
+
 var EditPlant = function(){
 	//----------------- BEGIN MODULE SCOPE VARIABLES ------------
 	var pub = {},
@@ -21,6 +23,15 @@ var EditPlant = function(){
         species =pSpecies;
         variety = pVariety;
         userId = userId;
+
+        // $(document).ready(function(){
+        //     //first slide down and blink the message box
+        //     $("#object").animate({
+        //         top: "0px"
+        //     }, 2000 ).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+        //     $("#object").show(400).delay(5000).fadeOut(400)
+
+        // });
 
         jqueryMap.$plantNames.mouseenter(function(e){
             $("#clicktoedit").show()
@@ -166,7 +177,7 @@ var EditPlant = function(){
                 }
                 if($("#id_endemicStatus option:selected").text().indexOf("--") < 0){
                     $("#endemicStatus").html( $("#id_endemicStatus option:selected").text());
-                    $("#endemicStatus").show();
+                    $("#endemicStatusWrapper").show();
                 }
                 $("#updateNamesMdl").modal("hide");
                 displayMessage();
@@ -532,8 +543,13 @@ var EditPlant = function(){
     }
 
     function displayMessage(){
-        if(!isNew)
-            $("#edit-msg").show(400).delay(5000).hide(400);
+        // if(!isNew)
+        //     $("#edit-msg").show(400).delay(5000).hide(400);
+        // $("#object").animate({
+        //         top: "0px"
+        //     }, 2000 ).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+        
+        $("#object").fadeIn(2000).delay(5000).fadeOut(400)
     }
 
     function resetBorderColor(elements){

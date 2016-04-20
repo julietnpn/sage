@@ -38,10 +38,21 @@
 		<div class="col-sm-3"> </div>
 	</div>
 
+
+
+
 	<div class="row editplantrow">
+		<!-- TESTING MESSAGE- -->
+		<div id="object" class="message">
+	  	<strong>Thanks for your contribution!</strong>
+	  	<p>Changes will be reflected on this page, but please allow 24 hours for your changes to be reflected across the site.</p>
+		</div>
+		<!-- TESTING MESSAGE- -->
+
+
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-11">
-			<div class="edit-plant-title name">{% spaceless %}
+			<div class="edit-plant-title">{% spaceless %}
 				<div class="name" id="genus">
 					{% if genus %}
 						{{ genus }}
@@ -61,13 +72,13 @@
 			</div>
 			
 			{% if common_name %}
-				<div class="edit-plant-title name italic">
+				<div class="edit-plant-title italic">
 					<div class="name" id="commonName">
 						{{ common_name }}
 					</div>
 				</div>
 			{% else %}
-				<div class="edit-plant-title name italic" style="display:none;">
+				<div class="edit-plant-title italic" style="display:none;">
 					<div class="name" id="commonName"></div>
 				</div> 
 			{% endif %}
@@ -93,10 +104,20 @@
 					<!-- <div class="name" id="familyCommonName"></div> -->
 				</div> 
 			{% endif %}
+
+			{% if endemic_status %}
+				{% if endemic_status != 0 %}
+				<div class="name" id="endemicStatusWrapper">Endemic Status: <p id="endemicStatus">{{ endemic_status }}</p></div>
+				{% endif %}
+
+			{% else %}
+				<div class="name" id="endemicStatusWrapper" style="display:none;">Endemic Status: <p id="endemicStatus"></p></div>
+
+			{% endif %}
 			
 			{% endspaceless %}
 			
-				<div style="display:none;">{% if endemic_status %}{% if endemic_status != 0 %}Endemic Status: {% endif %}{% endif %}<p id="endemicStatus">{% if endemic_status %}{% if endemic_status != 0 %}{{ endemic_status }}{% endif %}{% endif %}</p></div>
+			<!-- <div style="display:none;" id="endemicStatusWrapper">Endemic Status: <p id="endemicStatus">{% if endemic_status %}{% if endemic_status != 0 %}{{ endemic_status }}{% endif %}{% endif %}</p></div> -->
 		</div>
 	</div>
 
