@@ -147,6 +147,7 @@ def updateNames(request):
 
 		actions = []
 		
+		#pdb.set_trace()
 		genus = request.POST['genus']
 		species = request.POST['species']
 		variety = request.POST['variety']
@@ -335,8 +336,10 @@ def addPlant(request):
 			if len(nameArray) > 2:
 				variety = nameArray[2]
 
+
+			
 			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
-			# transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, transaction_type='INSERT', ignore=False)
+			#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, transaction_type='INSERT', ignore=False)
 			transaction.save()
 			actions = []
 
@@ -487,12 +490,11 @@ def search(request):
 	rawmat_results = Plant.objects.filter(raw_materials_prod__in=RawMaterialsProd.objects.filter(value__icontains=searchString))
 	med_results = Plant.objects.filter(medicinals_prod__in=MedicinalsProd.objects.filter(value__icontains=searchString))
 	biomed_results = Plant.objects.filter(biochemical_material_prod__in=BiochemicalMaterialProd.objects.filter(value__icontains=searchString))
-	water_results = Plant.objects.filter(water_needs__in=WaterNeeds.objects.filter(value__icontains=searchString))
-	sun_results = Plant.objects.filter(sun_needs__in=SunNeeds.objects.filter(value__icontains=searchString))
-	nutrients_results = Plant.objects.filter(fertility_needs__in=NutrientRequirements.objects.filter(value__icontains=searchString))
+	# water_results = Plant.objects.filter(water_needs__in=WaterNeeds.objects.filter(value__icontains=searchString))
+	# sun_results = Plant.objects.filter(sun_needs__in=SunNeeds.objects.filter(value__icontains=searchString))
+	# nutrients_results = Plant.objects.filter(fertility_needs__in=NutrientRequirements.objects.filter(value__icontains=searchString))
 	serotiny_results = Plant.objects.filter(serotiny__in=Serotiny.objects.filter(value__icontains=searchString))
 	erosion_results = Plant.objects.filter(erosion_control__in=ErosionControl.objects.filter(value__icontains=searchString))
-	
 	insect_attract_results = Plant.objects.filter(plants_insect_attractor__in=Insects.objects.filter(value__icontains=searchString))
 	insect_reg_results = Plant.objects.filter(plants_insect_regulator__in=Insects.objects.filter(value__icontains=searchString))
 
@@ -501,8 +503,8 @@ def search(request):
 		Q(variety__icontains=searchString) |
 		Q(common_name__icontains=searchString) |
 		Q(innoculant__icontains=searchString))
-	results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
-
+	# results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
+	results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 
 
 
