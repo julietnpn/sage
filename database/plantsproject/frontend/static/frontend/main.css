@@ -17,6 +17,10 @@ div{
 	font-family: 'Karla', sans-serif;
 }
 
+.formselect{
+	width:400px;
+}
+
 section#contain {
 	margin: 0 auto;
 	display: block;
@@ -105,10 +109,7 @@ section#contain a img {
 }
 
 
-
-
-#plant-images > .cardimg,
-#plant-images > #populated-images > .cardimg{
+#plant-images > .cardimg{
 	display:inline-block;
 	float:left;
 }
@@ -148,6 +149,8 @@ section#contain a img {
 	cursor:pointer;
 
 }
+
+
 
 #add-new-img2{
 	display:table;
@@ -438,3 +441,8 @@ border-color:#66CD00;
 		transition-delay: .25s;
 		transition-duration: 0s;
 	}
+
+#imagelightbox{
+	display:inline-block;
+	float:left;
+}

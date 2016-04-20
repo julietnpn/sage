@@ -63,7 +63,7 @@
 						{% endif %}
 
 						{% if plant.medicinals_prod.all %}
-							<text><i> Medicinals&nbsp;</i><b>{{ plant.medicinals_prod }}</b></text>
+							<text><i>Medicinals&nbsp;</i><b>{{ plant.get_medicinals_prod }}</b></text>
 						{% endif %}
 
 						{% if plant.get_biochemical_material_prod.all %}

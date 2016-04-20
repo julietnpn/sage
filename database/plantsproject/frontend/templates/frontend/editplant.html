@@ -30,8 +30,8 @@
 {% endif %}
 
 {% if result %}
-	<div id="hiddenTransactionId" style="visibility:hidden;">{{ transactionId }}</div> <!--do we really need these - should be object vars -->
-	<div id="hiddenPlantId" style="visibility:hidden;">{{plantId}}</div>
+	<div id="hiddenTransactionId" style="display:none;">{{ transactionId }}</div> <!--do we really need these - should be object vars -->
+	<div id="hiddenPlantId" style="display:none;">{{plantId}}</div>
 	<div class="row editplantrow" id="edit-msg">
 		<div class="col-sm-1"></div>
 		<div class="col-sm-8">Thanks for your contribution! Changes will be reflected on this page, but please allow 24 hours for your changes to be reflected across the site.</div>
@@ -57,28 +57,43 @@
 						{{ variety }}
 					{% endif %}
 				</div>
+				<text id="clicktoedit" style="display:none;">click to edit</text>
 			</div>
-			<div class="edit-plant-title name italic">
-				<div class="name" id="commonName">
-					{% if common_name %}
-					{{ common_name }}
-				{% endif %}
+			
+			{% if common_name %}
+				<div class="edit-plant-title name italic">
+					<div class="name" id="commonName">
+						{{ common_name }}
+					</div>
 				</div>
-			</div> 
+			{% else %}
+				<div class="edit-plant-title name italic" style="display:none;">
+					<div class="name" id="commonName"></div>
+				</div> 
+			{% endif %}
 			<br>
-			<div class="edit-plant-subtitle name">
-				<div class="name" id="family">
-				{% if family %}
-					{{ family }}
-				{% endif %}
+
+			{% if family %}
+				<div class="edit-plant-subtitle name">
+					<div class="name" id="family">{{ family }}</div>
 				</div>
-			</div>
-			<div class="edit-plant-subtitle name italic">
-				<div class="name" id="familyCommonName">{% if family_common_name %}
-					{{ family_common_name }}
-				{% endif %}
+			{% else %}
+				<div class="edit-plant-subtitle name" style="display:none;">
+					<div class="name" id="family"></div>
+				</div> 
+			{% endif %}
+			<br>
+
+			{% if family_common_name %}
+				<div class="edit-plant-subtitle name italic">
+					<div class="name" id="familyCommonName">{{ family_common_name }}</div>
 				</div>
-			</div>
+			{% else %}
+				<div class="edit-plant-subtitle name italic" style="display:none;">
+					<div class="name" id="familyCommonName"></div>
+				</div> 
+			{% endif %}
+			
 			{% endspaceless %}
 			<br>
 				<div>{% if endemic_status %}{% if endemic_status != 0 %}Endemic Status: {% endif %}{% endif %}<p id="endemicStatus">{% if endemic_status %}{% if endemic_status != 0 %}{{ endemic_status }}{% endif %}{% endif %}</p></div>
@@ -90,16 +105,17 @@
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div id="plant-images" class="col-sm-11">
 			<div id="populated-images">
-			{% for img in images %}
-			<img src="{{ img.value }}" class='cardimg' alt="Plant Image" />
-			{% endfor %}
-		</div>
-			<!--<a href="#"></a>-->
+				{% for img in images %}
+				<a href="{{ img.value }}"><img src="{{ img.value }}" class='cardimg' id="imagelightbox" alt="Plant Image" /></a>
+				{% endfor %}
+			</div>
 			{% if images|length < 5 %}
 			<div id ="add-new-img" src="" class="cardimg"/><div id="add-new-img2"><div>+ add new</div></div></div>
 			{% endif %}
 		</div>
-	</div>
+		
+	</div> <!-- end row editplantrow -->
+	
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-sm-5" id="characteristics-block">
@@ -285,7 +301,7 @@
 
 {% load staticfiles %}
 <script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
-
+<script src="{% static 'frontend/image.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript">
 	$("#edit-msg").hide();
@@ -300,6 +316,12 @@
 		EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, -1);
 	{% endif %} 
 	//EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, id); //pass transactionId as 0?
+
+
+
+	$(function () {
+        $('#plant-images a').fluidbox();
+    })
 </script>
 
 

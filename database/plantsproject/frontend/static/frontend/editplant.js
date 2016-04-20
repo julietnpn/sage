@@ -22,6 +22,13 @@ var EditPlant = function(){
         variety = pVariety;
         userId = userId;
 
+        jqueryMap.$plantNames.mouseenter(function(e){
+            $("#clicktoedit").show()
+        });
+
+        jqueryMap.$plantNames.mouseleave(function(e){
+            $("#clicktoedit").hide()
+        });
 
         // Opens modal to edit the general plant information
         jqueryMap.$plantNames.click(function(e){
@@ -30,21 +37,43 @@ var EditPlant = function(){
                 e.stopPropagation();
                 return;
             }
+            resetNameChangeFlags();
             $("#hidden-plantId").val(getPlantId());
             $("#transaction-id").val(transactionId);
             $("#input-genus").val($("#genus").text().trim());
             $("#input-species").val($("#species").text().trim());
             $("#input-variety").val($("#variety").text().trim());
             $("#input-commonName").val($("#commonName").text().trim());
-            $("#input-family").val($("#family").text().trim());
-            $("#input-familyCommonName").val($("#familyCommonName").text().trim());
-            var val = $("#endemicStatus").text().trim();
+            //$("#input-family").val($("#family").text().trim());
+            //$("#input-familyCommonName").val($("#familyCommonName").text().trim());
+            var val = $("#family").text().trim();
+            if(val != ""){
+                $("#id_family").find('option:contains("'+ val+ '")').attr("selected",true);
+                //$("#family-text").val(val);
+            }
+            val = $("#familyCommonName").text().trim();
+            if(val != ""){
+                $("#id_familyCommonName").find('option:contains("'+ val+ '")').attr("selected",true);
+                //$("#familyCommonName-text").val(val);
+            }
+            val = $("#endemicStatus").text().trim();
             if(val != ""){
                 $("#id_endemicStatus").find('option:contains("'+ val+ '")').attr("selected",true);
                 $("#endemicStatus-text").val(val);
             }
 
+            $("#id_family").select2();
+            $("#id_familyCommonName").select2();
+            $("#id_endemicStatus").select2();
+
             jqueryMap.$updateNamesMdl.modal();
+
+            jqueryMap.$updateNamesMdl.on('keypress', function(e){
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if(keycode == '13'){
+                    $("#updateNames-submit").trigger('click');
+                }
+            });
         });
 
         //Opens modal to edit an attribute
@@ -115,12 +144,21 @@ var EditPlant = function(){
                 return;
             }
             $.post('/frontend/updateNames/', $("#updateNamesMdl form").serialize(), function(data){
+                //alert($("#genus-flag").val());
+                //alert($("#species-flag").val()); //RESET FLAGS??????????????????????????????!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 $("#genus").html($("#input-genus").val());
                 $("#species").html($("#input-species").val());
                 $("#variety").html($("#input-variety").val());
+                // if($("#genus-flag").val() == "1"){
+                //     $("#commonName").
+                // }
                 $("#commonName").html($("#input-commonName").val());
-                $("#familyCommonName").html($("#input-familyCommonName").val());
-                $("#family").html($("#input-family").val());
+                //$("#familyCommonName").html($("#input-familyCommonName").val());
+                //$("#family").html($("#input-family").val());
+                if($("#id_family option:selected").text().indexOf("--") < 0)
+                    $("#family").html( $("#id_family option:selected").text());
+                if($("#id_familyCommonName option:selected").text().indexOf("--") < 0)
+                    $("#familyCommonName").html( $("#id_familyCommonName option:selected").text());
                 if($("#id_endemicStatus option:selected").text().indexOf("--") < 0)
                     $("#endemicStatus").html( $("#id_endemicStatus option:selected").text());
                 $("#updateNamesMdl").modal("hide");
@@ -170,10 +208,10 @@ var EditPlant = function(){
         $("#input-commonName").on('keydown', function(){
              $("#commonName-flag").val(1);
         });
-        $("#input-family").on('keydown', function(){
+        $("#id_family").on('change', function(){
              $("#family-flag").val(1);
         });
-        $("#input-familyCommonName").on('keydown', function(){
+        $("#id_familyCommonName").on('change', function(){
              $("#familyCommonName-flag").val(1);
         });
         $("#id_endemicStatus").on('change', function(){
@@ -350,7 +388,10 @@ var EditPlant = function(){
 
 
             $.post('/frontend/addImg/', $("#addImg form").serialize(), function(data){
-                $("<img />").attr("src", url).addClass('cardimg').appendTo($("#populated-images"));
+                $("<img />").attr("src", url)
+                    .addClass('cardimg')
+                    .attr('id', 'imagelightbox')
+                    .appendTo($("#populated-images"));
                 jqueryMap.$addImgModal.modal('hide');
                 displayMessage();
 
