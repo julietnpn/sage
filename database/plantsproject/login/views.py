@@ -32,9 +32,11 @@ def register(request):
     )
  
 def register_success(request):
-    return render_to_response(
-    'registration/success.html',
-    )
+    # return render_to_response(
+    # #'registration/success.html',
+    # 'frontend/login',
+    # )
+    return HttpResponseRedirect('/login')
  
 def logout_page(request):
     logout(request)
