@@ -7,11 +7,68 @@ from django.utils.decorators import method_decorator
 from datetime import datetime
 from .models import *
 from django.apps import apps
-from .forms import AddPlantForm, UpdateTextForm, UpdateSelectForm, UpdateMultiForm, UpdatePlantNamesForm
+from .forms import AddPlantForm, UpdateAttributeForm, UpdatePlantNamesForm #, UpdateTextForm, UpdateSelectForm, UpdateMultiForm
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 import pdb
+
+
+EmptyPlant = {
+	'Characteristics':[
+		{'name':'ph_min', 'field_type':'other', 'value':None, 'label':'pH min', 'class_name':'temp'},
+		{'name':'ph_max', 'field_type':'other', 'value':None, 'label':'pH max', 'class_name':'temp'},
+		{'name':'degree_of_serotiny', 'field_type':'many_to_one', 'value':None, 'label':'degree of serotiny', 'class_name':'DegreeOfSerotiny'},
+		{'name':'duration', 'field_type':'many_to_many', 'value':None, 'label':'duration', 'class_name':'Duration'},
+		{'name':'height', 'field_type':'other', 'value':None, 'label':'height', 'class_name':'temp'},
+		{'name':'spread', 'field_type':'other', 'value':None, 'label':'spread', 'class_name':'temp'},
+		{'name':'root_depth', 'field_type':'other', 'value':None, 'label':'root depth', 'class_name':'temp'},
+		{'name':'layer', 'field_type':'many_to_many', 'value':None, 'label':'layer', 'class_name':'Layer'},
+		{'name':'canopy_density', 'field_type':'many_to_many', 'value':None, 'label':'canopy density', 'class_name':'CanopyDensity'},
+		{'name':'active_growth_period', 'field_type':'many_to_many', 'value':None, 'label':'active growth period', 'class_name':'ActiveGrowthPeriod'},
+		{'name':'harvest_period', 'field_type':'many_to_many', 'value':None, 'label':'harvest period', 'class_name':'HarvestPeriod'},
+		{'name':'leaf_retention', 'field_type':'many_to_many', 'value':None, 'label':'leaf retention', 'class_name':'LeafRetention'},
+		{'name':'flower_color', 'field_type':'many_to_many', 'value':None, 'label':'flower color', 'class_name':'FlowerColor'},
+		{'name':'foliage_color', 'field_type':'many_to_many', 'value':None, 'label':'foliage color', 'class_name':'FoliageColor'},
+		{'name':'fruit_color', 'field_type':'many_to_many', 'value':None, 'label':'fruit color', 'class_name':'FruitColor'}
+	],
+	'Needs':[
+		{'name':'innoculant', 'field_type':'other', 'value':None, 'label':'innoculant', 'class_name':'temp'},
+		{'name':'serotiny', 'field_type':'many_to_one', 'value':None, 'label':'serotiny', 'class_name':'temp'},
+		{'name':'fertility_needs', 'field_type':'many_to_many', 'value':None, 'label':'Nutrient Requirements', 'class_name':'NutrientRequirements'},
+		{'name':'water_needs', 'field_type':'many_to_many', 'value':None, 'label':'water needs', 'class_name':'WaterNeeds'},
+		{'name':'sun_needs', 'field_type':'many_to_many', 'value':None, 'label':'sun needs', 'class_name':'SunNeeds'}
+	],
+	'Behaviors':[
+		{'name':'livestock_bloat', 'field_type':'many_to_one', 'value':None, 'label':'livestock bloat', 'class_name':'LivestockBloat'},
+		{'name':'toxicity', 'field_type':'many_to_one', 'value':None, 'label':'toxicity', 'class_name':'Toxicity'},
+		{'name':'erosion_control', 'field_type':'many_to_many', 'value':None, 'label':'erosion control', 'class_name':'ErosionControl'},
+		{'name':'plants_insect_attractor', 'field_type':'many_to_many', 'value':None, 'label':'plants insect attractor', 'class_name':'PlantInsectAttractorByRegion'},
+		{'name':'plants_insect_regulator', 'field_type':'many_to_many', 'value':None, 'label':'plants insect regulator', 'class_name':'PlantInsectRegulatorByRegion'},
+		{'name':'plants_animal_regulator', 'field_type':'many_to_many', 'value':None, 'label':'plants animal regulator', 'class_name':'PlantAnimalRegulatorByRegion'},
+		{'name':'plants_animal_attractor', 'field_type':'many_to_many', 'value':None, 'label':'plants animal attractor', 'class_name':'PlantAnimalAttractorByRegion'}
+	],
+	'Tolerances':[
+		{'name':'salt_tol', 'field_type':'many_to_one', 'value':None, 'label':'salt tol', 'class_name':'SaltTol'},
+		{'name':'flood_tol', 'field_type':'many_to_one', 'value':None, 'label':'flood tol', 'class_name':'FloodTol'},
+		{'name':'drought_tol', 'field_type':'many_to_one', 'value':None, 'label':'drought tol', 'class_name':'DroughtTol'},
+		{'name':'humidity_tol', 'field_type':'many_to_one', 'value':None, 'label':'humidity tol', 'class_name':'HumidityTol'},
+		{'name':'wind_tol', 'field_type':'many_to_one', 'value':None, 'label':'wind tol', 'class_name':'WindTol'},
+		{'name':'fire_tol', 'field_type':'many_to_one', 'value':None, 'label':'fire tol', 'class_name':'FireTol'},
+		{'name':'minimum_temperature_tol', 'field_type':'other', 'value':None, 'label':'minimum temperature tol', 'class_name':'temp'},
+		{'name':'shade_tol', 'field_type':'many_to_many', 'value':None, 'label':'shade tol', 'class_name':'ShadeTol'},
+		{'name':'soil_drainage_tol', 'field_type':'many_to_many', 'value':None, 'label':'soil drainage tol', 'class_name':'SoilDrainageTol'},
+	],
+	'Products':[
+		{'name':'allelochemicals', 'field_type':'other', 'value':None, 'label':'allelochemicals', 'class_name':'temp'},
+		{'name':'food_prod', 'field_type':'many_to_many', 'value':None, 'label':'food prod', 'class_name':'FoodProd'},
+		{'name':'raw_materials_prod', 'field_type':'many_to_many', 'value':None, 'label':'raw materials prod', 'class_name':'RawMaterialsProd'},
+		{'name':'medicinals_prod', 'field_type':'many_to_many', 'value':None, 'label':'medicinals prod', 'class_name':'MedicinalsProd'},
+		{'name':'biochemical_material_prod', 'field_type':'many_to_many', 'value':None, 'label':'biochemical material prod', 'class_name':'BiochemicalMaterialProd'},
+		{'name':'cultural_and_amenity_prod', 'field_type':'many_to_many', 'value':None, 'label':'cultural and amenity prod', 'class_name':'CulturalAndAmenityProd'},
+		{'name':'mineral_nutrients_prod', 'field_type':'many_to_many', 'value':None, 'label':'mineral nutrients prod', 'class_name':'MineralNutrientsProd'}
+	]
+}
 
 Characteristics = [
 	'duration', 'pH_min', 'pH_max', 'layer', 'canopy_density', 'active_growth_period', 'harvest_period', 'leaf_retention', 'flower_color',
@@ -139,8 +196,8 @@ def updateNames(request):
 		action_type = "UPDATE"
 
 		if transaction_id == 0:
-			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type=action_type, ignore=False)
-			#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type=action_type, ignore=False)
+			#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type=action_type, ignore=False)
+			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type=action_type, ignore=False)
 			transaction.save()
 		else:
 			transaction = Transactions.objects.get(id=transaction_id)
@@ -179,16 +236,17 @@ def updateNames(request):
 
 def updateText(request, transaction_id, action_type):
 	if request.method == 'POST':
-		form = UpdateTextForm(request.POST)
+		form = UpdateAttributeForm(request.POST, class_name='Plant')
 
 		if form.is_valid():
+			print("Update Text is valid")
 			property = request.POST['property_name']
 			value = request.POST['text']
 			plantId = request.POST['plant_id']
 
 			if int(transaction_id) == 0:
-				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-				#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
 				transaction.save()
 			else:
 				transaction = Transactions.objects.get(id = transaction_id)
@@ -197,25 +255,26 @@ def updateText(request, transaction_id, action_type):
 			Actions.objects.bulk_create(actions)
 			response_data = transaction.id
 		else:
-			response_data = {'dropdownvals':[request.POST['select']], 'defaultIds':['post select- invalid']}
-		return HttpResponse(json.dumps(response_data), content_type="application/json")
-	else:
-		response_data = {"get":"get"}
+			print("~~INVALID FORM~~")
+			response_data = int(transaction_id)
 		return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def updateSelect(request, transaction_id, action_type):
 	if request.method == 'POST':
 		cls_name = request.POST['class_name']
-		form = UpdateSelectForm(request.POST, class_name=cls_name)
+
+		form = UpdateAttributeForm(request.POST, class_name=cls_name)
+		#form = UpdateAttributeForm(request.POST, class_name='Plant')
 		
 		if form.is_valid():
+			print("Update select is valid")
 			property = request.POST['property_name']
 			value = request.POST['select']
 			plantId = request.POST['plant_id']
 
 			if int(transaction_id) == 0:
-				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-				#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
 				transaction.save()
 			else:
 				transaction = Transactions.objects.get(id = transaction_id)
@@ -224,23 +283,28 @@ def updateSelect(request, transaction_id, action_type):
 			Actions.objects.bulk_create(actions)
 			response_data = transaction.id
 		else:
-			response_data = {'dropdownvals':[request.POST['select']], 'defaultIds':['post select- invalid']}
+			print("~~INVALID FORM~~")
+			response_data = int(transaction_id)
 		return HttpResponse(json.dumps(response_data))
 
 def updateMulti(request, transaction_id, action_type):
+	
 	if request.method == 'POST':
-		form = UpdateMultiForm(request.POST)
-		
+		#form = UpdateMultiForm(request.POST)
+		cls_name = request.POST['class_name']
+		form = UpdateAttributeForm(request.POST, class_name=cls_name)
+		#pdb.set_trace()
 		if form.is_valid():
+			print("Update multi is valid")
 			property = request.POST['property_name']
 			values = dict(request.POST)['multi']
 			plantId = request.POST['plant_id']
-			oldVals = request.POST['old_vals']
-			oldVals = oldVals.split(",")
+			# oldVals = request.POST['old_vals']
+			# oldVals = oldVals.split(",") WHY WAS THIS HERE
 
 			if int(transaction_id) == 0: 
-				#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+				#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
 				transaction.save()
 			else:
 				transaction = Transactions.objects.get(id = transaction_id)
@@ -252,7 +316,8 @@ def updateMulti(request, transaction_id, action_type):
 
 			response_data = transaction.id
 		else:
-			response_data = {'dropdownvals':[], 'defaultIds':['post multi- invalid', ]}
+			print("~~INVALID FORM~~")
+			response_data = int(transaction_id)
 		return HttpResponse(json.dumps(response_data))
 
 #Plant.imageurl_set
@@ -307,10 +372,11 @@ def editPlant(request, plantId=None):
 		'endemic_status' : plant.get_endemic_status,
 		'images': ImageURL.objects.filter(plants_id=plantId),
 		'searchForThis': {},#json.dumps(populateSearchDropDown()),
-		'updateTextForm': UpdateTextForm(),
-		'updateSelectForm': UpdateSelectForm(class_name='Plant'),
-		'updateMulitForm': UpdateMultiForm(),
-		'updatePlantNamesForm':UpdatePlantNamesForm(),
+		# 'updateTextForm': UpdateTextForm(),
+		# 'updateSelectForm': UpdateSelectForm(class_name='Plant'),
+		# 'updateMulitForm': UpdateMultiForm(),
+		'updatePlantNamesForm' : UpdatePlantNamesForm(),
+		'updateAttributeForm' : UpdateAttributeForm(class_name='Plant'),
 	}
 	return render(request, 'frontend/editplant.html', context)
 
@@ -323,7 +389,7 @@ def addPlant(request):
 			nameArray = str(request.POST["latinName"]).split()
 			commonName = request.POST["commonName"]
 
-			# IF EITHER OF THE ABOVE ARE "NONE" RETURN ERRORS!!!!!!!
+			# IF EITHER OF THE ABOVE ARE "NONE" RETURN ERRORS!!!!!!! -- the UI doesnt allow ether to be none
 
 			genus = None
 			species = None
@@ -336,8 +402,6 @@ def addPlant(request):
 			if len(nameArray) > 2:
 				variety = nameArray[2]
 
-
-			
 			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
 			#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, transaction_type='INSERT', ignore=False)
 			transaction.save()
@@ -353,39 +417,42 @@ def addPlant(request):
 				actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
 			Actions.objects.bulk_create(actions)
 
-			plant = Plant.objects.create()
-			result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
-			for field in plant.get_all_fields:
-				if field['name'] is 'region':
-					if plant.get_region() is None:
-						height = dict(name='height', field_type='other', value=None, label='height', class_name = 'FIXME')
-						spread = dict(name='spread', field_type='other', value=None, label='spread', class_name = 'FIXME')
-						root_depth = dict(name='root_depth', field_type='other', value=None, label='root depth', class_name = 'FIXME')
-					else:
-						height = dict(name='height', field_type='other', value=plant.get_region()['height'], label='height', class_name = 'FIXME')
-						spread = dict(name='spread', field_type='other', value=plant.get_region()['spread'], label='spread', class_name = 'FIXME')
-						root_depth = dict(name='root_depth', field_type='other', value=plant.get_region()['root_depth'], label='root depth', class_name = 'FIXME')
-					
-					result['Characteristics'].append(height)
-					result['Characteristics'].append(spread)
-					result['Characteristics'].append(root_depth)
-				if field['name'] in Characteristics:
-					field.update({'class_name':PropertyToClassName[field['name']]})
-					result['Characteristics'].append(field)
-				elif field['name'] in Needs:
-					field.update({'class_name':PropertyToClassName[field['name']]})
-					result['Needs'].append(field)
-				elif field['name'] in Tolerances:
-					field.update({'class_name':PropertyToClassName[field['name']]})
-					result['Tolerances'].append(field)
-				elif field['name'] in Products:
-					field.update({'class_name':PropertyToClassName[field['name']]})
-					result['Products'].append(field)
-				elif field['name'] in Behaviors:
-					field.update({'class_name':PropertyToClassName[field['name']]})
-					result['Behaviors'].append(field)
-				else:
-					result['About'].append(field)
+			# plant = Plant.objects.create()
+			# result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
+			# for field in plant.get_all_fields:
+			# 	if field['name'] is 'region':
+			# 		if plant.get_region() is None:
+			# 			height = dict(name='height', field_type='other', value=None, label='height', class_name = 'FIXME')
+			# 			spread = dict(name='spread', field_type='other', value=None, label='spread', class_name = 'FIXME')
+			# 			root_depth = dict(name='root_depth', field_type='other', value=None, label='root depth', class_name = 'FIXME')
+			# 		else:
+			# 			height = dict(name='height', field_type='other', value=plant.get_region()['height'], label='height', class_name = 'FIXME')
+			# 			spread = dict(name='spread', field_type='other', value=plant.get_region()['spread'], label='spread', class_name = 'FIXME')
+			# 			root_depth = dict(name='root_depth', field_type='other', value=plant.get_region()['root_depth'], label='root depth', class_name = 'FIXME')
+			# 		result['Characteristics'].append(height)
+			# 		result['Characteristics'].append(spread)
+			# 		result['Characteristics'].append(root_depth)
+			# 	if field['name'] in Characteristics:
+			# 		field.update({'class_name':PropertyToClassName[field['name']]})
+			# 		result['Characteristics'].append(field)
+			# 	elif field['name'] in Needs:
+			# 		field.update({'class_name':PropertyToClassName[field['name']]})
+			# 		result['Needs'].append(field)
+			# 	elif field['name'] in Tolerances:
+			# 		field.update({'class_name':PropertyToClassName[field['name']]})
+			# 		result['Tolerances'].append(field)
+			# 	elif field['name'] in Products:
+			# 		field.update({'class_name':PropertyToClassName[field['name']]})
+			# 		result['Products'].append(field)
+			# 	elif field['name'] in Behaviors:
+			# 		field.update({'class_name':PropertyToClassName[field['name']]})
+			# 		result['Behaviors'].append(field)
+			# 	else:
+			# 		result['About'].append(field)
+
+
+
+			# pdb.set_trace()
 
 			context = {
 				'newPlant':{
@@ -396,21 +463,22 @@ def addPlant(request):
 				},
 				'userId': request.user.id,
 				'transactionId' : transaction.id,
-				'result': result,
+				'result': EmptyPlant,
 				'plantId': 0, 
 				'genus' : genus,
 				'species' : species,
 				'variety' : variety,
 				'common_name' : commonName,
-				'family' : plant.family,
-				'family_common_name' : plant.family_common_name,
-				'endemic_status' : plant.get_endemic_status,
+				'family' : None,
+				'family_common_name' : None,
+				'endemic_status' : None,
 				#'images': ImageURL.objects.get(plant.id=4121),
 				'searchForThis': {},#json.dumps(populateSearchDropDown()),
-				'updateTextForm': UpdateTextForm(),
-				'updateSelectForm': UpdateSelectForm(class_name='Plant'),
-				'updateMulitForm': UpdateMultiForm(),
+				# 'updateTextForm': UpdateTextForm(),
+				# 'updateSelectForm': UpdateSelectForm(class_name='Plant'),
+				# 'updateMulitForm': UpdateMultiForm(),
 				'updatePlantNamesForm':UpdatePlantNamesForm(),
+				'updateAttributeForm' : UpdateAttributeForm(class_name='Plant'),
 			}
 			return render(request, 'frontend/editplant.html', context)
 
@@ -505,11 +573,6 @@ def search(request):
 		Q(innoculant__icontains=searchString))
 	# results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 	results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
-
-
-
-
-
 
 	paginator = Paginator(results_list, 35)
 	page = request.GET.get('page')

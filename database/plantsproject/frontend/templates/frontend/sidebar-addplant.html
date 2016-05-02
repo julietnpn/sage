@@ -7,7 +7,7 @@
 		<a href="#" id="sidebar-clear" class="clear">clear</a><br>
 	</div>
 
-	<form action="/frontend/addPlant/" method="post">
+	<form action="/addPlant/" method="post">
 		{% csrf_token %}
 		{{ addPlantForm.latinName }}
 		<p class="input-label italic" id="latin-name-label">{{ addPlantForm.latinName.label_tag }}</p>

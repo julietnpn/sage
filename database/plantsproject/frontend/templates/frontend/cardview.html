@@ -8,7 +8,7 @@
 <div class='row plantcard'>
 	<div class="col-sm-1"></div>
 	<div class="col-sm-2">
-		<div id ="add-new-img" class="cardimg" onclick="location.href='/frontend/edit/{{plant.id}}'"/>
+		<div id ="add-new-img" class="cardimg" onclick="location.href='/edit/{{plant.id}}'"/>
 			{% if plant.id in images %}
 				<img src="{{ images|get_item:plant.id }}" id="add-new-img2" alt="Plant Image" />
 				{% else %}
@@ -17,7 +17,7 @@
 		</div>
 	</div>
 	<div class="col-sm-9">
-		<div class='row plantname' onclick="location.href='/frontend/edit/{{plant.id}}'">{% spaceless %}
+		<div class='row plantname' onclick="location.href='/edit/{{plant.id}}'">{% spaceless %}
 			{% if plant.genus %}{{ plant.genus }}{% endif %}
 			{% if plant.species %}&nbsp;{{ plant.species }}{% endif %}
 			{%if plant.variety %}&nbsp;{{plant.variety}}{% endif %}{% endspaceless %}</div>

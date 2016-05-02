@@ -61,92 +61,35 @@
 			</div><!--end main content -->
 		</div><!--end row-->
 
-		<!-- BEGIN EDIT ATTRIBUTE WITH TEXT MODAL -->
-		<div id="updateTextMdl" class="modal fade" tabindex="-1" role="dialog">
+		<div id="updateAttributeMdl" class="modal fade" tabindex="-1" role="dialog">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-body">
 		      	<form action="" method="post">
 		      		{% csrf_token %}
-					<label id="mdl-label-text"></label>
-		      		{% for field in updateTextForm %}
-		      		<div id="{{field.label}}" class="formdiv">{{ field }}</div>
+					<label id="mdl-label"></label>
+					{% for field in updateAttributeForm %}
+		      		{{ field }}
 		      		{% endfor %}
+			
+					<input type="hidden" id="hidden-plantId" name="plant_id" value=""/>
+					<input type="hidden" id="hidden-propName" name="property_name" value=""/>
+					<input type="hidden" id="hidden-dataType" name="data_type" value=""/>
+					<input type="hidden" id="hidden-className" name="class_name" value=""/>
+
+
 					<input type="submit" class="formsubmit" value="Save" />
-					<input type="hidden" id="hidden-plantId-t" name="plant_id" value=""/>
-					<input type="hidden" id="hidden-propName-t" name="property_name" value=""/>
-					<input type="hidden" id="hidden-dataType-t" name="data_type" value="text"/>
-					<input type="hidden" id="hidden-className-t" name="class_name" value=""/>
 				</form>
 		      </div>
 		      <div class="modal-footer">
+		      	<button type="button" class="btn btn-default rmvBtn" style="float:left;" data-dismiss="modal">Remove Attribute</button>
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		        <button type="button" class="btn btn-success submitBtn">Save</button>
+		        <button type="button" class="btn btn-success submitBtn" data-dismiss="modal">Save</button>
 		      </div>
 		      
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
-		<!-- END EDIT ATTRIBUTE WITH TEXTMODAL -->
-
-		<!-- BEGIN EDIT ATTRIBUTE WITH SELECT MODAL -->
-		<div id="updateSelectMdl" class="modal fade" tabindex="-1" role="dialog">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-body">
-		      	<form action="/frontend/updateSelect/" method="post" >
-		      		{% csrf_token %}
-
-					<label id="mdl-label-select"></label>
-		      		{% for field in updateSelectForm %}
-		      		<div id="{{field.label}}" class="formdiv">{{ field }}</div>
-		      		{% endfor %}
-					<input type="submit" class="formsubmit" value="Save" />
-					<input type="hidden" id="hidden-block" name="plant_id" value=""/>
-					<input type="hidden" id="hidden-plantId-s" name="plant_id" value=""/>
-					<input type="hidden" id="hidden-propName-s" name="property_name" value=""/>
-					<input type="hidden" id="hidden-dataType-s" name="data_type" value="select"/>
-					<input type="hidden" id="hidden-className-s" name="class_name" value=""/>
-				</form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		        <button type="button" class="btn btn-success submitBtn">Save</button>
-		      </div>
-		      
-		    </div><!-- /.modal-content -->
-		  </div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-		<!-- END EDIT ATTRIBUTE WITH SELECT MODAL -->
-
-		<!-- BEGIN EDIT ATTRIBUTE WITH MULTISELECT MODAL -->
-		<div id="updateMultiMdl" class="modal fade" tabindex="-1" role="dialog">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-body">
-		      	<form action="/frontend/updateMulti/" method="post" >
-		      		{% csrf_token %}
-					<label id="mdl-label-multi"></label>
-		      		{% for field in updateMulitForm %}
-		      		<div id="{{field.label}}" class="formdiv">{{ field }}</div>
-		      		{% endfor %}
-					<input type="submit" class="formsubmit" value="Save" />
-					<input type="hidden" id="hidden-plantId-m" name="plant_id" value=""/>
-					<input type="hidden" id="hidden-propName-m" name="property_name" value=""/>
-					<input type="hidden" id="hidden-dataType-m" name="data_type" value="multi"/>
-					<input type="hidden" id="hidden-className-m" name="class_name" value=""/>
-					<input type="hidden" id="hidden-oldVals-m" name="old_vals" value=""/>
-				</form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		        <button type="button" class="btn btn-success submitBtn">Save</button>
-		      </div>
-		      
-		    </div><!-- /.modal-content -->
-		  </div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-		<!-- END EDIt ATTRIBUTE WITH MULTISELECT MODAL -->
 
 		<!-- BEGIN EDIT ADD IMG MODAL -->
 		<div id="addImg" class="modal fade" tabindex="-1" role="dialog">
@@ -217,8 +160,8 @@
 
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<!-- <script src="{% static 'frontend/jquery-1.10.2.min.js' %}" type="text/javascript"></script> -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	<script scr="{% static 'frontend/jquery-1.10.2.min.js' %}" type="text/javascript"></script>
 	<script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
 	<script src="{% static 'frontend/search.js' %}" type="text/javascript"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>

@@ -7,11 +7,11 @@
 			<div class="col-md-7"></div>
 			<div class="col-md-2" id="login">{% spaceless %}
 				{% if request.user.is_authenticated %}
-				Welcome, {{ request.user.username }}! <a href="/frontend/logout">Logout</a>
-				{%else%}<a href="/frontend/login">Login</a>{%endif%}{% endspaceless %}</div>
+				Welcome, {{ request.user.username }}! <a href="/logout">Logout</a>
+				{%else%}<a href="/login">Login</a>{%endif%}{% endspaceless %}</div>
 			<div class="col-md-3" >
 
-				<form action="/frontend/search/" method="post" >
+				<form action="/search/" method="post" >
 					{% csrf_token %}
 					<input type="text" id="searchbar" name="searchVal" value=""></input>
 
