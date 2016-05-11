@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "frontend/maincontent-hdr.html" %}
 {% block title %}User Registration{% endblock %}
 {% block head %}User Registration{% endblock %}
-{% block content %}
+{% block maincontent %}
 Create a new user
     <form method="post" action="">{% csrf_token %}
         <table border="0">

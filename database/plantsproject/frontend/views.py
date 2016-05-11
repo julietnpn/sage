@@ -187,6 +187,28 @@ def addImg(request):
 
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+def removeAttribute(request):
+	if request.method == 'POST':
+		plantId = int(request.POST['plant_id'])
+		transaction_id = int(request.POST['transaction_id'])
+		prop = request.POST['property_name']
+
+		if transaction_id == 0:
+			#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type=action_type, ignore=False)
+			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+			transaction.save()
+			response_data = transaction.id
+		else:
+			transaction = Transactions.objects.get(id=transaction_id)
+			response_data = transaction_id
+
+		actions = []
+		actions.append(Actions(transactions=transaction , action_type='UPDATE', property=prop, value=None))
+		Actions.objects.bulk_create(actions)
+		return HttpResponse(json.dumps(response_data))
+	else:
+		return HttpResponse(json.dumps("GET"))
+
 def updateNames(request):
 	if request.method == 'POST': 
 		form = UpdatePlantNamesForm(request.POST)
@@ -290,10 +312,9 @@ def updateSelect(request, transaction_id, action_type):
 def updateMulti(request, transaction_id, action_type):
 	
 	if request.method == 'POST':
-		#form = UpdateMultiForm(request.POST)
 		cls_name = request.POST['class_name']
 		form = UpdateAttributeForm(request.POST, class_name=cls_name)
-		#pdb.set_trace()
+
 		if form.is_valid():
 			print("Update multi is valid")
 			property = request.POST['property_name']
@@ -319,6 +340,7 @@ def updateMulti(request, transaction_id, action_type):
 			print("~~INVALID FORM~~")
 			response_data = int(transaction_id)
 		return HttpResponse(json.dumps(response_data))
+
 
 #Plant.imageurl_set
 
@@ -416,43 +438,6 @@ def addPlant(request):
 			if commonName:
 				actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
 			Actions.objects.bulk_create(actions)
-
-			# plant = Plant.objects.create()
-			# result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
-			# for field in plant.get_all_fields:
-			# 	if field['name'] is 'region':
-			# 		if plant.get_region() is None:
-			# 			height = dict(name='height', field_type='other', value=None, label='height', class_name = 'FIXME')
-			# 			spread = dict(name='spread', field_type='other', value=None, label='spread', class_name = 'FIXME')
-			# 			root_depth = dict(name='root_depth', field_type='other', value=None, label='root depth', class_name = 'FIXME')
-			# 		else:
-			# 			height = dict(name='height', field_type='other', value=plant.get_region()['height'], label='height', class_name = 'FIXME')
-			# 			spread = dict(name='spread', field_type='other', value=plant.get_region()['spread'], label='spread', class_name = 'FIXME')
-			# 			root_depth = dict(name='root_depth', field_type='other', value=plant.get_region()['root_depth'], label='root depth', class_name = 'FIXME')
-			# 		result['Characteristics'].append(height)
-			# 		result['Characteristics'].append(spread)
-			# 		result['Characteristics'].append(root_depth)
-			# 	if field['name'] in Characteristics:
-			# 		field.update({'class_name':PropertyToClassName[field['name']]})
-			# 		result['Characteristics'].append(field)
-			# 	elif field['name'] in Needs:
-			# 		field.update({'class_name':PropertyToClassName[field['name']]})
-			# 		result['Needs'].append(field)
-			# 	elif field['name'] in Tolerances:
-			# 		field.update({'class_name':PropertyToClassName[field['name']]})
-			# 		result['Tolerances'].append(field)
-			# 	elif field['name'] in Products:
-			# 		field.update({'class_name':PropertyToClassName[field['name']]})
-			# 		result['Products'].append(field)
-			# 	elif field['name'] in Behaviors:
-			# 		field.update({'class_name':PropertyToClassName[field['name']]})
-			# 		result['Behaviors'].append(field)
-			# 	else:
-			# 		result['About'].append(field)
-
-
-
-			# pdb.set_trace()
 
 			context = {
 				'newPlant':{

@@ -12,5 +12,6 @@ urlpatterns= [
     url(r'^updateSelect/(?P<transaction_id>[0-9]+)/(?P<action_type>\w+)/$', views.updateSelect, name='updateSelect'),
     url(r'^updateMulti/(?P<transaction_id>[0-9]+)/(?P<action_type>\w+)/$', views.updateMulti, name='updateMulti'),
     url(r'^updateNames/$', views.updateNames, name='updateNames'),
+    url(r'^removeAttribute/$', views.removeAttribute, name='removeAttribute'),
     url(r'^addImg/$', views.addImg, name='updateNames'),
 ]

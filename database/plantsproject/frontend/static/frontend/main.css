@@ -5,6 +5,9 @@ html {
 
 }
 
+#login-form{
+}
+
 /*#addImg .modal-body{
 	height:100%;
 }*/
@@ -295,6 +298,7 @@ section#contain a img {
     background: transparent;
     border-bottom: 1px solid black;
 }
+
 
 .img-mdl-div{
 	display:inline-block;

@@ -76,6 +76,7 @@
 					<input type="hidden" id="hidden-propName" name="property_name" value=""/>
 					<input type="hidden" id="hidden-dataType" name="data_type" value=""/>
 					<input type="hidden" id="hidden-className" name="class_name" value=""/>
+					<input type="hidden" id="hidden-transactionId" name="transaction_id" value=""/>
 
 
 					<input type="submit" class="formsubmit" value="Save" />
@@ -131,9 +132,8 @@
 		      		{% endfor %}
 					<!-- <input type="submit" class="formsubmit" value="Save" /> -->
 					
-					<input type="hidden" id="hidden-plantId" name="plant_id" value=""/>
-					<input type="hidden" id="transaction-id" name="transaction_id" value="0"/>
-
+					<input type="hidden" id="hidden-plantId-names" name="plant_id" value=""/>
+					<input type="hidden" id="transaction-id" name="transaction_id" value="-1"/>
 					<input type="hidden" id="genus-flag" name="genus_flag" value="0"/>
 					<input type="hidden" id="species-flag" name="species_flag" value="0"/>
 					<input type="hidden" id="variety-flag" name="variety_flag" value="0"/>
@@ -165,9 +165,7 @@
 	<script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
 	<script src="{% static 'frontend/search.js' %}" type="text/javascript"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
-	<script type="text/javascript">
-		//search.js?
-	</script>
+	<script type="text/javascript"></script>
 	{% block script %}
 	{% endblock %}
 

@@ -20,6 +20,24 @@ var EditPlant = function(){
         variety = pVariety;
         userId = userId;
 
+
+        if(checkIfEmpty($("#characteristics-undefined"))){
+            $("#characteristics-undefined").parent().hide();
+        }
+        if(checkIfEmpty($("#needs-undefined"))){
+            $("#needs-undefined").parent().hide();
+        }
+        if(checkIfEmpty($("#tolerances-undefined"))){
+            $("#tolerances-undefined").parent().hide();
+        }
+        if(checkIfEmpty($("#behaviors-undefined"))){
+            $("#behaviors-undefined").parent().hide();
+        }
+        if(checkIfEmpty($("#products-undefined"))){
+            $("#products-undefined").parent().hide();
+        }
+
+
         jqueryMap.$plantNames.mouseenter(function(e){
             $("#clicktoedit").show()
         });
@@ -36,7 +54,7 @@ var EditPlant = function(){
                 return;
             }
             resetNameChangeFlags();
-            $("#hidden-plantId").val(getPlantId());
+            $("#hidden-plantId-names").val(getPlantId());
             $("#transaction-id").val(transactionId);
             $("#input-genus").val($("#genus").text().trim());
             $("#input-species").val($("#species").text().trim());
@@ -60,8 +78,8 @@ var EditPlant = function(){
                 $("#endemicStatus-text").val(val);
             }
 
-            $("#id_family").select2();
-            $("#id_familyCommonName").select2();
+            $("#id_family").select2({tags:true});
+            $("#id_familyCommonName").select2({tags:true});
             $("#id_endemicStatus").select2();
 
             jqueryMap.$updateNamesMdl.modal();
@@ -83,13 +101,22 @@ var EditPlant = function(){
             clearForms();
             $("#id_select").find('option').remove();
 
+            var isNewAttribute = $(this).attr("data-isNewAttribute");
+            if(isNewAttribute == "1"){
+                $(".rmvBtn").hide();
+            }
+            else{
+                $(".rmvBtn").show();
+            }
+
             // $(this) == the attribute that was clicked
             var attribute_prop = $(this).attr('id');
             var attribute_className = $(this).attr('data-className');
             var attribute_displayName = $(this).text();
             var attribute_fieldType = $(this).attr("data-fieldType");
-            var defaultVal = $(this).next().text().replace(",", "");
+            var defaultVal = $(this).next().text().split(",").join("");
             $("#hidden-dataType").val(attribute_fieldType); //other, many_to_many, many_to_one
+            $("#hidden-transactionId").val(transactionId);
 
             jqueryMap.$attributeLabel.html(attribute_displayName);
             jqueryMap.$attributeLabel.attr("data-block", $(this).attr("data-block"));
@@ -134,13 +161,10 @@ var EditPlant = function(){
             $("#updateAttributeMdl").modal();
         });
 
-
-
-
         // Submits form when modal save button is pressed.
         $('.submitBtn').click(function(){ //not update names
             if (userId < 0){
-                userNotAuthenticated();
+                 userNotAuthenticated();
                 return;
             }
             var $form = $(this).closest(".modal-content").find("form").submit();
@@ -152,12 +176,32 @@ var EditPlant = function(){
                 return;
             }
 
-            //var propertyName = $("#hidden-propName-t").val();
+            $.post('/removeAttribute/', $("#updateAttributeMdl form").serialize(), function(data){
+                var property = $("#hidden-propName").val();
 
-            // $('#' + propertyName).next().remove();
-            // $('#' + propertyName).remove();
+                $property = $("#" + property);
+                $property.attr("data-isNewAttribute", 1);
+                // $property.attr("data-block", "characteristics-block");
+                $property.attr("data-block", jqueryMap.$attributeLabel.attr("data-block"));
+                $property.removeClass("col-xs-4");
+                $property.addClass("col-xs-10")
+                $val = $("#" + property).next();
+                $val.html("undefined");
+                $val.css("visibility", "hidden");
+                $val.removeClass("col-xs-8");
+                $val.addClass("col-xs-2");
+                $row = $("#" + property).parent();
 
-            alert("Removing...");
+
+                $row.remove();
+                var $block = $("#" + jqueryMap.$attributeLabel.attr("data-block") + "-undefined");
+                $block.parent().show();
+                $row.appendTo($block);
+
+            })
+            .fail(function(){
+                alert("Fail");
+            });
         });
 
         // Submits general plant information form when modal button is clicked
@@ -166,7 +210,8 @@ var EditPlant = function(){
                 userNotAuthenticated();
                 return;
             }
-            $.post('/frontend/updateNames/', $("#updateNamesMdl form").serialize(), function(data){
+
+            $.post('/updateNames/', $("#updateNamesMdl form").serialize(), function(data){
                 //alert($("#genus-flag").val());
                 //alert($("#species-flag").val()); //RESET FLAGS??????????????????????????????!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 $("#genus").html($("#input-genus").val());
@@ -256,43 +301,41 @@ var EditPlant = function(){
             }
             
             var dataType = $("#hidden-dataType").val();
-
+            var isNewAttribute = jqueryMap.$attributeLabel.attr("data-isNewAttribute");
             if(dataType === "other"){
-                alert("This is text.");
+                //alert("This is text.");
                 var value = $("#id_text").val();
-                var isNewAttribute = jqueryMap.$attributeLabel.attr("data-isNewAttribute");
+                
 
                 var url = '/updateText/' + transactionId + "/";
                 url += isNewAttribute == "1" ? "INSERT/" : "UPDATE/";
             }
             else if(dataType == "many_to_many"){
-                alert("This is multi TEST");
+                //alert("This is multi TEST");
 
                 var selections = $('#id_multi').select2('data');
                 var value = selections[0].text;
                 for(var i = 1; i < selections.length; i++){
                     value += ", " + selections[i].text;
                 }
-
-                var isNewAttribute = jqueryMap.$attributeLabel.attr("data-isNewAttribute");
                 var url = '/updateMulti/' + transactionId + "/";
                 url += isNewAttribute == "1" ? "INSERT/" : "UPDATE/";
             }
             else{
-                alert("This is select");
-                var isNewAttribute = jqueryMap.$attributeLabel.attr("data-isNewAttribute");
+                //alert("This is select");
                 var value = $('#id_select').select2('data')[0].text;
                 var url = '/updateSelect/' + transactionId + "/";
                 url += isNewAttribute == "1" ? "INSERT/" : "UPDATE/";
             }
 
-            alert("Posting " + url);
+            //alert("Posting " + url);
             $.post(url, $(this).serialize(), function(data){
                 var label = jqueryMap.$attributeLabel.text()
                 var className = $("#hidden-className").val();
                 var propertyName = jqueryMap.$attributePropName.val();
 
                 $("#updateAttributeMdl").modal('hide');
+
 
                 if(isNewAttribute == "1" ){
                     var $newRow = $("<div>")
@@ -304,24 +347,32 @@ var EditPlant = function(){
                         .attr("data-fieldType", dataType)
                         .attr("data-className", className)
                         .attr("data-block", jqueryMap.$attributeLabel.attr("data-block"))
+                        .attr("data-isNewAttribute", 0)
                         .html(label)
                         .appendTo($newRow);
                     var $attributeVal = $('<div>');
                     $attributeVal.addClass("col-xs-8 bold").html(value).appendTo($newRow);
 
-                    var block = "#" + jqueryMap.$attributeLabel.attr("data-block");
+                    var block = "#" + jqueryMap.$attributeLabel.attr("data-block") + "-defined";
+                    
 
                     $(block).find('#' + propertyName).next().remove();
                     $(block).find('#' + propertyName).remove();
 
                     $newRow.appendTo($(block));
-                    $('.undefined-attributes').find('#' + propertyName).remove();
+                    $('.undefined-attributes').find('#' + propertyName).parent().remove();
+
+
+                    var block2 = "#" + jqueryMap.$attributeLabel.attr("data-block") + "-undefined";
+                    if(checkIfEmpty($(block2))){
+                        $(block2).parent().hide();
+                    }
                 }
                 else{
                     $("#" + propertyName).next().text(value);
                 }
 
-                alert("New transaction id: " + data)
+                //alert("New transaction id: " + data)
                 transactionId = data;
                 displayMessage();
             })
@@ -515,5 +566,34 @@ var EditPlant = function(){
     function clearForms(){
         $('form').find("input[type=text], input[type=select]").val("");
     }
+
+    // function getCookie(name) {
+    //     var cookieValue = null;
+    //     if (document.cookie && document.cookie != '') {
+    //         var cookies = document.cookie.split(';');
+    //         for (var i = 0; i < cookies.length; i++) {
+    //             var cookie = jQuery.trim(cookies[i]);
+    //             // Does this cookie string begin with the name we want?
+    //             if (cookie.substring(0, name.length + 1) == (name + '=')) {
+    //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     return cookieValue;
+    // }
+
+    // function csrfSafeMethod(method) {
+    //     // these HTTP methods do not require CSRF protection
+    //     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    // }
+
+    function checkIfEmpty($div){
+        if($div.children().length <= 0)
+            return true;
+        else
+            return false;
+    }
+
     //----------------- END DOM METHODS -----------------------
 }(); 

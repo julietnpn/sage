@@ -105,11 +105,12 @@
 						{% endif %}
 
 						{% if plant.plants_insect_attractor.all %}
-							<text><i>Insect&nbsp;Attraactor&nbsp;</i><b>{{ plant.get_insect_attractor }} </b></text>
+							<text><i>Insect&nbsp;Attractor&nbsp;</i><b>{{ plant.get_plants_insect_attractor }} </b></text>
+
 						{% endif %}
 
 						{% if plant.plants_insect_regulator.all %}
-							<text><i> Insect&nbsp;Regulator&nbsp;</i><b>{{ plant.get_insect_regulator }}</b></text>
+							<text><i> Insect&nbsp;Regulator&nbsp;</i><b>{{ plant.get_plants_insect_regulator }}</b></text>
 						{% endif %}
 
 						{% endspaceless %}
@@ -120,6 +121,7 @@
 	</div>
 </div> <!-- end plantcard -->
 {% endfor %}
+
 <div class='row plantcard'>
 	<div class="col-sm-1"></div>
 <div class="col-sm-11 pagination">

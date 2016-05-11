@@ -1,4 +1,4 @@
-{% extends 'frontend/sidebar-editplant.html' %}
+ {% extends 'frontend/sidebar-editplant.html' %}
 
 {% block title %}{% spaceless %}
 
@@ -15,7 +15,8 @@
 			{{ variety }}
 		{% endif %}
 	{% endif %}
-{% endspaceless %}{% endblock %}
+{% endspaceless %}
+{% endblock %}
 
 {% block maincontent %}
 
@@ -39,8 +40,6 @@
 	</div>
 
 
-
-
 	<div class="row editplantrow">
 		<!-- TESTING MESSAGE- -->
 		<div id="object" class="message">
@@ -58,7 +57,7 @@
 						{{ genus }}
 					{% endif %}
 				</div>
-				<div class="name" id="species">
+				<div class="name" id="species"> 
 					{% if species %}
 						{{ species }}
 					{% endif %}
@@ -85,33 +84,33 @@
 			
 
 			{% if family %}
-				<div class="edit-plant-subtitle name" id="family">{{ family }}
-					<!-- <div class="name" id="family">{{ family }}</div> -->
+				<div class="edit-plant-subtitle">
+					<div class="name" id="family">{{ family }}</div>
 				</div>
 			{% else %}
-				<div class="edit-plant-subtitle name" id="family" style="display:none;">
-					<!-- <div class="name" id="family"></div> -->
+				<div class="edit-plant-subtitle" style="display:none;">
+					<div class="name" id="family"></div>
 				</div> 
 			{% endif %}
 			
 
 			{% if family_common_name %}
-				<div class="edit-plant-subtitle name italic" id="familyCommonName">
-					<!-- <div class="name" id="familyCommonName">{{ family_common_name }}</div> -->
+				<div class="edit-plant-subtitle italic">
+					<div class="name" id="familyCommonName">{{ family_common_name }}</div>
 				</div>
 			{% else %}
-				<div class="edit-plant-subtitle name italic" id="familyCommonName" style="display:none;">
-					<!-- <div class="name" id="familyCommonName"></div> -->
+				<div class="edit-plant-subtitle name italic" style="display:none;">
+					<div class="name" id="familyCommonName"></div>
 				</div> 
 			{% endif %}
 
 			{% if endemic_status %}
 				{% if endemic_status != 0 %}
-				<div class="name" id="endemicStatusWrapper">Endemic Status: <p id="endemicStatus">{{ endemic_status }}</p></div>
+				<div id="endemicStatusWrapper">Endemic Status: <p class="name" id="endemicStatus">{{ endemic_status }}</p></div>
 				{% endif %}
 
 			{% else %}
-				<div class="name" id="endemicStatusWrapper" style="display:none;">Endemic Status: <p id="endemicStatus"></p></div>
+				<div id="endemicStatusWrapper" style="display:none;">Endemic Status: <p class="name" id="endemicStatus"></p></div>
 
 			{% endif %}
 			
@@ -139,24 +138,32 @@
 	
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
-		<div class="col-sm-5" id="characteristics-block">
-			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" id="characteristics" aria-hidden="true"></span>Characteristics</div>
+		<div class="col-sm-5" id="characteristics-defined">
+			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Characteristics</div>
 			{% for f in result.Characteristics %}
 			 
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div>
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" 
+				data-fieldType="{{f.field_type}}" 
+				data-className="{{ f.class_name }}" 
+				data-isNewAttribute="0"
+				data-block="characteristics">{{ f.label }}</div>
 					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
 			{% endfor %}
 		</div>
-		<div class="col-sm-6" id="needs-block">
+		<div class="col-sm-6" id="needs-defined">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Needs</div>
 			{% for f in result.Needs %}
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div>
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" 
+				data-fieldType="{{f.field_type}}" 
+				data-className="{{ f.class_name }}" 
+				data-block="needs" 
+				data-isNewAttribute="0">{{ f.label }}</div>
 					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -165,23 +172,31 @@
 	</div>
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
-		<div class="col-sm-5" id="tolerances-block">
+		<div class="col-sm-5" id="tolerances-defined">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Tolerances</div>
 			{% for f in result.Tolerances %}
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div> 
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" 
+				data-fieldType="{{f.field_type}}" 
+				data-className="{{ f.class_name }}" 
+				data-block="tolerances" 
+				data-isNewAttribute="0">{{ f.label }}</div> 
 					<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
 			{% endfor %}
 		</div>
-		<div class="col-sm-6" id="behaviors-block">
+		<div class="col-sm-6" id="behaviors-defined">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Behaviors</div>
 			{% for f in result.Behaviors %}
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div> 
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" 
+				data-fieldType="{{f.field_type}}" 
+				data-className="{{ f.class_name }}" 
+				data-block="behaviors" 
+				data-isNewAttribute="0">{{ f.label }}</div> 
 				<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -190,12 +205,16 @@
 	</div>
 	<div class="row editplantrow">
 		<div class="col-sm-1"></div> <!--EMPTY DIV OR OFFSET? -->
-		<div class="col-sm-5" id="products-block">
+		<div class="col-sm-5" id="products-defined">
 			<div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Products</div>
 			{% for f in result.Products %}
 			{% if f.value %}
 			<div class="row">
-				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" data-fieldType="{{f.field_type}}" data-className="{{ f.class_name }}" data-isNewAttribute="0">{{ f.label }}</div> 
+				<div class="col-xs-4 italic edit-attribute" id="{{f.name}}" 
+				data-fieldType="{{f.field_type}}" 
+				data-className="{{ f.class_name }}" 
+				data-block="products" 
+				data-isNewAttribute="0">{{ f.label }}</div> 
 				<div class="col-xs-8 bold">{{ f.value }}</div>
 			</div>
 			{% endif %}
@@ -210,18 +229,15 @@
 		<div class="col-md-1"></div> <!--EMPTY DIV OR OFFSET? -->
 		<div class="col-md-2">
 			<div class="add-attribute-container"><div class="add-attribute-center">+ add new characteristic</div>
-			<div class="undefined-attributes" data-block="characteristics-block"> <!--Do we need this data-blocl -->
+			<div class="undefined-attributes" id="characteristics-undefined"> <!--Do we need this data-blocl -->
 				{% for f in result.Characteristics %}
-				{% if "ph" in f.label %}
-				found ph
-				{% endif %}
 				{% if not f.value %}
 				<div class="row">
 					<div class="col-xs-10 italic edit-attribute" 
 						id="{{f.name}}" 
 						data-fieldType="{{f.field_type}}" 
 						data-className="{{ f.class_name }}"
-						data-block="characteristics-block"
+						data-block="characteristics"
 						data-isNewAttribute="1">{{ f.label }}
 					</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
@@ -233,7 +249,7 @@
 		</div>
 		<div class="col-md-2">
 			<div class="add-attribute-container"><div class="add-attribute-center">+ add new need</div>
-			<div class="undefined-attributes">
+			<div class="undefined-attributes" id="needs-undefined">
 				{% for f in result.Needs %}
 				{% if not f.value %}
 				<div class="row">
@@ -241,7 +257,7 @@
 					id="{{f.name}}" 
 					data-fieldType="{{f.field_type}}" 
 					data-className="{{ f.class_name }}"
-					data-block="needs-block"
+					data-block="needs"
 					data-isNewAttribute="1">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
@@ -252,7 +268,7 @@
 		</div>
 		<div class="col-md-2">
 			<div class="add-attribute-container"><div class="add-attribute-center">+ add new tolerance</div>
-			<div class="undefined-attributes">
+			<div class="undefined-attributes" id="tolerances-undefined">
 				{% for f in result.Tolerances %}
 				{% if not f.value %}
 				<div class="row">
@@ -260,7 +276,7 @@
 					id="{{f.name}}" 
 					data-fieldType="{{f.field_type}}" 
 					data-className="{{ f.class_name }}" 
-					data-block="tolerances-block"
+					data-block="tolerances"
 					data-isNewAttribute="1">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
@@ -271,7 +287,7 @@
 		</div>
 		<div class="col-md-2">
 			<div class="add-attribute-container"><div class="add-attribute-center">+ add new behavior</div>
-			<div class="undefined-attributes">
+			<div class="undefined-attributes" id="behaviors-undefined">
 				{% for f in result.Behaviors %}
 				{% if not f.value %}
 				<div class="row">
@@ -279,7 +295,7 @@
 					id="{{f.name}}" 
 					data-fieldType="{{f.field_type}}" 
 					data-className="{{ f.class_name }}" 
-					data-block="behaviors-block"
+					data-block="behaviors"
 					data-isNewAttribute="1">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
@@ -290,7 +306,7 @@
 		</div>
 		<div class="col-md-2">
 			<div class="add-attribute-container"><div class="add-attribute-center">+ add new product</div>
-			<div class="undefined-attributes">
+			<div class="undefined-attributes" id="products-undefined">
 				{% for f in result.Products %}
 				{% if not f.value %}
 				<div class="row">
@@ -298,7 +314,7 @@
 					id="{{f.name}}" 
 					data-fieldType="{{f.field_type}}" 
 					data-className="{{ f.class_name }}" 
-					data-block="products-block"
+					data-block="products"
 					data-isNewAttribute="1">{{ f.label }}</div> 
 					<div class="col-xs-2 bold" style="visibility:hidden;">undefined</div>
 				</div>
@@ -343,6 +359,9 @@
 	$(function () {
         $('#plant-images a').fluidbox();
     })
+
+
+
 </script>
 
 
