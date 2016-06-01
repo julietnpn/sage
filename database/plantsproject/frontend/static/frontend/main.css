@@ -2,15 +2,7 @@ html {
 	/*padding: 30px;*/
 	width:100%;
 	height:100%;
-
 }
-
-#login-form{
-}
-
-/*#addImg .modal-body{
-	height:100%;
-}*/
 
 .formdiv{
 	display:inline-block;
@@ -19,15 +11,18 @@ html {
 .message{
 	display:none;
 	position:fixed;
-	width:400px;
+	width:450px;
 	color: white;
 	border:1px solid #ebccd1;
 	border-radius:25px;
 	background:#cc060c;
-	padding:5px;
 	right:100px;
-	top : 100px;
-	text-align: center;
+	top:100px;
+/*	text-align: center;*/
+	padding-left:30px;
+	padding-right:30px;
+	padding-bottom:15px;
+	padding-top:10px;
 }
 
 div{
@@ -43,8 +38,10 @@ section#contain {
 	display: block;
 }
 
+
 h1, 
-.edit-plant-title > div{
+/*.edit-plant-title > div, */
+.name{
 	font-family: 'Karla', sans-serif;
 	font-size: 28px;
 	font-weight: bold;
@@ -112,6 +109,18 @@ section#contain a img {
 	font-style: italic;
 }
 
+.cardview-latin-name{
+	font-style: italic;
+	font-size:14px;
+	font-weight:normal;
+}
+
+.editplant-latin-name{
+	font-style: italic;
+	font-size:24px;
+	font-weight:normal;
+}
+
 
 
 .attribute{
@@ -167,8 +176,6 @@ section#contain a img {
 
 }
 
-
-
 #add-new-img2{
 	display:table;
 	width:100%;
@@ -220,20 +227,29 @@ section#contain a img {
 	padding:30px;
 }
 
-#sidebar-top > #nav > #nav-title{
+#nav-title{
 	font-weight:bold;
 	color:white;
 	padding-bottom:30px;
+	font-size:40px;
 }
 
-#sidebar-top > #nav > .nav-header{
+.nav-header{
 	font-weight:bold;
-	font-size:12px;
+	font-size:16px;
 	letter-spacing:1px;
 	color:#BDBDBD;
 	padding-bottom:10px;
 }
 
+.nav-item{
+	color:white;
+}
+
+.nav-item:hover{
+	text-decoration: none;
+	color:#66CD00;
+}
 
 #sidebar-top > #nav > ul{
 	list-style-type:none;
@@ -244,13 +260,10 @@ section#contain a img {
 	margin-bottom: 13px;
 	padding-left:0px;
 	color:white;
-	font-size:10px;
 	letter-spacing:1px;
 	font-weight:bold;
 	padding-bottom:8px;
 }
-
-
 
 /*input {
     border: 0;
@@ -292,7 +305,7 @@ section#contain a img {
 }
 
 #searchbar{
-	width:250px;
+	width:90%;
 	border: 0;
     outline: 0;
     background: transparent;
@@ -383,31 +396,33 @@ border-color:#66CD00;
 	color:gray;
 }
 
-
-
 #search-magnifying-glass{
 	cursor:pointer;
+}
+
+.add-attribute-container{
+	display:inline-block;
+	width:100%;
+	height:75px;
+	border-radius:25px;
+	border: 2px solid #ddd;
+	max-width:350px;
+}
+
+.add-attribute-center{
+	/*display:table-row;*/
+	width:100%;
+	color:#ddd;
+	text-align:center;
+	padding-top:20px;
+	padding-bottom: 10px;
 }
 
 .undefined-attributes{
 	padding-left:20px;
 	padding-right:20px;
 	padding-bottom:30px;
-}
-
-.add-attribute-container{
-	display:table;
-	width:100%;
-	height:75px;
-	border-radius:25px;
-	border: 2px solid #ddd;
-}
-
-.add-attribute-center{
-	color:#ddd;
-	text-align:center;
-	padding-top:20px;
-	padding-bottom: 10px;
+	/*display:table-row;*/
 }
 
 .add-att-btn{
@@ -463,4 +478,83 @@ border-color:#66CD00;
 #imagelightbox{
 	display:inline-block;
 	float:left;
+}
+
+
+
+
+
+
+/* Dropdown Button */
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    z-index:2;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 250px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index:2;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a{
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    z-index:2;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+	background-color: #f1f1f1;
+	text-decoration: none;
+	color:#66CD00;
+	z-index:2;
+}
+
+/* Show the dropdown menu on hover 
+dont think we need to list */
+.dropdown:hover .dropdown-content {
+    display: block;
+    z-index:2;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.img-container{
+	z-index:-1;
+}
+
+.dropdown-select{
+	color:black;
+	padding-left:16px;
+	padding-right:16px;
+	padding-top:12px;
+	padding-bottom:4px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid black;
+    width:100%;
+    margin-bottom:8px;
 }

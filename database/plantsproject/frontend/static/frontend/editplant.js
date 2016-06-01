@@ -114,7 +114,8 @@ var EditPlant = function(){
             var attribute_className = $(this).attr('data-className');
             var attribute_displayName = $(this).text();
             var attribute_fieldType = $(this).attr("data-fieldType");
-            var defaultVal = $(this).next().text().split(",").join("");
+            var defaultVal = $(this).next().text().split(", ");
+
             $("#hidden-dataType").val(attribute_fieldType); //other, many_to_many, many_to_one
             $("#hidden-transactionId").val(transactionId);
 
@@ -167,7 +168,7 @@ var EditPlant = function(){
                  userNotAuthenticated();
                 return;
             }
-            var $form = $(this).closest(".modal-content").find("form").submit();
+            var $form = $(this).closest(".modal-content").find("form").submit(); //need var? // use jquery map here
         });
 
         $('.rmvBtn').click(function(){ //not update names
@@ -226,15 +227,15 @@ var EditPlant = function(){
                 var family = $("#id_family option:selected").text();
                 if($("#id_family option:selected").text().indexOf("--") < 0){
                     $("#family").html( $("#id_family option:selected").text());
-                    $("#family").show();
+                    //$("#family").show();
                 }
                 if($("#id_familyCommonName option:selected").text().indexOf("--") < 0){
                     $("#familyCommonName").html( $("#id_familyCommonName option:selected").text());
-                    $("#familyCommonName").show();
+                    //$("#familyCommonName").show();
                 }
                 if($("#id_endemicStatus option:selected").text().indexOf("--") < 0){
                     $("#endemicStatus").html( $("#id_endemicStatus option:selected").text());
-                    $("#endemicStatusWrapper").show();
+                    //$("#endemicStatusWrapper").show();
                 }
                 $("#updateNamesMdl").modal("hide");
                 displayMessage();
@@ -499,7 +500,7 @@ var EditPlant = function(){
         });
     }
 
-    function load_values(isMultiSelect, className, defaultVal){
+    function load_values(isMultiSelect, className, defaultValArray){
         var $select
         if(isMultiSelect){
             $("#id_multi").addClass("js-example-basic-multiple");
@@ -509,15 +510,17 @@ var EditPlant = function(){
             $("#id_select").addClass("js-example-basic-single");
             $select = $("#id_select")
         }
+        $select.empty();
         $.ajax({
             type: 'GET',
-            url: "/reload_controls/" + className+ "/" + defaultVal,
+            url: "/reload_controls/" + className,
+            data:{'defaultVals[]': defaultValArray},
             dataType: 'json',
             contentType: 'json',
             success: function(result)
             {
                 $("#hidden-oldVals-m").val(result.defaultIds);
-                $select.empty();
+                // $select.empty();
                 for(var i = 0; i < result.dropdownvals.length; i++){
                     var dictionary = result.dropdownvals[i]
                     if(result.defaultIds.indexOf(dictionary.id) > -1)
@@ -535,13 +538,7 @@ var EditPlant = function(){
     }
 
     function displayMessage(){
-        // if(!isNew)
-        //     $("#edit-msg").show(400).delay(5000).hide(400);
-        // $("#object").animate({
-        //         top: "0px"
-        //     }, 2000 ).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-        
-        $("#object").fadeIn(2000).delay(5000).fadeOut(400)
+        $("#alert").fadeIn(2000).delay(5000).fadeOut(400)
     }
 
     function resetBorderColor(elements){

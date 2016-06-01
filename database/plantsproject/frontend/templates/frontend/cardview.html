@@ -6,9 +6,9 @@
 
 {% for plant in plants %}
 <div class='row plantcard'>
-	<div class="col-sm-1"></div>
-	<div class="col-sm-2">
-		<div id ="add-new-img" class="cardimg" onclick="location.href='/edit/{{plant.id}}'"/>
+	<!-- <div class="col-md-1"></div> -->
+	<div class="col-md-2 col-md-offset-1 col-xs-3 img-container">
+		<div id ="add-new-img" class="cardimg" data-plantId="{{plant.id}}" />
 			{% if plant.id in images %}
 				<img src="{{ images|get_item:plant.id }}" id="add-new-img2" alt="Plant Image" />
 				{% else %}
@@ -16,11 +16,17 @@
 			{% endif %}
 		</div>
 	</div>
-	<div class="col-sm-9">
-		<div class='row plantname' onclick="location.href='/edit/{{plant.id}}'">{% spaceless %}
-			{% if plant.genus %}{{ plant.genus }}{% endif %}
-			{% if plant.species %}&nbsp;{{ plant.species }}{% endif %}
-			{%if plant.variety %}&nbsp;{{plant.variety}}{% endif %}{% endspaceless %}</div>
+	<div class="col-md-8 col-xs-9">
+		<div class='row plantname' data-plantId="{{plant.id}}">
+			{% spaceless %}
+			<div style="display:inline-block;">{% if plant.common_name %}{{ plant.common_name }}&nbsp;{% endif %}</div>
+			<div class='cardview-latin-name' style="display:inline-block;">
+			{% if plant.common_name or plant.genus or plant.species or plany.variety %}
+			{% if plant.genus %}{{ plant.genus }}&nbsp;{% endif %}
+			{% if plant.species %}{{ plant.species }}&nbsp;{% endif %}
+			{%if plant.variety %}{{plant.variety}}{% endif %}
+			{%else%} No Plant Name{%endif%}{% endspaceless %}</div>
+			</div>
 		<div class='row plantdetails'>
 			<div class='row'>
 				<div class='col-sm-6'>
@@ -123,8 +129,8 @@
 {% endfor %}
 
 <div class='row plantcard'>
-	<div class="col-sm-1"></div>
-<div class="col-sm-11 pagination">
+	<div class="col-xs-1"></div>
+<div class="col-xs-11 pagination">
     <span class="step-links">
         {% if plants.has_previous %}
             <a href="?page={{ plants.previous_page_number }}">previous</a>
@@ -152,5 +158,15 @@
 <script src="{% static 'frontend/addPlant.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
 	AddPlant.init();
+	$(".plantname").on("click", function(){
+		var plantId = $(this).attr("data-plantId");
+		location.href='/edit/' + plantId
+	});
+
+	{% if filter_by %}
+		$("#filter_by").html("{{filter_by}}");
+	{% else %}
+		$("#filter_by").html("None");
+	{% endif %}
 </script>
 {% endblock %}

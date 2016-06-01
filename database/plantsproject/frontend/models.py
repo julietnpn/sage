@@ -8,11 +8,12 @@
 # Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
 # into your database.
 from __future__ import unicode_literals
-
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
 import json
+
+
 
 
 
@@ -547,9 +548,18 @@ class Plant(models.Model):
         except PlantRegion.DoesNotExist:
             return None
 
-        height = float(json.dumps(str(pr.height)).strip('"'));
-        spread = float(json.dumps(str(pr.spread)).strip('"'));
-        root_depth = float(json.dumps(str(pr.root_depth)).strip('"'));
+        if pr.height is not None:
+            height = float(json.dumps(str(pr.height)).strip('"'));
+        else:
+            height = None
+        if pr.spread is not None:
+            spread = float(json.dumps(str(pr.spread)).strip('"'));
+        else:
+            spread = None
+        if pr.root_depth is not None:
+            root_depth = float(json.dumps(str(pr.root_depth)).strip('"'));
+        else:
+            root_depth = None
 
         return {'height': height, 'spread': spread, 'root_depth': root_depth}
         #return ', '.join([str(a) for a in self.region.all()])
