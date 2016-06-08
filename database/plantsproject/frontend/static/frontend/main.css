@@ -153,6 +153,15 @@ section#contain a img {
 	text-align:right;
 }
 
+.modalimg{
+	max-width:250px;
+	max-height:200px;
+	border-radius:25px;
+	margin-left:10px;
+	margin-right:10px;
+	border: 5px solid #ddd;
+}
+
 
 .cardimg{
 	height:125px;
@@ -161,7 +170,6 @@ section#contain a img {
 	margin-left:10px;
 	margin-right:10px;
 	border: 2px solid #ddd;
-
 }
 
 .cardimg > img{
@@ -326,6 +334,10 @@ section#contain a img {
     border-bottom: 1px solid black;
 }
 
+.addImgMdlMsg{
+	padding-left:20px;
+}
+
 .inputbase input{
 	width:100%;
 	border: 0;
@@ -365,6 +377,9 @@ section#contain a img {
 	display:block;
 }
 
+.green{
+	color:#66CD00;
+}
 
 #btm-header{
 	font-family: 'Karla', sans-serif;

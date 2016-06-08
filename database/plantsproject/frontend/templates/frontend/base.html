@@ -108,7 +108,8 @@
 		  <div class="modal-dialog modal-lg">
 		    <div class="modal-content">
 		    	<div class="modal-header">
-		    		<h4 class="modal-title">Searching flickr.com for <input type="text" class="formtxt" id="addImg-tag"></input></h4>
+		    		<h3 class="modal-title">Select an image to add</h3><!-- 
+		    		<h3 class="modal-title">Flickr image results for <input type="text" class="formtxt" id="addImg-tag"></input></h3> -->
 		    	</div>
 		      	<div class="modal-body">
 		      		<form action="/frontend/addImg/" method="post">
@@ -116,8 +117,10 @@
 		      			<input type="hidden" id="hidden-plantId-img" name="plant_id" value=""/>
 						<input type="hidden" id="hidden-url-img" name="image_url" value=""/>
 						<input type="submit" class="formsubmit" value="Save" style="display:none;"/>
-		      			<div class="img-mdl-div back"><</div><div id="img-mdl-content" class="img-mdl-div"></div><div class="img-mdl-div forward">></div>
+		      			<div class="img-mdl-div back"><h1><</h1></div><div id="img-mdl-content" class="img-mdl-div"></div><div class="img-mdl-div forward"><h1>></h1></div>
 		      		</form>
+		      		<br>
+		      		<div class="addImgMdlMsg inputbase"><p>Displaying results for <text id="addImg-tag" class="green"></text> from flickr.com. If you don't like what you see, you can&nbsp;</p><input type="text" id="flickrSearchText" style="width:200px;" placeholder="search for something else"></input>&nbsp;<button type="button" id="flickrSearchBtn" class="btn btn-secondary btn-sm" style="display:none;">Go</button></div>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

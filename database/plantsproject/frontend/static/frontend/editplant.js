@@ -259,7 +259,7 @@ var EditPlant = function(){
                 userNotAuthenticated();
                 return;
             }
-            searchFlickrPictures()
+            searchFlickrPictures(generateSearchString());
         });
 
         // Changes CSS on images displayed in the modal
@@ -276,7 +276,7 @@ var EditPlant = function(){
                 if(!$(this).hasClass('selected'))
                 $(this).css('border-color', '#ddd');
             }
-        }, '.cardimg');
+        }, '.modalimg');
 
 
         $("#input-genus").on('keydown', function(){
@@ -402,7 +402,6 @@ var EditPlant = function(){
             $("#hidden-plantId-img").val(getPlantId());
             $("#hidden-url-img").val(url);
 
-
             $.post('/addImg/', $("#addImg form").serialize(), function(data){
                 $("<img />").attr("src", url)
                     .addClass('cardimg')
@@ -418,6 +417,15 @@ var EditPlant = function(){
             .fail(function(){
                 alert("Error - Could not add image.");
             });
+        });
+
+        $("#flickrSearchBtn").click(function(){
+            searchFlickrPictures($("#flickrSearchText").val());
+            updateImgModalMessage($("#flickrSearchText").val());
+        });
+
+        $("#flickrSearchText").on("keypress", function(){
+            $("#flickrSearchBtn").show();
         });
 
         // ----------------------- END JQUERY LISTENERS -----------------------
@@ -461,8 +469,7 @@ var EditPlant = function(){
         };
     }
 
-    function searchFlickrPictures(){
-        var pageNumber = 1;
+    function generateSearchString(){
         var searchString = "";
         var searchStringDisplay = "";
 
@@ -470,49 +477,75 @@ var EditPlant = function(){
             searchString = escapeString(common_name);
             searchStringDisplay = common_name;
         }
-        if(genus != "None"){
-            searchString += searchString.length > 0 ? "," + escapeString(genus) : escapeString(genus);
-            searchStringDisplay += searchStringDisplay.length > 0 ? " " + genus : genus;
-        }
-        if(species != "None"){
-            searchString += searchString.length > 0 ? "," + escapeString(species) : escapeString(species);
-            searchStringDisplay += searchStringDisplay.length > 0 ? " " + species : species;
-        }
+        // if(genus != "None"){
+        //     searchString += searchString.length > 0 ? "," + escapeString(genus) : escapeString(genus);
+        //     searchStringDisplay += searchStringDisplay.length > 0 ? " " + genus : genus;
+        // }
+        // if(species != "None"){
+        //     searchString += searchString.length > 0 ? "," + escapeString(species) : escapeString(species);
+        //     searchStringDisplay += searchStringDisplay.length > 0 ? " " + species : species;
+        // }
 
-        $("#addImg-tag").attr('placeholder', searchStringDisplay);
+        //alert(searchString + "\n" + searchStringDisplay + "\n" + searchStringDisplay.split(" ").join(","));
+
+        //searchFlickrPictures(searchString, searchStringDisplay);
+
+        return searchStringDisplay;
+    }
+
+    function searchFlickrPictures(searchStringDisplay){
+        var pageNumber = 1;
+    
+        
         $(".back").hide();
-        loadNewImages(searchString, pageNumber);
+        loadNewImages(searchStringDisplay, pageNumber);
         jqueryMap.$addImgModal.modal();
 
-        jqueryMap.$addImgModal.on("click", ".forward", function(){
-            loadNewImages(searchString, ++pageNumber);
-            $(".back").show();
-        });
+        
+    }
 
-        jqueryMap.$addImgModal.on("click", ".back", function(){
-            if(pageNumber == 1){
-                return;
-            }
-            else{
-                loadNewImages(searchString, --pageNumber);
-                if(pageNumber == 1)
-                    $(".back").hide();
-            }
-        });
+    function updateImgModalMessage(searchString){
+        $("#addImg-tag").html(searchString);
     }
 
     function loadNewImages(searchString, pageNumber){
+        updateImgModalMessage(searchString);
+
+        var escapedString = escapeString(searchString)
         var url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=0dde4e72b0091627e13df41e631b85ec&tags="
-                    +searchString+"&safe_search=1&per_page=3&page=" + pageNumber+ "&format=json&nojsoncallback=1";
+                    +escapedString+"&safe_search=1&per_page=3&page=" + pageNumber+ "&format=json&nojsoncallback=1";
         var src;
         $.getJSON(url, function(data){
             jqueryMap.$imgMdlContent.html("");
             $.each(data.photos.photo, function(i,item){
                 src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_m.jpg";
-                $("<img />").attr("src", src).addClass('cardimg').appendTo(jqueryMap.$imgMdlContent);
+                $("<img />").attr("src", src).addClass('modalimg').appendTo(jqueryMap.$imgMdlContent);
+            });
+
+            $("#flickrSearchBtn").hide();
+            $("#flickrSearchText").val("");
+
+
+            $(".forward").off("click").on("click", function(e){
+                loadNewImages(searchString, ++pageNumber);
+                $(".back").show();
+                e.stopPropagation();
+            });
+
+            $(".back").off("click").on("click", function(e){
+                if(pageNumber == 1){
+                    return;
+                }
+                else{
+                    loadNewImages(searchString, --pageNumber);
+                    if(pageNumber == 1)
+                        $(".back").hide();
+                }
+                e.stopPropagation();
             });
         });
     }
+
 
     function load_values(isMultiSelect, className, defaultValArray){
         var $select

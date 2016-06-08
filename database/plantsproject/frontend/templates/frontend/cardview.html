@@ -165,7 +165,7 @@
 </div>
 </div>
 {% else %}
-	<div class="col-md-11 col-md-offset-1 col-xs-12">
+	<div class="col-md-11 col-md-offset-1 col-xs-12" style="z-index:-1;">
 		<h2>Sorry, we couldn't find anything for you.</h2><br>
 		<text id="btm-header">Please try a different search term.</text>
 	</div>
@@ -185,6 +185,8 @@
 		var plantId = $(this).attr("data-plantId");
 		location.href='/edit/' + plantId
 	});
+
+
 
 	{% if filter_by %}
 		$("#filter_by").html("{{filter_by}}");
