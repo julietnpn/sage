@@ -3,10 +3,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<!-- Replace the following with a link for the icon to show up in the tabs bar -->
 	<link rel="shortcut icon" href="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg">
 	<link rel="stylesheet" type="text/css" href="{% static 'frontend/main.css' %}" />
 	<link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
-	<!--<link rel="stylesheet" href="{% static 'frontend/bootstrap.css' %}">-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
@@ -64,6 +64,8 @@
 		<div id="updateAttributeMdl" class="modal fade" tabindex="-1" role="dialog">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
+		      <div class="modal-header"><h3>Update a plant attribute</h3>
+		      </div>
 		      <div class="modal-body">
 		      	<form action="" method="post">
 		      		{% csrf_token %}
@@ -71,6 +73,15 @@
 					{% for field in updateAttributeForm %}
 		      		{{ field }}
 		      		{% endfor %}
+
+<!-- 		      		<table border="0" style="width:100%;">
+		      			{% for field in updateAttributeForm %}
+			      		<tr>
+				      		<th align="right"><label id="mdl-label"></label>&nbsp;</th>
+				      		<td><div class="inputbase formdiv" style="width:80%;">{{ field }}</div></td>
+				      	</tr>
+				      	{% endfor %}
+			      	</table> -->
 			
 					<input type="hidden" id="hidden-plantId" name="plant_id" value=""/>
 					<input type="hidden" id="hidden-propName" name="property_name" value=""/>
@@ -122,14 +133,21 @@
 		<div id="updateNamesMdl" class="modal fade" role="dialog">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
+		   	  <div class="modal-header"><h3>Update names</h3>
+		    		<p>Update one or more of the fields below</p>
+		      </div>
 		      <div class="modal-body">
 		      	<form action="#" method="post">
 		      		{% csrf_token %}
-					
-		      		{% for field in updatePlantNamesForm %}
-		      		<label id="mdl-label-text">{{ field.label }}</label>
-		      		<div id="{{field.label}}" class="formdiv">{{ field }}</div><br>
-		      		{% endfor %}
+					<table border="0">
+
+						{% for field in updatePlantNamesForm %}
+			      		<tr>
+			      			<th><label id="mdl-label-text">{{field.label}}&nbsp;</label></th>
+			      			<td><div id="{{field.label}}" class="inputbase formdiv" style="width:100%;">{{ field }}</div></td>
+			      		</tr>
+		      			{% endfor %}
+		      		</table>
 					<!-- <input type="submit" class="formsubmit" value="Save" /> -->
 					
 					<input type="hidden" id="hidden-plantId-names" name="plant_id" value=""/>
@@ -160,25 +178,10 @@
 
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-	<!-- <script src="{% static 'frontend/jquery-1.10.2.min.js' %}" type="text/javascript"></script> -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	<script src="{% static 'frontend/editplant.js' %}" type="text/javascript"></script>
-	<script src="{% static 'frontend/search.js' %}" type="text/javascript"></script>
-	<script src="{% static 'frontend/filter.js' %}" type="text/javascript"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
-	<script type="text/javascript">
-
-	$("#searchbar").on("focus mouseenter", function(){
-		$("#advanced_search").show();
-	});
-
-	$("#searchbar").on("blur mouseleave", function(){
-		$("#advanced_search").hide()
-	});
-</script>
+	<script src="{% static 'frontend/search.js' %}"></script>
 	{% block script %}
 	{% endblock %}
-
 </body>
-
 </html>

@@ -1,6 +1,7 @@
-// this does nothing
-// $("#search-magnifying-glass").on('click', function(){
-// 	searchValue = $("#searchbar").val();
+$("#search-magnifying-glass").on("click", function(){
+	$('#searchform').submit();
+});
 
-// 	$(this).closest(".modal-content").find("form").submit();
-// });
+$("#searchform").submit(function(){
+	$("#searchform").attr("action", "/search/" + $("#searchbar").val() + "/");
+});

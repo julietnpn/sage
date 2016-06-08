@@ -25,7 +25,7 @@
 				{% endspaceless %}
 			</div>
 			<div class="col-md-3 col-xs-4">
-				<form id="searchform" action="/search/" method="post" >
+				<form id="searchform" action="/search/" method="post">
 					{% csrf_token %}
 					<input type="text" id="searchbar" name="searchVal" value=""></input>
 					</select>
@@ -35,5 +35,3 @@
 		</div>
 	</div>
 {% endblock %}
-
-

@@ -2,7 +2,7 @@
 
 {% block filter %}
 
-  <div class="dropbtn">Filter by:&nbsp;<div id="filter_by" style="display:inline-block;">None</div></div>
+  <div class="dropbtn">Filter by:</div>&nbsp;<div id="filter_by" class='dropbtn'>None</div>
   <div class="dropdown-content">
     <a href="#" data-category="Name">Name</a>
     <a href="#" data-category="Characteristic">Characteristic</a>
@@ -10,14 +10,13 @@
     <a href="#" data-category="Need">Need</a>
     <a href="#" data-category="Tolerance">Tolerance</a>
     <a href="#" data-category="Behavior">Behavior</a>
-    <a href="/" data-category="None">None</a> <!--do we want to see if anything was searched for-->
   </div>
 
 <form id="filter_form" action="/filter/" method="get">
-	<input type="hidden" id="filter_field" name="filter_field" value="pH_min"/>
-  <input type="hidden" id="filter_field_label" name="filter_field_label" value="ph min"/>
-	<input type="hidden" id="filter_field_type" name="filter_field_type" value="other"/>
-	<input type="hidden" id="filter_value" name="filter_value" value="6"/>
+	<input type="hidden" id="filter_field" name="filter_field" value=""/>
+  <input type="hidden" id="filter_field_label" name="filter_field_label" value=""/>
+	<input type="hidden" id="filter_field_type" name="filter_field_type" value=""/>
+	<input type="hidden" id="filter_value" name="filter_value" value=""/>
 </form>
 {% endblock %}
 
@@ -29,5 +28,5 @@
     <a href="#">Recently Added</a>
   </div> -->
 
-<form id="sort_form" action="#" method="get">Sort by: None</form>
+<!-- <form id="sort_form" action="#" method="get">Sort by: None</form> -->
 {% endblock %}

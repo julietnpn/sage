@@ -1,5 +1,5 @@
 from django.http import *
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render #, render_to_response, redirect
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 import pdb
 from django.views.generic import View
-import django_filters
+#import django_filters
 from rest_framework import generics
 
 
@@ -42,8 +42,8 @@ EmptyPlant = {
 	],
 	'Needs':[
 		{'name':'innoculant', 'field_type':'other', 'value':None, 'label':'innoculant', 'class_name':'temp'},
-		{'name':'serotiny', 'field_type':'many_to_one', 'value':None, 'label':'serotiny', 'class_name':'temp'},
-		{'name':'fertility_needs', 'field_type':'many_to_many', 'value':None, 'label':'Nutrient Requirements', 'class_name':'NutrientRequirements'},
+		{'name':'serotiny', 'field_type':'many_to_one', 'value':None, 'label':'serotiny', 'class_name':'Serotiny'},
+		{'name':'fertility_needs', 'field_type':'many_to_many', 'value':None, 'label':'nutrient requirements', 'class_name':'NutrientRequirements'},
 		{'name':'water_needs', 'field_type':'many_to_many', 'value':None, 'label':'water needs', 'class_name':'WaterNeeds'},
 		{'name':'sun_needs', 'field_type':'many_to_many', 'value':None, 'label':'sun needs', 'class_name':'SunNeeds'}
 	],
@@ -69,12 +69,12 @@ EmptyPlant = {
 	],
 	'Products':[
 		{'name':'allelochemicals', 'field_type':'other', 'value':None, 'label':'allelochemicals', 'class_name':'temp'},
-		{'name':'food_prod', 'field_type':'many_to_many', 'value':None, 'label':'food prod', 'class_name':'FoodProd'},
-		{'name':'raw_materials_prod', 'field_type':'many_to_many', 'value':None, 'label':'raw materials prod', 'class_name':'RawMaterialsProd'},
-		{'name':'medicinals_prod', 'field_type':'many_to_many', 'value':None, 'label':'medicinals prod', 'class_name':'MedicinalsProd'},
-		{'name':'biochemical_material_prod', 'field_type':'many_to_many', 'value':None, 'label':'biochemical material prod', 'class_name':'BiochemicalMaterialProd'},
-		{'name':'cultural_and_amenity_prod', 'field_type':'many_to_many', 'value':None, 'label':'cultural and amenity prod', 'class_name':'CulturalAndAmenityProd'},
-		{'name':'mineral_nutrients_prod', 'field_type':'many_to_many', 'value':None, 'label':'mineral nutrients prod', 'class_name':'MineralNutrientsProd'}
+		{'name':'food_prod', 'field_type':'many_to_many', 'value':None, 'label':'food', 'class_name':'FoodProd'},
+		{'name':'raw_materials_prod', 'field_type':'many_to_many', 'value':None, 'label':'raw materials', 'class_name':'RawMaterialsProd'},
+		{'name':'medicinals_prod', 'field_type':'many_to_many', 'value':None, 'label':'medicinals', 'class_name':'MedicinalsProd'},
+		{'name':'biochemical_material_prod', 'field_type':'many_to_many', 'value':None, 'label':'biochemical material', 'class_name':'BiochemicalMaterialProd'},
+		{'name':'cultural_and_amenity_prod', 'field_type':'many_to_many', 'value':None, 'label':'cultural and amenity', 'class_name':'CulturalAndAmenityProd'},
+		{'name':'mineral_nutrients_prod', 'field_type':'many_to_many', 'value':None, 'label':'mineral nutrients', 'class_name':'MineralNutrientsProd'}
 	]
 }
 
@@ -92,7 +92,7 @@ Tolerances = [
 	'shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol'
 ]
 Products = [
-	'allelochemicals', 'food_prod', 'raw_materials_prod', 'medicinals_prod', 'biochemical_material_prod', 'cultural_and_amenity_prod', 'mineral_nutrients_prod',
+	'allelochemicals', 'food_prod', 'animal_food', 'raw_materials_prod', 'medicinals_prod', 'biochemical_material_prod', 'cultural_and_amenity_prod', 'mineral_nutrients_prod',
 ]
 
 PropertyToClassName={
@@ -143,6 +143,7 @@ PropertyToClassName={
 	### Products ###
 	'allelochemicals': 'fixthis', 
 	'food_prod' : 'FoodProd', 
+	'animal_food' : 'AnimalFood',
 	'raw_materials_prod': 'RawMaterialsProd', 
 	'medicinals_prod': 'MedicinalsProd', 
 	'biochemical_material_prod' : 'BiochemicalMaterialProd', 
@@ -342,7 +343,6 @@ def updateSelect(request, transaction_id, action_type):
 		return HttpResponse(json.dumps(response_data))
 
 def updateMulti(request, transaction_id, action_type):
-	
 	if request.method == 'POST':
 		cls_name = request.POST['class_name']
 		form = UpdateAttributeForm(request.POST, class_name=cls_name)
@@ -410,7 +410,6 @@ def editPlant(request, plantId=None):
 			result['About'].append(field)
 
 	context = {
-		# 'isNew': 1,
 		'userId': request.user.id,
 		'transactionId' : 0,
 		'result': result,
@@ -423,9 +422,6 @@ def editPlant(request, plantId=None):
 		'family_common_name' : plant.family_common_name,
 		'endemic_status' : plant.get_endemic_status,
 		'images': ImageURL.objects.filter(plants_id=plantId),
-		# 'updateTextForm': UpdateTextForm(),
-		# 'updateSelectForm': UpdateSelectForm(class_name='Plant'),
-		# 'updateMulitForm': UpdateMultiForm(),
 		'updatePlantNamesForm' : UpdatePlantNamesForm(),
 		'updateAttributeForm' : UpdateAttributeForm(class_name='Plant'),
 	}
@@ -439,8 +435,6 @@ def addPlant(request):
 		if 'add' in request.POST and addPlantForm.is_valid():
 			nameArray = str(request.POST["latinName"]).split()
 			commonName = request.POST["commonName"]
-
-			# IF EITHER OF THE ABOVE ARE "NONE" RETURN ERRORS!!!!!!! -- the UI doesnt allow ether to be none
 
 			genus = None
 			species = None
@@ -517,89 +511,67 @@ def viewPlants(request):
 		context = {
 			'addPlantForm': AddPlantForm(),
 			'plants':plants,
+			#'queryResultSet' : plant_list,
 			'images': images
 		}
 		return render(request, 'frontend/cardview.html', context)
 
-
-
-# from .filters import PlantFilter
-# def filter(request):
-# 	print("IN VIEW")
-# 	filter = PlantFilter(request.GET, queryset=Plant.objects.all())
-
-# 	context = {
-# 		'addPlantForm': AddPlantForm(),
-# 		'plants': filter
-# 		#'images': images
-# 	}
-# 	return render(request, 'frontend/cardview.html', context)
-
-# from frontend.serializers import PlantSerializer
-# from django.core import serializers
-# class PlantList(generics.ListAPIView):
-# 	serializer_class = PlantSerializer
-# 	def get_queryset(self):
-# 		genus = "Yucca"
-# 		return Plant.objects.filter(genus__icontains=genus)
-		# iterableImages = ImageURL.objects.all()
-		# images = {}
-		# plantIdsAlreadyUsed = []
-		# for img in iterableImages:
-		# 	if img.plants.id not in plantIdsAlreadyUsed:
-		# 		images[img.plants.id] = img.value
-		# 		plantIdsAlreadyUsed.append(img.plants.id)
-		# context = {
-		# 	'addPlantForm': AddPlantForm(),
-		# 	'plants':plants,
-		# 	'images': images
-		# }
-		# return render(request, 'frontend/cardview.html', context)
-
-def filter(request):
-	#what about plant_region fields?
-	#acount for multi-value filters
-	fieldLabel = request.GET['filter_field_label']
-	field = request.GET['filter_field']
-	field_type = request.GET['filter_field_type']
-	value = request.GET['filter_value']
-
+def getFilterResults(field, field_type, value):
 	if field_type == "other":
 		q = Q(**{"%s" % field: value})
-	else:
+	elif field_type == "many_to_many":
 		q = Q(**{"%s__value__icontains" % field: value})
+	else: 
+		q = Q(**{"%s__value__icontains" % field: value})
+	return q
 
 
-	plants = Plant.objects.filter(q)
+def filter(request):
+	if request.method == 'GET':
+		#account for multi-value filters?
+		fieldLabel = request.GET['filter_field_label']
+		field = request.GET['filter_field']
+		field_type = request.GET['filter_field_type']
+		value = request.GET['filter_value']
 
-	paginator = Paginator(plants, 35)
-	page = request.GET.get('page')
-	try:
-		plants = paginator.page(page)
-	except PageNotAnInteger:
-		plants = paginator.page(1)
-	except EmptyPage:
-		plants = paginator.page(paginator.num_pages)
-	iterableImages = ImageURL.objects.all()
-	images = {}
-	plantIdsAlreadyUsed = []
-	for img in iterableImages:
-		if img.plants.id not in plantIdsAlreadyUsed:
-			images[img.plants.id] = img.value
-			plantIdsAlreadyUsed.append(img.plants.id)
+		if field == 'height' or field == 'spread' or field == 'root_depth':
+			q = Q(**{"plantregion__%s" % field : value})
+		else:
+			q = getFilterResults(field, field_type, value)
 
-	context = {
-		'addPlantForm': AddPlantForm(),
-		'plants':plants,
-		'images': images,
-		'filter_by': fieldLabel + " " + value
-	}
-	return render(request, 'frontend/cardview.html', context)
+		plant_list = Plant.objects.filter(q)		
+
+		paginator = Paginator(plant_list, 35)
+		page = request.GET.get('page')
+
+		try:
+			plants = paginator.page(page)
+		except PageNotAnInteger:
+			plants = paginator.page(1)
+		except EmptyPage:
+			plants = paginator.page(paginator.num_pages)
+		iterableImages = ImageURL.objects.all()
+		images = {}
+		plantIdsAlreadyUsed = []
+		for img in iterableImages:
+			if img.plants.id not in plantIdsAlreadyUsed:
+				images[img.plants.id] = img.value
+				plantIdsAlreadyUsed.append(img.plants.id)
 
 
-from itertools import chain
-def search(request):
-	searchString = request.POST['searchVal']
+		context = {
+			'addPlantForm': AddPlantForm(),
+			'plants':plants,
+			'images': images,
+			'filter_by': fieldLabel + " | " + value
+		}
+		return render(request, 'frontend/cardview.html', context)
+
+
+#from itertools import chain
+def search(request, searchString):
+	print(searchString)
+		
 	plants = Plant.objects
 
 	# layer_results = Plant.objects.filter(layer__in=Layer.objects.filter(value__icontains=searchString))
@@ -623,7 +595,7 @@ def search(request):
 		Q(innoculant__icontains=searchString)
 	)
 	# results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
-	#results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
+	# results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 
 	results_list = list(name_matches)
 
@@ -650,3 +622,4 @@ def search(request):
 		'images': images
 	}
 	return render(request, 'frontend/cardview.html', context)
+

@@ -6,11 +6,10 @@
 
 {% for plant in plants %}
 <div class='row plantcard'>
-	<!-- <div class="col-md-1"></div> -->
 	<div class="col-md-2 col-md-offset-1 col-xs-3 img-container">
 		<div id ="add-new-img" class="cardimg" data-plantId="{{plant.id}}" />
 			{% if plant.id in images %}
-				<img src="{{ images|get_item:plant.id }}" id="add-new-img2" alt="Plant Image" />
+				<img src="{{ images | get_item:plant.id }}" id="add-new-img2" alt="Plant Image" />
 				{% else %}
 				<div id="add-new-img2"><div>image not available</div></div>
 			{% endif %}
@@ -30,6 +29,7 @@
 		<div class='row plantdetails'>
 			<div class='row'>
 				<div class='col-sm-6'>
+					
 					<p><text>Characteristics: </text>{% spaceless %}
 						{% if plant.height.all %}
 							<text><i>Height&nbsp;</i>
@@ -55,7 +55,11 @@
 							<text><i>phMax&nbsp;</i><b>{{ plant.ph_max }} </b></text>
 						{% endif %}
 						{% endspaceless %}
+						{% if not plant.height.all or not plant.layer.all or not plant.ph_min or not plant.ph_max %}
+						<text>None</text>
+						{% endif %}
 					</p>
+					
 				</div>
 				<div class='col-sm-6'>
 					<p><text>Products: </text>{% spaceless %}
@@ -76,11 +80,16 @@
 							<text><i> Biochemical&nbsp;Matieral&nbsp;</i><b>{{ plant.get_biochemical_material_prod }}</b></text>
 						{% endif %}
 						{% endspaceless %}
+						{% if not plant.food_prod.all or not plant.raw_materials_prod.all or not plant.medicinals_prod.all or not plant.get_biochemical_material_prod.all %}
+						<text>None</text>
+						{% endif %}
 					</p>
+					
 				</div>
 			</div>
 			<div class='row'>
 				<div class='col-sm-6'>
+					
 					<p><text>Needs: </text>{% spaceless %}
 						{% if plant.water_needs.all %}
 							<text><i>Water&nbsp;</i><b>{{ plant.get_water_needs }} </b></text>
@@ -102,9 +111,14 @@
 							<text><i> Innoculant&nbsp;</i><b>{{ plant.innoculant }}</b></text>
 						{% endif %}
 						{% endspaceless %}
+						{% if not plant.water_needs.all or not plant.sun_needs.all or not plant.fertility_needs.all or not plant.serotiny or plant.innoculant %}
+						<text>None</text>
+						{% endif %}
 					</p>
+					
 				</div>
 				<div class='col-sm-6'>
+					
 					<p><text>Behaviors: </text>{% spaceless %}
 						{% if plant.erosion_control.all %}
 							<text><i>Erosion&nbsp;Control&nbsp;</i><b>{{ plant.get_erosion_control }} </b></text>
@@ -120,7 +134,11 @@
 						{% endif %}
 
 						{% endspaceless %}
+						{% if not plant.eroision_control.all or not plant.plants_insect_attractor.all or not plant.plants_insect_regulator.all %}
+						<text>None</text>
+						{% endif %}
 					</p>
+					
 				</div>
 			</div>
 		</div>
@@ -147,7 +165,10 @@
 </div>
 </div>
 {% else %}
-	<p>No plants are available.</p>
+	<div class="col-md-11 col-md-offset-1 col-xs-12">
+		<h2>Sorry, we couldn't find anything for you.</h2><br>
+		<text id="btm-header">Please try a different search term.</text>
+	</div>
 {% endif %}
 
 
@@ -156,7 +177,9 @@
 {% block script %}
 {% load staticfiles %}
 <script src="{% static 'frontend/addPlant.js' %}" type="text/javascript"></script>
+<script src="{% static 'frontend/filter.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
+	Filter.init();
 	AddPlant.init();
 	$(".plantname").on("click", function(){
 		var plantId = $(this).attr("data-plantId");

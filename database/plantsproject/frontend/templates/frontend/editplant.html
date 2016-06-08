@@ -16,44 +16,21 @@
 {% endblock %}
 
 {% block maincontent %}
+<div id="hiddenTransactionId" style="display:none;">{{ transactionId }}</div> <!--do we really need these - should be object vars -->
+<div id="hiddenPlantId" style="display:none;">{{ plantId }}</div>
 
-{% if newPlant %}
-<div id="hiddenTransactionId" style="visibility:hidden;">{{ transactionId }}</div>
 <div class="row editplantrow">
-	<div class="col-sm-1"></div> 
-	<div class="col-sm-8">You are adding a plant to the database. Please allow 24 hours for your change to be reflected.</div>
-	<div class="col-sm-3"></div>
+	{% if newPlant %}
+		<div class="message hidden-xs"><p style="font-size:16px;"><strong>Thanks for your contribution!</strong></p><br>You are adding a brand new plant to the database. Please allow 24 hours for your change to be reflected across the site.</div>
+	{% else %}
+		<div id="alert" class="message" style="display:none;"><p style="font-size:16px;"><strong>Thanks for your contribution!</strong></p><br>Changes might take up to 24 hours to be reflected across the site.</div>
+	{% endif %}
 </div>
 
-{% endif %}
 
 {% if result %}
-	<div id="hiddenTransactionId" style="display:none;">{{ transactionId }}</div> <!--do we really need these - should be object vars -->
-	<div id="hiddenPlantId" style="display:none;">{{ plantId }}</div>
 	<div class="row editplantrow">
-
-		<!-- BEGIN ALERT -->
-		<div id="alert" class="message">
-	  	<p style="font-size:16px;"><strong>Thanks for your contribution!</strong></p><br>
-	  	Changes will be reflected on this page, but please allow 24 hours for your changes to be reflected across the site.
-		</div>
-		<!-- END ALERT -->
-
-
 		<div class="col-sm-11 col-sm-offset-1">
-
-			{% autoescape off %}
-			<!-- this was the old format for common name, not sure why we needed a wrapper div		
-			<div class="edit-plant-title">
-						<div class="name" id="commonName">{{ common_name }}</div>
-					</div>
-				- else -
-					<div class="edit-plant-title" style="display:none;">
-						<div class="name" id="commonName"></div>
-					</div> 
-			 -->
-			 {% endautoescape %}
-
 
 			<div class="edit-plant-title">{% spaceless %}
 				{% if common_name or genus or species or variety %}
@@ -74,6 +51,7 @@
 				<div class="name" id="familyCommonName" style="font-weight:bold;">{% if family_common_name %}{{ family_common_name }}{% endif %}</div>
 				<div class="name italic" id="family">{% if family %}{{ family }}{% endif %}</div>
 			</div>
+
 
 			<div id="endemicStatusWrapper">Endemic Status: <p id="endemicStatus">{% if endemic_status != 0 %}{{ endemic_status }}{% endif %}</p></div>
 			
@@ -308,10 +286,15 @@
 	genus = "{{ genus }}";
 	species = "{{ species }}";
 	variety = "{{ variety }}";
+
+	{% if not endemic_status %}
+	$("#endemicStatusWrapper").hide();
+	{% endif %}
+
 	{% if userId %}
-		EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, {{ userId }});
+		EditPlant.init(common_name, genus, species, {{ transactionId }}, {{ userId }});
 	{% else %}
-		EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, -1);
+		EditPlant.init(common_name, genus, species, {{ transactionId }}, -1);
 	{% endif %} 
 	//EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, id); //pass transactionId as 0?
 
