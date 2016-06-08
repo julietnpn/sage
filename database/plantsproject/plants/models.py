@@ -8,7 +8,6 @@
 # Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
 # into your database.
 from __future__ import unicode_literals
-
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
@@ -524,6 +523,10 @@ class Plant(models.Model):
     #--------------------------characteristic------------------------
     #duration
     duration = models.ManyToManyField('Duration', through='PlantDurationByRegion')
+    @property
+    def get_duration(self):
+        return ', '.join([str(a) for a in self.duration.all()])
+
     #height
     # height = models.ManyToManyField('PlantHeightAtMaturityByRegion')
     # @property
@@ -536,6 +539,27 @@ class Plant(models.Model):
     #     return ', '.join([str(a) for a in self.spread.all()])# ???????????????????????????
 
     region = models.ManyToManyField('Region', through='PlantRegion')
+    def get_region(self):
+        try:
+            pr = PlantRegion.objects.get(plants_id=self.id)
+        except PlantRegion.DoesNotExist:
+            return None
+
+        if pr.height is not None:
+            height = float(json.dumps(str(pr.height)).strip('"'));
+        else:
+            height = None
+        if pr.spread is not None:
+            spread = float(json.dumps(str(pr.spread)).strip('"'));
+        else:
+            spread = None
+        if pr.root_depth is not None:
+            root_depth = float(json.dumps(str(pr.root_depth)).strip('"'));
+        else:
+            root_depth = None
+
+        return {'height': height, 'spread': spread, 'root_depth': root_depth}
+        #return ', '.join([str(a) for a in self.region.all()])
 
     pH_min = models.DecimalField(db_column='ph_min', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase. #
     pH_max = models.DecimalField(db_column='ph_max', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase.
@@ -604,7 +628,7 @@ class Plant(models.Model):
 
     #-------------------------needs--------------------------------
     #FertilityNeeds
-    fertility_needs = models.ManyToManyField(NutrientRequirements, through='PlantNutrientRequirementsByRegion', verbose_name='Nutrient Requirements')
+    fertility_needs = models.ManyToManyField(NutrientRequirements, through='PlantNutrientRequirementsByRegion', verbose_name='nutrient requirements')
     @property
     def get_fertility_needs(self):
         return ',' .join([str(a) for a in self.fertility_needs.all()])
@@ -631,32 +655,32 @@ class Plant(models.Model):
     def get_food_prod(self):
         return ', '.join([str(a) for a in self.food_prod.all()])
     #AnimalFood
-    animal_food = models.ManyToManyField('AnimalFood', through='PlantAnimalFood')
+    animal_food = models.ManyToManyField('AnimalFood', through='PlantAnimalFood', verbose_name='animal food')
     @property
     def get_animal_food(self):
         return ','.join([str(a) for a in self.animal_food.all()])
     #RawMaterialsProd
-    raw_materials_prod = models.ManyToManyField('RawMaterialsProd', through='PlantRawMaterialsProd')
+    raw_materials_prod = models.ManyToManyField('RawMaterialsProd', through='PlantRawMaterialsProd', verbose_name='raw materials')
     @property
     def get_raw_materials_prod(self):
         return ', '.join([str(a) for a in self.raw_materials_prod.all()])
     #MedicinalsProd
-    medicinals_prod = models.ManyToManyField(MedicinalsProd, through='PlantMedicinalsProd')
+    medicinals_prod = models.ManyToManyField(MedicinalsProd, through='PlantMedicinalsProd', verbose_name='medicinals')
     @property
     def get_medicinals_prod(self):
         return ', '.join([str(a) for a in self.medicinals_prod.all()])
     #BiochemicalMaterialProd
-    biochemical_material_prod = models.ManyToManyField(BiochemicalMaterialProd, through='PlantBiochemicalMaterialProd')
+    biochemical_material_prod = models.ManyToManyField(BiochemicalMaterialProd, through='PlantBiochemicalMaterialProd', verbose_name='biochemical materials')
     @property
     def get_biochemical_material_prod(self):
         return ', '.join([str(a) for a in self.biochemical_material_prod.all()])
     #CulturalAndAmenityProd
-    cultural_and_amenity_prod = models.ManyToManyField(CulturalAndAmenityProd, through='PlantCulturalAndAmenityProd')
+    cultural_and_amenity_prod = models.ManyToManyField(CulturalAndAmenityProd, through='PlantCulturalAndAmenityProd', verbose_name='cultrual and amenity')
     @property
     def get_cultural_and_amenity_prod(self):
         return ', '.join([str(a) for a in self.cultural_and_amenity_prod.all()])
     #MineralNutrientsProd
-    mineral_nutrients_prod = models.ManyToManyField(MineralNutrientsProd, through='PlantMineralNutrientsProd')
+    mineral_nutrients_prod = models.ManyToManyField(MineralNutrientsProd, through='PlantMineralNutrientsProd', verbose_name='mineral nutrients')
     
     @property
     def get_mineral_nutrients_prod(self):
@@ -830,7 +854,6 @@ class PlantEndemicStatusByRegion(models.Model):
     class Meta:
         managed = False
         db_table = 'plants_endemic_status_by_region'
-
 
 class PlantErosionControlByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
