@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Plant Database Design Document v1.1</title>
+    <link rel="stylesheet" href="main.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="image.js" type="text/javascript"></script>
+    <script>
+    $(function () {
+        $('#contain a').fluidbox();
+    })
+    </script>
+  </head>
+  <body>
+  	<section id="contain">
+	  	<h1>PDB Interaction Design</h1>
+	  	<p>Designed by Sahand Nayebaziz in the Calit2 Lab at the University of California, Irvine for Juliet Norton, Bill Tomlinson, & Co.</p>
+	  	<h2>Overview</h2>
+	  	<p>The typeface used throughout this design is "Karla", a font available for free use through Google Fonts. Sizes range between 11pt and 21pt, and four faces of Karla are used: Regular, Italic, Bold, and Bold Italic.</p>
+	  	<h2>Front Page</h2>
+	  	<h3>Navigation</h3>
+	  	<p>The majority of the navigation through the PDB is content-driven and occurs as users add, search, and edit existing plants.</p>
+	  	<p>Higher-level navigation is handled by an always-visible set of links on the left side of the screen. Links are divided into sections so the user may scan them quickly.</p>
+	  	<h3>Plant Addition</h3>
+	  	<p>Users can begin to add a plant to the PDB from any part of the PDB they are currently viewing. All three fields - latin name, common name, and image choice - are needed as a minimum to adding a plant to the database.</p>
+	  	<a href="img/nav.png"><img src="img/nav_s.png" id="imagelightbox" alt="" /></a>
+	  	<p>Once the two names are filled out, the names are used to query image bases and the top three results are shown side-by-side in three square thumbnails. Thumbnails are given a 1px gray border that will change to green when selected by the user. This indicates this photo will be set as the first, and primary, photo for this plant entry.</p>
+	  	<p class="italic">note: photos should be placed into the squares in a way that does not force their ratio to change and therefore appear to be distorted. It is okay for edges of the photo to be cut-off when displayed.</p>
+	  	<p>A small arrow to the right of the thumbnails can be clicked to show another set of three thumbnails.</p>
+	  	<a href="img/add_plant.png"><img src="img/add_plant_s.png" id="imagelightbox" alt="" /></a>
+	  	<p>Once a photo has been selected, the "Add This" link will appear, and if this link is not pressed after a set amount of time, two small, green arrows appear on either side of this link and hover in tiny movements of a few pixels up and down to alert the user that they currently have unsaved progress. A small "clear" button is included to quickly clear all fields and selections so that they user may start over.</p>
+	  	<h3>Featured Plants</h3>
+	  	<p>To encourage discovery, the front page cycles through a set of a few featured plants in the hero image at the top of the window. These plants should be plants whose first photo has a resolution large enough to look sharp in this space.</p>
+	  	<a href="img/front_page.png"><img src="img/front_page_s.png" id="imagelightbox" alt="" /></a>
+	  	<p>Below, the most recently added plants are displayed in a grid with their photo and name. To avoid having to check for readability of a certain font color over a specific image, a plant's name is set below a plant's photo.</p>
+	  	<h2>Viewing the Database</h2>
+	  	<h3>Card View</h3>
+	  	<p>Searching the database, sorting the database, and simply browsing the database requires displaying multiple plants in a single frame.</p>
+	  	<p>Here, plants are represented by their main photo, their name and common name, and a preview of their characteristics, products, needs, and behaviors. A plant's photo and name in this context link to the plant view page.</p>
+	  	<a href="img/card_view.png"><img src="img/card_view_s.png" id="imagelightbox" alt="" /></a>
+	  	<p>The first plant in this frame is the one that is currently being hovered, making two things happen: the <i>values</i> in it's data for characteristics, products, needs, and behaviors become a full black to stand out for easy scanning, and a small <i>edit</i> button appears next to the full name of the plant. This way, the screen isn't filled with edit buttons for each plant. The plant the user hovers over displays its secondary actions (such as <i>edit</i>) and highlights its own data values.</p>
+	  	<h3>Filter & sort</h3>
+	  	<p>The plant database or the results of a search on the plant database can be filtered and sorted by using the "filter by" and "sort by" labels at the top of the window.</p>
+	  	<a href="img/filter.png"><img src="img/filter_s.png" id="imagelightbox" alt="" /></a>
+	  	<p>For example, if a user selected filter by, and then selected characteristic, the autocomplete domain for the field that appears should be the list of <i>all</i> existing characteristics and their values. While this list will certainly be lengthy, providing the user with a suggestion like "canopy density high" will protect the user from entering in filters for characteristics and respective values that have never been entered.</p>
+	  	<a href="img/filter_flow.png"><img src="img/filter_flow_s.png" id="imagelightbox" alt="" /></a>
+	  	<p>Filter & Sort can be expanded to work off of the metadata of plant cards, such as their date created for a recently added sort, or a filter for all plants that have an empty "needs" section, and so on.</p>
+	  	<h2>Viewing Plants</h2>
+	  	<h3>Plant View</h3>
+	  	<p>The full plant view, seen when visiting the URL of a plant, displays the full name of the plant, all values for characteristics, products, needs, and behaviors, an always-visible edit button, and the main photo with toggles to advance to other photos for this plant.</p>
+	  	<p>A small "enlarge" toggle is used to show the photos in a larger view or fullscreen view.</p>
+	  	<a href="img/plant_view.png"><img src="img/plant_view_s.png" id="imagelightbox" alt="" /></a>
+	  	<h3>Breadcrumbs</h3>
+	  	<p>To encourage discovery and browsing of the database, it is important that the user be shown where they are in the database, often including where they came from. This is where the breadcrumbs come in.</p>
+	  	<a href="img/breadcrumbs.jpg"><img src="img/breadcrumbs.jpg" id="imagelightbox" alt="" /></a>
+	  	<p> At the top of the window, they will be shown the name of the current plant they are viewing <i>in front of a plain-english sentence</i> describing the search query they were viewing when they selected to view the current plant. This plain-english sentence will act as a link to re-send that query and go back to the same results they were previously viewing. This grants forgiveness to the user if they mis-clicked and would like to return to the search they previously created, and indicates the users current location in the database.</p>
+	  	<h2>Adding Data to Plants</h2>
+	  	<h3>Data-add view</h3>
+	  	<p>Once the user has entered the minimum-viable plant data and successfully added a plant, they will be taken to the newly-created plant's page in the database. Here, they can begin to add data to the newly-created plant.</p>
+	  	<a href="img/add_data.png"><img src="img/add_data_s.png" id="imagelightbox" alt="" /></a>
+	  	<p>Below the name and the photo, the four information areas are displayed initially empty. Below these labels, four add buttons are displayed. Completing an add of any of the four information areas updates the four labels with the newly-added data.</p>
+	  	<a href="img/add_data_flow.png"><img src="img/add_data_flow_s.png" id="imagelightbox" alt="" /></a>
+	  	<p>All four add buttons work the same way.</p>
+	  	<h2>Changelog</h2>
+	  	<p>1.1 <i>July 2nd, 2014</i> - Rewritten in HTML.
+	  	<br>
+	  	1.0 <i>June 28th, 2014</i> - Document created.</p>
+  	</section>
+  </body>
+</html>

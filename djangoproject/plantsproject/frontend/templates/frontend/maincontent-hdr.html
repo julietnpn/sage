@@ -1,0 +1,32 @@
+{% extends 'frontend/base.html' %}
+
+{% block maincontentheader %}
+	<div class="col-xs-12" style="height:125px;width:100%;position:relative;">
+		<div class="row" style="width:100%;height:50%;position:absolute;top:50%;transform:translateY(-50%);">
+			
+			<div class="col-md-4 col-md-offset-1 col-xs-3">
+				<div id="filter" class="dropdown">
+					{% block filter %}{% endblock %}
+				</div>
+			</div>
+
+
+			<div class="col-md-4 col-xs-4" id="login">{% spaceless %}
+				{% if request.user.is_authenticated %}
+					Welcome, {{ request.user.username }}! <a href="/logout">Logout</a>
+				{% else %}
+					<a href="/login">Login</a>
+				{% endif %}
+				{% endspaceless %}
+			</div>
+			<div class="col-md-3 col-xs-4">
+				<form id="searchform" action="/search/" method="post">
+					{% csrf_token %}
+					<input type="text" id="searchbar" name="searchVal" value=""></input>
+					</select>
+  					<span id="search-magnifying-glass" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

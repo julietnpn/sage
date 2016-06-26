@@ -1,0 +1,21 @@
+{% extends "frontend/maincontent-hdr.html" %}
+{% block title %}Login{% endblock %}
+
+{% block maincontent %}
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+    <div class="col-md-1"></div>
+    <div class="col-md-8">
+    <form id="login-form" method="post" action=".">{% csrf_token %}
+        <table border="0">
+            <tr><th><label for="id_username">Username:</label></th><td>{{ form.username }}</td></tr>
+            <tr><th><label for="id_password">Password:</label></th><td>{{ form.password }}</td></tr>
+        </table>
+        <input type="submit" value="Login" />
+        <input type="hidden" name="next" value="/" />
+    </form>
+    <a href="/register">Register</a>
+    </div>
+    <div class="col-md-3"></div>
+{% endblock %}
