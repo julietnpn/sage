@@ -1,0 +1,6 @@
+{
+  "name": "Django Heroku Docker",
+  "description": "An example app.json for heroku-docker",
+  "image": "heroku/python",
+  "addons": [ "heroku-postgresql" ]
+}
