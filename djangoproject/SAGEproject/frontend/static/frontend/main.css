@@ -8,6 +8,16 @@ html {
 	display:inline-block;
 }
 
+#maincontentheaderrow{
+	position:relative;
+	z-index: 2;
+}
+
+#maincontentrow{
+	position:relative;
+	z-index: 1;
+}
+
 .message{
 	position:fixed;
 	width:450px;
@@ -206,6 +216,7 @@ section#contain a img {
 	padding-bottom:20px;
 	padding-left:10px;
 	padding-right:5px;
+	
 }
 
 .plantname{
@@ -531,10 +542,6 @@ border-color:#66CD00;
 }
 
 
-
-
-
-
 /* Dropdown Button */
 .dropbtn {
     background-color: #4CAF50;
@@ -550,17 +557,14 @@ border-color:#66CD00;
 .dropdown {
     position: relative;
     display: inline-block;
-    z-index:2;
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
-    position: absolute;
     background-color: #f9f9f9;
     min-width: 250px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index:2;
 }
 
 /* Links inside the dropdown */
@@ -569,7 +573,6 @@ border-color:#66CD00;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    z-index:2;
 }
 
 /* Change color of dropdown links on hover */
@@ -577,14 +580,12 @@ border-color:#66CD00;
 	background-color: #f1f1f1;
 	text-decoration: none;
 	color:#66CD00;
-	z-index:2;
 }
 
 /* Show the dropdown menu on hover 
 dont think we need to list */
 /*.dropdown:hover .dropdown-content {
     display: block;
-    z-index:2;
 }*/
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
@@ -592,9 +593,6 @@ dont think we need to list */
     background-color: #3e8e41;
 }
 
-.img-container{
-	z-index:-1;
-}
 
 .dropdown-select{
 	color:black;

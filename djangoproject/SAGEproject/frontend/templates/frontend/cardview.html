@@ -7,7 +7,7 @@
 {% for plant in plants %}
 <div class='row plantcard'>
 	<div class="col-md-2 col-md-offset-1 col-xs-3 img-container">
-		<div id ="add-new-img" class="cardimg" data-plantId="{{plant.id}}" />
+		<div id ="add-new-img" class="cardimg" data-plantId="{{plant.id}}" >
 			{% if plant.id in images %}
 				<img src="{{ images | get_item:plant.id }}" id="add-new-img2" alt="Plant Image" />
 				{% else %}
@@ -182,6 +182,10 @@
 	Filter.init();
 	AddPlant.init();
 	$(".plantname").on("click", function(){
+		var plantId = $(this).attr("data-plantId");
+		location.href='/edit/' + plantId
+	});
+	$(".cardimg").on("click", function(){
 		var plantId = $(this).attr("data-plantId");
 		location.href='/edit/' + plantId
 	});
