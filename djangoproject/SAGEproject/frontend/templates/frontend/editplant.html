@@ -19,7 +19,7 @@
 <div id="hiddenTransactionId" style="display:none;">{{ transactionId }}</div> <!--do we really need these - should be object vars -->
 <div id="hiddenPlantId" style="display:none;">{{ plantId }}</div>
 
-<div class="row editplantrow">
+<div id="editmessage" class="row editplantrow">
 	{% if newPlant %}
 		<div class="message hidden-xs"><p style="font-size:16px;"><strong>Thanks for your contribution!</strong></p><br>You are adding a brand new plant to the database. Please allow 24 hours for your change to be reflected across the site.</div>
 	{% else %}

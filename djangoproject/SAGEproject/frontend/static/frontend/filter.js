@@ -33,10 +33,11 @@ var Filter = function(){
 			
 			var category = $(this).html(); // Category is a plant-attribute category such as "Characteristics" or "Products"
 			var $toBeReplaced = $(this);
-			if(category == "Name"){
+			//remove name
+			/*if(category == "Name"){
 				$toBeReplaced.replaceWith("<input type='text' id='searchByName' class='dropdown-select' placeholder='"+category+"' data-category='"+category+"'></input>");
 			}
-			else{
+			else{*/
 			    $.ajax({
 		        	type: 'GET',
 		            url: "/get" + category,
@@ -54,7 +55,7 @@ var Filter = function(){
 		                }
 		            }
 		        });
-			}
+			//}
 		});
 
 		// jQuery Event: A drop-down option is selected (this is the field the user wants to filter by)

@@ -18,6 +18,11 @@ html {
 	z-index: 1;
 }
 
+#editmessage{
+	position:relative;
+	z-index: 2;
+}
+
 .message{
 	position:fixed;
 	width:450px;
