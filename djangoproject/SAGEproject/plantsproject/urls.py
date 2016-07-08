@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from login.views import *
+import django.contrib.auth.views
 
 # urlpatterns = [
 #     url(r'^admin/', include(admin.site.urls)),
@@ -27,8 +28,8 @@ urlpatterns = patterns('',
     url(r'^register/success/$', register_success),
     #url(r'^home/$', home),
     #url(r'^home/', include('frontend.urls')),
-    url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page':'/'}, name='logout'),
+    url(r'^login/$', django.contrib.auth.views.login, name='login'),
+    url(r'^logout/$', django.contrib.auth.views.logout, {'next_page':'/'}, name='logout'),
     url(r'^', include('frontend.urls')),
     url(r'^composer/', include('composer.urls')),
 )
