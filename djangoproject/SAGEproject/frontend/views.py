@@ -13,8 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 import pdb
 from django.views.generic import View
-#import django_filters
-from rest_framework import generics
+
 
 
 from django.template.defaulttags import register
