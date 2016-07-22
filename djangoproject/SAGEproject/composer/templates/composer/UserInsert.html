@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
+    <meta charset="UTF-8">
+    <title>Enter Info</title>
+
+</head>
+<body>
+    <form method ="post">
+        {% csrf_token %}
+
+    <h1>Enter your info here<br></h1>
+    <h2>Address</h2>
+    Address layout: <input type = "text" name = "address" style = "width: 350px"> <br>
+    <h2>Products</h2>
+       {% for choice in latest_choice %}
+            {% if choice.type == 1 %}
+            <input type = "checkbox" name = "products" id = "products{{forloop.counter}}" value ="{{choice.id}}"> {{choice.need}} </br>
+            {% endif %}
+       {% endfor %}
+    <h2>Services</h2>
+       {% for choice in latest_choice %}
+            {% if choice.type == 2 %}
+            <input type = "checkbox" name = "services" id = "services{{forloop.counter}}" value ="{{choice.id}}"> {{choice.need}} </br>
+            {% endif %}
+       {% endfor %}
+    <h2>Wildlife</h2>
+       {% for choice in latest_choice %}
+            {% if choice.type == 3 %}
+            <input type = "checkbox" name = "wildlife" id = "wildlife{{forloop.counter}}" value ="{{choice.id}}"> {{choice.need}} </br>
+            {% endif %}
+       {% endfor %}
+    <h2>Water Usage</h2>
+       {% for choice in latest_choice %}
+            {% if choice.type == 4 %}
+            <input type = "radio" name = "water_usage" id = "water_usage{{forloop.counter}}" value ="{{choice.id}}"> {{choice.need}} </br>
+            {% endif %}
+       {% endfor %}
+    <h2>Ecosystem Services</h2>
+       {% for choice in latest_choice %}
+            {% if choice.type == 5 %}
+            <input type = "checkbox" name = "ecosystem_services" id = "ecosystem_services{{forloop.counter}}" value ="{{choice.id}}"> {{choice.need}} </br>
+            {% endif %}
+       {% endfor %}
+    <br>
+        {{ form.as_p }}
+        {{ form.management_form }}
+        <input type="submit" id = "submitButton" value="Submit" />
+    </form>
+
+
+</body>
+</html>

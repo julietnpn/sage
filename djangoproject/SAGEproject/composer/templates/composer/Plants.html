@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
+    <meta charset="UTF-8">
+    <title>Recommended Plants</title>
+</head>
+<body>
+
+    <h2>The Choices you selected: </h2> <br>
+    <form method = "POST" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" id = "submitButton" value="Select Plants" />
+    </form>
+</body>
+</html>
