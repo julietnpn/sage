@@ -1,5 +1,5 @@
 from django import forms
-from .models import Plant, EndemicStatus, FamilyCommonName, Family
+from plants.models import Plant, EndemicStatus, FamilyCommonName, Family
 from django.apps import apps
 
 class AddPlantForm(forms.Form):

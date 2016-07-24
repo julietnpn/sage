@@ -5,7 +5,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from datetime import datetime
-from .models import *
+from plants.models import *
+from login. models import *
+from .models import Actions, Transactions
 from django.apps import apps
 from .forms import AddPlantForm, UpdateAttributeForm, UpdatePlantNamesForm #, UpdateTextForm, UpdateSelectForm, UpdateMultiForm
 from django.core import serializers

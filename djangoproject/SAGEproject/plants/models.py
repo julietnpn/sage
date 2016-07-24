@@ -14,20 +14,20 @@ from django.db.models import Q
 
 
 
-class Actions(models.Model):
-    transactions = models.ForeignKey('Transactions', blank=True, null=True)
-    action_type = models.TextField()
-    regions = models.ForeignKey('Region', blank=True, null=True)
-    property = models.TextField()
-    value = models.TextField(blank=True, null=True)
-    citation = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'actions'
-
-    def __str__(self):
-        return self.value
+# class Actions(models.Model):
+#     transactions = models.ForeignKey('Transactions', blank=True, null=True)
+#     action_type = models.TextField()
+#     regions = models.ForeignKey('Region', blank=True, null=True)
+#     property = models.TextField()
+#     value = models.TextField(blank=True, null=True)
+#     citation = models.TextField(blank=True, null=True)
+# 
+#     class Meta:
+#         managed = False
+#         db_table = 'actions'
+# 
+#     def __str__(self):
+#         return self.value
 
 
 class ActiveGrowthPeriod(models.Model):
@@ -63,71 +63,16 @@ class Animals(models.Model):
         return self.value
 
 
-class AuthGroup(models.Model):
-    name = models.CharField(unique=True, max_length=80)
+class Barrier(models.Model):
+    value = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
-        db_table = 'auth_group'
+        managed = True
+        db_table = 'barrier'
 
-
-class AuthGroupPermissions(models.Model):
-    group = models.ForeignKey(AuthGroup)
-    permission = models.ForeignKey('AuthPermission')
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group_permissions'
-        unique_together = (('group', 'permission'),)
-
-
-class AuthPermission(models.Model):
-    name = models.CharField(max_length=255)
-    content_type = models.ForeignKey('DjangoContentType')
-    codename = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_permission'
-        unique_together = (('content_type', 'codename'),)
-
-
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.BooleanField()
-    username = models.CharField(unique=True, max_length=30)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.CharField(max_length=254)
-    is_staff = models.BooleanField()
-    is_active = models.BooleanField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
-
-
-class AuthUserGroups(models.Model):
-    user = models.ForeignKey(AuthUser)
-    group = models.ForeignKey(AuthGroup)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_groups'
-        unique_together = (('user', 'group'),)
-
-
-class AuthUserUserPermissions(models.Model):
-    user = models.ForeignKey(AuthUser)
-    permission = models.ForeignKey(AuthPermission)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_user_permissions'
-        unique_together = (('user', 'permission'),)
-
+    def __str__(self):
+        return self.value
+        
 
 class BiochemicalMaterialProd(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -161,50 +106,6 @@ class CulturalAndAmenityProd(models.Model):
 
     def __str__(self):
         return self.value
-
-
-class DjangoAdminLog(models.Model):
-    action_time = models.DateTimeField()
-    object_id = models.TextField(blank=True, null=True)
-    object_repr = models.CharField(max_length=200)
-    action_flag = models.SmallIntegerField()
-    change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', blank=True, null=True)
-    user = models.ForeignKey(AuthUser)
-
-    class Meta:
-        managed = False
-        db_table = 'django_admin_log'
-
-
-class DjangoContentType(models.Model):
-    app_label = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'django_content_type'
-        unique_together = (('app_label', 'model'),)
-
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
-class DjangoSession(models.Model):
-    session_key = models.CharField(primary_key=True, max_length=40)
-    session_data = models.TextField()
-    expire_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_session'
 
 
 class DroughtTol(models.Model):
@@ -251,15 +152,6 @@ class ErosionControl(models.Model):
     def __str__(self):
         return self.value
 
-class Barrier(models.Model):
-    value = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'barrier'
-
-    def __str__(self):
-        return self.value
 
 class Family(models.Model):
     value = models.CharField(max_length=160, blank=True, null=True)
@@ -1219,20 +1111,20 @@ class ToxinRemoval(models.Model):
         return self.value
 
 
-class Transactions(models.Model):
-    timestamp = models.DateTimeField(auto_now=True)
-    #timestamp_add = models.DateTimeField(auto_now_add=True)
-    users = models.ForeignKey('AuthUser')#Users
-    transaction_type = models.TextField(blank=True, null=True)
-    plants_id = models.IntegerField(blank=True, null=True)
-    ignore = models.BooleanField()
-
-    class Meta:
-        managed = True
-        db_table = 'transactions'
-
-    def __str__(self):
-        return str(self.plants_id)
+# class Transactions(models.Model):
+#     timestamp = models.DateTimeField(auto_now=True)
+#     #timestamp_add = models.DateTimeField(auto_now_add=True)
+#     users = models.ForeignKey('AuthUser')#Users
+#     transaction_type = models.TextField(blank=True, null=True)
+#     plants_id = models.IntegerField(blank=True, null=True)
+#     ignore = models.BooleanField()
+# 
+#     class Meta:
+#         managed = True
+#         db_table = 'transactions'
+# 
+#     def __str__(self):
+#         return str(self.plants_id)
 
 
 class UrlTags(models.Model):
