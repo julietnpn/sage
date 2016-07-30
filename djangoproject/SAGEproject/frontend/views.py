@@ -265,9 +265,11 @@ def updateNames(request):
 		actions = []
 		
 		#pdb.set_trace()
-		genus = request.POST['genus']
-		species = request.POST['species']
-		variety = request.POST['variety']
+		scientific_name = request.POST['scientific_name']
+# 		species = request.POST['species']
+# 		variety = request.POST['variety']
+# 		subspecies = request.POST['subspecies']
+# 		cultivar = request.POST['cultivar']
 		common_name = request.POST['commonName']
 		family = request.POST['family']
 		family_common_name = request.POST['familyCommonName']
@@ -275,12 +277,98 @@ def updateNames(request):
 		if endemic_status_text == '0' or '---' in endemic_status_text:
 			endemic_status_text = None
 
-		if int(request.POST['genus_flag']) == 1:
-			actions.append(Actions(transactions=transaction , action_type=action_type, property='genus', value=genus))
-		if int(request.POST['species_flag']) == 1:
-			actions.append(Actions(transactions=transaction , action_type=action_type, property='species', value=species))
-		if int(request.POST['variety_flag']) == 1:
-			actions.append(Actions(transactions=transaction , action_type=action_type, property='variety', value=variety))
+		
+		if int(request.POST['scientific_name']) == 1:
+
+			genus = ''
+			species = ''
+			variety = ''
+			subspecies = ''
+			cultivar = ''
+			
+			# TODO what about var. in scientific name
+			if 'spp.' in scientific_name:
+				if scientific_name.endswith('spp.'):
+					print("spp only, delete transaction")
+					transaction.delete() #we need species specific information. When it is across many species, the information is not reliable enough.
+				else:
+					sciname_bits= scientific_name.split()
+					found = False
+					for i in sciname_bits:
+						if "spp." in i:
+							found = True
+						if found:
+							subspecies = i;
+							continue
+			if ' x ' in scientific_name:
+				sciname_bits= scientific_name.split()
+				genus = sciname_bits[0] + " x " + sciname_bits[2]
+				species = None
+			if "'" in scientific_name:
+				sciname_bits= scientific_name.split()
+				for i in sciname_bits: #make sure it is not a genus with a cultivar
+					if i.startswith("'") and i.endswith("'"):
+						cultivar = i
+						if i<2 and genus is None:
+							genus = sciname_bits[0]
+							species = None
+			if "Var." or "var." in scientific_name:
+				sciname_bits= scientific_name.split()
+				found = False
+				for i in sciname_bits:
+					if "Var." or "var." in i:
+						found = True
+					if found:
+						variety = i;
+						continue
+			if genus is '':
+				#genus has not been defined and needs to be defined
+				sciname_bits = scientific_name.split()
+				genus = sciname_bits[0]
+				if len(sciname_bits) > 1:
+					species = sciname_bits[1]
+				else:
+					print("genus only, delete transaction")
+					transaction.delete() #contains a genus name only
+				
+			
+			
+			genus_id = ScientificName.objects.filter(value='genus').first().id
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=genus, scientific_names=genus_id))
+			
+			if species is not '':
+				species_id = ScientificName.objects.filter(value='species').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=species, scientific_names=species_id))
+			if variety is not '':
+				variety_id = ScientificName.objects.filter(value='variety').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=variety, scientific_names=variety_id))	
+			if subspecies is not '':
+				subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
+			if cultivar is not '':
+				variety_id = ScientificName.objects.filter(value='cultivar').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
+
+			
+		
+		
+		# if int(request.POST['genus_flag']) == 1:
+# 			genus_id = ScientificName.objects.filter(value='genus').first().id
+# 			actions.append(Actions(transactions=transaction , action_type=action_type, property='plant_scientific_name', value=genus, scientific_names=genus_id))
+# 		if int(request.POST['species_flag']) == 1:
+# 			species_id = ScientificName.objects.filter(value='species').first().id
+# 			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=species, scientific_names=species_id))
+# 		if int(request.POST['variety_flag']) == 1:
+# 			variety_id = ScientificName.objects.filter(value='variety').first().id
+# 			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=variety, scientific_names=variety_id))	
+# 		if int(request.POST['subspecies_flag']) == 1:
+# 			subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
+# 			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
+# 		if int(request.POST['cultivar_flag']) == 1:
+# 			variety_id = ScientificName.objects.filter(value='cultivar').first().id
+# 			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
+# 			
+			
 		if int(request.POST['commonName_flag']) == 1:
 			actions.append(Actions(transactions=transaction , action_type=action_type, property='common_name', value=common_name))
 		if int(request.POST['family_flag']) == 1:
@@ -415,9 +503,7 @@ def editPlant(request, plantId=None):
 		'transactionId' : 0,
 		'result': result,
 		'plantId': plantId, 
-		'genus' : plant.genus,
-		'species' : plant.species,
-		'variety' : plant.variety,
+		'scientific_name': plant.get_scientific_name,
 		'common_name' : plant.common_name,
 		'family' : plant.family,
 		'family_common_name' : plant.family_common_name,
@@ -434,49 +520,96 @@ def addPlant(request):
 		addPlantForm = AddPlantForm(request.POST)
 
 		if 'add' in request.POST and addPlantForm.is_valid():
-			nameArray = str(request.POST["latinName"]).split()
+			scientific_name = str(request.POST["latinName"])
 			commonName = request.POST["commonName"]
 
-			genus = None
-			species = None
-			variety = None
+			genus = ''
+			species = ''
+			variety = ''
+			subspecies = ''
+			cultivar = ''
 
-			if len(nameArray) > 0:
-				genus = nameArray[0]
-			if len(nameArray) > 1:
-				species = nameArray[1]
-			if len(nameArray) > 2:
-				variety = nameArray[2]
+			if 'spp.' in scientific_name:
+				if scientific_name.endswith('spp.'):
+					print("spp only, delete transaction")
+					transaction.delete() #we need species specific information. When it is across many species, the information is not reliable enough.
+				else:
+					sciname_bits= scientific_name.split()
+					found = False
+					for i in sciname_bits:
+						if "spp." in i:
+							found = True
+						if found:
+							subspecies = i;
+							continue
+			if ' x ' in scientific_name:
+				sciname_bits= scientific_name.split()
+				genus = sciname_bits[0] + " x " + sciname_bits[2]
+				species = None
+			if "'" in scientific_name:
+				sciname_bits= scientific_name.split()
+				for i in sciname_bits: #make sure it is not a genus with a cultivar
+					if i.startswith("'") and i.endswith("'"):
+						cultivar = i
+						if i<2 and genus is None:
+							genus = sciname_bits[0]
+							species = None
+			if "Var." or "var." in scientific_name:
+				sciname_bits= scientific_name.split()
+				found = False
+				for i in sciname_bits:
+					if "Var." or "var." in i:
+						found = True
+					if found:
+						variety = i;
+						continue
+			if genus is '':
+				#genus has not been defined and needs to be defined
+				sciname_bits = scientific_name.split()
+				genus = sciname_bits[0]
+				if len(sciname_bits) > 1:
+					species = sciname_bits[1]
+				else:
+					print("genus only, delete transaction")
+					transaction.delete() #contains a genus name only
+
+				
 
 			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
-			#transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, transaction_type='INSERT', ignore=False)
 			transaction.save()
 			actions = []
 
-			if genus:
-				actions.append(Actions(transactions=transaction , action_type='INSERT', property='genus', value=genus))
-			if species:
-				actions.append(Actions(transactions=transaction , action_type='INSERT', property='species', value=species))
-			if variety:
-				actions.append(Actions(transactions=transaction , action_type='INSERT', property='variety', value=variety))
+			genus_id = ScientificName.objects.filter(value='genus').first().id
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=genus, scientific_names=genus_id))
+			
+			if species is not '':
+				species_id = ScientificName.objects.filter(value='species').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=species, scientific_names=species_id))
+			if variety is not '':
+				variety_id = ScientificName.objects.filter(value='variety').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=variety, scientific_names=variety_id))	
+			if subspecies is not '':
+				subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
+			if cultivar is not '':
+				variety_id = ScientificName.objects.filter(value='cultivar').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
+
+			
 			if commonName:
 				actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
 			Actions.objects.bulk_create(actions)
 
 			context = {
 				'newPlant':{
-					'genus': genus,
-					'species': species,
-					'variety': variety,
+					'scientific_name': scientific_name,
 					'common_name': commonName
 				},
 				'userId': request.user.id,
 				'transactionId' : transaction.id,
 				'result': EmptyPlant,
 				'plantId': 0, 
-				'genus' : genus,
-				'species' : species,
-				'variety' : variety,
+				'scientific_name' :scientific_name,
 				'common_name' : commonName,
 				'family' : None,
 				'family_common_name' : None,
@@ -589,12 +722,9 @@ def search(request, searchString):
 	# insect_reg_results = Plant.objects.filter(plants_insect_regulator__in=Insects.objects.filter(value__icontains=searchString))
 
 	name_matches = Plant.objects.filter(
-		Q(genus__icontains=searchString) | 
-		Q(species__icontains=searchString) | 
-		Q(variety__icontains=searchString) |
+		Q(get_scientific_name__icontains=searchString) | 
 		Q(common_name__icontains=searchString) |
-		Q(innoculant__icontains=searchString)
-	)
+		Q(get_layer__icontains=searchString))
 	# results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 	# results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 

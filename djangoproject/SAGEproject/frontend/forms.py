@@ -1,5 +1,5 @@
 from django import forms
-from plants.models import Plant, EndemicStatus, FamilyCommonName, Family
+from plants.models import Plant, EndemicStatus, TheFamilyCommonName, TheFamily
 from django.apps import apps
 
 class AddPlantForm(forms.Form):
@@ -42,12 +42,15 @@ class UpdateAttributeForm(forms.Form):
 
 
 class UpdatePlantNamesForm(forms.Form):
-	genus = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-genus'}), label='Genus')
-	species = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-species'}), label='Species')
-	variety = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-variety'}), label='Variety')
+	# genus = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-genus'}), label='Genus')
+# 	species = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-species'}), label='Species')
+# 	variety = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-variety'}), label='Variety')
+# 	subspecies = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-subspecies'}), label='Subspecies')
+# 	cultivar = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-cultivar'}), label='Cultivar')
+	scientific_name = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-scientific_name'}), label='Scientific Name')
 	commonName = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-commonName'}), label='Common Name')
 	#familyCommonName =forms.CharField(widget=forms.TextInput(attrs={'id': 'input-familyCommonName'}), label='Family Common Name')
 	#family = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-family'}), label='Family')
-	family = forms.ModelChoiceField(queryset=Family.objects.values_list("value", flat=True).distinct(), label='Family', widget=forms.Select(attrs={'class':'formselect'}))
-	familyCommonName = forms.ModelChoiceField(queryset=FamilyCommonName.objects.values_list("value", flat=True).distinct(), label='Family Common Name', widget=forms.Select(attrs={'class':'formselect'}))
+	family = forms.ModelChoiceField(queryset=TheFamily.objects.values_list("value", flat=True).distinct(), label='Family', widget=forms.Select(attrs={'class':'formselect'}))
+	TheFamilyCommonName = forms.ModelChoiceField(queryset=TheFamilyCommonName.objects.values_list("value", flat=True).distinct(), label='Family Common Name', widget=forms.Select(attrs={'class':'formselect'}))
 	endemicStatus = forms.ModelChoiceField(queryset=EndemicStatus.objects.all().distinct(), label='Endemic Status', widget=forms.Select(attrs={'class':'formselect'}))

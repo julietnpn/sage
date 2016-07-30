@@ -214,10 +214,10 @@ class ReadonlyTabularInline(admin.TabularInline):
         return False
 
 class PlantsAdmin(admin.ModelAdmin):
-	list_display = ('id', 'common_name','genus','species')
+	list_display = ('id', 'common_name','get_scientific_name')
 	#list_filter = ['genus']
 	#filter_horizontal = ('water_needs',)
-	search_fields = ('id', 'common_name', )
+	search_fields = ('id', 'common_name', 'get_scientific_name')
 	can_delete = False #ca_delete?
 	exclude = ('height','spread')
 	#specifies the fields to show for change panel
@@ -241,15 +241,17 @@ class PlantID(Plant):
 
 class PlantIDAdmin(admin.ModelAdmin):
 	#list_display = ('Family', 'family_common_name', 'genus', 'species', 'variety', 'common_name', 'EndemicStatus', 'tags', 'urltags')
-	list_display = ('id', 'family', 'family_common_name', 'genus', 'species', 'variety', 'common_name', 'get_endemic_status', 'tags')
-	fields = ['id', 'family', 'family_common_name','genus', 'species', 'variety', 'common_name', 'tags']
+	list_display = ('id', 'family', 'family_common_name', 'get_scientific_name', 'common_name', 'get_endemic_status', 'tags')
+	fields = ['id', 'family', 'family_common_name', 'get_scientific_name', 'common_name', 'tags']
 	readonly_fields= ('id',)
-	search_fields = ('id', 'common_name', )
+	search_fields = ('id', 'common_name', 'get_scientific_name')
 	exclude = ('height','spread')
 	inlines = [PlantEndemicStatusByRegionInline]
 	def get_endemic_status(self, obj):
 		return ','.join([str(a) for a in obj.endemic_status.all()])
 	get_endemic_status.short_description = 'Endemic Status'
+	def get_scientific_name(self, obj):
+		return ' '.join ([str(a) for a in plants_scientific_name.all()])
 
 class PlantCharacteristic(Plant):
 	class Meta:
@@ -257,7 +259,7 @@ class PlantCharacteristic(Plant):
 
 class PlantCharacteristicAdmin(admin.ModelAdmin):
 	# list_display = ('duration', 'height', 'spread', 'pH', 'layer', 'CanopyDensity', 'ActiveGrowthPeriod', 'HarvestPeriod', 'LeafRetention', 'FlowerColor', 'FoliageColor', 'FruitColor')
-	list_display = ('id', 'genus', 'species','get_duration', 'pH_min', 'pH_max', 'get_layer','get_canopy_density', 'get_active_growth_period', 'get_harvest_period', 'get_leaf_retention', 'get_flower_color', 'get_foliage_color', 'get_fruit_color', 'degree_of_serotiny')
+	list_display = ('id', 'get_scientific_name','get_duration', 'pH_min', 'pH_max', 'get_layer','get_canopy_density', 'get_active_growth_period', 'get_harvest_period', 'get_leaf_retention', 'get_flower_color', 'get_foliage_color', 'get_fruit_color', 'degree_of_serotiny')
 	fields = ['id', 'common_name', 'pH_min', 'pH_max', 'degree_of_serotiny']
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
@@ -324,7 +326,7 @@ class PlantTolerance(Plant):
 
 class PlantToleranceAdmin(admin.ModelAdmin):
 	# list_display = ('shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol')
-	list_display = ('id', 'genus', 'species', 'get_shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'get_soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol')
+	list_display = ('id', 'get_scientific_name', 'get_shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'get_soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol')
 	fields = ['id', 'common_name', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'fire_tol', 'minimum_temperature_tol']
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
@@ -345,7 +347,7 @@ class PlantNeed(Plant):
 
 class PlantNeedAdmin(admin.ModelAdmin):
 	# list_display = ('FertilityNeeds', 'WaterNeeds', 'innoculant', 'SunNeeds')
-	list_display = ('id', 'genus', 'species', 'get_fertility_needs', 'get_water_needs', 'innoculant', 'get_sun_needs', 'serotiny')
+	list_display = ('id', 'get_scientific_name', 'get_fertility_needs', 'get_water_needs', 'innoculant', 'get_sun_needs', 'serotiny')
 	fields = ['id', 'common_name','innoculant', 'serotiny']
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
@@ -369,7 +371,7 @@ class PlantProduct(Plant):
 		proxy = True
 
 class PlantProductAdmin(admin.ModelAdmin):
-	list_display = ('id', 'genus', 'species', 'get_food_prod', 'get_raw_materials_prod', 'get_medicinals_prod', 'get_biochemical_material_prod', 'get_cultural_and_amenity_prod', 'get_mineral_nutrients_prod', 'allelochemicals')
+	list_display = ('id', 'get_scientific_name', 'get_food_prod', 'get_raw_materials_prod', 'get_medicinals_prod', 'get_biochemical_material_prod', 'get_cultural_and_amenity_prod', 'get_mineral_nutrients_prod', 'allelochemicals')
 	fields = ['id', 'common_name', 'allelochemicals']
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
@@ -406,7 +408,7 @@ class PlantBehavior(Plant):
 
 class PlantBehaviorAdmin(admin.ModelAdmin):
 	# list_display = ('erosion_control', 'insect_attractor', 'insect_regulator', 'animal_attractor', 'animal_regulator','livestock_bloat', 'toxicity')
-	list_display = ('id', 'genus', 'species', 'get_erosion_control', 'get_insect_attractor', 'get_insect_regulator', 'get_animal_attractor', 'get_animal_regulator', 'livestock_bloat', 'toxicity')
+	list_display = ('id', 'get_scientific_name', 'get_erosion_control', 'get_insect_attractor', 'get_insect_regulator', 'get_animal_attractor', 'get_animal_regulator', 'livestock_bloat', 'toxicity')
 	fields = ['id', 'common_name', 'livestock_bloat', 'toxicity']
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )

@@ -26,6 +26,7 @@ class Actions(models.Model):
     transactions = models.ForeignKey('Transactions', blank=True, null=True)
     action_type = models.TextField()
     regions = models.ForeignKey('plants.Region', blank=True, null=True)
+    scientific_names = models.ForeignKey('plants.ScientificName', blank=True, null=True)
     property = models.TextField()
     value = models.TextField(blank=True, null=True)
     citation = models.TextField(blank=True, null=True)

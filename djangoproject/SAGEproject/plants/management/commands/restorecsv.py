@@ -29,18 +29,16 @@ class Command(BaseCommand):
 		user3 = AuthUser.objects.get(username='USDA')
 		
 		
-		csv_import1(path1, user1)
-		csv_import2(path2, user2)
-		csv_import3(path3, user3)
+		#csv_import1(path1, user1)
+		#csv_import3(path2, user2)
+		csv_import2(path3, user3)
 		process_transactions()
 		process_updates()
 		
 	
 	
 	
-properties_1_to_1 = ['genus', #add _id for foreign keys
-                     'species',
-                     'common_name',
+properties_1_to_1 = ['common_name',
                      'drought_tol_id',
                      'flood_tol_id',
                      'humidity_tol_id',
@@ -90,6 +88,13 @@ properties_1_to_many = ['family',
                         'family_common_name',#-----the_family
                         ]
                         #'tags']
+properties_scientific_name = ['genus', #add _id for foreign keys
+                     		  'species',
+                     		  'subspecies',
+                     		  'variety',
+                     		  'form',
+                     		  'cutivated variety'
+                     		 ]
 
 properties_many_to_many = ['biochemical_material_prod',
                            'cultural_and_amenity_prod',
@@ -108,6 +113,11 @@ def get_attributes(cls):
 	attributes = cls.__doc__.split(',')[1:]
 	attributes[-1] = attributes[-1][:-1]
 	if "regions" in attributes[-1]:
+		t = attributes[-1]
+		attributes[-1]=attributes[-2]
+		attributes[-2]=t
+		f= True
+	if "name_category" in attriutes[-1]:
 		t = attributes[-1]
 		attributes[-1]=attributes[-2]
 		attributes[-2]=t
@@ -506,6 +516,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 			species = ''
 			variety = ''
 			subspecies = ''
+			cultivar = ''
 			
 			scientific_name = plant['Scientific Name']
 			# TODO what about var. in scientific name
@@ -525,7 +536,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 							continue
 			if ' x ' in scientific_name:
 				sciname_bits= scientific_name.split()
-				genus = sciname_bits[0] + " " + sciname_bits[1] + " " + sciname_bits[2]
+				genus = sciname_bits[0] + " x " + sciname_bits[2]
 				species = None
 			if "'" in scientific_name:
 				sciname_bits= scientific_name.split()
@@ -556,11 +567,22 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 					continue
 				
 			
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='genus', value=genus))
+			
+			genus_id = ScientificName.objects.filter(value='genus').first().id
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=genus, scientific_names=genus_id))
+			
 			if species is not '':
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='species', value=species))
+				species_id = ScientificName.objects.filter(value='species').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=species, scientific_names=species_id))
 			if variety is not '':
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='variety', value=variety))
+				variety_id = ScientificName.objects.filter(value='variety').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=variety, scientific_names=variety_id))	
+			if subspecies is not '':
+				subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
+			if cultivar is not '':
+				variety_id = ScientificName.objects.filter(value='cultivar').first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
 
 			if plant['Common Name'].strip():
 				actions.append(Actions(transactions=transaction , action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
@@ -1024,6 +1046,17 @@ def process_transactions():
 
 		for action in transaction.actions_set.all():# transaction.actions:
 			the_plant=Plant.objects.get(pk=transaction.plants_id)
+			
+			
+			if action.property in properties_scientific_name:
+				print('T_id={0}, property={1}, name={2}, value={3}'.format(transaction.id, action.property, action.scientific_name, action.value))
+				class_name = 'PlantScientificName'
+				cls = globals()[class_name]
+				cls_instance = cls()
+				cls_instance = cls(cls_instance.id ,the_plant.id, action.scientific_name, action.value)
+				cls_instance.save()
+			
+			
 			if action.property in 'height spread root_depth':
 				if PlantRegion.objects.filter(plants=the_plant.id, regions=action.regions):# TODO check for region Null----------------------------------
 					plant_region = PlantRegion.objects.filter(plants=the_plant.id, regions=action.regions).first()#transaction.plants_id
