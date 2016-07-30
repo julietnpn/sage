@@ -153,30 +153,30 @@ class ErosionControl(models.Model):
         return self.value
 
 
-class Family(models.Model):
-    value = models.CharField(max_length=160, blank=True, null=True)
-    plants = models.ForeignKey('Plant', related_name='plants_plant_related',blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'family'
-        #unique_together = (('value', 'plants'),)
-
-    def __str__(self):
-        return self.value
-
-
-class FamilyCommonName(models.Model):
-    value = models.CharField(max_length=160, blank=True, null=True)
-    plants = models.ForeignKey('Plant',blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'family_common_name'
-        unique_together = (('value', 'plants'),)
-
-    def __str__(self):
-        return self.value
+# class Family(models.Model):
+#     value = models.CharField(max_length=160, blank=True, null=True)
+#     plants = models.ForeignKey('Plant', related_name='plants_plant_related',blank=True, null=True)
+# 
+#     class Meta:
+#         managed = True
+#         db_table = 'family'
+#         #unique_together = (('value', 'plants'),)
+# 
+#     def __str__(self):
+#         return self.value
+# 
+# 
+# class FamilyCommonName(models.Model):
+#     value = models.CharField(max_length=160, blank=True, null=True)
+#     plants = models.ForeignKey('Plant',blank=True, null=True)
+# 
+#     class Meta:
+#         managed = True
+#         db_table = 'family_common_name'
+#         unique_together = (('value', 'plants'),)
+# 
+#     def __str__(self):
+#         return self.value
 
 
 class TheFamily(models.Model):
@@ -387,6 +387,7 @@ class MineralNutrientsProd(models.Model):
 
     def __str__(self):
         return self.value
+        
 
 class Plant(models.Model):
     #-----------------------------id-----------------------------
@@ -399,9 +400,18 @@ class Plant(models.Model):
 
     family = models.ForeignKey('TheFamily', blank=True, null=True)
     family_common_name = models.ForeignKey('TheFamilyCommonName', blank=True, null=True)
-    genus = models.CharField(max_length=160, blank=True, null=True)
-    species = models.CharField(max_length=160, blank=True, null=True)
-    variety = models.CharField(max_length=160, blank=True, null=True)
+    
+    scientific_name = models.ManyToManyField('ScientificName', through='PlantScientificName')
+    @property
+    def get_scientific_name(self):
+    	#genus = self.plant_scientific_name.filter(name_component='genus')
+     	#genus
+		#name = all_names
+    	return ' '.join([str(a) for a in self.plants_scientific_name.all()])
+    		
+    # genus = models.CharField(max_length=160, blank=True, null=True)
+	# species = models.CharField(max_length=160, blank=True, null=True)
+	# variety = models.CharField(max_length=160, blank=True, null=True)
     common_name = models.CharField(max_length=160, blank=True, null=True)
     #endemic_status
     endemic_status = models.ManyToManyField(EndemicStatus, through='PlantEndemicStatusByRegion')
@@ -626,7 +636,7 @@ class Plant(models.Model):
         if self.common_name:
             return self.common_name
         else:
-            return self.genus
+            return self.get_scientific_name
     @property
     def get_all_fields(self):
         fields = []
@@ -770,7 +780,7 @@ class PlantBarrier(models.Model):# BarrierByRegion
 class PlantNutrientRequirementsByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
     regions = models.ForeignKey('Region', blank=True, null=True)
-    fertility_needs = models.ForeignKey(NutrientRequirements, blank=True, null=True, verbose_name='Nutrient Requirements') #####
+    fertility_needs = models.ForeignKey(NutrientRequirements, blank=True, null=True) #####
 
     class Meta:
         managed = True
@@ -917,6 +927,14 @@ class PlantRawMaterialsProd(models.Model):
         managed = False
         db_table = 'plants_raw_materials_prod'
 
+class PlantScientificName(models.Model):
+	plants = models.ForeignKey(Plant, blank=True, null=True)
+	name_component = models.ForeignKey('ScientificName', blank=True, null=True)
+	value = models.TextField(blank=True, null=True)
+	
+	class Meta:
+		managed = False
+        db_table = 'plants_scientific_name'
 
 class PlantShadeTolByRegion(models.Model):
     plants = models.ForeignKey(Plant, blank=True, null=True)
@@ -1020,7 +1038,15 @@ class SaltTol(models.Model):
     def __str__(self):
         return self.value
 
-
+class ScientificName(models.Model):
+	value = models.TextField(blank=True, null=True)
+	
+	class Meta:
+		managed = False
+		db_table = 'scientific_name'
+	
+	def __str__(self):
+		return self.value
 
 class Serotiny(models.Model):
     value = models.TextField(blank=True, null=True)
