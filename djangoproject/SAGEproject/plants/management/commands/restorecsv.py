@@ -25,13 +25,13 @@ class Command(BaseCommand):
 		#ID,Name,Scientific name,Plant Type,Height,Spread,Root Depth,Seasonal Interest,Notes,Flower Color,Root Type,Bloom Time,Fruit Time,Texture,Form,Growth Rate,Insect Predation,Disease,Light,Hardiness Zone,Soil Moisture,Soil pH,Ecological Function,Human Use/Crop
 
 		user1 = AuthUser.objects.get(username='TEC_PDC_2014')
-		user2 = AuthUser.objects.get(username='Natural_Capital')
-		user3 = AuthUser.objects.get(username='USDA')
+		user3 = AuthUser.objects.get(username='Natural_Capital')
+		user2 = AuthUser.objects.get(username='USDA')
 		
 		
-		#csv_import1(path1, user1)
-		#csv_import3(path2, user2)
-		csv_import2(path3, user3)
+		csv_import1(path1, user1)
+		csv_import3(path3, user3)
+		csv_import2(path2, user2)
 		process_transactions()
 		process_updates()
 		
@@ -47,7 +47,6 @@ properties_1_to_1 = ['common_name',
                      'wind_tol_id',
                      'minimum_temperature_tol',
                      'innoculant',
-                     'variety',
                      'fire_tol_id',
                      'livestock_bloat_id',
                      'pH_min',
@@ -70,7 +69,7 @@ properties_many_with_region = ['active_growth_period',
                                'duration',
                                'endemic_status',
                                'erosion_control',
-                               'fertility_needs',
+                               'nutrient_requirements',
                                'harvest_period',
                                'height_at_maturity',
                                'insect_attractor',
@@ -88,12 +87,13 @@ properties_1_to_many = ['family',
                         'family_common_name',#-----the_family
                         ]
                         #'tags']
-properties_scientific_name = ['genus', #add _id for foreign keys
-                     		  'species',
-                     		  'subspecies',
-                     		  'variety',
-                     		  'form',
-                     		  'cutivated variety'
+properties_scientific_name = [# 'genus', #add _id for foreign keys
+#                      		  'species',
+#                      		  'subspecies',
+#                      		  'variety',
+#                      		  'form',
+#                      		  'cutivar',
+                     		  'scientific_name'
                      		 ]
 
 properties_many_to_many = ['biochemical_material_prod',
@@ -106,7 +106,8 @@ properties_many_to_many = ['biochemical_material_prod',
                            'layer',
                            'medicinals_prod',
                            'mineral_nutrients_prod',
-                           'raw_materials_prod']
+                           'raw_materials_prod'
+                           ]
 
 def get_attributes(cls):
 	f = False
@@ -117,7 +118,7 @@ def get_attributes(cls):
 		attributes[-1]=attributes[-2]
 		attributes[-2]=t
 		f= True
-	if "name_category" in attriutes[-1]:
+	if "name_category" in attributes[-1]:
 		t = attributes[-1]
 		attributes[-1]=attributes[-2]
 		attributes[-2]=t
@@ -153,10 +154,12 @@ def csv_import1(path1, user):
 # 			except AttributeError:
 # 				pass
 				
+			scientific_name = ''
 			genus = ''
 			species = ''
 			variety = ''
 			subspecies = ''
+			cultivar = ''
 			
 			scientific_name = plant['Scientific Name']
 			# TODO what about var. in scientific name
@@ -176,7 +179,7 @@ def csv_import1(path1, user):
 							continue
 			if ' x ' in scientific_name:
 				sciname_bits= scientific_name.split()
-				genus = sciname_bits[0] + " " + sciname_bits[1] + " " + sciname_bits[2]
+				genus = sciname_bits[0] + " x " + sciname_bits[2]
 				species = None
 			if "'" in scientific_name:
 				sciname_bits= scientific_name.split()
@@ -186,11 +189,11 @@ def csv_import1(path1, user):
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
 							species = None
-			if "Var." in scientific_name:
+			if 'var. ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				found = False
 				for i in sciname_bits:
-					if "Var." in i:
+					if "Var. " or "var. " in i:
 						found = True
 					if found:
 						variety = i;
@@ -205,12 +208,23 @@ def csv_import1(path1, user):
 					print("genus only, delete transaction")
 					transaction.delete() #contains a genus name only
 					continue
-				
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='genus', value=genus))
+			
+			
+			genus_id = ScientificName.objects.filter(value='genus').first()
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+			
 			if species is not '':
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='species', value=species))
+				species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
 			if variety is not '':
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='variety', value=variety))
+				variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
+			if subspecies is not '':
+				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+			if cultivar is not '':
+				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
 
 			if plant['Common Name'].strip():
 				actions.append(Actions(transactions=transaction , action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
@@ -247,10 +261,12 @@ def csv_import3(path, user):
 			#print(trans_type)
 			print(i,plant['Scientific Name'], len(plant['Scientific Name']))
 
+			scientific_name = ''
 			genus = ''
 			species = ''
 			variety = ''
 			subspecies = ''
+			cultivar = ''
 			
 			scientific_name = plant['Scientific Name']
 			# TODO what about var. in scientific name
@@ -270,7 +286,7 @@ def csv_import3(path, user):
 							continue
 			if ' x ' in scientific_name:
 				sciname_bits= scientific_name.split()
-				genus = sciname_bits[0] + " " + sciname_bits[1] + " " + sciname_bits[2]
+				genus = sciname_bits[0] + " x " + sciname_bits[2]
 				species = None
 			if "'" in scientific_name:
 				sciname_bits= scientific_name.split()
@@ -280,11 +296,11 @@ def csv_import3(path, user):
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
 							species = None
-			if "Var." in scientific_name:
+			if 'var. ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				found = False
 				for i in sciname_bits:
-					if "Var." in i:
+					if "Var. " or "var. " in i:
 						found = True
 					if found:
 						variety = i;
@@ -299,14 +315,23 @@ def csv_import3(path, user):
 					print("genus only, delete transaction")
 					transaction.delete() #contains a genus name only
 					continue
-				
 			
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='genus', value=genus))
+			
+			genus_id = ScientificName.objects.filter(value='genus').first()
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+			
 			if species is not '':
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='species', value=species))
+				species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
 			if variety is not '':
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='variety', value=variety))
-
+				variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
+			if subspecies is not '':
+				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+			if cultivar is not '':
+				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
 
 			if plant['Common Name'].strip():
 				actions.append(Actions(transactions=transaction , action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
@@ -510,8 +535,9 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 # 				pass
 			
 			#print(trans_type)
-			print(i,plant['Scientific Name'], len(plant['Scientific Name']))
+			#print(i,plant['Scientific Name'], len(plant['Scientific Name']))
 
+			scientific_name = ''
 			genus = ''
 			species = ''
 			variety = ''
@@ -546,11 +572,11 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
 							species = None
-			if "Var." or "var." in scientific_name:
+			if 'var. ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				found = False
 				for i in sciname_bits:
-					if "Var." or "var." in i:
+					if "Var. " or "var. " in i:
 						found = True
 					if found:
 						variety = i;
@@ -565,27 +591,29 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 					print("genus only, delete transaction")
 					transaction.delete() #contains a genus name only
 					continue
-				
 			
 			
-			genus_id = ScientificName.objects.filter(value='genus').first().id
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=genus, scientific_names=genus_id))
+			genus_id = ScientificName.objects.filter(value='genus').first()
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
 			
 			if species is not '':
-				species_id = ScientificName.objects.filter(value='species').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=species, scientific_names=species_id))
+				species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
 			if variety is not '':
-				variety_id = ScientificName.objects.filter(value='variety').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=variety, scientific_names=variety_id))	
+				variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
 			if subspecies is not '':
-				subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
-			if cultivar is not '':
-				variety_id = ScientificName.objects.filter(value='cultivar').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
+				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+			
+			
+			#  Cultivar has its own column in the USDA CSV file
+			if plant['Cultivar Name'].strip():
+				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=plant['Cultivar Name'].strip(), scientific_names=cultivar_id))
 
 			if plant['Common Name'].strip():
-				actions.append(Actions(transactions=transaction , action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
 
 			# 3. add field for Family Common Name
 			# what if the name is not in the famile tables... handle it!
@@ -651,11 +679,6 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 				# db.session.add_all(actions)
 				# db.session.commit()
 				continue
-
-
-			# 9. Cultivar translates to Variety
-			if plant['Cultivar Name'].strip():
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='variety', value=plant['Cultivar Name'].strip()))
 
 			# 10. Active growth period maps to active growth period as is.
 			seasons = []
@@ -794,7 +817,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 								 'Medium': 'moderate',
 								 'High': 'high'}
 				nutrient_requirements_id = NutrientRequirements.objects.filter(value=nutrient_requirement_map[plant['Fertility Requirement'].strip()]).first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='fertility_needs', value=nutrient_requirements_id))# fertility needs -> nutrient_req
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='nutrient_requirements', value=nutrient_requirements_id))# fertility needs -> nutrient_req
 
 			# 27. IGNORE
 
@@ -977,10 +1000,6 @@ def process_updates():
 			elif property in properties_many_with_region:# TODO PlantBarrierByRegion
 				print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, property, value[1], value[0]))
 				class_name = 'Plant' + property.title().replace('_', '') + 'ByRegion'
-				if class_name=='PlantFertilityNeedsByRegion':
-					class_name='PlantNutrientRequirementsByRegion'
-				if class_name=='PlantBarrierByRegion':
-					class_name='PlantBarrier'
 				cls = globals()[class_name]
 				attributes, is_region_last = get_attributes(cls)
 				filter_args = {attributes[0]:the_plant.id, attributes[2]:value[0], attributes[1]:value[1]}
@@ -1049,15 +1068,15 @@ def process_transactions():
 			
 			
 			if action.property in properties_scientific_name:
-				print('T_id={0}, property={1}, name={2}, value={3}'.format(transaction.id, action.property, action.scientific_name, action.value))
+				print('T_id={0}, property={1}, name={2}, value={3}'.format(transaction.id, action.property, action.scientific_names, action.value))
 				class_name = 'PlantScientificName'
 				cls = globals()[class_name]
 				cls_instance = cls()
-				cls_instance = cls(cls_instance.id ,the_plant.id, action.scientific_name, action.value)
+				cls_instance = cls(cls_instance.id ,the_plant.id, action.scientific_names.id, action.value)
 				cls_instance.save()
 			
 			
-			if action.property in 'height spread root_depth':
+			elif action.property in 'height spread root_depth':
 				if PlantRegion.objects.filter(plants=the_plant.id, regions=action.regions):# TODO check for region Null----------------------------------
 					plant_region = PlantRegion.objects.filter(plants=the_plant.id, regions=action.regions).first()#transaction.plants_id
 				else:
@@ -1085,10 +1104,6 @@ def process_transactions():
 			elif action.property in properties_many_with_region:# TODO height
 				print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, action.property, action.regions, action.value))
 				class_name = 'Plant' + action.property.title().replace('_', '') + 'ByRegion'
-				if class_name=='PlantFertilityNeedsByRegion':
-					class_name='PlantNutrientRequirementsByRegion'
-				if class_name=='PlantBarrierByRegion':#TODO change renameModel PlantBarrier -> PLnatbarrierByRegion
-					class_name='PlantBarrier'
 				cls = globals()[class_name]
 				attributes, is_region_last = get_attributes(cls)
 				if action.action_type == 'INSERT':#CREATE

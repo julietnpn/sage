@@ -32,7 +32,7 @@ class Actions(models.Model):
     citation = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'actions'
 
     def __str__(self):
@@ -1230,13 +1230,13 @@ class Actions(models.Model):
 class Transactions(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     #timestamp_add = models.DateTimeField(auto_now_add=True)
-    users = models.ForeignKey('login.AuthUser')#Users
+    users = models.ForeignKey('login.AuthUser', blank=True, null=True)#Users
     transaction_type = models.TextField(blank=True, null=True)
     plants_id = models.IntegerField(blank=True, null=True)
     ignore = models.BooleanField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'transactions'
 
     def __str__(self):

@@ -193,8 +193,8 @@ class PlantAnimalAttractorByRegionInline(admin.TabularInline):
 	model = PlantAnimalAttractorByRegion
 	extra = 1
 
-class PlantBarrierInline(admin.TabularInline):
-	model = PlantBarrier
+class PlantBarrierByRegionInline(admin.TabularInline):
+	model = PlantBarrierByRegion
 	extra = 1
 
 class ReadonlyTabularInline(admin.TabularInline):
@@ -232,7 +232,7 @@ class PlantsAdmin(admin.ModelAdmin):
 	# 	return obj.family
 	# related_family.short_description = 'family'
 #[PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantHeightAtMaturityByRegionInline, PlantSpreadAtMaturityByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantFertilityNeedsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantAnimalFoodInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
-	inlines = [PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantNutrientRequirementsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantAnimalFoodInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantBarrierInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
+	inlines = [PlantEndemicStatusByRegionInline, PlantDurationByRegionInline, PlantLayerInline, PlantCanopyDensityByRegionInline,PlantActiveGrowthPeriodByRegionInline, PlantHarvestPeriodByRegionInline, PlantLeafRetentionByRegionInline, PlantFlowerColorInline, PlantFoliageColorInline, PlantFruitColorInline, PlantShadeTolByRegionInline, PlantSoilDrainageTolByRegionInline, PlantNutrientRequirementsByRegionInline, PlantWaterNeedsByRegionInline, PlantSunNeedsByRegionInline, PlantFoodProdInline, PlantAnimalFoodInline, PlantRawMaterialsProdInline, PlantMedicinalsProdInline, PlantBiochemicalMaterialProdInline, PlantCulturalAndAmenityProdInline, PlantMineralNutrientsProdInline, PlantErosionControlByRegionInline, PlantBarrierByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
 
 
 class PlantID(Plant):
@@ -413,7 +413,7 @@ class PlantBehaviorAdmin(admin.ModelAdmin):
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
 	exclude = ('height','spread')
-	inlines = [PlantErosionControlByRegionInline, PlantBarrierInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
+	inlines = [PlantErosionControlByRegionInline, PlantBarrierByRegionInline, PlantInsectAttractorByRegionInline, PlantInsectRegulatorByRegionInline, PlantAnimalRegulatorByRegionInline, PlantAnimalAttractorByRegionInline]
 
 	def get_erosion_control(self, obj):
 		return ','.join([str(a) for a in obj.erosion_control.all()])
