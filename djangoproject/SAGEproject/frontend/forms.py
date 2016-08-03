@@ -4,7 +4,7 @@ from django.apps import apps
 
 class AddPlantForm(forms.Form):
 	#not sure we need ID's anymore
-	latinName = forms.CharField(widget=forms.TextInput(attrs={'id':'add-plant-latin-name', 'class': 'formtxt'}), label='latin name', label_suffix='')
+	scientificName = forms.CharField(widget=forms.TextInput(attrs={'id':'add-plant-scientifc-name', 'class': 'formtxt'}), label='scientific name', label_suffix='')
 	commonName = forms.CharField(widget=forms.TextInput(attrs={'id':'add-plant-common-name','class': 'formtxt'}), label='common name', label_suffix='')
 
 # class UpdateTextForm(forms.Form):
@@ -35,7 +35,7 @@ class UpdateAttributeForm(forms.Form):
 		if class_name is "Plant":
 			values = Plant.objects.none()
 		else:
-			cls_model = apps.get_model('frontend', class_name)
+			cls_model = apps.get_model('plants', class_name)
 			values = cls_model.objects.values_list("id", flat = True)
 		super(UpdateAttributeForm, self).__init__(*args, **kwargs)
 		self.fields['select'].queryset = values
@@ -47,7 +47,7 @@ class UpdatePlantNamesForm(forms.Form):
 # 	variety = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-variety'}), label='Variety')
 # 	subspecies = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-subspecies'}), label='Subspecies')
 # 	cultivar = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-cultivar'}), label='Cultivar')
-	scientific_name = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-scientific_name'}), label='Scientific Name')
+	scientificName = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-scientificName'}), label='Scientific Name')
 	commonName = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-commonName'}), label='Common Name')
 	#familyCommonName =forms.CharField(widget=forms.TextInput(attrs={'id': 'input-familyCommonName'}), label='Family Common Name')
 	#family = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-family'}), label='Family')

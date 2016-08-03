@@ -9,8 +9,8 @@
 
 	<form action="/addPlant/" method="post">
 		{% csrf_token %}
-		{{ addPlantForm.latinName }}
-		<p class="input-label italic" id="latin-name-label">{{ addPlantForm.latinName.label_tag }}</p>
+		{{ addPlantForm.scientificName }}
+		<p class="input-label italic" id="scientific-name-label">{{ addPlantForm.scientificName.label_tag }}</p>
 		{{ addPlantForm.commonName }}
 		<p class="input-label italic" id="common-name-label">{{ addPlantForm.commonName.label_tag }}</p>
 

@@ -4,10 +4,8 @@
 	{% if common_name %}
 		{{ common_name }}
 	{% else %}
-		{% if genus or species or variety %}
-			{% if genus %}{{ genus }}&nbsp;{% endif %}
-			{% if species %}{{ species }}&nbsp;{% endif %}
-			{% if variety %}{{ variety }}{% endif %}
+		{% if get_scientific_name %}
+			{{ get_scientific_name }}
 		{% else %}
 			No Plant Name
 		{% endif %}
@@ -33,16 +31,12 @@
 		<div class="col-sm-11 col-sm-offset-1">
 
 			<div class="edit-plant-title">{% spaceless %}
-				{% if common_name or genus or species or variety %}
+				{% if common_name or scientific_name %}
 					<div class="name" id="commonName">{% if common_name %}{{ common_name }}{% endif %}</div>
-					<div class="name editplant-latin-name" id="genus">{% if genus %}{{ genus }}{% endif %}</div>
-					<div class="name editplant-latin-name" id="species">{% if species %}{{ species }}{% endif %}</div>
-					<div class="name editplant-latin-name" id="variety">{% if variety %}{{ variety }}{% endif %}</div>
+					<div class="name editplant-scientific-name" id="scientific_name">{% if scientific_name %}{{ scientific_name }}{% endif %}</div>
 				{% else %}
 					<div class="name" id="commonName"></div>
-					<div class="name editplant-latin-name" id="genus">No Plant Name</div>
-					<div class="name editplant-latin-name" id="species"></div>
-					<div class="name editplant-latin-name" id="variety"></div>
+					<div class="name editplant-scientific-name" id="scientific_name">No Plant Name</div>
 				{% endif %}
 				<text id="clicktoedit" style="display:none;">click to edit</text>
 			</div>
@@ -281,22 +275,19 @@
 
 <script type="text/javascript">
 	$("#edit-msg").hide();
-	var common_name, genus, species, variety;
+	var common_name, scientific_name;
 	common_name = "{{ common_name }}";
-	genus = "{{ genus }}";
-	species = "{{ species }}";
-	variety = "{{ variety }}";
+	scientific_name = "{{ get_scientific_name }}";
 
 	{% if not endemic_status %}
 	$("#endemicStatusWrapper").hide();
 	{% endif %}
 
 	{% if userId %}
-		EditPlant.init(common_name, genus, species, {{ transactionId }}, {{ userId }});
+		EditPlant.init(common_name, scientific_name, {{ transactionId }}, {{ userId }});
 	{% else %}
-		EditPlant.init(common_name, genus, species, {{ transactionId }}, -1);
+		EditPlant.init(common_name, scientific_name, {{ transactionId }}, -1);
 	{% endif %} 
-	//EditPlant.init(common_name, genus, species, variety, {{ transactionId }}, id); //pass transactionId as 0?
 
 
 

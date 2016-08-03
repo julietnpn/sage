@@ -13,13 +13,12 @@ var EditPlant = function(){
 
 	//----------------- BEGIN PUBLIC METHODS --------------------
     //pub.init = function(pCommonName, pGenus, pSpecies, pVariety, transactionId, userId){
-    pub.init = function(pCommonName, pGenus, pSpecies, transactionId, userId){
+    pub.init = function(pCommonName, pScientificName, transactionId, userId){
         setUserId(userId);
     	setJqueryMap();
         transactionId = transactionId == "None" ? 0 : transactionId;
         common_name = pCommonName;
-        genus = pGenus;
-        species =pSpecies;
+        scientific_name = pScientiicName;
         resetUpdateAttributeModal();
 
 
@@ -67,9 +66,7 @@ var EditPlant = function(){
             resetNameChangeFlags();
             $("#hidden-plantId-names").val(getPlantId());
             $("#transaction-id").val(transactionId);
-            $("#input-genus").val($("#genus").text().trim());
-            $("#input-species").val($("#species").text().trim());
-            $("#input-variety").val($("#variety").text().trim());
+            $("#input-scientificName").val($("#scientificName").text().trim());
             $("#input-commonName").val($("#commonName").text().trim());
             var val = $("#family").text().trim();
             if(val != ""){
@@ -223,9 +220,7 @@ var EditPlant = function(){
             $.post('/updateNames/', $("#updateNamesMdl form").serialize(), function(data){
                 //alert($("#genus-flag").val());
                 //alert($("#species-flag").val()); //RESET FLAGS??????????????????????????????!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                $("#genus").html($("#input-genus").val());
-                $("#species").html($("#input-species").val());
-                $("#variety").html($("#input-variety").val());
+                $("#scientificName").html($("#input-scientificName").val());
                 // if($("#genus-flag").val() == "1"){
                 //     $("#commonName").
                 // }
@@ -279,15 +274,8 @@ var EditPlant = function(){
         }, '.modalimg');
 
 
-        $("#input-genus").on('keydown', function(){
-             $("#genus-flag").val(1);
-        });
-        $("#input-species").on('keydown', function(){
-             $("#species-flag").val(1);
-        });
-        $("#input-variety").on('keydown', function(){
-             //$("#variety-flag").val(1);
-             setFlag($("#variety-flag"));
+        $("#input-scientificName").on('keydown', function(){
+             $("#scientificName-flag").val(1);
         });
         $("#input-commonName").on('keydown', function(){
              $("#commonName-flag").val(1);
@@ -442,9 +430,7 @@ var EditPlant = function(){
     }
 
     function resetNameChangeFlags(){
-        $("#genus-flag").val(0);
-        $("#species-flag").val(0);
-        $("#variety-flag").val(0);
+        $("#scientificName-flag").val(0);
         $("#commonName-flag").val(0);
         $("#family-flag").val(0);
         $("#familyCommonName-flag").val(0);

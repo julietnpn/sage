@@ -19,12 +19,9 @@
 		<div class='row plantname' data-plantId="{{plant.id}}">
 			{% spaceless %}
 			<div style="display:inline-block;">{% if plant.common_name %}{{ plant.common_name }}&nbsp;{% endif %}</div>
-			<div class='cardview-latin-name' style="display:inline-block;">
-			{% if plant.common_name or plant.genus or plant.species or plany.variety %}
-			{% if plant.genus %}{{ plant.genus }}&nbsp;{% endif %}
-			{% if plant.species %}{{ plant.species }}&nbsp;{% endif %}
-			{%if plant.variety %}{{plant.variety}}{% endif %}
-			{%else%} No Plant Name{%endif%}{% endspaceless %}</div>
+			<div class='cardview-scientific-name' style="display:inline-block;">
+			{% if plant.get_scientific_name%}{{ plant.get_scientific_name }}&nbsp;
+			{%else%} No Plant Scientific Name{%endif%}{% endspaceless %}</div>
 			</div>
 		<div class='row plantdetails'>
 			<div class='row'>

@@ -5,14 +5,8 @@
 	{% if common_name %}
 		{{ common_name }}
 	{% else %}
-		{% if genus %}
-			{{ genus }}&nbsp;
-		{% endif %}
-		{% if species %}
-			{{ species }}&nbsp;
-		{% endif %}
-		{% if variety %}
-			{{ variety }}
+		{% if scientific_name %}
+			{{ scientific_name }}
 		{% endif %}
 	{% endif %}
 {% endspaceless %}{% endblock %}

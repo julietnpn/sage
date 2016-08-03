@@ -202,7 +202,7 @@ def reload_attribute_vals_view(request, className=None):
 	# 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 	else:
 		cls = globals()[className]
-		cls_model = apps.get_model('frontend', className)
+		cls_model = apps.get_model('plants', className)
 		values = cls_model.objects.values_list("value", "id")
 		for i in range(0, len(list(values))):
 			if list(values)[i][0] in defaults: ## THE WAY THIS IS EVALUATED NEEDS TO BE CHANGED MANY TO MANY DEFAULTS NOT WORKING
@@ -265,7 +265,7 @@ def updateNames(request):
 		actions = []
 		
 		#pdb.set_trace()
-		scientific_name = request.POST['scientific_name']
+		scientific_name = request.POST['scientificName']
 # 		species = request.POST['species']
 # 		variety = request.POST['variety']
 # 		subspecies = request.POST['subspecies']
@@ -278,7 +278,7 @@ def updateNames(request):
 			endemic_status_text = None
 
 		
-		if int(request.POST['scientific_name']) == 1:
+		if int(request.POST['scientificName_flag']) == 1:
 
 			genus = ''
 			species = ''
@@ -312,7 +312,7 @@ def updateNames(request):
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
 							species = None
-			if "Var." or "var." in scientific_name:
+			if "Var. " or "var. " in scientific_name:
 				sciname_bits= scientific_name.split()
 				found = False
 				for i in sciname_bits:
@@ -346,7 +346,7 @@ def updateNames(request):
 				subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
 			if cultivar is not '':
-				variety_id = ScientificName.objects.filter(value='cultivar').first().id
+				cultivar_id = ScientificName.objects.filter(value='cultivar').first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
 
 			
@@ -468,14 +468,14 @@ def editPlant(request, plantId=None):
 	result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
 	for field in plant.get_all_fields:
 		if field['name'] is 'region':
-			if plant.get_region() is None:
-				height = dict(name='height', field_type='other', value=None, label='height', class_name = 'FIXME')
-				spread = dict(name='spread', field_type='other', value=None, label='spread', class_name = 'FIXME')
-				root_depth = dict(name='root_depth', field_type='other', value=None, label='root depth', class_name = 'FIXME')
+			if plant.get_region is None:
+				height = {'name' : 'height', 'field_type' : 'other', 'value' : None, 'label' : 'height', 'class_name' : 'FIXME'}
+				spread = {'name':'spread', 'field_type':'other', 'value':None, 'label':'spread', 'class_name' : 'FIXME'}
+				root_depth = {'name':'root_depth', 'field_type':'other', 'value':None, 'label':'root depth', 'class_name' : 'FIXME'}
 			else:
-				height = dict(name='height', field_type='other', value=plant.get_region()['height'], label='height', class_name = 'FIXME')
-				spread = dict(name='spread', field_type='other', value=plant.get_region()['spread'], label='spread', class_name = 'FIXME')
-				root_depth = dict(name='root_depth', field_type='other', value=plant.get_region()['root_depth'], label='root depth', class_name = 'FIXME')
+				height = {'name' : 'height', 'field_type' : 'other', 'value' : plant.get_region['height'], 'label' : 'height', 'class_name' : 'FIXME'}
+				spread = {'name' : 'spread', 'field_type' : 'other', 'value' : plant.get_region['spread'], 'label' : 'spread', 'class_name' : 'FIXME'}
+				root_depth = {'name' : 'root_depth', 'field_type' : 'other', 'value' : plant.get_region['root_depth'], 'label' : 'root depth', 'class_name' : 'FIXME'}
 			
 			result['Characteristics'].append(height)
 			result['Characteristics'].append(spread)
@@ -520,7 +520,7 @@ def addPlant(request):
 		addPlantForm = AddPlantForm(request.POST)
 
 		if 'add' in request.POST and addPlantForm.is_valid():
-			scientific_name = str(request.POST["latinName"])
+			scientificName = str(request.POST["scientificName"])
 			commonName = request.POST["commonName"]
 
 			genus = ''
@@ -529,12 +529,12 @@ def addPlant(request):
 			subspecies = ''
 			cultivar = ''
 
-			if 'spp.' in scientific_name:
-				if scientific_name.endswith('spp.'):
+			if 'spp.' in scientificName:
+				if scientificName.endswith('spp.'):
 					print("spp only, delete transaction")
 					transaction.delete() #we need species specific information. When it is across many species, the information is not reliable enough.
 				else:
-					sciname_bits= scientific_name.split()
+					sciname_bits= scientificName.split()
 					found = False
 					for i in sciname_bits:
 						if "spp." in i:
@@ -542,20 +542,20 @@ def addPlant(request):
 						if found:
 							subspecies = i;
 							continue
-			if ' x ' in scientific_name:
-				sciname_bits= scientific_name.split()
+			if ' x ' in scientificName:
+				sciname_bits= scientificName.split()
 				genus = sciname_bits[0] + " x " + sciname_bits[2]
 				species = None
-			if "'" in scientific_name:
-				sciname_bits= scientific_name.split()
+			if "'" in scientificName:
+				sciname_bits= scientificName.split()
 				for i in sciname_bits: #make sure it is not a genus with a cultivar
 					if i.startswith("'") and i.endswith("'"):
 						cultivar = i
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
 							species = None
-			if "Var." or "var." in scientific_name:
-				sciname_bits= scientific_name.split()
+			if "Var. " or "var. " in scientificName:
+				sciname_bits= scientificName.split()
 				found = False
 				for i in sciname_bits:
 					if "Var." or "var." in i:
@@ -564,8 +564,7 @@ def addPlant(request):
 						variety = i;
 						continue
 			if genus is '':
-				#genus has not been defined and needs to be defined
-				sciname_bits = scientific_name.split()
+				sciname_bits = scientificName.split()
 				genus = sciname_bits[0]
 				if len(sciname_bits) > 1:
 					species = sciname_bits[1]
@@ -592,24 +591,25 @@ def addPlant(request):
 				subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
 			if cultivar is not '':
-				variety_id = ScientificName.objects.filter(value='cultivar').first().id
+				cultivar_id = ScientificName.objects.filter(value='cultivar').first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
 
 			
 			if commonName:
 				actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
+			
 			Actions.objects.bulk_create(actions)
 
 			context = {
 				'newPlant':{
-					'scientific_name': scientific_name,
+					'scientific_name': scientificName,
 					'common_name': commonName
 				},
 				'userId': request.user.id,
 				'transactionId' : transaction.id,
 				'result': EmptyPlant,
 				'plantId': 0, 
-				'scientific_name' :scientific_name,
+				'scientific_name' :scientificName,
 				'common_name' : commonName,
 				'family' : None,
 				'family_common_name' : None,

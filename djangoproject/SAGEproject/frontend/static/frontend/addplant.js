@@ -16,7 +16,7 @@ var AddPlant = function(){
             validateNames();
         });
 
-        jqueryMap.$latinName.blur(function () {
+        jqueryMap.$scientificName.blur(function () {
             validateNames();
         });
 
@@ -28,7 +28,7 @@ var AddPlant = function(){
             }
         });
 
-        jqueryMap.$latinName.keydown(function(e){
+        jqueryMap.$scientificName.keydown(function(e){
             if(e.keyCode == 13 && validateNames() != 2)
                 e.preventDefault();
                 e.stopPropagation();
@@ -37,7 +37,7 @@ var AddPlant = function(){
 
 
         jqueryMap.$clearAddPlant.click(function(){
-            jqueryMap.$latinName.val("");
+            jqueryMap.$scientificName.val("");
             jqueryMap.$commonName.val("");
             hideElements(jqueryMap.$clearAddPlant);
             hideElements(jqueryMap.$addThis.children());
@@ -50,8 +50,8 @@ var AddPlant = function(){
     //----------------- BEGIN DOM METHODS -----------------------        
     function setJqueryMap() {
         jqueryMap = {
-        	$latinName : $("#add-plant-latin-name"),
-            $lNameLabel :$("#latin-name-label"),
+        	$scientificName : $("#add-plant-scientific-name"),
+            $sNameLabel :$("#scientific-name-label"),
             $cNameLabel:$("#common-name-label"),
         	$commonName : $("#add-plant-common-name"),
         	$addThis: $("#add-plant-submit-container"),
@@ -64,11 +64,11 @@ var AddPlant = function(){
 
     function validateNames(){
         var isValidated = 0;
-        if(jqueryMap.$latinName.val() == ""){
-            jqueryMap.$lNameLabel.css("color", "red"); //#66CD00
+        if(jqueryMap.$scientificName.val() == ""){
+            jqueryMap.$sNameLabel.css("color", "red"); //#66CD00
         }
         else{
-            jqueryMap.$lNameLabel.css("color", "#999");
+            jqueryMap.$sNameLabel.css("color", "#999");
             isValidated += 1;
         }
         if(jqueryMap.$commonName.val() == ""){
