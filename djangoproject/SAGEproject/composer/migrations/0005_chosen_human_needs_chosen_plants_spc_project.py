@@ -43,6 +43,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('user_id', models.IntegerField()),
                 ('address', models.TextField()),
+                ('polyculture_coordinates', models.TextField()),
             ],
             options={
                 'db_table': 'SPC_Project',

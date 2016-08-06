@@ -13,49 +13,8 @@
             {% csrf_token %}
             {{ form.as_p }}
 
-
-           <!-- <h2>Products</h2>
-            {% for choice in form.list %}
-                {% if choice.initial == 1 %}
-                    <input type = "checkbox" name = "products" id = "choice.initial" > {{choice.label}} </br>
-                {% endif %}
-            {% endfor %}
-
-            <h2>Services</h2>
-            {% for choice in form.list %}
-                {% if choice.initial == 2 %}
-                    <input type = "checkbox" name = "services" id = "choice.initial" > {{choice.label}} </br>
-                {% endif %}
-            {% endfor %}
-
-            <h2>Wildlife</h2>
-            {% for choice in form.list %}
-                {% if choice.initial == 3 %}
-                    <input type = "checkbox" name = "wildlife" id = "choice.initial" > {{choice.label}} </br>
-                {% endif %}
-            {% endfor %}
-
-            <h2>Water Usage</h2>
-            {% for choice in form.list %}
-                {% if choice.initial == 4 %}
-                    <input type = "radio" name = "water_usage" id = "choice.initial" > {{choice.label}} </br>
-                {% endif %}
-            {% endfor %}
-
-            <h2>Ecosystem Services</h2>
-            {% for choice in form.list %}
-                {% if choice.initial == 5 %}
-                    <input type = "checkbox" name = "ecosystem_services" id = "choice.initial" > {{choice.label}} </br>
-                {% endif %}
-            {% endfor %}
-            <br>
-            <!--{% for field in form %}
-	        {{ field }}
-	        {% endfor %} -->
-
             <input type="submit" id = "submitButton" value="Submit" />
-         </form>
-
+        </form>
 
 
 </body>

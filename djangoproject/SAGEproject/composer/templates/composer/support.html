@@ -4,13 +4,15 @@
     {% load staticfiles %}
     <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Support Species</title>
 </head>
 <body>
-    <h1> Thank you for submitting</h1>
-    <form method ="post">
+    <h1>Choose your support plants</h1>
+    <form method = "POST" >
         {% csrf_token %}
-        <input type="submit" value="Go Back" />
+        {{ form.as_p }}
+        <input type="submit" id = "submitButton" value="Select Plants" />
     </form>
+
 </body>
 </html>

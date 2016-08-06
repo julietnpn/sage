@@ -6,7 +6,10 @@ urlpatterns = [
 
 
     url(r'^$', views.UserInsert, name='UserInsert'),
-    url(r'^next/$', views.Return, name='Return'),
+    url(r'^next/$', views.Return, name='Next'),
     url(r'^address/$', views.EnterAddress, name='EnterAddress'),
-    url(r'^plants/$', views.FindProducts, name='FindProducts')
+    url(r'^plants/$', views.FindProducts, name='FindProducts'),
+    url(r'^support/$', views.FindSupport, name='FindSupport'),
+    url(r'^maps/$', views.PlantPlacement, name='PlantPlacement'),#must change here
+    url(r'^id/$', views.EnterID, name='EnterID')
 ]

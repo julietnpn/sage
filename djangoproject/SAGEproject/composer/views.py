@@ -5,11 +5,15 @@ from django.views import generic
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader, RequestContext
 from plants.models import Human_Needs_Library, PlantFoodProd, SPC_Project, Chosen_Plants, Chosen_Human_Needs, Plant, PlantMedicinalsProd, PlantCulturalAndAmenityProd, PlantBiochemicalMaterialProd, PlantRawMaterialsProd, PlantMineralNutrientsProd
-from .forms import Human_Needs, Address, Plants
+from .forms import Human_Needs, Address, Plants, Support, IDForm
 from django.core.urlresolvers import reverse
 from django import forms
 from django.core.context_processors import csrf
 from django.views.generic.edit import UpdateView
+from .models import ID_Table
+
+
+UNIVERSALID = 1 #GLOBAL ID VARIABLE
 
 
 class LocationUpdateView(UpdateView):
@@ -18,6 +22,59 @@ class LocationUpdateView(UpdateView):
     template_name = 'composer/Plants.html'
     form_class = Plants
     success_url = '/composer/next/'
+
+def PlantPlacement(request):
+    addressvalues = SPC_Project.objects.order_by('id')
+    currentaddress = ""
+    for i in range(0, len(addressvalues), 1):
+        if (addressvalues[i].user_id == UNIVERSALID):  # ADD ACTUAL USER ID HERE!!!
+            currentaddress = addressvalues[i].address
+            break
+
+    #context = {'addressvalues': addressvalues}
+    if request.method == 'POST':
+        coordinates = request.POST.get('test', '')
+
+        coordinatearray = []
+        i = 0
+        while True:
+            index = coordinates.find(",", i)
+            if index == -1:
+                coordinatearray.append(coordinates[i:len(coordinates)])
+                break
+            coordinatearray.append(coordinates[i:index])
+            i = index + 1
+
+        for j in range(0, len(addressvalues), 1):
+            if (addressvalues[j].user_id == UNIVERSALID and addressvalues[j].id > 0):
+                addressvalues[j].polyculture_coordinates = ""
+                addressvalues[j].polyculture_coordinates = coordinates
+                addressvalues[j].save()
+                break
+        #convert string back to array
+        return HttpResponseRedirect('/composer/')
+    else:
+        #form = Address()
+        return render(request, 'composer/map.html', {"value": currentaddress})
+
+def FindSupport(request):
+    if request.method == 'POST':
+
+        form = Support(request.POST)
+        if form.is_valid():
+            selectedPlants = form.cleaned_data.get('supportchoices')
+            selectedId = map(int, selectedPlants)
+
+            for i in range(0, len(selectedId), 1):
+                newdata = Chosen_Plants(project_id=UNIVERSALID, plant_id=selectedId[i], key_species=False)
+                newdata.save()
+
+        return HttpResponseRedirect('/composer/next/')
+    else:
+        form = Support()
+        return render(request, 'composer/support.html', {'form': form})
+
+
 
 def FindProducts(request):
     existingobjects = Chosen_Plants.objects.order_by('id')
@@ -32,17 +89,19 @@ def FindProducts(request):
             selectedId = map(int, selectedPlants)
 
             for i in range(0, len(existingobjects), 1):
-                if (existingobjects[i].project_id == 1):
+                if (existingobjects[i].project_id == UNIVERSALID):
                     deletedEntry = Chosen_Plants.objects.get(id=existingobjects[i].id)
                     deletedEntry.delete()
 
             for i in range(0, len(selectedId), 1):
-                newdata = Chosen_Plants(project_id=1, plant_id= selectedId[i], key_species= False)
+                newdata = Chosen_Plants(project_id=UNIVERSALID, plant_id= selectedId[i], key_species= True)
                 newdata.save()
 
 
-        return HttpResponseRedirect('/composer/next/')
+        return HttpResponseRedirect('/composer/support/')
     else:
+        existingList = []
+
         form = Plants()
         return render(request, 'composer/Plants.html', {'form': form})
         #return render_to_response('composer/Plants.html', args)
@@ -55,7 +114,7 @@ def UserInsert(request):
     #selected_choice = question.choice_set.get(pk=request.POST['products'])
 
     chosenobjects = Chosen_Human_Needs.objects.order_by('id')
-    largestid = 1
+    largestid = UNIVERSALID
     #for i in range(0, len(objects), 1):  # finds largest project id value
     #    currentnumber = objects[i].project_id
     #    if currentnumber > largestid:
@@ -99,7 +158,11 @@ def UserInsert(request):
 
 
     else:
-        form = Human_Needs()
+        existingList = []
+        for i in range(0, len(chosenobjects), 1):
+            if (chosenobjects[i].project_id == UNIVERSALID):
+                existingList.append(chosenobjects[i].human_need_lib_id)
+        form = Human_Needs(initial={'picked': existingList})
         return render(request, 'composer/enter.html', {'form': form})
 
 
@@ -109,23 +172,55 @@ def Sample(request):
     context = {'latest_choice': latest_choice}
     return render(request, 'composer/UserInsert.html', context)
 
+def EnterID(request):
+    if request.method == 'POST':
+        IDtext = str(request.POST.get('textfield'))
+        global UNIVERSALID
+        UNIVERSALID = int(IDtext)
+        newdata = ID_Table(id_Value= UNIVERSALID, id=1)
+        newdata.save()
+        return HttpResponseRedirect('/composer/address')
+    else:
+        form = IDForm()
+        return render(request, 'composer/id.html', {'form': form})
+
+
 def EnterAddress(request):
     addresstext = str(request.POST.get('textfield'))
-    print addresstext, len(addresstext)
+    print addresstext
+    existingaddress = SPC_Project.objects.order_by('id')
 
-    if (addresstext is None) == False:
+    if request.method == 'POST':  # add project number function
 
-        newAddress = SPC_Project(user_id=1, address=addresstext)
+        #form = Address(request.POST)
+        #if form.is_valid():
+
+        for i in range(0, len(existingaddress), 1):
+            if (existingaddress[i].user_id == UNIVERSALID):
+                deletedEntry = SPC_Project.objects.get(id=existingaddress[i].id)
+                print "DELETED"
+                deletedEntry.delete()
+
+        newAddress = SPC_Project(user_id=UNIVERSALID, address=addresstext)
         newAddress.save()
-            #print form
-        return render(request, 'composer/next.html')
+
+        print 'address created'
+        #else:
+            #print 'address not created'
+            # print form
+
+        return HttpResponseRedirect('/composer/maps')
     else:
-        form = Address()
-        return render(request, 'composer/Address.html')
+        existingList = []
+        for i in range(0, len(existingaddress), 1):
+            if (existingaddress[i].user_id == UNIVERSALID):
+                existingList.append(existingaddress[i].address)
+        form = Address(initial={'addresstext': existingList})
+        return render(request, 'composer/Address.html', {'form': form})
 
 
 def Return(request):
-    return render(request, 'composer/enter.html')
+    return render(request, 'composer/next.html')
 
 def Answer(request, choice_id):
     choice = get_object_or_404(Human_Needs_Library, pk = choice_id)
@@ -200,4 +295,4 @@ def AddRandomResponse (request):
 
 def Next(request, choice_id):
     choice = get_object_or_404(Human_Needs_Library, pk=choice_id)
-    return render(request, 'polls/next.html', {'choice': choice})
+    return render(request, 'composer/next.html', {'choice': choice})

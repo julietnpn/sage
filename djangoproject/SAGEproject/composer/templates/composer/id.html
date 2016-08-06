@@ -4,14 +4,13 @@
     {% load staticfiles %}
     <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
     <meta charset="UTF-8">
-    <title>Enter Address</title>
+    <title>Enter ID</title>
+
 </head>
 <body>
-    <h1>Enter your Home Address</h1>
-    <br>
     <form method = "POST">
         {% csrf_token %}
-        <label>Address: </label>
+        <label>Enter your ID number: </label>
         <input type="text" name="textfield"> <br>
         <input type="submit" id = "submitButton" value="Submit" />
     </form>

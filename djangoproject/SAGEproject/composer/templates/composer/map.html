@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
+    <meta charset="UTF-8">
+    <title>Plant Placement</title>
+
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+    <script>var URL = "{% url 'composer:PlantPlacement' %}";</script>
+    {% csrf_token %}
+</head>
+<body>
+    <form method = "POST" >
+        <input type="hidden" id="title" name="test">
+    <h1>View Address</h1>
+     <div>
+       <label>Your entered address: {{value}}</label> <br> <br>
+       <input id="address" type="textbox" value="Wrong address? Re-enter it here!" style="width: 400px;">
+
+       <input type="button" value="Encode"
+              onclick='codeAddress(document.getElementById("address").value)'>
+
+     </div>
+     <div id="map_canvas" style="width: 600px; height: 480px;"></div>
+     <script type="text/javascript">
+
+
+       var geocoder;
+       var map;
+       var test = "{{value}}";
+       var allmarkers = [];
+       var deletedIndexes = [];
+       var connectedMarkers = [];
+       var exportedMarkers = [];
+       var inc = 0;
+       var polyline = new google.maps.Polyline({
+                path: connectedMarkers,
+                strokeColor: "#0000FF",
+                strokeOpacity: 0.4
+       });
+
+
+
+       function initialize() {
+         geocoder = new google.maps.Geocoder();
+         var address = test;
+         var latlng = codeAddress(address);
+         var myOptions = {
+           zoom: 20,
+           center: latlng,
+           mapTypeId: google.maps.MapTypeId.ROADMAP
+         }
+
+         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+         google.maps.event.addListener(map, 'click', function (e) {
+
+
+            //Determine the location where the user has clicked.
+            var location = e.latLng;
+
+            //Create a marker and placed it on the map.
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+
+
+
+
+            allmarkers.push(marker);
+            connectedMarkers.push({lat: location.lat(), lng: location.lng()});
+            exportedMarkers.push(location.lat());
+            exportedMarkers.push(location.lng());
+
+            polyline.setPath(connectedMarkers);
+
+            //console.log(allmarkers[0].getPosition().lat());
+
+
+
+
+
+            google.maps.event.addListener(marker, 'rightclick', function (e){
+
+
+                var currentIndex = [];
+                var lineIndex = [];
+
+                for (var i = 0; i < allmarkers.length; i++){
+                    if (allmarkers[i].getPosition().lat() == location.lat()){
+                        currentIndex.push(i);
+                    }
+                }
+                for (var i = 0; i < connectedMarkers.length; i++){
+                    if (connectedMarkers[i].lat == location.lat()){
+                        lineIndex.push(i);
+                    }
+                }
+
+
+                inc = 0;
+                for (var i = 0; i < currentIndex.length; i++){
+                    allmarkers[currentIndex[i] - inc].setMap(null);
+                    allmarkers.splice(currentIndex[i] - inc, 1);
+
+                    deletedIndexes.push(currentIndex[i] - inc);
+                    inc++
+                }
+                inc = 0;
+
+                for (var i = 0; i < lineIndex.length; i++){
+                    connectedMarkers.splice(lineIndex[i] - inc, 1);
+                    exportedMarkers.splice(lineIndex[i]*2 - inc*2, 1);
+                    exportedMarkers.splice(lineIndex[i]*2 - inc*2, 1);
+                    inc++
+                }
+
+                console.log(exportedMarkers);
+
+                polyline.setPath(connectedMarkers);
+
+
+                polyline.setMap(map);
+            });
+
+
+
+
+
+
+
+            polyline.setMap(map);
+
+
+
+            document.getElementById("title").value = exportedMarkers;
+
+            //Attach click event handler to the marker.
+            google.maps.event.addListener(marker, "click", function (e) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: 'Latitude: ' + location.lat() + '<br />Longitude: ' + location.lng()
+                });
+                infoWindow.open(map, marker);
+                allmarkers.push(marker);
+                connectedMarkers.push({lat: location.lat(), lng: location.lng()});
+                exportedMarkers.push(location.lat());
+                exportedMarkers.push(location.lng());
+
+                polyline.setPath(connectedMarkers);
+
+            });
+           });
+
+       }
+
+       function codeAddress(address) {
+         geocoder.geocode( { 'address': address}, function(results, status) {
+           if (status == google.maps.GeocoderStatus.OK) {
+             map.setCenter(results[0].geometry.location);
+             var marker = new google.maps.Marker({
+                 map: map,
+                 position: results[0].geometry.location
+             });
+           } else {
+             alert("Geocode was not successful for the following reason: " + status);
+           }
+         });
+
+       }
+
+
+       initialize();
+
+
+
+     </script>
+     <br>
+
+         {% csrf_token %}
+         {{ form.as_p }}
+
+
+         <input type="submit" id = "submitButton" value="Submit" />
+     </form>
+
+  </body>
+</html>
