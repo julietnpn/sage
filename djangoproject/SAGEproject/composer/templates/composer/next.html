@@ -8,8 +8,9 @@
 </head>
 <body>
     <h1> Thank you for submitting</h1>
-    <form method ="post">
-        {% csrf_token %}
+    <form method = "POST" >
+            {% csrf_token %}
+            {{ form.as_p }}
         <input type="submit" value="Go Back" />
     </form>
 </body>

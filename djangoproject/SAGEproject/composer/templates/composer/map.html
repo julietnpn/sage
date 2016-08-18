@@ -14,9 +14,12 @@
 <body>
     <form method = "POST" >
         <input type="hidden" id="title" name="test">
+
     <h1>View Address</h1>
      <div>
-       <label>Your entered address: {{value}}</label> <br> <br>
+       <label>Your entered address: {{value}}</label> <br>
+       <label>Approximate Full Address, if it is completely wrong re-enter it: </label> <br>
+
        <input id="address" type="textbox" value="Wrong address? Re-enter it here!" style="width: 400px;">
 
        <input type="button" value="Encode"
@@ -47,6 +50,8 @@
          geocoder = new google.maps.Geocoder();
          var address = test;
          var latlng = codeAddress(address);
+         console.log(latlng);
+         var fulladdress;
          var myOptions = {
            zoom: 20,
            center: latlng,
@@ -54,6 +59,8 @@
          }
 
          map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+
 
          google.maps.event.addListener(map, 'click', function (e) {
 
@@ -160,6 +167,15 @@
          geocoder.geocode( { 'address': address}, function(results, status) {
            if (status == google.maps.GeocoderStatus.OK) {
              map.setCenter(results[0].geometry.location);
+             var latlng = {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()};
+             console.log(latlng);
+             geocoder.geocode({'location': latlng}, function(results, status, e) {
+                var fullAddress = results[1].formatted_address;
+                console.log(fullAddress);
+                document.getElementById("address").value = fullAddress;
+             });
+
+
              var marker = new google.maps.Marker({
                  map: map,
                  position: results[0].geometry.location
@@ -172,6 +188,8 @@
        }
 
 
+
+
        initialize();
 
 
@@ -181,6 +199,9 @@
 
          {% csrf_token %}
          {{ form.as_p }}
+
+        <label>Instructions for creating polyculture: <br> Left Click to add a marker for polyculture perimeter <br> Right Click to delete the marker
+        <br> Click on marker to connect markers and to view latitude and longitude</label> <br>
 
 
          <input type="submit" id = "submitButton" value="Submit" />

@@ -1,12 +1,13 @@
 
-from plants.models import Human_Needs_Library, PlantLayer, PlantFoodProd, Chosen_Plants, Chosen_Human_Needs, Plant, PlantMedicinalsProd, \
+from plants.models import PlantLayer, PlantFoodProd, Plant, PlantMedicinalsProd, \
     PlantCulturalAndAmenityProd, PlantBiochemicalMaterialProd, PlantRawMaterialsProd, PlantMineralNutrientsProd, PlantNutrientRequirementsByRegion
 from django import forms
-from .models import ID_Table
+from .models import ID_Table, Human_Needs_Library, Chosen_Plants, Chosen_Human_Needs, SPC_Project
 
 
 UNIVERSALID = 1
 
+# HUMAN NEEDS FORM
 class Human_Needs (forms.Form):
 
 
@@ -36,7 +37,7 @@ class Human_Needs (forms.Form):
 
 
 
-
+# KEY SPECIES FORM
 class Plants (forms.Form):
     plantChoiceList = []
     blank = []
@@ -71,14 +72,7 @@ class Plants (forms.Form):
 
         global UNIVERSALID
 
-        #self.prefilteredplants = []
 
-        #print chosenItems[0].human_need_lib_id
-
-        # for i in range(0, len(chosenItems), 1):
-        # idList.append(chosenItems[i].human_need_lib_id)
-
-        #super(Plants, self).__init__(*args, **kwargs)
         # Convert ID to text from Human_Needs_Library
         for i in range(0, len(chosenItems), 1):
             for j in range(0, len(humanNeeds), 1):
@@ -190,37 +184,11 @@ class Plants (forms.Form):
 
     def returnPlantIDs(self):
         return self.prefilteredplants
-        #print self.plantChoiceList
 
-        #self.fields['plantrec'].widget = forms.CheckboxSelectMultiple()
-        #self.fields['plantrec'].label.append(plantrecLabel)
-        #print self.plantrec.choices
-            #print self.fields['plantrec'].choices.append((str(PlantIds[i]), PlantNames[i]))
-
-
-        #plantrec = self.fields.update(forms.MultipleChoiceField(label=plantrecLabel, choices=plantChoiceList, required=False,
-                                         #widget=forms.CheckboxSelectMultiple()))
-
-
-    # Task 3: Create checkboxes for each plant
-    #def getPlantChoice(self):
-     #   return self.plantChoiceList
-
-
-        #self.fields.update(forms.MultipleChoiceField(label=plantrecLabel, choices=plantChoiceList, required=False,
-          #                                   widget=forms.CheckboxSelectMultiple()))
-        #return plantChoiceList
-
-
-    #hi = self.plantChoiceList
-    #object = Plants()
-
-    #def __init__(self, *args, **kwargs):
-      #  super(Plants, self).__init__(*args, **kwargs)
-
+# SUPPORT SPECIES FORM
 class Support (forms.Form):
     plantChoiceList = []
-     #might put this inside
+
     blank = []
     plantobj = Plants()
     humanneedsList = "The Human Needs you selected - "
@@ -274,25 +242,25 @@ class Support (forms.Form):
             for j in range(0, len(fertNeeds), 1):
                 if (chosenPlants[i].plant_id == fertNeeds[j].plants_id and chosenPlants[i].project_id == UNIVERSALID):
                     keyfertID.append(fertNeeds[j].fertility_needs_id)
-        #print keyfertID
+
 
         print len(chosenSupportID)
         for i in range(0, len(allPlants), 1):
             for j in range(0, len(fertNeeds), 1):
-                #print "inside outer loop"
+
                 if (allPlants[i] == fertNeeds[j].plants_id):
-                    #print "inside if"
+
                     for k in range(0, len(keyfertID), 1):
-                        #print "inside loop"
+
                         if (fertNeeds[j].fertility_needs_id == keyfertID[k]):
                             chosenSupportID.append(allPlants[i])
-                            #print "adding ID"
+
                             break
-                            break
+
                 elif (allPlants[i] > 33160):
                     chosenSupportID.append(allPlants[i])
                     break
-        #print self.chosenSupportID
+
 
         PlantNames = []
         for i in range(0, len(chosenSupportID), 1):
@@ -300,25 +268,25 @@ class Support (forms.Form):
                 if (chosenSupportID[i] == allPlantsTable[j].id):
                     PlantNames.append(allPlantsTable[j].common_name)
 
-        #for i in range(len(self.plantChoiceList) - 1, -1, -1):
-            #self.plantChoiceList.pop(i)
+
 
         while len(self.plantChoiceList) > 0:
             self.plantChoiceList.pop(0)
-        print len(self.plantChoiceList)
+        
 
         for i in range(0, len(PlantNames), 1):
             newTuple = (str(chosenSupportID[i]), PlantNames[i])
             self.plantChoiceList.append(newTuple)
-        #print self.plantChoiceList
 
-        print len(self.plantChoiceList)
+
+
 
         self.fields['supportchoices'].choices = self.plantChoiceList
         self.fields['selectedchoices'].label = self.humanneedsList
         self.fields['plantrec'].label = self.chosenplantsList
 
 
+# ADDRESS FORM
 class Address (forms.Form):
     def __init__(self, *args, **kwargs):
         allIDs = ID_Table.objects.order_by('id')
@@ -329,7 +297,69 @@ class Address (forms.Form):
     Address = forms.CharField(max_length=400)
 
 
-
+# ID PLACEHOLDER FORM
 class IDForm (forms.Form):
 
     IDForm = forms.CharField(max_length=400)
+
+# FINAL PAGE FORM
+class finalPage (forms.Form):
+
+    humanneedsList = "The Human Needs you selected - "
+    chosenplantsList = "The Key Species you selected - "
+    supportLabel = "The Support Species you selected - "
+    addressLabel = "The Address you entered - "
+
+    enteredaddress = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
+    selectedchoices = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
+    plantrec = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
+    supportchoices = forms.MultipleChoiceField(required=False, widget=forms.CheckboxSelectMultiple())
+    def __init__(self, *args, **kwargs):
+        super(finalPage, self).__init__(*args, **kwargs)
+
+        chosenItems = Chosen_Human_Needs.objects.order_by('id')
+        humanNeeds = Human_Needs_Library.objects.order_by('id')
+        chosenPlants = Chosen_Plants.objects.order_by('id')
+        allPlantsTable = Plant.objects.order_by('id')
+        addressdata = SPC_Project.objects.order_by('id')
+        global UNIVERSALID
+
+        # Adding text for the selected human needs
+        for i in range(0, len(chosenItems), 1):
+            for j in range(0, len(humanNeeds), 1):
+                if (chosenItems[i].human_need_lib_id == humanNeeds[j].id and chosenItems[i].project_id == UNIVERSALID):
+                    # choiceList.append(humanNeeds[j].need)
+                    self.humanneedsList = self.humanneedsList + humanNeeds[j].need + ", "
+                    # choice = choice + humanNeeds[j].need
+        self.humanneedsList = self.humanneedsList[:-2]
+
+        # Adding text for the key species selected
+        for i in range(0, len(chosenPlants), 1):
+            for j in range(0, len(allPlantsTable), 1):
+                if (chosenPlants[i].plant_id == allPlantsTable[j].id and chosenPlants[i].project_id == UNIVERSALID and chosenPlants[i].key_species == True):
+                    self.chosenplantsList = self.chosenplantsList + allPlantsTable[j].common_name + ", "
+
+        self.chosenplantsList = self.chosenplantsList[:-2]
+
+        # Adding text for the support species selected
+        for i in range(0, len(chosenPlants), 1):
+            for j in range(0, len(allPlantsTable), 1):
+                if (chosenPlants[i].plant_id == allPlantsTable[j].id and chosenPlants[i].project_id == UNIVERSALID and
+                            chosenPlants[i].key_species == False):
+                    self.supportLabel = self.supportLabel + allPlantsTable[j].common_name + ", "
+
+        self.supportLabel = self.supportLabel[:-2]
+
+        # Adding text for the address entered
+        for i in range(0, len(addressdata), 1):
+            if (addressdata[i].user_id == UNIVERSALID):
+                self.addressLabel = self.addressLabel + addressdata[i].address
+
+
+
+
+
+        self.fields['selectedchoices'].label = self.humanneedsList
+        self.fields['plantrec'].label = self.chosenplantsList
+        self.fields['supportchoices'].label = self.supportLabel
+        self.fields['enteredaddress'].label = self.addressLabel
