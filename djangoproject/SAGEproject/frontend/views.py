@@ -722,9 +722,9 @@ def search(request, searchString):
 	# insect_reg_results = Plant.objects.filter(plants_insect_regulator__in=Insects.objects.filter(value__icontains=searchString))
 
 	name_matches = Plant.objects.filter(
-		Q(get_scientific_name__icontains=searchString) | 
-		Q(common_name__icontains=searchString) |
-		Q(get_layer__icontains=searchString))
+		Q(scientific_name__contains=searchString) | 
+		Q(common_name__contains=searchString) |
+		Q(layer__contains=searchString))
 	# results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 	# results_list = list(chain(name_matches, layer_results, food_results, rawmat_results, med_results, biomed_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 

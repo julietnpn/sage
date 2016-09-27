@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'actions',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'transactions',
-                'managed': False,
+                'managed': True,
             },
         ),
     ]

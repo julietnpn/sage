@@ -11,6 +11,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Q
+import json
 
 
 
@@ -905,7 +906,46 @@ class Plant(models.Model):
     	#genus = self.plant_scientific_name.filter(name_component='genus')
      	#genus
 		#name = all_names
-    	return ' '.join([str(a) for a in self.plants_scientific_name.all()])
+		
+		try:
+			ps = PlantScientificName.objects.filter(plants=self.id)
+		except PlantScientificName.DoesNotExist:
+			print('Plant Region Does not Exist for plant' + str(self.id))
+			return None
+			
+            
+		name = None
+		genus = ''
+		species = ''
+		variety = ''
+		subspecies = ''
+		cultivar = ''
+		for a in ps:
+			sc = a.scientific_name
+			if sc.value in 'genus':
+				genus = a.value
+			elif sc.value in 'species':
+				species = a.value
+			elif sc.value in 'subspecies':
+				subspecies = 'spp. ' + a.value
+			elif sc.value in 'variety':
+				subspecies = 'var. ' + a.value
+			elif sc.value in 'variety':
+				subspecies = "cultivar. '" + a.value + "'"
+		
+		
+		if genus is not '':
+			name = genus
+		if species is not '':
+			name = name + " " + species
+		if subspecies is not '':
+			name = name + " " + subspecies
+		if variety is not '':
+			name = name + " " + variety
+		if cultivar is not '':
+			name = name + " " + cultivar
+		
+		return name
     		
     # genus = models.CharField(max_length=160, blank=True, null=True)
 	# species = models.CharField(max_length=160, blank=True, null=True)
@@ -934,6 +974,7 @@ class Plant(models.Model):
         try:
             pr = PlantRegion.objects.get(plants_id=self.id)
         except PlantRegion.DoesNotExist:
+            print('Plant Region Does not Exist for plant' + str(self.id))
             return None
 
         if pr.height is not None:
