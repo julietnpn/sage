@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'plants',
     'login',
     'frontend',
+    'composer',
 )
 
 MIDDLEWARE_CLASSES = (
