@@ -2,7 +2,7 @@
 from plants.models import PlantLayer, PlantFoodProd, Plant, PlantMedicinalsProd, \
     PlantCulturalAndAmenityProd, PlantBiochemicalMaterialProd, PlantRawMaterialsProd, PlantMineralNutrientsProd, PlantNutrientRequirementsByRegion
 from django import forms
-from .models import ID_Table, Human_Needs_Library, Chosen_Plants, Chosen_Human_Needs, SPC_Project
+from .models import Human_Needs_Library, Chosen_Plants, Chosen_Human_Needs, SPC_Project, ID_Table
 
 
 UNIVERSALID = 1
@@ -241,7 +241,7 @@ class Support (forms.Form):
         for i in range(0, len(chosenPlants), 1):
             for j in range(0, len(fertNeeds), 1):
                 if (chosenPlants[i].plant_id == fertNeeds[j].plants_id and chosenPlants[i].project_id == UNIVERSALID):
-                    keyfertID.append(fertNeeds[j].fertility_needs_id)
+                    keyfertID.append(fertNeeds[j].nutrient_requirements_id)
 
 
         print len(chosenSupportID)
@@ -252,7 +252,7 @@ class Support (forms.Form):
 
                     for k in range(0, len(keyfertID), 1):
 
-                        if (fertNeeds[j].fertility_needs_id == keyfertID[k]):
+                        if (fertNeeds[j].nutrient_requirements_id == keyfertID[k]):
                             chosenSupportID.append(allPlants[i])
 
                             break

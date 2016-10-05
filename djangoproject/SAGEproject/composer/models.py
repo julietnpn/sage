@@ -1,7 +1,7 @@
 from django.db import models
 
 class Human_Needs_Library(models.Model):
-    need = models.TextField()
+    need = models.TextField(blank=True, null=True)
     type = models.IntegerField()
 
     class Meta:
@@ -13,8 +13,8 @@ class Human_Needs_Library(models.Model):
 
 class SPC_Project(models.Model):
     user_id = models.IntegerField()
-    address = models.TextField()
-    polyculture_coordinates = models.TextField()
+    address = models.TextField(blank=True, null=True)
+    polyculture_coordinates = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
