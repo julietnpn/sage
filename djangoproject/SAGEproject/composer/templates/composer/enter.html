@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load staticfiles %}
-    <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% extends 'composer/base.html' %}
 
-</head>
-<body>
-        <h1>Enter your info here<br></h1>
+{% block maincontentheader %}
+<h2>Human Needs Analysis</h2>
+{% endblock %}
+
+{% block maincontent %}
         <form method = "POST" >
             {% csrf_token %}
             {{ form.as_p }}
 
             <input type="submit" id = "submitButton" value="Submit" />
         </form>
-
-
-</body>
-</html>
+{% endblock %}

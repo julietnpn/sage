@@ -53,7 +53,8 @@ def PlantPlacement(request):
         return HttpResponseRedirect('/composer/')
     else:
         #form = Address()
-        return render(request, 'composer/map.html', {"value": currentaddress})
+        #return render(request, 'composer/map.html', {"value": currentaddress})
+        return HttpResponseRedirect('/composer/')
 
 # VIEW FOR SUPPORT SPECIES
 def FindSupport(request):

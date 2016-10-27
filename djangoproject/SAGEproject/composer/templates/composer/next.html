@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load staticfiles %}
-    <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h1> Thank you for submitting</h1>
+{% extends 'composer/base.html' %}
+
+{% block maincontentheader %}
+<h2>Review</h2>
+{% endblock %}
+
+{% block maincontent %}
     <form method = "POST" >
             {% csrf_token %}
             {{ form.as_p }}
         <input type="submit" value="Go Back" />
     </form>
-</body>
-</html>
+{% endblock %}

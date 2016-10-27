@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load staticfiles %}
-    <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
-    <meta charset="UTF-8">
-    <title>Support Species</title>
-</head>
-<body>
-    <h1>Choose your support plants</h1>
+
+{% extends 'composer/base.html' %}
+
+{% block maincontentheader %}
+<h2>Species Selection</h2>
+{% endblock %}
+
+{% block maincontent %}
+    <h2>Select Support Species: </h2> <br>
     <form method = "POST" >
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" id = "submitButton" value="Select Plants" />
     </form>
-
-</body>
-</html>
+{% endblock %}

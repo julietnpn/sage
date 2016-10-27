@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load staticfiles %}
-    <link rel = "stylesheet" type = "text/css" href = "{% static 'composer/style.css' %}" />
-    <meta charset="UTF-8">
-    <title>Enter ID</title>
+{% extends 'composer/base.html' %}
 
-</head>
-<body>
+{% block maincontentheader %}
+<h2>Log In</h2>
+{% endblock %}
+
+{% block maincontent %}
     <form method = "POST">
         {% csrf_token %}
         <label>Enter your ID number: </label>
         <input type="text" name="textfield"> <br>
         <input type="submit" id = "submitButton" value="Submit" />
     </form>
-
-</body>
-</html>
+{% endblock %}

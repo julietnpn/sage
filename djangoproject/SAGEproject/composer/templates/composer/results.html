@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h1>{{ question.question_text }}</h1>
+{% extends 'composer/base.html' %}
+
+{% block maincontentheader %}
+<h2>Human Needs Analysis</h2>
+{% endblock %}
+
+{% block maincontent %}
+   <h1>{{ question.question_text }}</h1>
 
     <ul>
         {% for choice in choice.choice_set.all %}
@@ -13,6 +13,5 @@
         {% endfor %}
     </ul>
 
-    <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
-</body>
-</html>
+    <a href="{% url 'polls:detail' question.id %}">Go back?</a>
+{% endblock %}

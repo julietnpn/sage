@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^address/$', views.EnterAddress, name='EnterAddress'),
     url(r'^plants/$', views.FindProducts, name='FindProducts'),
     url(r'^support/$', views.FindSupport, name='FindSupport'),
-    url(r'^maps/$', views.PlantPlacement, name='PlantPlacement'),#must change here
+    #url(r'^maps/$', views.PlantPlacement, name='PlantPlacement'),#must change here
     url(r'^id/$', views.EnterID, name='EnterID')
 ]
