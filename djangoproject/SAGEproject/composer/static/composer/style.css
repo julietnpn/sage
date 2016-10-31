@@ -1,14 +1,30 @@
-h2 {
-    color: blue;
-
+#pagetitlerow{
+	background-color:#809ca0;
 }
 
-h1 {
-    text-align: center
+#project-title{
+	/*font-weight:bold;*/
+	color:white;
+	letter-spacing:2px;
+	font-size:16px;
+	text-align: left;
+	padding-left: 20px;
+	text-transform: uppercase;
+	padding-top:10px;
+	padding-bottom:10px;
 }
 
+#step-title{
+	font-weight:bold;
+	font-size:16px;
+	letter-spacing:2px;
+	color:black;
+	text-align: left;
+	text-transform: uppercase;
+	padding-top:10px;
+	padding-bottom:10px;
+}
 
-
-body {
-    padding: 20px 50px 50px 50px
+#maincontentcontainer{
+	padding-left: 40px;
 }

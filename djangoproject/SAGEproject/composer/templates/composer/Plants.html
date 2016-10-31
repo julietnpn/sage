@@ -1,13 +1,13 @@
 {% extends 'composer/base.html' %}
 
 {% block maincontentheader %}
-Review
+Key Species Selection
 {% endblock %}
 
 {% block maincontent %}
     <form method = "POST" >
-            {% csrf_token %}
-            {{ form.as_p }}
-        <input type="submit" value="Go Back" />
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" id = "submitButton" value="Select Plants" />
     </form>
 {% endblock %}

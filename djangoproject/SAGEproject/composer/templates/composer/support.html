@@ -2,11 +2,10 @@
 {% extends 'composer/base.html' %}
 
 {% block maincontentheader %}
-<h2>Species Selection</h2>
+Support Species Selection
 {% endblock %}
 
 {% block maincontent %}
-    <h2>Select Support Species: </h2> <br>
     <form method = "POST" >
         {% csrf_token %}
         {{ form.as_p }}

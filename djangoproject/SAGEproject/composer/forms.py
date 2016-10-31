@@ -42,7 +42,7 @@ class Plants (forms.Form):
     plantChoiceList = []
     blank = []
     entireList = "The Human Needs you selected - "
-    plantrecLabel = "Here are the plant recommendations"
+    plantrecLabel = "Choose from the recommended plants:"
     selectedchoices = forms.MultipleChoiceField(required= False, widget= forms.CheckboxSelectMultiple())
     plantrec = forms.MultipleChoiceField(label= plantrecLabel, required= False, widget= forms.CheckboxSelectMultiple())
     prefilteredplants = []
