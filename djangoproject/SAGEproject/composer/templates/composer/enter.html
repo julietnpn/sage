@@ -1,14 +1,25 @@
 {% extends 'composer/base.html' %}
 
 {% block maincontentheader %}
-Human Needs Analysis
+  <button class="btn btn-default pull-right">Save and Logout</button>
+  <h1>
+    What goals do you have <br> for your polyculture?
+  </h1>
 {% endblock %}
 
 {% block maincontent %}
-        <form method = "POST" >
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <input type="submit" id = "submitButton" value="Submit" />
-        </form>
+  <div class="row">
+    <div id="polyculture-goals" class="col-xs-7 col-xs-offset-3">
+      <form method = "POST" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="row">
+          <div class="col-xs-6 col-xs-offset-2">
+            <button class="btn btn-default pull-left">Choose different location</button>
+            <input class="btn btn-primary pull-right" type="submit" id = "submitButton" value="I've chosen my goals" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}

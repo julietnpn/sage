@@ -4,30 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Sustainable Polyculture Composer</title>
-    
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="{% static 'composer/style.css' %}" />
+    <link rel="stylesheet" type='text/css' href="{% static 'composer/bootstrap.min.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'composer/style.css' %}" />
 </head>
 <body>
 
 	<div class="container-fluid">
+
+    <div id="pagetitlerow" class="row">
+			<div id="project-title" class="col-xs-12">Sustainable Polyculture Composer</div>
+    </div>
+
 		<div class="row">
-			<div id="content" class="col-xs-12">
-				<div id="pagetitlerow" class="row">
-					<div id="project-title">Sustainable Polyculture Composer</div>
-				</div>
-				
-				<div id="maincontentcontainer" class="row">
-					<div id="maincontentheaderrow" class="row">
-						<div id="step-title">{% block maincontentheader %}{% endblock %}</div>
-					</div>
-					<div id="maincontentheaderrow" class="row">
-						{% block maincontent %}
-						{% endblock %}
-					</div>
-				</div>
-			</div>
-		</div>
+      <div id="maincontentheader" class="col-xs-12">
+        {% block maincontentheader %}{% endblock %}
+      </div>
+    </div>
+
+    <div id="maincontentbody" class="row">
+      <div class="col-xs-12">
+        {% block maincontent %}
+        {% endblock %}
+      </div>
+    </div>
+
 	</div>
 
 </body>
