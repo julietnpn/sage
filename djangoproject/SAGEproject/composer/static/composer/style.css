@@ -44,3 +44,10 @@
   display:inline;
 	width:33.333%;
 }
+
+
+/* Utilities */
+.util-text-center{
+	text-align: center;
+	/*margin: 0 auto;*/
+}

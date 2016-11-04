@@ -171,6 +171,10 @@ def UserInsert(request):
 def GoalChart(request):
     return render(request, 'composer/goalchart.html', {})
 
+# VIEW FOR TIME AND MONEY PAGE
+def TimeAndMoney(request):
+    return render(request, 'composer/timeandmoney.html', {})
+
 
 # VIEW FOR ID PLACEHOLDER
 def EnterID(request):

@@ -1,0 +1,84 @@
+{% extends 'composer/base.html' %}
+
+{% block maincontentheader %}
+  <button class="btn btn-default pull-right">Save and Logout</button>
+  <h1>
+    We need a bit more information to<br>help construct your polyculture.
+  </h1>
+{% endblock %}
+
+{% block maincontent %}
+  <div class="row">
+    <div class="col-xs-4 col-xs-offset-2">
+			<h3 class="util-text-center">
+				Time available for polyculture
+			</h3>
+			<select class="center-block" name="time-number" value="Number">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+			</select>
+			<select class="center-block" name="time-number" value="Number">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+			</select>
+    </div>
+		<div class="col-xs-4">
+			<h3 class="util-text-center">
+				Money available for initial setup
+			</h3>
+			<select class="form-control" name="time-number" value="Number">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+			</select>
+		</div>
+  </div>
+	<div class="row">
+		<div class="col-xs-4 col-xs-offset-6">
+			<h3 class="util-text-center">
+				Money available for upkeeping
+			</h3>
+			<select class="form-control" name="time-number" value="Number">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+			</select>
+		</div>
+	</div>
+	<div class="row" style="margin-top: 10em;">
+		<div class="col-xs-4 col-xs-offset-4">
+			<button class="btn btn-default pull-left">Reorganize goals</button>
+			<input class="btn btn-primary pull-right" type="submit" id = "submitButton" value="Next step please!" />
+		</div>
+	</div>
+{% endblock %}
