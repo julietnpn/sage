@@ -1,0 +1,56 @@
+{% extends 'composer/base.html' %}
+{% load staticfiles %}
+
+{% block extrastaticfiles %}
+	<!-- CSS -->
+	<link rel="stylesheet" type='text/css' href="{% static 'composer/goalchart.css' %}">
+
+	<!-- JS -->
+	<script src="{% static 'composer/jquery.min.js' %}" charset="utf-8"></script>
+	<script src="{% static 'composer/bootstrap.min.js' %}" charset="utf-8"></script>
+	<script src="{% static 'composer/d3.min.js' %}" charset="utf-8"></script>
+	<script src="{% static 'composer/goalchart.js' %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block maincontentheader %}
+	<button class="btn btn-default pull-right">Save and Logout</button>
+	<h1>Expected polyculture<br>production breakdown</h1>
+{% endblock %}
+
+{% block maincontent %}
+<div class="row">
+
+	<div class="col-xs-3 col-xs-offset-1 pull-left">
+
+		<div class="controls">
+			<form id=nbForm>
+				<ul id="menu">
+					<li>
+						<button id=nbFormSubmit type="button" class="btn btn-success">Reset Segments</button>
+					</li>
+				</ul>
+			</form>
+
+			<table id=rangebox>
+				<tbody>
+					<h5 class="HideOnLoad">Click boxes to edit labels</h5>
+				</tbody>
+			</table>
+		</div>		
+
+	</div>
+
+	<div class="col-xs-7 pull-right">
+		<div id="pie"></div>
+	</div>
+
+</div>
+
+<div class="row">
+	<div class="col-xs-4 col-xs-offset-4">
+		<button class="btn btn-default pull-left">Choose different goals</button>
+		<input class="btn btn-primary pull-right" type="submit" id="submitButton" value="Looks good!" />
+	</div>
+</div>
+
+{% endblock %}

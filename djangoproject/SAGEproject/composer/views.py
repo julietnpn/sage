@@ -167,6 +167,9 @@ def UserInsert(request):
         return render(request, 'composer/enter.html', {'form': form})
 
 
+# VIEW FOR GOAL CHART PAGE
+def GoalChart(request):
+    return render(request, 'composer/goalchart.html', {})
 
 
 # VIEW FOR ID PLACEHOLDER
@@ -221,9 +224,3 @@ def EnterAddress(request):
 def Return(request):
     form = finalPage()
     return render(request, 'composer/next.html', {'form': form})
-
-
-
-
-
-
