@@ -1,0 +1,53 @@
+{% extends 'composer/base.html' %}
+
+{% block maincontentheader %}
+  <button class="btn btn-default pull-right">Save and Logout</button>
+  <h1>
+    We need a bit more information to<br>help construct your polyculture.
+  </h1>
+{% endblock %}
+
+{% block maincontent %}
+  <div class="row">
+    <div class="col-xs-4 col-xs-offset-2">
+			<h2 class="text-center">
+				Water Available
+			</h2>
+    </div>
+		<div class="col-xs-4">
+			<h2 class="text-center">
+				Nutrients Available
+			</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-2 col-xs-offset-3">
+			<select class="form-control" name="water-available">
+				<option value="" disabled selected>Select Amount Available</option>
+				<option value="rainfall">rainfall only</option>
+				<option value="drought">irrigation during drought</option>
+				<option value="low">low year-round irrigation</option>
+				<option value="moderate">moderate irrigation</option>
+				<option value="boundless">boundless irrigation</option>
+			</select>
+		</div>
+		<div class="col-xs-3 col-xs-offset-2">
+			<div class="checkbox">
+				<label><input type="checkbox">Store bought fertilizer</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Nutrient producing plants in the polyculture</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Compost from on-site organic waste</label>
+			</div>
+		</div>
+	</div>
+
+	<div class="row add-margin-top">
+		<div class="col-xs-4 col-xs-offset-4">
+			<button class="btn btn-default pull-left">Choose different time and money</button>
+			<input class="btn btn-primary pull-right" type="submit" id = "submitButton" value="I'm ready to design!" />
+		</div>
+	</div>
+{% endblock %}

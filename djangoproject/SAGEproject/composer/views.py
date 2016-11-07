@@ -175,6 +175,9 @@ def GoalChart(request):
 def TimeAndMoney(request):
     return render(request, 'composer/timeandmoney.html', {})
 
+# VIEW FOR CONSTRAINTS PAGE
+def Constraints(request):
+    return render(request, 'composer/constraints.html', {})
 
 # VIEW FOR ID PLACEHOLDER
 def EnterID(request):
