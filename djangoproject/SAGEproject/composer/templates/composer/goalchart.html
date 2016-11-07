@@ -3,10 +3,10 @@
 
 {% block extrastaticfiles %}
 	<!-- CSS -->
-	<link rel="stylesheet" type='text/css' href="{% static 'composer/goalchart.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'composer/goalchart.css' %}">
 
 	<!-- JS -->
-	<script src="{% static 'composer/jquery.min.js' %}" charset="utf-8"></script>
+	<!-- <script src="{% static 'composer/jquery.min.js' %}" charset="utf-8"></script> -->
 	<script src="{% static 'composer/bootstrap.min.js' %}" charset="utf-8"></script>
 	<script src="{% static 'composer/d3.min.js' %}" charset="utf-8"></script>
 	<script src="{% static 'composer/goalchart.js' %}" charset="utf-8"></script>
@@ -20,28 +20,28 @@
 {% block maincontent %}
 <div class="row">
 
-	<div class="col-xs-3 col-xs-offset-1 pull-left">
+	<div class="col-xs-2 col-xs-offset-2 pull-left">
 
 		<div class="controls">
-			<form id=nbForm>
+			<form id="nbForm">
 				<ul id="menu">
 					<li>
-						<button id=nbFormSubmit type="button" class="btn btn-success">Reset Segments</button>
+						<button id="nbFormSubmit" type="button" class="btn btn-success">Reset Segments</button>
 					</li>
 				</ul>
 			</form>
 
-			<table id=rangebox>
+			<table id="rangebox">
 				<tbody>
 					<h5 class="HideOnLoad">Click boxes to edit labels</h5>
 				</tbody>
 			</table>
-		</div>		
+		</div>
 
 	</div>
 
-	<div class="col-xs-7 pull-right">
-		<div id="pie"></div>
+	<div class="col-xs-7 pull-right" id="pie">
+		<!-- <div class id="pie"></div> -->
 	</div>
 
 </div>
