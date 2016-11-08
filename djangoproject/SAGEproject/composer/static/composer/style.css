@@ -50,11 +50,30 @@
 	width:33.333%;
 }
 
+.scrolling-checkboxes{
+	max-height: 110px;
+	overflow-y: scroll;
+	border: 1px solid black;
+	border-radius: 4px;
+}
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, .5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
 
 /* Utilities */
 .util-text-center{
 	text-align: center;
 }
-.add-margin-top{
+.add-margin-top-lg{
 	margin-top: 9em;
+}
+.add-margin-top-md{
+	margin-top: 4.5em;
 }

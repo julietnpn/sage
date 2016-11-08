@@ -1,0 +1,109 @@
+{% extends 'composer/base.html' %}
+
+{% block maincontentheader %}
+  <button class="btn btn-default pull-right">Save and Logout</button>
+  <h1>
+    We need a bit more information to<br>help construct your polyculture.
+  </h1>
+{% endblock %}
+
+{% block maincontent %}
+  <div class="row">
+    <div class="col-xs-4 col-xs-offset-2">
+			<h2 class="text-center">
+				Plant Structures Available
+			</h2>
+    </div>
+		<div class="col-xs-4">
+			<h2 class="text-center">
+				Water Structures Available
+			</h2>
+		</div>
+	</div>
+
+
+	<div class="row">
+
+		<div class="col-xs-2 col-xs-offset-3 scrolling-checkboxes">
+			<div class="checkbox">
+				<label><input type="checkbox">Wooden fence</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Chainlink fence</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Wooden telephone poles</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Concrete telephone poles</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Tall trees with few low branches</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Lattices</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Other</label>
+			</div>
+		</div>
+
+
+		<div class="col-xs-2 col-xs-offset-2 scrolling-checkboxes">
+			<div class="checkbox">
+				<label><input type="checkbox">Rainwater into 50 gallon tank</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Greywater into 50 gallon tank</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Rainwater into swale, pond, or french drain</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Greywater into swale, pond, or french drain</label>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row add-margin-top-md">
+		<div class="col-xs-4 col-xs-offset-4">
+			<h2 class="text-center">
+				Tools Available
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-2 col-xs-offset-5 scrolling-checkboxes">
+			<div class="checkbox">
+				<label><input type="checkbox">Hand pruners</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Loppers</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Shovel</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Rake</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Hoe</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">A-frame level</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox">Other</label>
+			</div>
+		</div>
+	</div>
+
+	<div class="row add-margin-top-lg">
+		<div class="col-xs-4 col-xs-offset-4">
+			<button class="btn btn-default pull-left">Choose different resources</button>
+			<input class="btn btn-primary pull-right" type="submit" id = "submitButton" value="I'm ready to design!" />
+		</div>
+	</div>
+{% endblock %}

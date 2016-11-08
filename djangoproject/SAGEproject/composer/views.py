@@ -179,6 +179,10 @@ def TimeAndMoney(request):
 def Constraints(request):
     return render(request, 'composer/constraints.html', {})
 
+# VIEW FOR RESROUCES PAGE
+def Resources(request):
+    return render(request, 'composer/resources.html', {})
+
 # VIEW FOR ID PLACEHOLDER
 def EnterID(request):
     if request.method == 'POST':
