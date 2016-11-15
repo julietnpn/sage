@@ -13,69 +13,78 @@
 			<h3 class="util-text-center">
 				Time available for polyculture
 			</h3>
-
-      <div id="time-box">
-        <div class="row center-block">
-          <div class="col-xs-6 col-xs-offset-3 form-inline">
-            <select class="form-control" name="time-number" value="Time Amount">
-              <option value="" disabled selected>Amount</option>
-      				<option value="1">1 hour</option>
-      				<option value="2">2 hours</option>
-      				<option value="3">3 hours</option>
-      				<option value="4">4 hours</option>
-      				<option value="5">5 hours</option>
-      				<option value="6">6 hours</option>
-      				<option value="7">7 hours</option>
-      				<option value="8">8 hours</option>
-      				<option value="9">9 hours</option>
-      				<option value="10">10 hours</option>
-      			</select>
-            <span>per</span>
-      			<select class="form-control" name="time-number" value="Time Unit">
-              <option value="" disabled selected>Unit</option>
-      				<option value="1">day</option>
-      				<option value="2">week</option>
-      				<option value="3">month</option>
-      			</select>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-xs-4 col-xs-offset-4">
-          <br>
-          <button id="time-box-button" class="btn btn-secondary center-block">Add</button>
-        </div>
-      </div>
-
     </div>
-		<div class="col-xs-4">
-			<h3 class="util-text-center">
-				Money available for initial setup
-			</h3>
-			<select class="form-control" name="time-number">
-        <option value="" disabled selected>Select an amount</option>
-				<option value="1">less than $50.00</option>
-				<option value="2">$50.00 to $100</option>
-				<option value="3">$100 to $200</option>
-        <option value="3">money is no problem</option>
-			</select>
-		</div>
+    <div class="col-xs-4">
+      <h3 class="util-text-center">
+        Money available for initial setup
+      </h3>
+    </div>
   </div>
+
+  <div class="time-box">
+    <div class="row">
+      <div class="col-xs-4 col-xs-offset-2 text-center form-inline">
+        <select class="form-control" name="time-number" value="Time Amount">
+          <option value="" disabled selected>Amount</option>
+          <option value="1">1 hour</option>
+          <option value="2">2 hours</option>
+          <option value="3">3 hours</option>
+          <option value="4">4 hours</option>
+          <option value="5">5 hours</option>
+          <option value="6">6 hours</option>
+          <option value="7">7 hours</option>
+          <option value="8">8 hours</option>
+          <option value="9">9 hours</option>
+          <option value="10">10 hours</option>
+        </select>
+        <span>per</span>
+        <select class="form-control" name="time-number" value="Time Unit">
+          <option value="" disabled selected>Unit</option>
+          <option value="1">day</option>
+          <option value="2">week</option>
+          <option value="3">month</option>
+        </select>
+      </div>
+      <div class="col-xs-4">
+        <select class="form-control" name="time-number">
+          <option value="" disabled selected>Select an amount</option>
+          <option value="1">less than $50.00</option>
+          <option value="2">$50.00 to $100</option>
+          <option value="3">$100 to $200</option>
+          <option value="3">money is no problem</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-4 col-xs-offset-2">
+      <br>
+      <button id="time-box-button" class="btn btn-secondary center-block">Add</button>
+    </div>
+  </div>
+
 	<div class="row">
-		<div class="col-xs-4 col-xs-offset-6">
-			<h3 class="util-text-center">
-				Money available for upkeeping
-			</h3>
-			<select class="form-control" name="time-number">
+    <div class="col-xs-4 col-xs-offset-6">
+      <h3 class="util-text-center">
+        Money available for upkeeping
+      </h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-4 col-xs-offset-6">
+
+      <select class="form-control" name="time-number">
         <option value="" disabled selected>Select an amount</option>
         <option value="1">less than $50.00</option>
-				<option value="2">$50.00 to $100</option>
-				<option value="3">$100 to $200</option>
+        <option value="2">$50.00 to $100</option>
+        <option value="3">$100 to $200</option>
         <option value="3">money is no problem</option>
-			</select>
-		</div>
-	</div>
+      </select>
+    </div>
+  </div>
+
 	<div class="row add-margin-top-lg">
 		<div class="col-xs-4 col-xs-offset-4">
       <a class="btn btn-default pull-left" href="/composer/goalchart">Reorganize goals</a>

@@ -4,7 +4,7 @@ var moving_id = null; // id of the moved slider
 var oldValue = []; // previous values of the sliders
 
 // pie chart radius
-var radius = 200;
+var radius = 100;
 
 // setup the margins so we don't clip the outter labels
 var margin = {
