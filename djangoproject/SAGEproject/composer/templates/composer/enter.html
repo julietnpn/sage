@@ -9,12 +9,12 @@
 
 {% block maincontent %}
   <div class="row">
-    <div id="polyculture-goals" class="col-xs-7 col-xs-offset-3">
+    <div id="polyculture-goals" class="col-xs-8 col-xs-offset-3">
       <form method = "POST" >
         {% csrf_token %}
         {{ form.as_p }}
         <div class="row">
-          <div class="col-xs-8 col-xs-offset-2">
+          <div class="col-xs-8 col-xs-offset-1">
             <br>
             <br>
             <a class="btn btn-default pull-left" href="/composer/">Choose different location</a>
