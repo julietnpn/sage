@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$("#time-box-button").click(function(){
 		console.log("test");
 		$(".time-box").append('<div class="row add-margin-top-sm">\
-			<div class="col-xs-4 col-xs-offset-2 text-center form-inline">\
+			<div class="col-xs-4 col-xs-offset-4 text-center form-inline">\
 				<select class="form-control" name="time-number" value="Time Amount">\
 					<option value="" disabled selected>Amount</option>\
 					<option value="1">1 hour</option>\

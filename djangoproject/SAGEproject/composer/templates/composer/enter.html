@@ -8,22 +8,102 @@
 {% endblock %}
 
 {% block maincontent %}
+<!-- This commented out form is created in UserInsert view and Human_Needs forms.py. We have decided to HTML hard code the form instead to avoid messing with brittle python code and more easily style and format. To bring back this form, the commented out button below must be used as well. - Daniel 11/16/16  -->
+<!-- <form method = "POST" >
+  {% csrf_token %}
+  {{ form.as_p }}
+</form> -->
+
   <div class="row">
-    <div id="polyculture-goals" class="col-xs-8 col-xs-offset-3">
-      <form method = "POST" >
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div class="row">
-          <div class="col-xs-8 col-xs-offset-1">
-            <br>
-            <br>
-            <a class="btn btn-default pull-left" href="/composer/">Choose different location</a>
-            <!-- Uncomment button below to post form choices to database -->
-            <!-- <input class="btn btn-primary pull-right" type="submit" id = "submitButton" value="I've chosen my goals" /> -->
-            <a class="btn btn-primary pull-right" href="/composer/goalchart">I've chosen my goals</a>
-          </div>
-        </div>
-      </form>
+    <div class="col-xs-3 text-center">
+      <h3>
+        Products
+      </h3>
+    </div>
+    <div class="col-xs-3 text-center">
+      <h3>
+        Services
+      </h3>
+    </div>
+    <div class="col-xs-3 text-center">
+      <h3>
+        Wildlife
+      </h3>
+    </div>
+    <div class="col-xs-3 text-center">
+      <h3>
+        Ecosystem Services
+      </h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-1">
+      <div class="checkbox">
+        <label><input type="checkbox">Food</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Herb</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Medicine</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Timber / Construction Materials</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Raw products for household use</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Flowers</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Fragrance</label>
+      </div>
+    </div>
+    <div class="col-xs-2 col-xs-offset-1">
+      <div class="checkbox">
+        <label><input type="checkbox">Religious, Spiritual, and Cultural amenity</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Recreation</label>
+      </div>
+    </div>
+    <div class="col-xs-2 col-xs-offset-1">
+      <div class="checkbox">
+        <label><input type="checkbox">Birds</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Butterfly</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Wildlife habitat</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Deter plant-eating animals</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Deter plant-eating pests</label>
+      </div>
+    </div>
+    <div class="col-xs-2 col-xs-offset-1">
+      <div class="checkbox">
+        <label><input type="checkbox">Erosion</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox">Bioremediation</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6 col-xs-offset-3">
+      <br>
+      <br>
+      <a class="btn btn-default pull-left" href="/composer/">Choose different location</a>
+      <!-- Uncomment button below to post form choices to database -->
+      <!-- <input class="btn btn-primary pull-right" type="submit" id = "submitButton" value="I've chosen my goals" /> -->
+      <a class="btn btn-primary pull-right" href="/composer/goalchart">I've chosen my goals</a>
     </div>
   </div>
 {% endblock %}
