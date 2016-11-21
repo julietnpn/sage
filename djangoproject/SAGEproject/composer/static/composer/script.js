@@ -26,4 +26,24 @@ $(document).ready(function(){
 			</div>\
 		</div>');
 	});
+
+	$("#to-goalchart-button").click(function(){
+		var productsSerialzed = $("#products-form").serialize();
+		var servicesSerialzed = $("#services-form").serialize();
+		var wildlifeSerialzed = $("#wildlife-form").serialize();
+		var ecosystemSerialzed = $("#ecosystem-form").serialize();
+		$.post("/composer/", productsSerialzed);
+		$.post("/composer/", servicesSerialzed);
+		$.post("/composer/", wildlifeSerialzed);
+		$.post("/composer/", ecosystemSerialzed);
+	});
+
+	// $("#to-constraints-button").click(function(){
+	// 	var productsSerialzed = $("#time-form").serialize();
+	// 	$.post("/composer/", productsSerialzed);
+	// 	$.post("/composer/", servicesSerialzed);
+	// 	$.post("/composer/", wildlifeSerialzed);
+	// 	$.post("/composer/", ecosystemSerialzed);
+	// });
+
 });

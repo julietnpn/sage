@@ -10,8 +10,8 @@
 {% block maincontent %}
 <!-- This commented out form is created in UserInsert view and Human_Needs forms.py. We have decided to HTML hard code the form instead to avoid messing with brittle python code and more easily style and format. To bring back this form, the commented out button below must be used as well. - Daniel 11/16/16  -->
 <!-- <form method = "POST" >
-  {% csrf_token %}
   {{ form.as_p }}
+  {% csrf_token %}
 </form> -->
 
   <div class="row">
@@ -39,60 +39,72 @@
 
   <div class="row">
     <div class="col-xs-2 col-xs-offset-1">
-      <div class="checkbox">
-        <label><input type="checkbox">Food</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Herb</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Medicine</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Timber / Construction Materials</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Raw products for household use</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Flowers</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Fragrance</label>
-      </div>
+      <form id="products-form" action="">
+        {% csrf_token %}
+        <div class="checkbox">
+          <label><input type="checkbox" name="food">Food</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="herb">Herb</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="medicine">Medicine</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="construction materials">Timber / Construction Materials</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="raw producst">Raw products for household use</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="flowers">Flowers</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="fragrance">Fragrance</label>
+        </div>
+      </form>
     </div>
     <div class="col-xs-2 col-xs-offset-1">
-      <div class="checkbox">
-        <label><input type="checkbox">Religious, Spiritual, and Cultural amenity</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Recreation</label>
-      </div>
+      <form id="services-form" action="">
+        {% csrf_token %}
+        <div class="checkbox">
+          <label><input type="checkbox" name="religious">Religious, Spiritual, and Cultural amenity</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="recreation">Recreation</label>
+        </div>
+      </form>
     </div>
     <div class="col-xs-2 col-xs-offset-1">
-      <div class="checkbox">
-        <label><input type="checkbox">Birds</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Butterfly</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Wildlife habitat</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Deter plant-eating animals</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Deter plant-eating pests</label>
-      </div>
+      <form id="wildlife-form" action="">
+        {% csrf_token %}
+        <div class="checkbox">
+          <label><input type="checkbox" name="birds">Birds</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="butterfly">Butterfly</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="wildlife habitat">Wildlife habitat</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="deter animals">Deter plant-eating animals</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="deter pests">Deter plant-eating pests</label>
+        </div>
+      </form>
     </div>
     <div class="col-xs-2 col-xs-offset-1">
-      <div class="checkbox">
-        <label><input type="checkbox">Erosion</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Bioremediation</label>
-      </div>
+      <form id="ecosystem-form" action="">
+        {% csrf_token %}
+        <div class="checkbox">
+          <label><input type="checkbox" name="erosion">Erosion</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="bioremiation">Bioremediation</label>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -103,7 +115,7 @@
       <a class="btn btn-default pull-left" href="/composer/">Choose different location</a>
       <!-- Uncomment button below to post form choices to database -->
       <!-- <input class="btn btn-primary pull-right" type="submit" id = "submitButton" value="I've chosen my goals" /> -->
-      <a class="btn btn-primary pull-right" href="/composer/goalchart">I've chosen my goals</a>
+      <a id="to-goalchart-button" class="btn btn-primary pull-right" href="/composer/goalchart">I've chosen my goals</a>
     </div>
   </div>
 {% endblock %}

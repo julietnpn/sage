@@ -22,9 +22,9 @@
   </div>
 
   <div class="row">
+    <form id="moneyform" action="">
     <div class="col-xs-4 col-xs-offset-2">
-
-      <select class="form-control" name="time-number">
+      <select class="form-control" name="initial-money">
         <option value="" disabled selected>Select an amount</option>
         <option value="1">less than $50.00</option>
         <option value="2">$50.00 to $100</option>
@@ -33,7 +33,7 @@
       </select>
     </div>
     <div class="col-xs-4">
-      <select class="form-control" name="time-number">
+      <select class="form-control" name="upkeeping-money">
         <option value="" disabled selected>Select an amount</option>
         <option value="1">less than $50.00</option>
         <option value="2">$50.00 to $100</option>
@@ -41,6 +41,7 @@
         <option value="3">money is no problem</option>
       </select>
     </div>
+    </form>
   </div>
 
 	<div class="row add-margin-top-md">
@@ -90,7 +91,7 @@
 	<div class="row add-margin-top-lg">
 		<div class="col-xs-6 col-xs-offset-3">
       <a class="btn btn-default pull-left" href="/composer/goalchart">Reorganize goals</a>
-      <a class="btn btn-primary pull-right" href="/composer/constraints">Next step please!</a>
+      <a id="to-constraints-button" class="btn btn-primary pull-right" href="/composer/constraints">Next step please!</a>
 		</div>
 	</div>
 {% endblock %}

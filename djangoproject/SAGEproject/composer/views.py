@@ -123,9 +123,9 @@ def UserInsert(request):
     #largestid += 1
 
     #largestid = 1
-    print request.method
+    # print request.method
     if request.method == 'POST': #add project number function
-
+        print(request.POST)
         form = Human_Needs(request.POST)
 
         #print largestid
@@ -173,6 +173,7 @@ def GoalChart(request):
 
 # VIEW FOR TIME AND MONEY PAGE
 def TimeAndMoney(request):
+    print(request.POST)
     return render(request, 'composer/timeandmoney.html', {})
 
 # VIEW FOR CONSTRAINTS PAGE
