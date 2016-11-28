@@ -22,7 +22,7 @@
   </div>
 
   <div class="row">
-    <form id="moneyform" action="">
+    <form id="money-form" action="">
     <div class="col-xs-4 col-xs-offset-2">
       <select class="form-control" name="initial-money">
         <option value="" disabled selected>Select an amount</option>
@@ -53,38 +53,88 @@
   </div>
 
   <div class="time-box">
-    <div class="row add-margin-top-sm">
-      <div class="col-xs-4 col-xs-offset-4 text-center form-inline">
-        <select class="form-control" name="time-number" value="Time Amount">
-          <option value="" disabled selected>Amount</option>
-          <option value="1">1 hour</option>
-          <option value="2">2 hours</option>
-          <option value="3">3 hours</option>
-          <option value="4">4 hours</option>
-          <option value="5">5 hours</option>
-          <option value="6">6 hours</option>
-          <option value="7">7 hours</option>
-          <option value="8">8 hours</option>
-          <option value="9">9 hours</option>
-          <option value="10">10 hours</option>
-        </select>
-        <span>per</span>
-        <select class="form-control" name="time-number" value="Time Unit">
-          <option value="" disabled selected>Unit</option>
-          <option value="1">day</option>
-          <option value="2">week</option>
-          <option value="3">month</option>
-        </select>
+    <form id="time-form" action="">
+      <div class="row add-margin-top-sm">
+        <div class="col-xs-3 col-xs-offset-5 form-inline">
+          <select class="form-control" name="time-number" value="time-per-day">
+            <option value="" disabled selected>Amount</option>
+            <option value="1 hours">1 hour</option>
+            <option value="2 hours">2 hours</option>
+            <option value="3 hours">3 hours</option>
+            <option value="4 hours">4 hours</option>
+            <option value="5 hours">5 hours</option>
+            <option value="6 hours">6 hours</option>
+            <option value="7 hours">7 hours</option>
+            <option value="8 hours">8 hours</option>
+            <option value="9 hours">9 hours</option>
+            <option value="10 hours">10 hours</option>
+          </select>
+          <span class="add-padding-left-md">per day</span>
+          <!-- <select class="form-control" name="time-number" value="Time Unit">
+            <option value="" disabled selected>Unit</option>
+            <option value="1">day</option>
+            <option value="2">week</option>
+            <option value="3">month</option>
+          </select> -->
+        </div>
       </div>
-    </div>
+      <div class="row add-margin-top-sm">
+        <div class="col-xs-3 col-xs-offset-5 form-inline">
+          <select class="form-control" name="time-number" value="time-per-week">
+            <option value="" disabled selected>Amount</option>
+            <option value="1 hours">1 hour</option>
+            <option value="2 hours">2 hours</option>
+            <option value="3 hours">3 hours</option>
+            <option value="4 hours">4 hours</option>
+            <option value="5 hours">5 hours</option>
+            <option value="6 hours">6 hours</option>
+            <option value="7 hours">7 hours</option>
+            <option value="8 hours">8 hours</option>
+            <option value="9 hours">9 hours</option>
+            <option value="10 hours">10 hours</option>
+          </select>
+          <span class="add-padding-left-md">per week</span>
+          <!-- <select class="form-control" name="time-number" value="Time Unit">
+            <option value="" disabled selected>Unit</option>
+            <option value="1">day</option>
+            <option value="2">week</option>
+            <option value="3">month</option>
+          </select> -->
+        </div>
+      </div>
+      <div class="row add-margin-top-sm">
+        <div class="col-xs-3 col-xs-offset-5 form-inline">
+          <select class="form-control" name="time-number" value="time-per-month">
+            <option value="" disabled selected>Amount</option>
+            <option value="1 hours">1 hour</option>
+            <option value="2 hours">2 hours</option>
+            <option value="3 hours">3 hours</option>
+            <option value="4 hours">4 hours</option>
+            <option value="5 hours">5 hours</option>
+            <option value="6 hours">6 hours</option>
+            <option value="7 hours">7 hours</option>
+            <option value="8 hours">8 hours</option>
+            <option value="9 hours">9 hours</option>
+            <option value="10 hours">10 hours</option>
+          </select>
+          <span class="add-padding-left-md">per month</span>
+          <!-- <select class="form-control" name="time-number" value="Time Unit">
+            <option value="" disabled selected>Unit</option>
+            <option value="1">day</option>
+            <option value="2">week</option>
+            <option value="3">month</option>
+          </select> -->
+        </div>
+      </div>
+    </form>
   </div>
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-xs-4 col-xs-offset-4">
       <br>
       <button id="time-box-button" class="btn btn-secondary center-block">Add</button>
     </div>
-  </div>
+  </div> -->
 
 
 
