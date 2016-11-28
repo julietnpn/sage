@@ -3,6 +3,17 @@
 	outline: 1px solid gold;
 }*/
 
+/* Add color if user overscrolls page */
+html{
+	background-color: #527E4E;
+}
+
+/* Make sure whitespace goes to the bottom of the viewport */
+/* POSSIBLE BUG: If weird green bar at bottom of the page, delete body:height and html:background-color styles */
+body{
+	height: 100vh;
+}
+
 /* Page Title -  Sustainable Polyculture Composer */
 #pagetitlerow{
 	background-color: #527E4E;

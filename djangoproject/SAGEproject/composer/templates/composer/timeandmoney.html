@@ -23,6 +23,7 @@
 
   <div class="row">
     <form id="money-form" action="">
+      {% csrf_token %}
     <div class="col-xs-4 col-xs-offset-2">
       <select class="form-control" name="initial-money">
         <option value="" disabled selected>Select an amount</option>
@@ -54,6 +55,7 @@
 
   <div class="time-box">
     <form id="time-form" action="">
+      {% csrf_token %}
       <div class="row add-margin-top-sm">
         <div class="col-xs-3 col-xs-offset-5 form-inline">
           <select class="form-control" name="time-number" value="time-per-day">

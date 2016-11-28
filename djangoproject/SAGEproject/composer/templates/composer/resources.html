@@ -29,76 +29,79 @@
 
 	<div class="row">
 
-		<div class="col-xs-3 col-xs-offset-1">
-			<div class="checkbox">
-				<label><input type="checkbox">Wooden fence</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Chainlink fence</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Wooden telephone poles</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Concrete telephone poles</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Tall trees with few low branches</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Lattices</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Other</label>
-			</div>
-		</div>
+    <form id="structures-and-tools-form" action="">
+      {% csrf_token %}
+  		<div class="col-xs-3 col-xs-offset-1">
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="wooden-fence">Wooden fence</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="chainlink-fence">Chainlink fence</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="wooden-phone-pole">Wooden telephone poles</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="concrete-phone-pole">Concrete telephone poles</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="tall-tree">Tall trees with few low branches</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="lattices">Lattices</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="other">Other</label>
+  			</div>
+  		</div>
 
 
-		<div class="col-xs-3 col-xs-offset-1">
-			<div class="checkbox">
-				<label><input type="checkbox">Rainwater into 50 gallon tank</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Greywater into 50 gallon tank</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Rainwater into swale, pond, or french drain</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Greywater into swale, pond, or french drain</label>
-			</div>
-		</div>
+  		<div class="col-xs-3 col-xs-offset-1">
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="rainwater-tank">Rainwater into 50 gallon tank</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="greywater-tank">Greywater into 50 gallon tank</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="rainwater-natural">Rainwater into swale, pond, or french drain</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="greywater-natural">Greywater into swale, pond, or french drain</label>
+  			</div>
+  		</div>
 
-    <div class="col-xs-3 col-xs-offset-1">
-      <div class="checkbox">
-        <label><input type="checkbox">Hand pruners</label>
+      <div class="col-xs-3 col-xs-offset-1">
+        <div class="checkbox">
+          <label><input type="checkbox" name="pruners">Hand pruners</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="loppers">Loppers</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="shovel">Shovel</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="rake">Rake</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="hoe">Hoe</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="aframe">A-frame level</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="other">Other</label>
+        </div>
       </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Loppers</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Shovel</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Rake</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Hoe</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">A-frame level</label>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox">Other</label>
-      </div>
-    </div>
+    </form>
 
 	</div>
 
 	<div class="row add-margin-top-lg">
 		<div class="col-xs-6 col-xs-offset-3">
       <a class="btn btn-default pull-left" href="/composer/constraints/">Choose different resources</a>
-      <a class="btn btn-primary pull-right" href="/composer/resources">I'm ready to design!</a>
+      <a id="to-designcanvas-button" class="btn btn-primary pull-right" href="/composer/resources">I'm ready to design!</a>
 		</div>
 	</div>
 {% endblock %}

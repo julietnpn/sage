@@ -43,8 +43,20 @@ $(document).ready(function(){
 		var timeSerialized = $("#time-form").serialize();
 		// console.log(moneySerialized);
 		// console.log(timeSerialized);
-		// $.post("/composer/", moneySerialized);
-		// $.post("/composer/", timeSerialized);
+		// $.post("/timeandmoney/", moneySerialized);
+		// $.post("/timeandmoney/", timeSerialized);
+	});
+
+	$("#to-resources-button").click(function(){
+		var waterAndNutrientsSerialized = $("#water-and-nutrients-form").serialize();
+		// console.log(waterAndNutrientsSerialized);
+		// $.post("/constraints/", waterAndNutrientsForm);
+	});
+
+	$("#to-designcanvas-button").click(function(){
+		var structuresAndToolsSerialized = $("#structures-and-tools-form").serialize();
+		// console.log(structuresAndToolsSerialized);
+		// $.post("/resources/", structuresAndToolsSerialized);
 	});
 
 });

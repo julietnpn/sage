@@ -21,33 +21,36 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xs-2 col-xs-offset-3">
-			<select class="form-control" name="water-available">
-				<option value="" disabled selected>Select Amount Available</option>
-				<option value="rainfall">rainfall only</option>
-				<option value="drought">irrigation during drought</option>
-				<option value="low">low year-round irrigation</option>
-				<option value="moderate">moderate irrigation</option>
-				<option value="boundless">boundless irrigation</option>
-			</select>
-		</div>
-		<div class="col-xs-3 col-xs-offset-2">
-			<div class="checkbox">
-				<label><input type="checkbox">Store bought fertilizer</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Nutrient producing plants in the polyculture</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox">Compost from on-site organic waste</label>
-			</div>
-		</div>
+    <form id="water-and-nutrients-form" action="">
+      {% csrf_token %}
+  		<div class="col-xs-2 col-xs-offset-3">
+  			<select class="form-control" name="water-available">
+  				<option value="" disabled selected>Select Amount Available</option>
+  				<option value="rainfall">rainfall only</option>
+  				<option value="drought">irrigation during drought</option>
+  				<option value="low">low year-round irrigation</option>
+  				<option value="moderate">moderate irrigation</option>
+  				<option value="boundless">boundless irrigation</option>
+  			</select>
+  		</div>
+  		<div class="col-xs-3 col-xs-offset-2">
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="store-fertilizer">Store bought fertilizer</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="nutrient-plants" >Nutrient producing plants in the polyculture</label>
+  			</div>
+  			<div class="checkbox">
+  				<label><input type="checkbox" name="compost">Compost from on-site organic waste</label>
+  			</div>
+  		</div>
+    </form>
 	</div>
 
 	<div class="row add-margin-top-lg">
 		<div class="col-xs-6 col-xs-offset-3">
       <a class="btn btn-default pull-left" href="/composer/timeandmoney">Choose different time and money</a>
-      <a class="btn btn-primary pull-right" href="/composer/resources">Next step please!</a>
+      <a id="to-resources-button" class="btn btn-primary pull-right" href="/composer/resources">Next step please!</a>
 		</div>
 	</div>
 {% endblock %}
