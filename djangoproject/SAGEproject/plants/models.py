@@ -903,53 +903,53 @@ class Plant(models.Model):
     scientific_name = models.ManyToManyField(ScientificName, through=PlantScientificName)
     @property
     def get_scientific_name(self):
-    	#genus = self.plant_scientific_name.filter(name_component='genus')
-     	#genus
-		#name = all_names
-		
-		try:
-			ps = PlantScientificName.objects.filter(plants=self.id)
-		except PlantScientificName.DoesNotExist:
-			print('Plant Region Does not Exist for plant' + str(self.id))
-			return None
-			
+        #genus = self.plant_scientific_name.filter(name_component='genus')
+        #genus
+        #name = all_names
+        
+        try:
+            ps = PlantScientificName.objects.filter(plants=self.id)
+        except PlantScientificName.DoesNotExist:
+            print('Plant Region Does not Exist for plant' + str(self.id))
+            return None
             
-		name = None
-		genus = ''
-		species = ''
-		variety = ''
-		subspecies = ''
-		cultivar = ''
-		for a in ps:
-			sc = a.scientific_name
-			if sc.value in 'genus':
-				genus = a.value
-			elif sc.value in 'species':
-				species = a.value
-			elif sc.value in 'subspecies':
-				subspecies = 'spp. ' + a.value
-			elif sc.value in 'variety':
-				subspecies = 'var. ' + a.value
-			elif sc.value in 'variety':
-				subspecies = "cultivar. '" + a.value + "'"
-		
-		
-		if genus is not '':
-			name = genus
-		if species is not '':
-			name = name + " " + species
-		if subspecies is not '':
-			name = name + " " + subspecies
-		if variety is not '':
-			name = name + " " + variety
-		if cultivar is not '':
-			name = name + " " + cultivar
-		
-		return name
-    		
+            
+        name = None
+        genus = ''
+        species = ''
+        variety = ''
+        subspecies = ''
+        cultivar = ''
+        for a in ps:
+            sc = a.scientific_name
+            if sc.value in 'genus':
+                genus = a.value
+            elif sc.value in 'species':
+                species = a.value
+            elif sc.value in 'subspecies':
+                subspecies = 'spp. ' + a.value
+            elif sc.value in 'variety':
+                subspecies = 'var. ' + a.value
+            elif sc.value in 'variety':
+                subspecies = "cultivar. '" + a.value + "'"
+        
+        
+        if genus is not '':
+            name = genus
+        if species is not '':
+            name = name + " " + species
+        if subspecies is not '':
+            name = name + " " + subspecies
+        if variety is not '':
+            name = name + " " + variety
+        if cultivar is not '':
+            name = name + " " + cultivar
+        
+        return name
+        
     # genus = models.CharField(max_length=160, blank=True, null=True)
-	# species = models.CharField(max_length=160, blank=True, null=True)
-	# variety = models.CharField(max_length=160, blank=True, null=True)
+    # species = models.CharField(max_length=160, blank=True, null=True)
+    # variety = models.CharField(max_length=160, blank=True, null=True)
     common_name = models.CharField(max_length=160, blank=True, null=True)
     #endemic_status
     endemic_status = models.ManyToManyField(EndemicStatus, through=PlantEndemicStatusByRegion)
