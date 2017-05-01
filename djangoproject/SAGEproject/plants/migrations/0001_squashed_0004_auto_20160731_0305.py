@@ -737,7 +737,7 @@ class Migration(migrations.Migration):
                 ('minimum_temperature_tol', models.IntegerField(blank=True, null=True)),
                 ('innoculant', models.CharField(blank=True, max_length=160, null=True)),
                 ('allelochemicals', models.CharField(blank=True, max_length=160, null=True)),
-                ('active_growth_period', models.ManyToManyField(through='plants.PlantActiveGrowthPeriodByRegion', to=b'plants.ActiveGrowthPeriod')),
+                ('active_growth_period', models.ManyToManyField(through='plants.PlantActiveGrowthPeriodByRegion', to='plants.ActiveGrowthPeriod')),
                 ('allelopathic', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='plants.Allelopathic')),
             ],
             options={
@@ -794,22 +794,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='animal_food',
-            field=models.ManyToManyField(through='plants.PlantAnimalFood', to=b'plants.AnimalFood'),
+            field=models.ManyToManyField(through='plants.PlantAnimalFood', to='plants.AnimalFood'),
         ),
         migrations.AddField(
             model_name='plant',
             name='biochemical_material_prod',
-            field=models.ManyToManyField(through='plants.PlantBiochemicalMaterialProd', to=b'plants.BiochemicalMaterialProd'),
+            field=models.ManyToManyField(through='plants.PlantBiochemicalMaterialProd', to='plants.BiochemicalMaterialProd'),
         ),
         migrations.AddField(
             model_name='plant',
             name='canopy_density',
-            field=models.ManyToManyField(through='plants.PlantCanopyDensityByRegion', to=b'plants.CanopyDensity'),
+            field=models.ManyToManyField(through='plants.PlantCanopyDensityByRegion', to='plants.CanopyDensity'),
         ),
         migrations.AddField(
             model_name='plant',
             name='cultural_and_amenity_prod',
-            field=models.ManyToManyField(through='plants.PlantCulturalAndAmenityProd', to=b'plants.CulturalAndAmenityProd'),
+            field=models.ManyToManyField(through='plants.PlantCulturalAndAmenityProd', to='plants.CulturalAndAmenityProd'),
         ),
         migrations.AddField(
             model_name='plant',
@@ -824,17 +824,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='duration',
-            field=models.ManyToManyField(through='plants.PlantDurationByRegion', to=b'plants.Duration'),
+            field=models.ManyToManyField(through='plants.PlantDurationByRegion', to='plants.Duration'),
         ),
         migrations.AddField(
             model_name='plant',
             name='endemic_status',
-            field=models.ManyToManyField(through='plants.PlantEndemicStatusByRegion', to=b'plants.EndemicStatus'),
+            field=models.ManyToManyField(through='plants.PlantEndemicStatusByRegion', to='plants.EndemicStatus'),
         ),
         migrations.AddField(
             model_name='plant',
             name='erosion_control',
-            field=models.ManyToManyField(through='plants.PlantErosionControlByRegion', to=b'plants.ErosionControl'),
+            field=models.ManyToManyField(through='plants.PlantErosionControlByRegion', to='plants.ErosionControl'),
         ),
         migrations.AddField(
             model_name='plant',
@@ -859,27 +859,27 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='flower_color',
-            field=models.ManyToManyField(through='plants.PlantFlowerColor', to=b'plants.FlowerColor'),
+            field=models.ManyToManyField(through='plants.PlantFlowerColor', to='plants.FlowerColor'),
         ),
         migrations.AddField(
             model_name='plant',
             name='foliage_color',
-            field=models.ManyToManyField(through='plants.PlantFoliageColor', to=b'plants.FoliageColor'),
+            field=models.ManyToManyField(through='plants.PlantFoliageColor', to='plants.FoliageColor'),
         ),
         migrations.AddField(
             model_name='plant',
             name='food_prod',
-            field=models.ManyToManyField(through='plants.PlantFoodProd', to=b'plants.FoodProd'),
+            field=models.ManyToManyField(through='plants.PlantFoodProd', to='plants.FoodProd'),
         ),
         migrations.AddField(
             model_name='plant',
             name='fruit_color',
-            field=models.ManyToManyField(through='plants.PlantFruitColor', to=b'plants.FruitColor'),
+            field=models.ManyToManyField(through='plants.PlantFruitColor', to='plants.FruitColor'),
         ),
         migrations.AddField(
             model_name='plant',
             name='harvest_period',
-            field=models.ManyToManyField(through='plants.PlantHarvestPeriodByRegion', to=b'plants.HarvestPeriod'),
+            field=models.ManyToManyField(through='plants.PlantHarvestPeriodByRegion', to='plants.HarvestPeriod'),
         ),
         migrations.AddField(
             model_name='plant',
@@ -889,12 +889,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='layer',
-            field=models.ManyToManyField(through='plants.PlantLayer', to=b'plants.Layer'),
+            field=models.ManyToManyField(through='plants.PlantLayer', to='plants.Layer'),
         ),
         migrations.AddField(
             model_name='plant',
             name='leaf_retention',
-            field=models.ManyToManyField(through='plants.PlantLeafRetentionByRegion', to=b'plants.LeafRetention'),
+            field=models.ManyToManyField(through='plants.PlantLeafRetentionByRegion', to='plants.LeafRetention'),
         ),
         migrations.AddField(
             model_name='plant',
@@ -909,32 +909,32 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='medicinals_prod',
-            field=models.ManyToManyField(through='plants.PlantMedicinalsProd', to=b'plants.MedicinalsProd'),
+            field=models.ManyToManyField(through='plants.PlantMedicinalsProd', to='plants.MedicinalsProd'),
         ),
         migrations.AddField(
             model_name='plant',
             name='mineral_nutrients_prod',
-            field=models.ManyToManyField(through='plants.PlantMineralNutrientsProd', to=b'plants.MineralNutrientsProd'),
+            field=models.ManyToManyField(through='plants.PlantMineralNutrientsProd', to='plants.MineralNutrientsProd'),
         ),
         migrations.AddField(
             model_name='plant',
             name='plants_animal_attractor',
-            field=models.ManyToManyField(related_name='a_plants_animal_attractor_related', through='plants.PlantAnimalAttractorByRegion', to=b'plants.Animals'),
+            field=models.ManyToManyField(related_name='a_plants_animal_attractor_related', through='plants.PlantAnimalAttractorByRegion', to='plants.Animals'),
         ),
         migrations.AddField(
             model_name='plant',
             name='plants_animal_regulator',
-            field=models.ManyToManyField(through='plants.PlantAnimalRegulatorByRegion', to=b'plants.Animals'),
+            field=models.ManyToManyField(through='plants.PlantAnimalRegulatorByRegion', to='plants.Animals'),
         ),
         migrations.AddField(
             model_name='plant',
             name='plants_insect_attractor',
-            field=models.ManyToManyField(related_name='a_plants_insect_attractor_related', through='plants.PlantInsectAttractorByRegion', to=b'plants.Insects'),
+            field=models.ManyToManyField(related_name='a_plants_insect_attractor_related', through='plants.PlantInsectAttractorByRegion', to='plants.Insects'),
         ),
         migrations.AddField(
             model_name='plant',
             name='plants_insect_regulator',
-            field=models.ManyToManyField(through='plants.PlantInsectRegulatorByRegion', to=b'plants.Insects'),
+            field=models.ManyToManyField(through='plants.PlantInsectRegulatorByRegion', to='plants.Insects'),
         ),
         migrations.AddField(
             model_name='plant',
@@ -949,22 +949,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='shade_tol',
-            field=models.ManyToManyField(through='plants.PlantShadeTolByRegion', to=b'plants.ShadeTol'),
+            field=models.ManyToManyField(through='plants.PlantShadeTolByRegion', to='plants.ShadeTol'),
         ),
         migrations.AddField(
             model_name='plant',
             name='soil_drainage_tol',
-            field=models.ManyToManyField(through='plants.PlantSoilDrainageTolByRegion', to=b'plants.SoilDrainageTol'),
+            field=models.ManyToManyField(through='plants.PlantSoilDrainageTolByRegion', to='plants.SoilDrainageTol'),
         ),
         migrations.AddField(
             model_name='plant',
             name='spread',
-            field=models.ManyToManyField(to=b'plants.PlantSpreadAtMaturityByRegion'),
+            field=models.ManyToManyField(to='plants.PlantSpreadAtMaturityByRegion'),
         ),
         migrations.AddField(
             model_name='plant',
             name='sun_needs',
-            field=models.ManyToManyField(through='plants.PlantSunNeedsByRegion', to=b'plants.SunNeeds'),
+            field=models.ManyToManyField(through='plants.PlantSunNeedsByRegion', to='plants.SunNeeds'),
         ),
         migrations.AddField(
             model_name='plant',
@@ -979,7 +979,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='water_needs',
-            field=models.ManyToManyField(through='plants.PlantWaterNeedsByRegion', to=b'plants.WaterNeeds'),
+            field=models.ManyToManyField(through='plants.PlantWaterNeedsByRegion', to='plants.WaterNeeds'),
         ),
         migrations.AddField(
             model_name='plant',
@@ -1067,7 +1067,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='barrier',
-            field=models.ManyToManyField(through='plants.PlantBarrierByRegion', to=b'plants.Barrier'),
+            field=models.ManyToManyField(through='plants.PlantBarrierByRegion', to='plants.Barrier'),
         ),
         migrations.CreateModel(
             name='PlantRegion',
@@ -1091,7 +1091,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='region',
-            field=models.ManyToManyField(through='plants.PlantRegion', to=b'plants.Region'),
+            field=models.ManyToManyField(through='plants.PlantRegion', to='plants.Region'),
         ),
         migrations.AlterUniqueTogether(
             name='plantregion',
@@ -1177,32 +1177,32 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='plant',
             name='animal_food',
-            field=models.ManyToManyField(through='plants.PlantAnimalFood', to=b'plants.AnimalFood', verbose_name='animal food'),
+            field=models.ManyToManyField(through='plants.PlantAnimalFood', to='plants.AnimalFood', verbose_name='animal food'),
         ),
         migrations.AlterField(
             model_name='plant',
             name='biochemical_material_prod',
-            field=models.ManyToManyField(through='plants.PlantBiochemicalMaterialProd', to=b'plants.BiochemicalMaterialProd', verbose_name='biochemical materials'),
+            field=models.ManyToManyField(through='plants.PlantBiochemicalMaterialProd', to='plants.BiochemicalMaterialProd', verbose_name='biochemical materials'),
         ),
         migrations.AlterField(
             model_name='plant',
             name='cultural_and_amenity_prod',
-            field=models.ManyToManyField(through='plants.PlantCulturalAndAmenityProd', to=b'plants.CulturalAndAmenityProd', verbose_name='cultrual and amenity'),
+            field=models.ManyToManyField(through='plants.PlantCulturalAndAmenityProd', to='plants.CulturalAndAmenityProd', verbose_name='cultrual and amenity'),
         ),
         migrations.AlterField(
             model_name='plant',
             name='medicinals_prod',
-            field=models.ManyToManyField(through='plants.PlantMedicinalsProd', to=b'plants.MedicinalsProd', verbose_name='medicinals'),
+            field=models.ManyToManyField(through='plants.PlantMedicinalsProd', to='plants.MedicinalsProd', verbose_name='medicinals'),
         ),
         migrations.AlterField(
             model_name='plant',
             name='mineral_nutrients_prod',
-            field=models.ManyToManyField(through='plants.PlantMineralNutrientsProd', to=b'plants.MineralNutrientsProd', verbose_name='mineral nutrients'),
+            field=models.ManyToManyField(through='plants.PlantMineralNutrientsProd', to='plants.MineralNutrientsProd', verbose_name='mineral nutrients'),
         ),
         migrations.AddField(
             model_name='plant',
             name='raw_materials_prod',
-            field=models.ManyToManyField(through='plants.PlantRawMaterialsProd', to=b'plants.RawMaterialsProd', verbose_name='raw materials'),
+            field=models.ManyToManyField(through='plants.PlantRawMaterialsProd', to='plants.RawMaterialsProd', verbose_name='raw materials'),
         ),
         migrations.AddField(
             model_name='plantscientificname',
@@ -1227,7 +1227,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plant',
             name='scientific_name',
-            field=models.ManyToManyField(through='plants.PlantScientificName', to=b'plants.ScientificName'),
+            field=models.ManyToManyField(through='plants.PlantScientificName', to='plants.ScientificName'),
         ),
         migrations.AlterUniqueTogether(
             name='plantnutrientrequirementsbyregion',
