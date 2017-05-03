@@ -646,7 +646,7 @@ class Actions(models.Model):
 #     def get_water_needs(self):
 #         return ', '.join([str(a) for a in self.water_needs.all()])
 # 
-#     innoculant = models.CharField(max_length=160, blank=True, null=True)
+#     inoculant = models.CharField(max_length=160, blank=True, null=True)
 #     #SunNeeds
 #     sun_needs = models.ManyToManyField('SunNeeds', through='PlantSunNeedsByRegion')
 #     @property

@@ -18,7 +18,7 @@ var EditPlant = function(){
     	setJqueryMap();
         transactionId = transactionId == "None" ? 0 : transactionId;
         common_name = pCommonName;
-        scientific_name = pScientiicName;
+        scientific_name = pScientificName;
         resetUpdateAttributeModal();
 
 

@@ -42,7 +42,7 @@ EmptyPlant = {
 		{'name':'fruit_color', 'field_type':'many_to_many', 'value':None, 'label':'fruit color', 'class_name':'FruitColor'}
 	],
 	'Needs':[
-		{'name':'innoculant', 'field_type':'other', 'value':None, 'label':'innoculant', 'class_name':'temp'},
+		{'name':'inoculant', 'field_type':'other', 'value':None, 'label':'inoculant', 'class_name':'temp'},
 		{'name':'serotiny', 'field_type':'many_to_one', 'value':None, 'label':'serotiny', 'class_name':'Serotiny'},
 		{'name':'fertility_needs', 'field_type':'many_to_many', 'value':None, 'label':'nutrient requirements', 'class_name':'NutrientRequirements'},
 		{'name':'water_needs', 'field_type':'many_to_many', 'value':None, 'label':'water needs', 'class_name':'WaterNeeds'},
@@ -84,7 +84,7 @@ Characteristics = [
 	'foliage_color', 'fruit_color', 'degree_of_serotiny', 
 ]
 Needs = [
-	'fertility_needs', 'water_needs', 'innoculant', 'sun_needs', 'serotiny'
+	'fertility_needs', 'water_needs', 'inoculant', 'sun_needs', 'serotiny'
 ]
 Behaviors = [
 	'erosion_control', 'plants_insect_attractor', 'plants_insect_regulator', 'plants_animal_attractor', 'plants_animal_regulator', 'livestock_bloat', 'toxicity',
@@ -117,7 +117,7 @@ PropertyToClassName={
 	### Needs ###
 	'fertility_needs':'NutrientRequirements', #didnt work
 	'water_needs':'WaterNeeds', #was multiselect but should be only one
-	'innoculant':'fixthis', #didnt work
+	'inoculant':'fixthis', #didnt work
 	'sun_needs': 'SunNeeds', #didnt work 
 	'serotiny' :'Serotiny', #didnt work
 
@@ -332,22 +332,22 @@ def updateNames(request):
 					transaction.delete() #contains a genus name only
 				
 			
-			
-			genus_id = ScientificName.objects.filter(value='genus').first().id
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=genus, scientific_names=genus_id))
+			trans_type = 'UPDATE'
+			genus_id = ScientificName.objects.filter(value='genus').first()
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
 			
 			if species is not '':
-				species_id = ScientificName.objects.filter(value='species').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=species, scientific_names=species_id))
+				species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
 			if variety is not '':
-				variety_id = ScientificName.objects.filter(value='variety').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=variety, scientific_names=variety_id))	
+				variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
 			if subspecies is not '':
-				subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
+				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
 			if cultivar is not '':
-				cultivar_id = ScientificName.objects.filter(value='cultivar').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
+				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
 
 			
 		
@@ -569,55 +569,60 @@ def addPlant(request):
 				if len(sciname_bits) > 1:
 					species = sciname_bits[1]
 				else:
-					print("genus only, delete transaction")
-					transaction.delete() #contains a genus name only
+					print("genus only, do not create transaction")
+					genus = ''
+					#transaction.delete() #contains a genus name only
 
 				
 
-			transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
-			transaction.save()
-			actions = []
+			if genus is not '':
+				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
+				transaction.save()
+				actions = []
+				trans_type = 'INSERT'
 
-			genus_id = ScientificName.objects.filter(value='genus').first().id
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=genus, scientific_names=genus_id))
-			
-			if species is not '':
-				species_id = ScientificName.objects.filter(value='species').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=species, scientific_names=species_id))
-			if variety is not '':
-				variety_id = ScientificName.objects.filter(value='variety').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=variety, scientific_names=variety_id))	
-			if subspecies is not '':
-				subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
-			if cultivar is not '':
-				cultivar_id = ScientificName.objects.filter(value='cultivar').first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
+				genus_id = ScientificName.objects.filter(value='genus').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+				
+				if species is not '':
+					species_id = ScientificName.objects.filter(value='species').first()
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
+				if variety is not '':
+					variety_id = ScientificName.objects.filter(value='variety').first()
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
+				if subspecies is not '':
+					subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+				if cultivar is not '':
+					cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
 
+				
+				if commonName:
+					actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
 			
-			if commonName:
-				actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
-			
-			Actions.objects.bulk_create(actions)
+				Actions.objects.bulk_create(actions)
 
-			context = {
-				'newPlant':{
-					'scientific_name': scientificName,
-					'common_name': commonName
-				},
-				'userId': request.user.id,
-				'transactionId' : transaction.id,
-				'result': EmptyPlant,
-				'plantId': 0, 
-				'scientific_name' :scientificName,
-				'common_name' : commonName,
-				'family' : None,
-				'family_common_name' : None,
-				'endemic_status' : None,
-				'updatePlantNamesForm':UpdatePlantNamesForm(),
-				'updateAttributeForm' : UpdateAttributeForm(class_name='Plant'),
-			}
-			return render(request, 'frontend/editplant.html', context)
+				context = {
+					'newPlant':{
+						'scientific_name': scientificName,
+						'common_name': commonName
+					},
+					'userId': request.user.id,
+					'transactionId' : transaction.id,
+					'result': EmptyPlant,
+					'plantId': 0, 
+					'scientific_name' :scientificName,
+					'common_name' : commonName,
+					'family' : None,
+					'family_common_name' : None,
+					'endemic_status' : None,
+					'updatePlantNamesForm':UpdatePlantNamesForm(),
+					'updateAttributeForm' : UpdateAttributeForm(class_name='Plant'),
+				}
+				return render(request, 'frontend/editplant.html', context)
+			else:
+				return JsonResponse({'error':'you did not enter a valid scientific name'},status=400)
 
 
 def viewPlants(request):

@@ -346,9 +346,9 @@ class PlantNeed(Plant):
 		proxy = True
 
 class PlantNeedAdmin(admin.ModelAdmin):
-	# list_display = ('FertilityNeeds', 'WaterNeeds', 'innoculant', 'SunNeeds')
-	list_display = ('id', 'get_scientific_name', 'get_fertility_needs', 'get_water_needs', 'innoculant', 'get_sun_needs', 'serotiny')
-	fields = ['id', 'common_name','innoculant', 'serotiny']
+	# list_display = ('FertilityNeeds', 'WaterNeeds', 'inoculant', 'SunNeeds')
+	list_display = ('id', 'get_scientific_name', 'get_fertility_needs', 'get_water_needs', 'inoculant', 'get_sun_needs', 'serotiny')
+	fields = ['id', 'common_name','inoculant', 'serotiny']
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
 	exclude = ('height','spread')

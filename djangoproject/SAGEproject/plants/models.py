@@ -30,6 +30,8 @@ import json
 #     def __str__(self):
 #         return self.value
 
+# classes need to be added 5/2/2017: time to first harvest, heat tolerance
+
 
 class ActiveGrowthPeriod(models.Model):
     value = models.TextField(blank=True, null=True)
@@ -319,16 +321,16 @@ class LeafRetention(models.Model):
         return self.value
 
 
-class Lifespan(models.Model):
-    value = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'lifespan'
-
-    def __str__(self):
-        return self.value
+# class Lifespan(models.Model):
+#     value = models.TextField(blank=True, null=True)
+#     description = models.TextField(blank=True, null=True)
+# 
+#     class Meta:
+#         managed = True
+#         db_table = 'lifespan'
+# 
+#     def __str__(self):
+#         return self.value
 
 
 class LivestockBloat(models.Model):
@@ -967,6 +969,10 @@ class Plant(models.Model):
     def get_duration(self):
         return ', '.join([str(a) for a in self.duration.all()])
 
+    # 5/2/2017 made lifespan into a column on the plant because it doesn't need its own table, added timetofirstharvest and heattolerance
+    lifespan = models.DecimalField(db_column='lifespan', max_digits=6, decimal_places=2, blank=True, null=True)
+    timetofirstharvest = models.DecimalField(db_column='timetofirstharvest', max_digits=6, decimal_places=2, blank=True, null=True)
+
 
     region = models.ManyToManyField(Region, through=PlantRegion)
     @property
@@ -1057,6 +1063,7 @@ class Plant(models.Model):
 
     fire_tol = models.ForeignKey(FireTol, blank=True, null=True)
     minimum_temperature_tol = models.IntegerField(blank=True, null=True)
+    heat_tol = models.IntegerField(blank=True, null=True)
 
     #-------------------------needs--------------------------------
     #FertilityNeeds
@@ -1070,7 +1077,7 @@ class Plant(models.Model):
     def get_water_needs(self):
         return ', '.join([str(a) for a in self.water_needs.all()])
 
-    innoculant = models.CharField(max_length=160, blank=True, null=True)
+    inoculant = models.CharField(max_length=160, blank=True, null=True)
     #SunNeeds
     sun_needs = models.ManyToManyField(SunNeeds, through=PlantSunNeedsByRegion)
     @property
@@ -1153,9 +1160,9 @@ class Plant(models.Model):
     livestock_bloat = models.ForeignKey(LivestockBloat, blank=True, null=True)
     toxicity = models.ForeignKey('Toxicity', blank=True, null=True)
 
-    #------------------------not in schema----------------------
+
     toxin_removal = models.ForeignKey(ToxinRemoval, blank=True, null=True)
-    lifespan = models.ForeignKey(Lifespan, blank=True, null=True)
+    #lifespan = models.ForeignKey(Lifespan, blank=True, null=True)
     allelopathic = models.ForeignKey(Allelopathic, blank=True, null=True)
 
     class Meta:

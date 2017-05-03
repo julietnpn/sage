@@ -104,11 +104,11 @@
 							<text><i> Serotiny&nbsp;</i><b>{{ plant.serotiny.value }}</b></text> <!--This foreign key hasn't been checked-->
 						{% endif %}
 
-						{% if plant.innoculant %}
-							<text><i> Innoculant&nbsp;</i><b>{{ plant.innoculant }}</b></text>
+						{% if plant.inoculant %}
+							<text><i> Inoculant&nbsp;</i><b>{{ plant.inoculant }}</b></text>
 						{% endif %}
 						{% endspaceless %}
-						{% if not plant.water_needs.all or not plant.sun_needs.all or not plant.fertility_needs.all or not plant.serotiny or plant.innoculant %}
+						{% if not plant.water_needs.all or not plant.sun_needs.all or not plant.fertility_needs.all or not plant.serotiny or plant.inoculant %}
 						<text>None</text>
 						{% endif %}
 					</p>
