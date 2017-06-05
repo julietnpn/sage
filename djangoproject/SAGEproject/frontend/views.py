@@ -29,6 +29,7 @@ EmptyPlant = {
 		{'name':'pH_max', 'field_type':'other', 'value':None, 'label':'pH max', 'class_name':'temp'},
 		{'name':'degree_of_serotiny', 'field_type':'many_to_one', 'value':None, 'label':'degree of serotiny', 'class_name':'DegreeOfSerotiny'},
 		{'name':'duration', 'field_type':'many_to_many', 'value':None, 'label':'duration', 'class_name':'Duration'},
+		{'name':'life_span', 'field_type':'other', 'value':None, 'label':'life span in years', 'class_name':'temp'},
 		{'name':'height', 'field_type':'other', 'value':None, 'label':'height', 'class_name':'temp'},
 		{'name':'spread', 'field_type':'other', 'value':None, 'label':'spread', 'class_name':'temp'},
 		{'name':'root_depth', 'field_type':'other', 'value':None, 'label':'root depth', 'class_name':'temp'},
@@ -36,6 +37,7 @@ EmptyPlant = {
 		{'name':'canopy_density', 'field_type':'many_to_many', 'value':None, 'label':'canopy density', 'class_name':'CanopyDensity'},
 		{'name':'active_growth_period', 'field_type':'many_to_many', 'value':None, 'label':'active growth period', 'class_name':'ActiveGrowthPeriod'},
 		{'name':'harvest_period', 'field_type':'many_to_many', 'value':None, 'label':'harvest period', 'class_name':'HarvestPeriod'},
+		{'name':'time_to_first_harvest', 'field_type':'other', 'value':None, 'label':'time to first harvest in months', 'class_name':'temp'},
 		{'name':'leaf_retention', 'field_type':'many_to_many', 'value':None, 'label':'leaf retention', 'class_name':'LeafRetention'},
 		{'name':'flower_color', 'field_type':'many_to_many', 'value':None, 'label':'flower color', 'class_name':'FlowerColor'},
 		{'name':'foliage_color', 'field_type':'many_to_many', 'value':None, 'label':'foliage color', 'class_name':'FoliageColor'},
@@ -66,7 +68,8 @@ EmptyPlant = {
 		{'name':'fire_tol', 'field_type':'many_to_one', 'value':None, 'label':'fire tol', 'class_name':'FireTol'},
 		{'name':'minimum_temperature_tol', 'field_type':'other', 'value':None, 'label':'minimum temperature tol', 'class_name':'temp'},
 		{'name':'shade_tol', 'field_type':'many_to_many', 'value':None, 'label':'shade tol', 'class_name':'ShadeTol'},
-		{'name':'soil_drainage_tol', 'field_type':'many_to_many', 'value':None, 'label':'soil drainage tol', 'class_name':'SoilDrainageTol'},
+		{'name':'heat_tol', 'field_type':'other', 'value':None, 'label':'heat tol', 'class_name':'temp'},
+		
 	],
 	'Products':[
 		{'name':'allelochemicals', 'field_type':'other', 'value':None, 'label':'allelochemicals', 'class_name':'temp'},
@@ -80,7 +83,7 @@ EmptyPlant = {
 }
 
 Characteristics = [
-	'duration', 'pH_min', 'pH_max', 'layer', 'canopy_density', 'active_growth_period', 'harvest_period', 'leaf_retention', 'flower_color',
+	'duration', 'life_span', 'pH_min', 'pH_max', 'layer', 'canopy_density', 'active_growth_period', 'harvest_period', 'time_to_first_harvest', 'leaf_retention', 'flower_color',
 	'foliage_color', 'fruit_color', 'degree_of_serotiny', 
 ]
 Needs = [
@@ -90,7 +93,7 @@ Behaviors = [
 	'erosion_control', 'plants_insect_attractor', 'plants_insect_regulator', 'plants_animal_attractor', 'plants_animal_regulator', 'livestock_bloat', 'toxicity',
 ]
 Tolerances = [
-	'shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol'
+	'shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol', 'heat_tol'
 ]
 Products = [
 	'allelochemicals', 'food_prod', 'animal_food', 'raw_materials_prod', 'medicinals_prod', 'biochemical_material_prod', 'cultural_and_amenity_prod', 'mineral_nutrients_prod',
@@ -99,6 +102,7 @@ Products = [
 PropertyToClassName={
 	### Characteristics ###
 	'duration':'Duration', #was multiselect but should be only one
+	'life_span' : 'fixthis', 
 	'height':'PlantHeightAtMaturityByRegion', #didnt work
 	'spread':'PlantSpreadAtMaturityByRegion', #didnt work
 	'pH_min': 'fixthis', 
@@ -108,6 +112,7 @@ PropertyToClassName={
 	'canopy_density' : 'CanopyDensity', #was multiselect but should be only one
 	'active_growth_period' : 'ActiveGrowthPeriod', 
 	'harvest_period' : 'HarvestPeriod', 
+	'time_to_first_harvest' : 'fixthis',
 	'leaf_retention' : 'LeafRetention', #was multiselect but should be only one
 	'flower_color' : 'FlowerColor',
 	'foliage_color' : 'FoliageColor', 
@@ -140,6 +145,7 @@ PropertyToClassName={
 	'soil_drainage_tol': 'SoilDrainageTol', #didntw ork
 	'fire_tol' : 'FireTol', #gave back wrong default
 	'minimum_temperature_tol' : 'fixthis',
+	'heat_tol' : 'fixthis',
 
 	### Products ###
 	'allelochemicals': 'fixthis', 

@@ -25,7 +25,7 @@ import csv
  #          HumidityTol,
  #          Insects,
  #          Layer,
- #          Lifespan,
+ #          life_span,
  #          LeafRetention,
  #          MedicinalsProd,
  #          MineralNutrientsProd,
@@ -259,8 +259,8 @@ class PlantCharacteristic(Plant):
 
 class PlantCharacteristicAdmin(admin.ModelAdmin):
 	# list_display = ('duration', 'height', 'spread', 'pH', 'layer', 'CanopyDensity', 'ActiveGrowthPeriod', 'HarvestPeriod', 'LeafRetention', 'FlowerColor', 'FoliageColor', 'FruitColor')
-	list_display = ('id', 'get_scientific_name','get_duration', 'pH_min', 'pH_max', 'get_layer','get_canopy_density', 'get_active_growth_period', 'get_harvest_period', 'get_leaf_retention', 'get_flower_color', 'get_foliage_color', 'get_fruit_color', 'degree_of_serotiny')
-	fields = ['id', 'common_name', 'pH_min', 'pH_max', 'degree_of_serotiny']
+	list_display = ('id', 'get_scientific_name','get_duration', 'pH_min', 'pH_max', 'get_layer','get_canopy_density', 'get_active_growth_period', 'get_harvest_period', 'get_leaf_retention', 'get_flower_color', 'get_foliage_color', 'get_fruit_color', 'degree_of_serotiny', 'time_to_first_harvest', 'life_span')
+	fields = ['id', 'common_name', 'pH_min', 'pH_max', 'degree_of_serotiny', 'time_to_first_harvest', 'life_span',]
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
 	exclude = ('height','spread')
@@ -326,8 +326,8 @@ class PlantTolerance(Plant):
 
 class PlantToleranceAdmin(admin.ModelAdmin):
 	# list_display = ('shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol')
-	list_display = ('id', 'get_scientific_name', 'get_shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'get_soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol')
-	fields = ['id', 'common_name', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'fire_tol', 'minimum_temperature_tol']
+	list_display = ('id', 'get_scientific_name', 'get_shade_tol', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'get_soil_drainage_tol', 'fire_tol', 'minimum_temperature_tol', 'heat_tol')
+	fields = ['id', 'common_name', 'salt_tol', 'flood_tol', 'drought_tol', 'humidity_tol', 'wind_tol', 'fire_tol', 'minimum_temperature_tol', 'heat_tol']
 	readonly_fields= ('id', 'common_name',)
 	search_fields = ('id', 'common_name', )
 	exclude = ('height','spread')
@@ -476,7 +476,7 @@ admin.site.register(PlantNeed, PlantNeedAdmin)
 admin.site.register(PlantProduct, PlantProductAdmin)
 admin.site.register(PlantBehavior, PlantBehaviorAdmin)
 
-#admin.site.register([Actions, ActiveGrowthPeriod, Allelopathic, Animals, BiochemicalMaterialProd, CanopyDensity, CulturalAndAmenityProd, DroughtTol, EndemicStatus, ErosionControl, Family, FloodTol, FoodProd, FlowerColor, FoliageColor, FruitColor, HarvestPeriod, HumidityTol, Insects, Layer, Lifespan, LeafRetention, MedicinalsProd, MineralNutrientsProd, RawMaterialsProd, Region, SaltTol, ShadeTol, SunNeeds, ToxinRemoval, Toxicity, Transactions, Users, WaterNeeds, WindTol])
+#admin.site.register([Actions, ActiveGrowthPeriod, Allelopathic, Animals, BiochemicalMaterialProd, CanopyDensity, CulturalAndAmenityProd, DroughtTol, EndemicStatus, ErosionControl, Family, FloodTol, FoodProd, FlowerColor, FoliageColor, FruitColor, HarvestPeriod, HumidityTol, Insects, Layer, life_span, LeafRetention, MedicinalsProd, MineralNutrientsProd, RawMaterialsProd, Region, SaltTol, ShadeTol, SunNeeds, ToxinRemoval, Toxicity, Transactions, Users, WaterNeeds, WindTol])
 #admin.site.register([TheFamily, TheFamilyCommonName, FireTol])
 #admin.site.register([Actions, Region, Transactions, Users, DjangoAdminLog])
 

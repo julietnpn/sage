@@ -30,7 +30,7 @@ import json
 #     def __str__(self):
 #         return self.value
 
-# classes need to be added 5/2/2017: time to first harvest, heat tolerance
+
 
 
 class ActiveGrowthPeriod(models.Model):
@@ -321,13 +321,13 @@ class LeafRetention(models.Model):
         return self.value
 
 
-# class Lifespan(models.Model):
+# class life_span(models.Model):
 #     value = models.TextField(blank=True, null=True)
 #     description = models.TextField(blank=True, null=True)
 # 
 #     class Meta:
 #         managed = True
-#         db_table = 'lifespan'
+#         db_table = 'life_span'
 # 
 #     def __str__(self):
 #         return self.value
@@ -969,9 +969,9 @@ class Plant(models.Model):
     def get_duration(self):
         return ', '.join([str(a) for a in self.duration.all()])
 
-    # 5/2/2017 made lifespan into a column on the plant because it doesn't need its own table, added timetofirstharvest and heattolerance
-    lifespan = models.DecimalField(db_column='lifespan', max_digits=6, decimal_places=2, blank=True, null=True)
-    timetofirstharvest = models.DecimalField(db_column='timetofirstharvest', max_digits=6, decimal_places=2, blank=True, null=True)
+    # 5/2/2017 made life_span into a column on the plant because it doesn't need its own table, added time_to_first_harvest and heattolerance
+    life_span = models.DecimalField(db_column='life_span', max_digits=6, decimal_places=2, blank=True, null=True)
+    time_to_first_harvest = models.DecimalField(db_column='time_to_first_harvest', max_digits=6, decimal_places=2, blank=True, null=True)
 
 
     region = models.ManyToManyField(Region, through=PlantRegion)
@@ -999,8 +999,8 @@ class Plant(models.Model):
         return {'height': height, 'spread': spread, 'root_depth': root_depth}
         #return ', '.join([str(a) for a in self.region.all()])
 
-    pH_min = models.DecimalField(db_column='ph_min', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase. #
-    pH_max = models.DecimalField(db_column='ph_max', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='ph should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase.
+    pH_min = models.DecimalField(db_column='ph_min', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase. #
+    pH_max = models.DecimalField(db_column='ph_max', max_digits=4, decimal_places=2, blank=True, null=True, validators=[MaxValueValidator(14, message='pH should be in range 0-14')])#, validators=[MinValueValidator(0, message='ph should be in range 0-14')])  # Field name made lowercase.
     
     #Layer
     layer = models.ManyToManyField(Layer, through=PlantLayer)#, blank=True, null=True) #not sure testing
@@ -1042,6 +1042,7 @@ class Plant(models.Model):
     @property
     def get_fruit_color(self):
         return ', '.join([str(a) for a in self.fruit_color.all()])
+    #DegreeofSeritony
     degree_of_serotiny = models.ForeignKey(DegreeOfSerotiny, blank=True, null=True)
 
     #--------------------------Tolerance-----------------------------
@@ -1162,7 +1163,7 @@ class Plant(models.Model):
 
 
     toxin_removal = models.ForeignKey(ToxinRemoval, blank=True, null=True)
-    #lifespan = models.ForeignKey(Lifespan, blank=True, null=True)
+    #life_span = models.ForeignKey(life_span, blank=True, null=True)
     allelopathic = models.ForeignKey(Allelopathic, blank=True, null=True)
 
     class Meta:
