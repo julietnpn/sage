@@ -854,9 +854,11 @@ class UrlTags(models.Model):
 #     def __str__(self):
 #         return self.username
 
-
 class WaterNeeds(models.Model):
-    value = models.TextField(blank=True, null=True)
+    value = models.DecimalField(blank=True, null=True, max_digits=4, decimal_places=2, validators=[MinValueValidator(0, message='amount of water should be more than 0')]) #amount
+    units = models.ForeignKey('WaterUnits', blank=True, null=True)
+    frequency = models.ForeignKey('WaterFrequency', blank=True, null=True)
+    season = models.ForeignKey('WaterSeason', blank=True, null=True)
 
     class Meta:
         managed = True
@@ -865,6 +867,35 @@ class WaterNeeds(models.Model):
     def __str__(self):
         return self.value
 
+class WaterUnits(models.Model):
+    value = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'water_units'
+
+    def __str__(self):
+        return self.value
+
+class WaterFrequency(models.Model):
+    value = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'water_frequency'
+
+    def __str__(self):
+        return self.value
+
+class WaterSeason(models.Model):
+    value = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'water_season'
+
+    def __str__(self):
+        return self.value
 
 class WindTol(models.Model):
     value = models.TextField(blank=True, null=True)
@@ -916,7 +947,7 @@ class Plant(models.Model):
             return None
             
             
-        name = None
+        name = ''
         genus = ''
         species = ''
         variety = ''
@@ -938,7 +969,7 @@ class Plant(models.Model):
         
         if genus is not '':
             name = genus
-        if species is not '':
+        if species is not '' or None:
             name = name + " " + species
         if subspecies is not '':
             name = name + " " + subspecies
@@ -1067,7 +1098,7 @@ class Plant(models.Model):
     heat_tol = models.IntegerField(blank=True, null=True)
 
     #-------------------------needs--------------------------------
-    #FertilityNeeds
+    #nutrientRequirements
     nutrient_requirements = models.ManyToManyField(NutrientRequirements, through=PlantNutrientRequirementsByRegion, verbose_name='nutrient requirements')
     @property
     def get_nutrient_requirements(self):

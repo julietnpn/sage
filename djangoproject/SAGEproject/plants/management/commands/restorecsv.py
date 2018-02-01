@@ -133,6 +133,7 @@ def get_attributes(cls):
 #updated by Juliet on 7/27/2016
 def csv_import1(path1, user):
 	trans_type = 'INSERT'
+	print("CSV Import 1")
 	with open(path1) as f:
 		reader = csv.DictReader(f)    
 		for i,plant in enumerate(reader):
@@ -180,7 +181,7 @@ def csv_import1(path1, user):
 			if ' x ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				genus = sciname_bits[0] + " x " + sciname_bits[2]
-				species = None
+				species = ''
 			if "'" in scientific_name:
 				sciname_bits= scientific_name.split()
 				for i in sciname_bits: #make sure it is not a genus with a cultivar
@@ -188,7 +189,7 @@ def csv_import1(path1, user):
 						cultivar = i
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
-							species = None
+							species = ''
 			if 'var. ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				found = False
@@ -236,6 +237,7 @@ def csv_import1(path1, user):
 #written by Moin
 def csv_import3(path, user):
 	trans_type = 'INSERT'
+	print("CSV Import 3")
 	with open(path) as f:
 		reader = csv.DictReader(f)
 		for i,plant in enumerate(reader):
@@ -287,7 +289,7 @@ def csv_import3(path, user):
 			if ' x ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				genus = sciname_bits[0] + " x " + sciname_bits[2]
-				species = None
+				species = ''
 			if "'" in scientific_name:
 				sciname_bits= scientific_name.split()
 				for i in sciname_bits: #make sure it is not a genus with a cultivar
@@ -295,7 +297,7 @@ def csv_import3(path, user):
 						cultivar = i
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
-							species = None
+							species = ''
 			if 'var. ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				found = False
@@ -512,6 +514,7 @@ def csv_import3(path, user):
 #----------------------------usda.orange.for_import
 def csv_import2(path, user):############################serotiny, degree_of_serotiny, allelochemicals######
 	trans_type = 'INSERT'
+	print("CSV Import 2")
 	with open(path) as f:
 		reader = csv.DictReader(f)#csv.reader(f)    
 		for i,plant in enumerate(reader):
@@ -563,7 +566,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 			if ' x ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				genus = sciname_bits[0] + " x " + sciname_bits[2]
-				species = None
+				species = ''
 			if "'" in scientific_name:
 				sciname_bits= scientific_name.split()
 				for i in sciname_bits: #make sure it is not a genus with a cultivar
@@ -571,7 +574,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 						cultivar = i
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
-							species = None
+							species = ''
 			if 'var. ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				found = False
@@ -615,13 +618,14 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 			if plant['Common Name'].strip():
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
 
-			# 3. add field for Family Common Name
-			# what if the name is not in the famile tables... handle it!
-			if plant['Family Common Name'].strip():
-				if TheFamilyCommonName.objects.filter(value=plant['Family Common Name'].strip()):
-					family_common_name_id = TheFamilyCommonName.objects.filter(value=plant['Family Common Name'].strip()).first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='family_common_name_id', value=family_common_name_id))
-				
+# No family common name in this file
+# 			3. add field for Family Common Name
+# 			what if the name is not in the famile tables... handle it!
+# 			if plant['Family Common Name'].strip():
+# 				if TheFamilyCommonName.objects.filter(value=plant['Family Common Name'].strip()):
+# 					family_common_name_id = TheFamilyCommonName.objects.filter(value=plant['Family Common Name'].strip()).first().id
+# 					actions.append(Actions(transactions=transaction, action_type=trans_type, property='family_common_name_id', value=family_common_name_id))
+# 				
 			# 4. add field for Family
 			# what if the name is not in the famile tables... handle it!
 			if plant['Family'].strip():
@@ -786,9 +790,9 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 			if plant['Known Allelopath'].strip():
 				allelopathic_id = Allelopathic.objects.filter(value=plant['Known Allelopath'].strip().lower()).first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='allelopathic_id', value=allelopathic_id))
-			if plant['Lifespan'].strip():
-				lifespan_id = Lifespan.objects.filter(value=plant['Lifespan'].strip().lower()).first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='lifespan_id', value=lifespan_id))
+			# if plant['Lifespan'].strip():
+# 				#lifespan_id = Lifespan.objects.filter(value=plant['Lifespan'].strip().lower()).first().id
+# 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='life_span', value=float(plant['Lifespan'].strip())))
 
 			# 22. if Nitrogen Fixation is low, medium, or high then it maps to mineral nutrients = nitrogen
 			if plant['Nitrogen Fixation'].strip() in ['Low', 'Medium', 'High']:
@@ -822,12 +826,12 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 			# 27. IGNORE
 
 			# 28. moisture use maps to water requirements
-			if plant['Moisture Use'].strip():
-				moisture_use_map = {'Low': 'low',
-						'Medium': 'moderate',
-						'High': 'high'}
-				water_needs_id = WaterNeeds.objects.filter(value=moisture_use_map[plant['Moisture Use'].strip()]).first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='water_needs', value=water_needs_id))
+			# if plant['Moisture Use'].strip():
+# 				moisture_use_map = {'Low': 'low',
+# 						'Medium': 'moderate',
+# 						'High': 'high'}
+# 				water_needs_id = WaterNeeds.objects.filter(value=moisture_use_map[plant['Moisture Use'].strip()]).first().id
+# 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='water_needs', value=water_needs_id))
 
 			# 29. ph Maximum and ph Minimum map directly to our db (need to create max and min values though).
 			if plant['pH (Minimum)'].strip():

@@ -119,7 +119,8 @@ var EditPlant = function(){
             var attribute_className = $(this).attr('data-className');
             var attribute_displayName = $(this).text();
             var attribute_fieldType = $(this).attr("data-fieldType");
-            var defaultVal = $(this).next().text().split(", ");
+            //var defaultVal = $(this).next().text().split(", ");
+            var defaultVal = $(this).next();
 
             $("#hidden-dataType").val(attribute_fieldType); //other, many_to_many, many_to_one
             $("#hidden-transactionId").val(transactionId);
@@ -132,6 +133,7 @@ var EditPlant = function(){
             $("#hidden-plantId").val(getPlantId());
 
             if(attribute_fieldType == 'other'){
+                window.alert("attribute fieldType is other");
                 $("#id_text").show();
                 // if($("#id_select").data('select2'))
                 //     $("#id_select").select2('destroy');
@@ -142,8 +144,26 @@ var EditPlant = function(){
                 $("#id_text").attr("placeholder", $(this).next().text());                
             }
             else if(attribute_fieldType == 'many_to_many'){
+                window.alert("attribute fieldType is may_to_many");
                 
-                load_values(true, attribute_className, defaultVal);
+                if(attribute_className == 'WaterNeeds'){
+                    
+                    window.alert("attribute fieldType is water");
+                    $("#id_text").show();
+                    window.alert("text done");
+                    window.alert(defaultVal);
+                    $("#id_text").attr("placeholder", $(this).next().text());
+                    load_values(false, 'waterunits', 'other');
+                    $("#id_select").show();
+                    load_values(false, 'waterfrequency', 'other');
+                    $("#id_select").show();
+                    load_values(true, 'waterseason', 'other');
+                    $("#id_multi").show();
+                }
+                else{
+                    window.alert("attribute fieldType is not water");
+                    load_values(true, attribute_className, defaultVal);
+                }
 
                 // $("#id_text").hide();
                 // $("#id_select").hide();
@@ -152,16 +172,14 @@ var EditPlant = function(){
                 $("#id_multi").show(); 
 
             }
-            else {
+            else if (attribute_fieldType == 'many_to_one'){
+                window.alert("attribute fieldType is may_to_one");
                 load_values(false, attribute_className, defaultVal);
                 // $("#id_text").hide();
                 $("#id_select").show();
                 // if($("#id_multi").data('select2'))
                 //     $("#id_multi").select2('destroy');
                 // $("#id_multi").hide(); 
-
-                
-
             }
             
             $("#updateAttributeMdl").modal();
@@ -565,7 +583,7 @@ var EditPlant = function(){
             },
             error: function(xhr, status, error) 
             {
-                alert("Error. Could not load values for " + className);
+                alert("Error. Could not load values for " + className + "with default values " + defaultValArray);
             }
         });
     }
