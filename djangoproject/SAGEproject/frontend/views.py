@@ -554,6 +554,7 @@ def editPlant(request, plantId=None):
 
 @login_required
 def addPlant(request):
+	print("add plant")
 	if request.method == 'POST':
 		addPlantForm = AddPlantForm(request.POST)
 
@@ -764,38 +765,14 @@ def search(request, searchString):
 	insect_attract_results = Plant.objects.filter(plants_insect_attractor__in=Insects.objects.filter(value__icontains=searchString))
 	insect_reg_results = Plant.objects.filter(plants_insect_regulator__in=Insects.objects.filter(value__icontains=searchString))
 	
-	plant_scientific_name_results = PlantScientificName.objects.all()
-	# for p in plant_scientific_name_results:
-# 		print(p.value)
 	
-	
-# 	
-	
-# 	plant_scientific_name_results = Plant.objects.filter(id__in=PlantScientificName.objects.filter(value__icontains=searchString))
-	
-
-	
-	
-	
-	
-	# scientific_name_results = Plant.objects.filter(plants__in=PlantScientificName.objects.filter(value__icontains=searchString))
-# 	for p in scientific_name_results:
-# 		print(results)
-# 		print(p.get_scientific_name)
-	
-	# for p in plant_scientific_name_results:
-#		scientific_name_results.append(Plant.objects.filter(id = p.plants))
-	#pplants = Plant.objects.all()
-	# for p in pplants:
-# 		print(p.get_scientific_name)
-	#scientific_name_results = Plant.objects.filter(plants_scientific_name__icontains=searchString)
-#	print(scientific_name_results)
 	common_name_results = Plant.objects.filter(common_name__icontains=searchString)
 
 # 	name_matches = Plant.objects.filter(
 # 		Q(scientific_name__contains=searchString) | 
 # 		Q(common_name__contains=searchString))
 # 	if scientific_name_results is not None:
+
 	results_list = list(chain(layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results, common_name_results)) #scientific_name_results,
 
 	searchStringSegments = searchString.split(" ")

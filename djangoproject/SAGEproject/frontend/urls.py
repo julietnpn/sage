@@ -4,8 +4,8 @@ from . import views
 #from frontend.views import PlantList
 
 urlpatterns= [
-	url(r'^$', views.viewPlants, name='index'),
-	url(r'^addPlant/$', views.addPlant, name='index'),
+    url(r'^$', views.viewPlants, name='index'),
+    url(r'^addPlant/$', views.addPlant, name='index'),
     url(r'^edit/([0-9]+)/$', views.editPlant, name='editPlant'),
     url(r'^search/(?P<searchString>[\w ]+)/$', views.search, name='editPlant'),
     url(r'^filter/$', views.filter),

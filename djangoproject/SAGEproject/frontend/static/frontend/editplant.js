@@ -133,7 +133,7 @@ var EditPlant = function(){
             $("#hidden-plantId").val(getPlantId());
 
             if(attribute_fieldType == 'other'){
-                window.alert("attribute fieldType is other");
+                //window.alert("attribute fieldType is other");
                 $("#id_text").show();
                 // if($("#id_select").data('select2'))
                 //     $("#id_select").select2('destroy');
@@ -144,14 +144,14 @@ var EditPlant = function(){
                 $("#id_text").attr("placeholder", $(this).next().text());                
             }
             else if(attribute_fieldType == 'many_to_many'){
-                window.alert("attribute fieldType is may_to_many");
+                //window.alert("attribute fieldType is may_to_many");
                 
                 if(attribute_className == 'WaterNeeds'){
                     
-                    window.alert("attribute fieldType is water");
+                    //window.alert("attribute fieldType is water");
                     $("#id_text").show();
-                    window.alert("text done");
-                    window.alert(defaultVal);
+                   // window.alert("text done");
+                    //window.alert(defaultVal);
                     $("#id_text").attr("placeholder", $(this).next().text());
                     load_values(false, 'waterunits', 'other');
                     $("#id_select").show();
@@ -161,7 +161,7 @@ var EditPlant = function(){
                     $("#id_multi").show();
                 }
                 else{
-                    window.alert("attribute fieldType is not water");
+                    //window.alert("attribute fieldType is not water");
                     load_values(true, attribute_className, defaultVal);
                 }
 
@@ -173,7 +173,7 @@ var EditPlant = function(){
 
             }
             else if (attribute_fieldType == 'many_to_one'){
-                window.alert("attribute fieldType is may_to_one");
+                //window.alert("attribute fieldType is may_to_one");
                 load_values(false, attribute_className, defaultVal);
                 // $("#id_text").hide();
                 $("#id_select").show();

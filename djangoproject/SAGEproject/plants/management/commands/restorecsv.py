@@ -29,9 +29,10 @@ class Command(BaseCommand):
 		user2 = AuthUser.objects.get(username='USDA')
 		
 		
+		#only import one file at a time so you don't have duplicates
 		csv_import1(path1, user1)
-		csv_import3(path3, user3)
-		csv_import2(path2, user2)
+		#csv_import3(path3, user3)
+		#csv_import2(path2, user2)
 		process_transactions()
 		process_updates()
 		
@@ -251,16 +252,7 @@ def csv_import3(path, user):
 			#if len(plant['Scientific Name'].split()) < 2:
 			#	continue
 
-			# try:
-# 				plant_id = Plant.objects.filter(genus=plant['Scientific Name'].split()[0]).first().id
-# 				transaction.plants_id=plant_id
-# 				trans_type = 'UPDATE'
-# 				transaction.transaction_type = trans_type
-# 				transaction.save()
-# 			except AttributeError:
-# 				pass
 			
-			#print(trans_type)
 			print(i,plant['Scientific Name'], len(plant['Scientific Name']))
 
 			scientific_name = ''
@@ -319,6 +311,27 @@ def csv_import3(path, user):
 					continue
 			
 			
+			#check if this scientific name is already in the database
+			#plant_genus_results=PlantScientificName.objects.filter(value=genus)
+			for g in plant_genus_results:
+			    p_sciname = PlantScientificName.objects.filter(plant_id=g.plant_id)
+			    indatabase = False
+			    for n in p_sciname:
+			        if n.scientific_name_id == ScientificName.objects.filter(value='species').id:
+			            if n.value == species:
+			                indatabase=True
+			            else
+			                indatabase=False
+			        if n.scientific_name_id == ScientificName.objects.filter(value='variety').id:
+			            
+			    
+			
+			#plant_species_results=PlantScientificName.objects.filter(value=species)
+			#plant_variety_results=PlantScientificName.objects.filter(value=variety)
+			#plant_subspecies_results=PlantScientificName.objects.filter(value=subspecies)
+			#plant_cultivar_results=PlantScientificName.objects.filter(value=cultivar)
+			
+			
 			genus_id = ScientificName.objects.filter(value='genus').first()
 			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
 			
@@ -334,6 +347,8 @@ def csv_import3(path, user):
 			if cultivar is not '':
 				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
+
+
 
 			if plant['Common Name'].strip():
 				actions.append(Actions(transactions=transaction , action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
