@@ -82,6 +82,12 @@ var AddPlant = function(){
             displayElements(jqueryMap.$clearAddPlant);
         }
         if(isValidated == 2){
+            // if (userId < 1){
+//                 userNotAuthenticated();
+//                 e.stopPropagation();
+//                 return;
+//             }
+
             displayElements(jqueryMap.$addThis.children());
         }
 

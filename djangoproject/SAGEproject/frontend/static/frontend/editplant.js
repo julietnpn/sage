@@ -97,8 +97,9 @@ var EditPlant = function(){
         });
 
         // jQuery Event: A plant attribute is clicked (whether defined already or not)
-        // Reslting Action Summary: Display modal for filling in attribute value
+        // Resulting Action Summary: Display modal for filling in attribute value
         $(document).on('click', '.edit-attribute', function(){
+            //alert("edit-attribute clicked!");
             if (userId < 1){
                 userNotAuthenticated();
                 return;
@@ -120,7 +121,9 @@ var EditPlant = function(){
             var attribute_displayName = $(this).text();
             var attribute_fieldType = $(this).attr("data-fieldType");
             //var defaultVal = $(this).next().text().split(", ");
-            var defaultVal = $(this).next();
+            //alert("default val " + $(this).next().next().text());
+            //alert("default val " + $(this).next().text());
+            var defaultVal = $(this).text();
 
             $("#hidden-dataType").val(attribute_fieldType); //other, many_to_many, many_to_one
             $("#hidden-transactionId").val(transactionId);
@@ -144,31 +147,28 @@ var EditPlant = function(){
                 $("#id_text").attr("placeholder", $(this).next().text());                
             }
             else if(attribute_fieldType == 'many_to_many'){
-                //window.alert("attribute fieldType is may_to_many");
                 
                 if(attribute_className == 'WaterNeeds'){
                     
-                    //window.alert("attribute fieldType is water");
                     $("#id_text").show();
-                   // window.alert("text done");
-                    //window.alert(defaultVal);
                     $("#id_text").attr("placeholder", $(this).next().text());
                     load_values(false, 'waterunits', 'other');
                     $("#id_select").show();
-                    load_values(false, 'waterfrequency', 'other');
+                    load_values(false, 'waterfrequency', 'other'); //shouldn't this be true?
                     $("#id_select").show();
                     load_values(true, 'waterseason', 'other');
                     $("#id_multi").show();
                 }
                 else{
-                    //window.alert("attribute fieldType is not water");
+                    //window.alert("attribute_className="+attribute_className);
                     load_values(true, attribute_className, defaultVal);
+                    //window.alert("after load_values");
                 }
 
                 // $("#id_text").hide();
-                // $("#id_select").hide();
-                // if($("#id_select").data('select2'))
-                //     $("#id_select").select2('destroy');
+//                 $("#id_select").hide();
+//                 if($("#id_select").data('select2'))
+//                     $("#id_select").select2('destroy');
                 $("#id_multi").show(); 
 
             }
@@ -461,7 +461,7 @@ var EditPlant = function(){
 
     function setJqueryMap() {
         jqueryMap = {
-        	$attribute : $(".edit-attribute"),
+            $attribute : $(".edit-attribute"),
             $addNewImg : $('#add-new-img'),
             $addImgModal : $('#addImg'),
             $imgMdlContent : $("#img-mdl-content"),
@@ -552,40 +552,50 @@ var EditPlant = function(){
 
 
     function load_values(isMultiSelect, className, defaultValArray){
-        var $select
+        var $select;
+        //window.alert("in load values. className=" +className+" defaultValArray=" + defaultValArray);
         if(isMultiSelect){
             $("#id_multi").addClass("js-example-basic-multiple");
-            $select = $("#id_multi")
+            $select = $("#id_multi");
+            //alert("This is single select");
         }
         else{
             $("#id_select").addClass("js-example-basic-single");
-            $select = $("#id_select")
+            $select = $("#id_select");
+            //alert("This is single select");
         }
+        
         $select.empty();
         $.ajax({
-            type: 'GET',
+            type: "GET",
             url: "/reload_controls/" + className,
             data:{'defaultVals[]': defaultValArray},
             dataType: 'json',
             contentType: 'json',
             success: function(result)
             {
+                //alert("In success function");
                 $("#hidden-oldVals-m").val(result.defaultIds);
                 // $select.empty();
                 for(var i = 0; i < result.dropdownvals.length; i++){
-                    var dictionary = result.dropdownvals[i]
-                    if(result.defaultIds.indexOf(dictionary.id) > -1)
-                        $select.append("<option selected value='" + dictionary.id + "'>"+dictionary.text+"</option>")
-                    else
-                        $select.append("<option value='" + dictionary.id + "'>"+dictionary.text+"</option>")
+                    var dictionary = result.dropdownvals[i];
+                    if(result.defaultIds.indexOf(dictionary.id) > -1){
+                        //alert("result.defaultIDs.indexOf(dictionary.id) > -1");
+                        $select.append("<option selected value='" + dictionary.id + "'>"+dictionary.text+"</option>");
+                    }
+                    else{
+                        //alert("Else to result.defaultIDs.indexOf(dictionary.id) > -1");
+                        $select.append("<option value='" + dictionary.id + "'>"+dictionary.text+"</option>");
+                    }
                 }
                 $select.select2();
             },
             error: function(xhr, status, error) 
             {
-                alert("Error. Could not load values for " + className + "with default values " + defaultValArray);
+                alert("Error. Could not load values for " + className + "with default values " + defaultValArray.toString());
             }
         });
+        //alert("done with load values");
     }
 
     function displayMessage(){

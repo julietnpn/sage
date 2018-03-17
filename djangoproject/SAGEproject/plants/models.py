@@ -933,6 +933,11 @@ class Plant(models.Model):
     family = models.ForeignKey('TheFamily', blank=True, null=True)
     family_common_name = models.ForeignKey('TheFamilyCommonName', blank=True, null=True)
     
+#     food_prod = models.ManyToManyField(FoodProd, through=PlantFoodProd)
+#     @property
+#     def get_food_prod(self):
+#         return ', '.join([str(a) for a in self.food_prod.all()])
+    
     scientific_name = models.ManyToManyField(ScientificName, through=PlantScientificName)
     @property
     def get_scientific_name(self):
@@ -943,7 +948,7 @@ class Plant(models.Model):
         try:
             ps = PlantScientificName.objects.filter(plants=self.id)
         except PlantScientificName.DoesNotExist:
-            print('Plant Region Does not Exist for plant' + str(self.id))
+            print('Plant Scientific Name Does not Exist for plant' + str(self.id))
             return None
             
             

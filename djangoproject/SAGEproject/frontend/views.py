@@ -176,7 +176,7 @@ def getBehaviors(request):
 def reload_attribute_vals_view(request, className=None):
 	response_data = {'dropdownvals':[], 'defaultIds':[]}
 	defaults = request.GET.getlist('defaultVals[]')
-	print(defaults)
+	print("in reload attribute")
 	if "insect" in className.lower() or "animal" in className.lower():
 		if "insect" in className.lower():
 			choices = Insects.objects.all()
@@ -188,37 +188,37 @@ def reload_attribute_vals_view(request, className=None):
 			p = dict(id=choices[i].id, text = choices[i].value)
 			response_data['dropdownvals'].append(p)
 			return HttpResponse(json.dumps(response_data), content_type="application/json")
-# 	if "waterunits" in className.lower():
-# 		units_choices= WaterUnits.objects.all()
-# 		print units_choices
-# 		for i in range(0, len(units_choices)):
-# 			if units_choices[i].value in defaults:
-# 				response_data['defaultIds'].append(units_choices[i].id)
-# 			p = dict(id=units_choices[i].id, text = units_choices[i].value)
-# 			print "has units"
-# 			response_data['dropdownvals'].append(p)
-# 			return HttpResponse(json.dumps(response_data), content_type="application/json")
-# 	if "waterfrequency" in className.lower():
-# 		frequency_choices= WaterFrequency.objects.all()
-# 		print frequency_choices
-# 		for i in range(0, len(frequency_choices)):
-# 			if frequency_choices[i].value in defaults:
-# 				response_data['defaultIds'].append(frequency_choices[i].id)
-# 			p = dict(id=frequency_choices[i].id, text = frequency_choices[i].value)
-# 			print "has frequency"
-# 			response_data['dropdownvals'].append(p)
-# 			return HttpResponse(json.dumps(response_data), content_type="application/json")
-# 			
-# 	if "waterseason" in className.lower():
-# 		season_choices= WaterSeason.objects.all()
-# 		print season_choices
-# 		for i in range(0, len(season_choices)):
-# 			if season_choices[i].value in defaults:
-# 				response_data['defaultIds'].append(season_choices[i].id)
-# 			p = dict(id=season_choices[i].id, text = season_choices[i].value)
-# 			print "has season"
-# 			response_data['dropdownvals'].append(p)
-# 		return HttpResponse(json.dumps(response_data), content_type="application/json")
+	if "waterunits" in className.lower():
+		units_choices= WaterUnits.objects.all()
+		print units_choices
+		for i in range(0, len(units_choices)):
+			if units_choices[i].value in defaults:
+				response_data['defaultIds'].append(units_choices[i].id)
+			p = dict(id=units_choices[i].id, text = units_choices[i].value)
+			print "has units"
+			response_data['dropdownvals'].append(p)
+			return HttpResponse(json.dumps(response_data), content_type="application/json")
+	if "waterfrequency" in className.lower():
+		frequency_choices= WaterFrequency.objects.all()
+		print frequency_choices
+		for i in range(0, len(frequency_choices)):
+			if frequency_choices[i].value in defaults:
+				response_data['defaultIds'].append(frequency_choices[i].id)
+			p = dict(id=frequency_choices[i].id, text = frequency_choices[i].value)
+			print "has frequency"
+			response_data['dropdownvals'].append(p)
+			return HttpResponse(json.dumps(response_data), content_type="application/json")
+			
+	if "waterseason" in className.lower():
+		season_choices= WaterSeason.objects.all()
+		print season_choices
+		for i in range(0, len(season_choices)):
+			if season_choices[i].value in defaults:
+				response_data['defaultIds'].append(season_choices[i].id)
+			p = dict(id=season_choices[i].id, text = season_choices[i].value)
+			print "has season"
+			response_data['dropdownvals'].append(p)
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 	# if "insect" in className.lower():
@@ -237,17 +237,17 @@ def reload_attribute_vals_view(request, className=None):
 	# 		p = dict(id=animals[i].id, text = animals[i].value)
 	# 		response_data['dropdownvals'].append(p)
 	# 	return HttpResponse(json.dumps(response_data), content_type="application/json")
-	else:
-		print "not animal, or insect"
-		cls = globals()[className]
-		cls_model = apps.get_model('plants', className)
-		values = cls_model.objects.values_list("value", "id")
-		for i in range(0, len(list(values))):
-			if list(values)[i][0] in defaults: ## THE WAY THIS IS EVALUATED NEEDS TO BE CHANGED MANY TO MANY DEFAULTS NOT WORKING
-				response_data['defaultIds'].append(list(values)[i][1])
-			p = dict(id=list(values)[i][1], text=list(values)[i][0])
-			response_data['dropdownvals'].append(p)
-		return HttpResponse(json.dumps(response_data), content_type="application/json")
+	
+	print "not animal, or insect"
+	cls = globals()[className]
+	cls_model = apps.get_model('plants', className)
+	values = cls_model.objects.values_list("value", "id")
+	for i in range(0, len(list(values))):
+		if list(values)[i][0] in defaults: ## THE WAY THIS IS EVALUATED NEEDS TO BE CHANGED MANY TO MANY DEFAULTS NOT WORKING
+			response_data['defaultIds'].append(list(values)[i][1])
+		p = dict(id=list(values)[i][1], text=list(values)[i][0])
+		response_data['dropdownvals'].append(p)
+	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def addImg(request):
 	if request.method == 'POST':
@@ -554,7 +554,6 @@ def editPlant(request, plantId=None):
 
 @login_required
 def addPlant(request):
-	print("add plant")
 	if request.method == 'POST':
 		addPlantForm = AddPlantForm(request.POST)
 
