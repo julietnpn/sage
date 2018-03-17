@@ -190,33 +190,33 @@ def reload_attribute_vals_view(request, className=None):
 			return HttpResponse(json.dumps(response_data), content_type="application/json")
 	if "waterunits" in className.lower():
 		units_choices= WaterUnits.objects.all()
-		print units_choices
+		print(units_choices)
 		for i in range(0, len(units_choices)):
 			if units_choices[i].value in defaults:
 				response_data['defaultIds'].append(units_choices[i].id)
 			p = dict(id=units_choices[i].id, text = units_choices[i].value)
-			print "has units"
+			print("has units")
 			response_data['dropdownvals'].append(p)
 			return HttpResponse(json.dumps(response_data), content_type="application/json")
 	if "waterfrequency" in className.lower():
 		frequency_choices= WaterFrequency.objects.all()
-		print frequency_choices
+		print(frequency_choices)
 		for i in range(0, len(frequency_choices)):
 			if frequency_choices[i].value in defaults:
 				response_data['defaultIds'].append(frequency_choices[i].id)
 			p = dict(id=frequency_choices[i].id, text = frequency_choices[i].value)
-			print "has frequency"
+			print("has frequency")
 			response_data['dropdownvals'].append(p)
 			return HttpResponse(json.dumps(response_data), content_type="application/json")
 			
 	if "waterseason" in className.lower():
 		season_choices= WaterSeason.objects.all()
-		print season_choices
+		print(season_choices)
 		for i in range(0, len(season_choices)):
 			if season_choices[i].value in defaults:
 				response_data['defaultIds'].append(season_choices[i].id)
 			p = dict(id=season_choices[i].id, text = season_choices[i].value)
-			print "has season"
+			print("has season")
 			response_data['dropdownvals'].append(p)
 		return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -238,7 +238,7 @@ def reload_attribute_vals_view(request, className=None):
 	# 		response_data['dropdownvals'].append(p)
 	# 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 	
-	print "not animal, or insect"
+	print("not animal, or insect")
 	cls = globals()[className]
 	cls_model = apps.get_model('plants', className)
 	values = cls_model.objects.values_list("value", "id")
