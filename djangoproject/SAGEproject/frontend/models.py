@@ -23,10 +23,10 @@ from plants.models import Region
 
 
 class Actions(models.Model):
-    transactions = models.ForeignKey('Transactions', blank=True, null=True)
+    transactions = models.ForeignKey('Transactions', on_delete=models.CASCADE, blank=True, null=True)
     action_type = models.TextField()
-    regions = models.ForeignKey('plants.Region', blank=True, null=True)
-    scientific_names = models.ForeignKey('plants.ScientificName', blank=True, null=True)
+    regions = models.ForeignKey('plants.Region', on_delete=models.CASCADE, blank=True, null=True)
+    scientific_names = models.ForeignKey('plants.ScientificName', on_delete=models.CASCADE, blank=True, null=True)
     property = models.TextField()
     value = models.TextField(blank=True, null=True)
     citation = models.TextField(blank=True, null=True)
@@ -42,7 +42,7 @@ class Actions(models.Model):
 class Transactions(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     #timestamp_add = models.DateTimeField(auto_now_add=True)
-    users = models.ForeignKey('login.AuthUser', blank=True, null=True)#Users
+    users = models.ForeignKey('login.AuthUser', on_delete=models.CASCADE, blank=True, null=True)#Users
     transaction_type = models.TextField(blank=True, null=True)
     plants_id = models.IntegerField(blank=True, null=True)
     parent_transaction = models.IntegerField(blank=True, null=True)

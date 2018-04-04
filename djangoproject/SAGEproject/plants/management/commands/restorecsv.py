@@ -4,6 +4,7 @@ from frontend.models import Actions, Transactions
 from login.models import AuthUser
 import csv
 
+#Note, after running restorecsv, you must run process_transactions for changes to reflect in the database.
 class Command(BaseCommand):
 
 	def handle(self, *args, **options):
@@ -13,8 +14,7 @@ class Command(BaseCommand):
 		Actions.objects.all().delete()
 		print('Flushing transactions table...')
 		Transactions.objects.all().delete()
-		print('Flushing plant table...')
-		Plant.objects.all().delete()
+
 
 
 		path1=r'../csv/TEC_for_import.csv'
