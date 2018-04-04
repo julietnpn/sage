@@ -217,7 +217,7 @@ def csv_import1(path1, user):
 				s_index =scientific_names_list.index(whole_db_scientific_name)
 				print("index in scientific names list: ", s_index)
 				print("transaction id of that index: ", transaction_list[s_index])
-				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, parent_transaction=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the parent_transactions of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
 			else:
 				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
 			
@@ -328,7 +328,7 @@ def csv_import3(path, user):
 				s_index =scientific_names_list.index(whole_db_scientific_name)
 				print("index in scientific names list: ", s_index)
 				print("transaction id of that index: ", transaction_list[s_index])
-				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, parent_transaction=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
 			else:
 				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
 			
@@ -630,7 +630,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 				s_index =scientific_names_list.index(whole_db_scientific_name)
 				print("index in scientific names list: ", s_index)
 				print("transaction id of that index: ", transaction_list[s_index])
-				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, parent_transaction=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the parent_transaction of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
 			else:
 				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
 			

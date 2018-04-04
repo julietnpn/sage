@@ -45,6 +45,7 @@ class Transactions(models.Model):
     users = models.ForeignKey('login.AuthUser', blank=True, null=True)#Users
     transaction_type = models.TextField(blank=True, null=True)
     plants_id = models.IntegerField(blank=True, null=True)
+    parent_transaction = models.IntegerField(blank=True, null=True)
     ignore = models.BooleanField()
 
     class Meta:

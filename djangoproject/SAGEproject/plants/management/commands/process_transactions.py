@@ -6,13 +6,24 @@ import csv
 
 class Command(BaseCommand):
 
+	def add_arguments(self, parser):
+		parser.add_argument('-restore', nargs='?', help='Use if restoring CSV files')
+		parser.add_argument('-update', nargs='?', help='use if updating new plants added through the UI or through an import')
+		
 	def handle(self, *args, **options):
 		self.stdout.write("processing transactions!!!")
-
-		process_transactions()
+		
+		print('Flushing plant table...')
+		Plant.objects.all().delete()
+		
+		if options['restore']:
+			print("restore transactions")
+			process_transactions('restore')
+		else:
+			print("update transactions")
+			process_transactions('update')
 		process_updates()
 		
-	
 	
 	
 properties_1_to_1 = ['common_name',
@@ -195,7 +206,7 @@ def process_updates():
 				raise ValueError("Invalid property name = " + property)
 				pass
 
-def process_transactions():
+def process_transactions(args):
 	for transaction in Transactions.objects.all().filter(ignore=False).order_by('id'):
 		print('transaction_type = ' + transaction.transaction_type)
 		if transaction.transaction_type == 'INSERT':# get_or_crete????????
@@ -218,7 +229,7 @@ def process_transactions():
 			Plant.objects.get(pk=transaction.plant).delete()#----------------should be tested-----
 			# db.session.commit()
 			continue
-		elif transaction.transaction_type == 'UPDATE':
+		elif transaction.transaction_type == 'UPDATE' and args == 'restore':
 			#this looks weird because I'm using plants_id to store the transaction id of the plant this is an update to, however, that plant was not yet put in the database. 
 			#This works for the restore CSV and may need to be changed for other stuff. 
 			updatedTransId = transaction.plants_id

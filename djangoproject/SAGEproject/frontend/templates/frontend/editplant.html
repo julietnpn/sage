@@ -19,7 +19,7 @@
 
 <div id="editmessage" class="row editplantrow">
 	{% if newPlant %}
-		<div class="message hidden-xs"><p style="font-size:16px;"><strong>Thanks for your contribution!</strong></p><br>You are adding a brand new plant to the database. Please allow 24 hours for your change to be reflected across the site.</div>
+		<div id="alert" class="message" style="display:none;"><p style="font-size:16px;"><strong>Thanks for your contribution!</strong></p><br>You are adding a brand new plant to the database. Please allow 24 hours for your change to be reflected across the site.</div>
 	{% else %}
 		<div id="alert" class="message" style="display:none;"><p style="font-size:16px;"><strong>Thanks for your contribution!</strong></p><br>Changes might take up to 24 hours to be reflected across the site.</div>
 	{% endif %}
