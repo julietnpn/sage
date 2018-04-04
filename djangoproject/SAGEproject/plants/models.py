@@ -967,8 +967,8 @@ class Plant(models.Model):
             elif sc.value in 'subspecies':
                 subspecies = 'spp. ' + a.value
             elif sc.value in 'variety':
-                subspecies = 'var. ' + a.value
-            elif sc.value in 'variety':
+                variety = 'var. ' + a.value
+            elif sc.value in 'cultivar':
                 subspecies = "cultivar. '" + a.value + "'"
         
         

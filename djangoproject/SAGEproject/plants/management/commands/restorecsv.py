@@ -31,14 +31,16 @@ class Command(BaseCommand):
 		
 		#only import one file at a time so you don't have duplicates
 		csv_import1(path1, user1)
-		#csv_import3(path3, user3)
-		#csv_import2(path2, user2)
-		process_transactions()
-		process_updates()
+		csv_import3(path3, user3)
+		csv_import2(path2, user2)
+
 		
 	
 	
 	
+scientific_names_list = []
+transaction_list = []
+
 properties_1_to_1 = ['common_name',
                      'drought_tol_id',
                      'flood_tol_id',
@@ -127,18 +129,16 @@ def get_attributes(cls):
 	attributes = [i.strip()+'_id' for i in attributes]
 	return attributes, f
 
-	
 
 #--------------------------------------The Ecology Center - Plant List-------------
 #written by Moin
 #updated by Juliet on 7/27/2016
 def csv_import1(path1, user):
-	trans_type = 'INSERT'
 	print("CSV Import 1")
 	with open(path1) as f:
 		reader = csv.DictReader(f)    
 		for i,plant in enumerate(reader):
-			transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
+			trans_type = 'INSERT'
 			# print(transaction.id)
 			actions = []
 			if not(plant['Scientific Name']):
@@ -168,7 +168,6 @@ def csv_import1(path1, user):
 			if 'spp.' in scientific_name:
 				if scientific_name.endswith('spp.'):
 					print("spp only, delete transaction")
-					transaction.delete() #we need species specific information. When it is across many species, the information is not reliable enough.
 					continue
 				else:
 					sciname_bits= scientific_name.split()
@@ -208,9 +207,23 @@ def csv_import1(path1, user):
 					species = sciname_bits[1]
 				else:
 					print("genus only, delete transaction")
-					transaction.delete() #contains a genus name only
 					continue
 			
+			#check if this scientific name is already in the database
+			#if scientific name has already been added, then this should be an update transaction, not an insert
+			whole_db_scientific_name = genus + species + subspecies + variety + cultivar
+			if whole_db_scientific_name in scientific_names_list:
+				trans_type = 'UPDATE'
+				s_index =scientific_names_list.index(whole_db_scientific_name)
+				print("index in scientific names list: ", s_index)
+				print("transaction id of that index: ", transaction_list[s_index])
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+			else:
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
+			
+			
+			scientific_names_list.append(whole_db_scientific_name)
+			transaction_list.append(transaction.id)
 			
 			genus_id = ScientificName.objects.filter(value='genus').first()
 			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
@@ -237,17 +250,15 @@ def csv_import1(path1, user):
 #updated by Juliet on 7/26/2016
 #written by Moin
 def csv_import3(path, user):
-	trans_type = 'INSERT'
 	print("CSV Import 3")
 	with open(path) as f:
 		reader = csv.DictReader(f)
 		for i,plant in enumerate(reader):
+			trans_type = 'INSERT'
 			# print(i,plant['Name']):
-			transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
 			# print(transaction.id)
 			actions = []
 			if not(plant['Scientific Name']):
-				transaction.delete()
 				continue
 			#if len(plant['Scientific Name'].split()) < 2:
 			#	continue
@@ -267,7 +278,6 @@ def csv_import3(path, user):
 			if 'spp.' in scientific_name:
 				if scientific_name.endswith('spp.'):
 					print("spp only, delete transaction")
-					transaction.delete() #we need species specific information. When it is across many species, the information is not reliable enough.
 					continue
 				else:
 					sciname_bits= scientific_name.split()
@@ -307,24 +317,24 @@ def csv_import3(path, user):
 					species = sciname_bits[1]
 				else:
 					print("genus only, delete transaction")
-					transaction.delete() #contains a genus name only
 					continue
 			
 			
 			#check if this scientific name is already in the database
-			#plant_genus_results=PlantScientificName.objects.filter(value=genus)
-			for g in plant_genus_results:
-			    p_sciname = PlantScientificName.objects.filter(plant_id=g.plant_id)
-			    indatabase = False
-			    for n in p_sciname:
-			        if n.scientific_name_id == ScientificName.objects.filter(value='species').id:
-			            if n.value == species:
-			                indatabase=True
-			            else
-			                indatabase=False
-			        if n.scientific_name_id == ScientificName.objects.filter(value='variety').id:
-			            
-			    
+			#if scientific name has already been added, then this should be an update transaction, not an insert
+			whole_db_scientific_name = genus + species + subspecies + variety + cultivar
+			if whole_db_scientific_name in scientific_names_list:
+				trans_type = 'UPDATE'
+				s_index =scientific_names_list.index(whole_db_scientific_name)
+				print("index in scientific names list: ", s_index)
+				print("transaction id of that index: ", transaction_list[s_index])
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+			else:
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
+			
+			
+			scientific_names_list.append(whole_db_scientific_name)
+			transaction_list.append(transaction.id)
 			
 			#plant_species_results=PlantScientificName.objects.filter(value=species)
 			#plant_variety_results=PlantScientificName.objects.filter(value=variety)
@@ -528,17 +538,16 @@ def csv_import3(path, user):
 
 #----------------------------usda.orange.for_import
 def csv_import2(path, user):############################serotiny, degree_of_serotiny, allelochemicals######
-	trans_type = 'INSERT'
+
 	print("CSV Import 2")
 	with open(path) as f:
 		reader = csv.DictReader(f)#csv.reader(f)    
 		for i,plant in enumerate(reader):
 			# print(i,plant['Name']):
-			transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
+			trans_type = 'INSERT'
 			# print(transaction.id)
 			actions = []
 			if not(plant['Scientific Name']):
-				transaction.delete()
 				continue
 			#if len(plant['Scientific Name'].split()) < 2:
 			#	continue
@@ -553,7 +562,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 # 				pass
 			
 			#print(trans_type)
-			#print(i,plant['Scientific Name'], len(plant['Scientific Name']))
+			print(i,plant['Scientific Name'], len(plant['Scientific Name']))
 
 			scientific_name = ''
 			genus = ''
@@ -567,7 +576,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 			if 'spp.' in scientific_name:
 				if scientific_name.endswith('spp.'):
 					print("spp only, delete transaction")
-					transaction.delete() #we need species specific information. When it is across many species, the information is not reliable enough.
+					
 					continue
 				else:
 					sciname_bits= scientific_name.split()
@@ -607,9 +616,27 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 					species = sciname_bits[1]
 				else:
 					print("genus only, delete transaction")
-					transaction.delete() #contains a genus name only
 					continue
 			
+			#  Cultivar has its own column in the USDA CSV file
+			if plant['Cultivar Name'].strip():
+				cultivar = plant['Cultivar Name'].strip()
+			
+			#check if this scientific name is already in the database
+			#if scientific name has already been added, then this should be an update transaction, not an insert
+			whole_db_scientific_name = genus + species + subspecies + variety + cultivar
+			if whole_db_scientific_name in scientific_names_list:
+				trans_type = 'UPDATE'
+				s_index =scientific_names_list.index(whole_db_scientific_name)
+				print("index in scientific names list: ", s_index)
+				print("transaction id of that index: ", transaction_list[s_index])
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+			else:
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
+			
+			
+			scientific_names_list.append(whole_db_scientific_name)
+			transaction_list.append(transaction.id)
 			
 			genus_id = ScientificName.objects.filter(value='genus').first()
 			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
@@ -623,12 +650,11 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 			if subspecies is not '':
 				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
-			
-			
-			#  Cultivar has its own column in the USDA CSV file
-			if plant['Cultivar Name'].strip():
+			if cultivar is not '':
 				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=plant['Cultivar Name'].strip(), scientific_names=cultivar_id))
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
+
+
 
 			if plant['Common Name'].strip():
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
@@ -965,219 +991,3 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 
 			Actions.objects.bulk_create(actions)
 			
-def process_updates():
-
-	plants={0:{}}
-	for transaction in Transactions.objects.all().filter(ignore=False, transaction_type='UPDATE').order_by('id'): # if same user updates should be filtered out
-		print('transaction_type = ' + transaction.transaction_type)
-		if not(transaction.plants_id):
-			print('No plant_id in transaction UPDATE!')
-			continue
-		actions={}
-		if not(transaction.plants_id in list(plants.keys())):
-			plants[transaction.plants_id]={}
-		# merging dictionaries so the latest update would be the result
-		for action in transaction.actions_set.all():
-			# actions[action.property]=[action.value, action.regions_id]
-		# for property, value in actions.items():
-			plants[transaction.plants_id][action.property]=[action.value, action.regions_id]
-
-		# plants[transaction.plants_id]={**plants[transaction.plants_id],**actions}# saves the last update, not the number of votes
-		# print(plants)
-
-	for plant, updates in plants.items():
-		for property, value in updates.items():
-			if Plant.objects.get(pk=plant):
-				the_plant = Plant.objects.get(pk=plant)
-			else:
-				raise ValueError("Invalid property plant id = " + plant)
-			print(property, property=='height', property in 'heightspreadroot_depth')
-			if property in 'heightspreadroot_depth':
-				if PlantRegion.objects.filter(plants=the_plant.id, regions=value[1]):# TODO check for region Null----------------------------------
-					plant_region = PlantRegion.objects.filter(plants=the_plant.id, regions=value[1]).first()#filter(transaction.plants_id, action.regions)
-				else:
-					plant_region = PlantRegion()
-					plant_region.plants = the_plant
-					plant_region.regions = value[1]
-					plant_region.save()
-
-				# somthing nice to learn------- how to dynamically choose the attribute that we want to set?!
-				if property == 'height':
-					plant_region.height = float(value[0])
-				elif property == 'spread':
-					plant_region.spread = float(value[0])
-				elif property == 'root_depth':
-					plant_region.root_depth = float(value[0])
-				else:
-					raise ValueError("Invalid property name = " + property)
-				plant_region.save()
-
-			elif property in properties_1_to_1:
-				print('T_id={0}, property={1}, value={2}'.format(transaction.id, property, value[0]))
-				setattr(the_plant, property, value[0]) # pH or ph... not being saved!
-				the_plant.save()
-			elif property in properties_many_with_region:# TODO PlantBarrierByRegion
-				print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, property, value[1], value[0]))
-				class_name = 'Plant' + property.title().replace('_', '') + 'ByRegion'
-				cls = globals()[class_name]
-				attributes, is_region_last = get_attributes(cls)
-				filter_args = {attributes[0]:the_plant.id, attributes[2]:value[0], attributes[1]:value[1]}
-				cls_instance = cls.objects.filter(**filter_args)# TODO make sure get() works instead of filter().first() which also may carry bugs
-				if not(cls_instance):
-					cls_instance = cls()
-					cls_instance.save()
-				else:
-					cls_instance = cls_instance.first()
-				
-				if is_region_last:
-					cls_instance = cls(cls_instance.id ,the_plant.id, value[0], value[1])
-				else:
-					cls_instance = cls(cls_instance.id ,the_plant.id, value[1], value[0])
-				cls_instance.save()
-			elif property in properties_many_to_many:
-				class_name = 'Plant' + property.title().replace('_', '')
-				cls = globals()[class_name]
-				attributes, f = get_attributes(cls)
-				filter_args={attributes[0]:the_plant.id, attributes[1]:value[0]}
-				cls_instance = cls.objects.filter(**filter_args)# TODO make sure get works instead of filter().firts() which also may carry bugs
-				if not(cls_instance):
-					cls_instance = cls()
-					cls_instance.save()
-				else:
-					cls_instance = cls_instance.first()
-				cls_instance = cls(cls_instance.id ,the_plant.id, value[0])# make sure that it is rewriting....
-				cls_instance.save()
-			elif property in properties_1_to_many:
-				pass
-			else:
-				raise ValueError("Invalid property name = " + property)
-				pass
-
-def process_transactions():
-	for transaction in Transactions.objects.all().filter(ignore=False).order_by('id'):
-		print('transaction_type = ' + transaction.transaction_type)
-		if transaction.transaction_type == 'INSERT':# get_or_crete????????
-			new_plant = Plant()
-			new_plant.save()
-			transaction.plants_id = new_plant.id
-			transaction.save()
-			print('plant_id = ' + str(transaction.plants_id))
-		elif transaction.transaction_type == 'DELETE':
-			if transaction.plant is None:
-				print('None objects')
-				pass
-				# db.session.rollback()
-				# raise ValueError("Can't delete plant == None")
-			# db.session.delete(transaction.plant)
-			Plant.objects.get(pk=transaction.plant).delete()#----------------should be tested-----
-			# db.session.commit()
-			continue
-		elif transaction.transaction_type == 'UPDATE':
-			pass
-		else:
-			print('rollback')
-			# db.session.rollback()
-			# raise ValueError("Invalid transaction type = " + transaction.transaction_type)
-
-		if len(transaction.actions_set.all())==0:
-			print(len(transaction.actions_set.all()))
-
-		for action in transaction.actions_set.all():# transaction.actions:
-			the_plant=Plant.objects.get(pk=transaction.plants_id)
-			
-			
-			if action.property in properties_scientific_name:
-				print('T_id={0}, property={1}, name={2}, value={3}'.format(transaction.id, action.property, action.scientific_names, action.value))
-				class_name = 'PlantScientificName'
-				cls = globals()[class_name]
-				cls_instance = cls()
-				cls_instance = cls(cls_instance.id ,the_plant.id, action.scientific_names.id, action.value)
-				cls_instance.save()
-			
-			
-			elif action.property in 'height spread root_depth':
-				if PlantRegion.objects.filter(plants=the_plant.id, regions=action.regions):# TODO check for region Null----------------------------------
-					plant_region = PlantRegion.objects.filter(plants=the_plant.id, regions=action.regions).first()#transaction.plants_id
-				else:
-					plant_region = PlantRegion()
-					plant_region.plants = the_plant
-					plant_region.regions = action.regions
-					plant_region.save()
-				# somthing nice to learn------- how to dynamically choose the attribute that we want to set?!
-				if action.property == 'height':
-					plant_region.height = float(action.value)
-				elif action.property == 'spread':
-					plant_region.spread = float(action.value)
-				elif action.property == 'root_depth':
-					plant_region.root_depth = float(action.value)
-				else:
-					raise ValueError("Invalid property name = " + action.property)
-
-				plant_region.save()
-
-			elif action.property in properties_1_to_1:# TODO check for INSERT DELETE UPDATE??????????????????
-													# TODO height
-				print('T_id={0}, property={1}, value={2}'.format(transaction.id, action.property, action.value))
-				setattr(the_plant, action.property, action.value)# pH or ph... not being saved!
-				the_plant.save()
-			elif action.property in properties_many_with_region:# TODO height
-				print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, action.property, action.regions, action.value))
-				class_name = 'Plant' + action.property.title().replace('_', '') + 'ByRegion'
-				cls = globals()[class_name]
-				attributes, is_region_last = get_attributes(cls)
-				if action.action_type == 'INSERT':#CREATE
-					# temp = cls.objects.create(the_plant.id, action.regions, action.value)
-					cls_instance = cls()
-					cls_instance.save()
-					print (cls_instance.id ,the_plant.id, action.regions, action.value)
-					if is_region_last:
-						cls_instance = cls(cls_instance.id ,the_plant.id, action.value, action.regions)# no regions added?
-					else:
-						cls_instance = cls(cls_instance.id ,the_plant.id, action.regions, action.value)
-					cls_instance.save()
-			elif action.property in properties_many_to_many:
-				class_name = 'Plant' + action.property.title().replace('_', '')
-				cls = globals()[class_name]
-				if action.action_type == 'INSERT':#CREATE
-					# temp = cls.objects.create(the_plant.id, action.value)
-					cls_instance = cls()
-					cls_instance.save()
-					print (cls_instance.id ,the_plant.id, action.value)
-					cls_instance = cls(cls_instance.id ,the_plant.id, action.value)
-					cls_instance.save()
-			elif action.property in properties_1_to_many: # TODO Seortiny
-				pass
-				# class_name = action.property.title().replace('_', '')
-				# cls = globals()[class_name]
-				# if action.action_type == 'INSERT':#CREATE
-				# 	# temp = cls.objects.create(the_plant.id, action.value)
-				# 	cls_instance = cls()
-				# 	cls_instance.save()
-				# 	print (cls_instance.id ,the_plant.id, action.value)
-				# 	cls_instance = cls(cls_instance.id ,the_plant.id, action.value)
-				# 	cls_instance.save()
-				# temp = cls.objects.create(cls_instance.id ,the_plant.id, action.value)
-				# print('calss name',class_name)
-				
-				# elif action.action_type == 'DELETE':
-				# when action_type is DELETE, the action value tells you the ID of the row to delete in the 1-to-many or many-to-many table
-					# pass
-					# cls_instance = cls.query.get(action.value)
-					# db.session.delete(cls_instance)
-				# elif action.action_type == 'UPDATE':
-					# pass
-					# db.session.rollback()
-					# raise ValueError("Support for updating values hasn't been implemented yet."
-					# + "Either implement updating in the code, or do a delete followed by an insert.")
-				# else:
-					# db.session.rollback()
-					# raise ValueError("Invalid action type = " + action.action_type)
-					# pass
-			else:
-				# db.session.rollback()
-				raise ValueError("Invalid property name = " + action.property)
-				pass
-
-#---------------------flushing tables---------------------------
-
-

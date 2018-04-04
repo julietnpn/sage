@@ -561,16 +561,21 @@ def addPlant(request):
 			scientificName = str(request.POST["scientificName"])
 			commonName = request.POST["commonName"]
 
+			name = ''
 			genus = ''
 			species = ''
 			variety = ''
 			subspecies = ''
 			cultivar = ''
-
+			delete = False
+			response = ''
+			
+#First check that we can create a true name
 			if 'spp.' in scientificName:
 				if scientificName.endswith('spp.'):
 					print("spp only, delete transaction")
-					transaction.delete() #we need species specific information. When it is across many species, the information is not reliable enough.
+					delete = True
+					response = 'You did not enter a valid name'
 				else:
 					sciname_bits= scientificName.split()
 					found = False
@@ -608,12 +613,48 @@ def addPlant(request):
 					species = sciname_bits[1]
 				else:
 					print("genus only, do not create transaction")
-					genus = ''
-					#transaction.delete() #contains a genus name only
+					delete = True
+					response = 'You did not enter a valid name'
+			
+			name = genus + species + subspecies + variety + cultivar
 
 				
+#Confirm the plant doesn't already exist in the database
+			all_plants = Plant.objects.all()
+			for p in all_plants:
+				try:
+					ps = PlantScientificName.objects.filter(plants=p.id)
+				except PlantScientificName.DoesNotExist:
+					print('Plant Scientific Name Does not Exist for plant' + str(p.id))
+					
+				pname = ''
+				pgenus = ''
+				pspecies = ''
+				pvariety = ''
+				psubspecies = ''
+				pcultivar = ''
 
-			if genus is not '':
+				for a in ps:
+					sc = a.scientific_name
+					if sc.value in 'genus':
+						pgenus = a.value
+					elif sc.value in 'species':
+						pspecies = a.value
+					elif sc.value in 'subspecies':
+						psubspecies = a.value
+					elif sc.value in 'variety':
+						pvariety = a.value
+					elif sc.value in 'variety':
+						pcultivar = a.value + "'"
+						
+				pname = pgenus + pspecies+ psubspecies + pvariety + pcultivar
+				
+				if pname in name:
+					delete = True  # don't want to add a plant already in the database
+					response = 'Plant is already in the database'
+
+#Add the plant to the database
+			if delete is not True:
 				transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
 				transaction.save()
 				actions = []
@@ -660,7 +701,7 @@ def addPlant(request):
 				}
 				return render(request, 'frontend/editplant.html', context)
 			else:
-				return JsonResponse({'error':'you did not enter a valid scientific name'},status=400)
+				return JsonResponse({'error':response},status=400)
 
 
 def viewPlants(request):
