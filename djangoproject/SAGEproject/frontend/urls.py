@@ -21,4 +21,5 @@ urlpatterns= [
     url(r'^getBehavior/$', views.getBehaviors),
     url(r'^getNeed/$', views.getNeeds),
     url(r'^getTolerance/$', views.getTolerances),
+    url(r'^about/$', views.about),
 ]

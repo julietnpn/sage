@@ -13,9 +13,9 @@
 
 			<div class="col-md-4 col-xs-4" id="login">{% spaceless %}
 				{% if request.user.is_authenticated %}
-					Welcome, {{ request.user.username }}! <a href="/logout">Logout</a>
+					Welcome, {{ request.user.username }}! <a href="/logout">Log out</a>
 				{% else %}
-					<a href="/login">Login</a>
+					<a href="/login">Log in</a>
 				{% endif %}
 				{% endspaceless %}
 			</div>

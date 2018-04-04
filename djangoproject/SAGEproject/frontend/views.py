@@ -859,3 +859,6 @@ def search(request, searchString):
 	}
 	return render(request, 'frontend/cardview.html', context)
 
+
+def about(request):
+    return render(request, 'frontend/about.html', {})
