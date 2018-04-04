@@ -16,12 +16,8 @@ class Command(BaseCommand):
 		print('Flushing plant table...')
 		Plant.objects.all().delete()
 		
-		if options['restore']:
-			print("restore transactions")
-			process_transactions('restore')
-		else:
-			print("update transactions")
-			process_transactions('update')
+		
+		process_transactions()
 		process_updates()
 		
 	
@@ -206,7 +202,7 @@ def process_updates():
 				raise ValueError("Invalid property name = " + property)
 				pass
 
-def process_transactions(args):
+def process_transactions():
 	for transaction in Transactions.objects.all().filter(ignore=False).order_by('id'):
 		print('transaction_type = ' + transaction.transaction_type)
 		if transaction.transaction_type == 'INSERT':# get_or_crete????????
@@ -229,14 +225,11 @@ def process_transactions(args):
 			Plant.objects.get(pk=transaction.plant).delete()#----------------should be tested-----
 			# db.session.commit()
 			continue
-		elif transaction.transaction_type == 'UPDATE' and args == 'restore':
-			#this looks weird because I'm using plants_id to store the transaction id of the plant this is an update to, however, that plant was not yet put in the database. 
-			#This works for the restore CSV and may need to be changed for other stuff. 
-			updatedTransId = transaction.plants_id
-			print("this plants related transaction id is ",updatedTransId) 
-			#updatedTrans = Transactions.objects.all().filter(id=updatedTransId)
-			updatedTrans = Transactions.objects.get(id=updatedTransId)
-			transaction.plants_id = updatedTrans.plants_id
+		elif transaction.transaction_type == 'UPDATE':
+			#BECAUSE WE FLUSHED THE PLANTS TABLE, WE HAVE TO RESET THE PLANT ID FROM THE PARENT TRANSACTION (THE ORIGINAL INSERT OF THAT PLANT)
+			print("this plants related transaction id is ",transaction.parent_transaction)
+			parentTrans = Transactions.objects.get(id=transaction.parent_transaction)
+			transaction.plants_id = parentTrans.plants_id
 			transaction.save()
 		else:
 			print('rollback')
