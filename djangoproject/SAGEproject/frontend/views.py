@@ -706,7 +706,7 @@ def addPlant(request):
 
 def viewPlants(request):
 	if request.method == 'GET':
-		plant_list = Plant.objects.all()
+		plant_list = Plant.objects.all().order_by('common_name')
 		paginator = Paginator(plant_list, 35)
 		page = request.GET.get('page')
 
