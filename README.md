@@ -1,7 +1,8 @@
-# Plant Guild Composer
-## (aka) Sustainable Polyculture Composer
+# SAGE - Software for AGricultural Ecosystems
 
 This is the dissertation project of Juliet Norton. It is a collaborative effort between Juliet Norton, Bill Tomlinson, and Don Patterson at the University of California, Irvine and Sarah Lovell at the University of Illinois Urbana-Champagne
+
+[A NSF Funded Project](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1442749)
 
 [Demo Site](https://sage-pdb.herokuapp.com/)
 
