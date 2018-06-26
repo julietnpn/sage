@@ -40,12 +40,15 @@ class AuthUser(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.CharField(max_length=254)
+    affiliation = models.CharField(max_length=254, blank=True, null=True)
+    experience = models.CharField(max_length=512, blank=True, null=True)
+    interests =models.CharField(max_length=512, blank=True, null=True)
     is_staff = models.BooleanField()
     is_active = models.BooleanField()
     date_joined = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'auth_user'
 
 

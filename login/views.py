@@ -2,12 +2,14 @@ from django.shortcuts import render
 
 # Create your views here.
 from login.forms import *
+from django.contrib.auth.models import User
+from login.models import AuthUser
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from django.template import RequestContext
+from django.template import *
  
 @csrf_protect
 def register(request):
@@ -17,19 +19,21 @@ def register(request):
             user = User.objects.create_user(
             username=form.cleaned_data['username'],
             password=form.cleaned_data['password1'],
-            email=form.cleaned_data['email']
+            email=form.cleaned_data['email'],
+            first_name=form.cleaned_data['firstname'],
+            last_name=form.cleaned_data['firstname'],
             )
+            print("IN Views: " + form.cleaned_data['affiliation'])
+            auth_user = AuthUser.objects.get(username=form.cleaned_data['username'])
+            auth_user.affiliation=form.cleaned_data['affiliation']
+            auth_user.experience=form.cleaned_data['experience']
+            auth_user.interests=form.cleaned_data['interests']
+            auth_user.save()
             return HttpResponseRedirect('/register/success/')
     else:
         form = RegistrationForm()
-    variables = RequestContext(request, {
-    'form': form
-    })
- 
-    return render_to_response(
-    'registration/register.html',
-    variables,
-    )
+    variables = {'form': form}
+    return render(request,'registration/register.html', variables)
  
 def register_success(request):
     # return render_to_response(
@@ -44,7 +48,8 @@ def logout_page(request):
  
 @login_required
 def home(request):
-    return render_to_response(
+    return render(
+    request,
     'home.html',
-    { 'user': request.user }
+    {'user': request.user }
     )
