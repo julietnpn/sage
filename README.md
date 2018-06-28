@@ -1,4 +1,4 @@
-# SAGE - Software for AGricultural Ecosystems
+# SAgE - Software for Agricultural Ecosystems
 
 This is the dissertation project of Juliet Norton. It is a collaborative effort between Juliet Norton and Bill Tomlinson at the University of California, Irvine, Don Patterson at Westmont College, and Sarah Lovell at the University of Illinois Urbana-Champagne.
 
