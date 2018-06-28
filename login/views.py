@@ -21,9 +21,8 @@ def register(request):
             password=form.cleaned_data['password1'],
             email=form.cleaned_data['email'],
             first_name=form.cleaned_data['firstname'],
-            last_name=form.cleaned_data['firstname'],
+            last_name=form.cleaned_data['lastname'],
             )
-            print("IN Views: " + form.cleaned_data['affiliation'])
             auth_user = AuthUser.objects.get(username=form.cleaned_data['username'])
             auth_user.affiliation=form.cleaned_data['affiliation']
             auth_user.experience=form.cleaned_data['experience']
@@ -53,3 +52,18 @@ def home(request):
     'home.html',
     {'user': request.user }
     )
+
+@login_required
+def view_profile(request):
+    userID = request.user.id
+    userName = User.objects.get(id=userID).username
+    user = AuthUser.objects.get(username=userName)
+    context = {
+        'userName' : userName,
+        'firstName' : user.first_name,
+        'lastName' : user.last_name,
+        'affiliation' : user.affiliation,
+        'experience' : user.experience,
+        'interests' : user.interests,
+    }
+    return render(request, 'user_profile.html', context)

@@ -1,0 +1,23 @@
+{% extends "frontend/maincontent-hdr.html" %}
+{% block title %}User Profile: {{get_user_name}}{% endblock %}
+{% block head %}
+ User Profile
+{% endblock %}
+{% block maincontent %}
+ 
+{% if userName %}
+    <div class="row username">
+    	<div class="col-sm-11 col-sm-offset-1">
+			<p>User Name: {{ userName }}</p>
+			{% if firstName %}<div><p>First Name: {{ firstName }}</p></div>{% endif %}
+			{% if lastName %}<div><p>Last Name: {{ lastName }}</p></div>{% endif %}
+			{% if affiliation %}<div><p>Affiliation: {{ affiliation }}</p></div>{% endif %}
+			{% if experience %}<div><p>Experience: {{ experience }}</p></div>{% endif %}
+			{% if interest %}<div><p>Interests: {{ interests }}</p></div>{% endif %}
+		</div>
+    </div>
+{% else %}
+<p>No User Profile</p>
+{% endif %}
+
+{% endblock %}

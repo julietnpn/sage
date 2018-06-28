@@ -27,6 +27,7 @@ urlpatterns = [
     re_path(r'admin/', admin.site.urls),
     re_path(r'^register/$', register),
     re_path(r'^register/success/$', register_success),
+    re_path(r'^view_profile/$', view_profile),
     #path(r'^home/$', home),
     #path(r'^home/', frontend.urls),
     re_path(r'^login/$', django.contrib.auth.views.login, name='login'),
