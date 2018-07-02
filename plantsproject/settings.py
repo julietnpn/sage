@@ -36,9 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'plants',
     'login',
     'frontend',
+    'django_comments_xtd',
+    'django_comments',
     #'composer',
 )
 
@@ -72,7 +75,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'plantsproject.wsgi.application'
 
+SITE_ID = 1
+COMMENTS_APP = 'django_comments_xtd'
+COMMENTS_XTD_MAX_THREAD_LEVEL = 2
+COMMENTS_XTD_CONFIRM_EMAIL = False
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 

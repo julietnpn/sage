@@ -1248,6 +1248,7 @@ class Plant(models.Model):
             
             
             # fields.append({'label':f.vebose_name, 'name':f.name, 'value':value,})
-
-
         return fields
+
+    def get_absolute_url(self):
+        return "/edit/%i/" % self.id

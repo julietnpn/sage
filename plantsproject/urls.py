@@ -33,6 +33,7 @@ urlpatterns = [
     re_path(r'^login/$', django.contrib.auth.views.login, name='login'),
     re_path(r'^logout/$', django.contrib.auth.views.logout, {'next_page':'/'}, name='logout'),
     re_path(r'^', include('frontend.urls')),
+    re_path(r'^comments/', include('django_comments_xtd.urls')),
 ]
 
 

@@ -541,6 +541,7 @@ def editPlant(request, plantId=None):
         'userId': request.user.id,
         'transactionId' : 0,
         'result': result,
+        'plant': plant,
         'plantId': plantId, 
         'scientific_name': plant.get_scientific_name,
         'common_name' : plant.common_name,
