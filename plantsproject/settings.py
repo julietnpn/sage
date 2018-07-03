@@ -134,8 +134,8 @@ STATICFILES_DIRS = (
 )
 #django.contrib.auth.LOGIN_URL = '/frontend/login'
 #django.contrib.auth.LOGIN_REDIRECT_URL = '/frontend/home'
-LOGIN_REDIRECT_URL = '/frontend/'
-LOGIN_URL="/frontend/"
+LOGIN_REDIRECT_URL = '/login'
+LOGIN_URL="/login"
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
