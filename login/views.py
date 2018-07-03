@@ -35,10 +35,6 @@ def register(request):
     return render(request,'registration/register.html', variables)
  
 def register_success(request):
-    # return render_to_response(
-    # #'registration/success.html',
-    # 'frontend/login',
-    # )
     return HttpResponseRedirect('/login')
  
 def logout_page(request):

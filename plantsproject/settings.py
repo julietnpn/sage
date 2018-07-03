@@ -30,8 +30,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -42,6 +40,8 @@ INSTALLED_APPS = (
     'frontend',
     'django_comments_xtd',
     'django_comments',
+    'django.contrib.auth',
+    'django.contrib.admin',
     #'composer',
 )
 
@@ -78,7 +78,13 @@ WSGI_APPLICATION = 'plantsproject.wsgi.application'
 SITE_ID = 1
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
-COMMENTS_XTD_CONFIRM_EMAIL = False
+COMMENTS_XTD_CONFIRM_EMAIL = True
+
+# EMAIL_HOST = "smtp.mail.com"
+# EMAIL_PORT = "587"
+# EMAIL_HOST_USER = "noreply@sage-pdb.com"
+# EMAIL_HOST_PASSWORD = "yourpassword"
+# DEFAULT_FROM_EMAIL = "perennialpolycultures@ics.uci.edu"
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 # Database
