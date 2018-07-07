@@ -366,7 +366,12 @@ section#contain a img {
 #id_password,
 #id_email,
 #id_password1,
-#id_password2 {
+#id_password2, 
+#firstName,
+#lastName,
+#affiliation,
+#experience,
+#interests{
 	width:250px;
 	border: 0;
     outline: 0;

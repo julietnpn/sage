@@ -33,6 +33,25 @@ def register(request):
         form = RegistrationForm()
     variables = {'form': form}
     return render(request,'registration/register.html', variables)
+
+@login_required
+def edit_profile(request):
+    auth_user = AuthUser.objects.get(username=request.user.username)
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST)
+        if form.is_valid():
+            auth_user.email=form.cleaned_data['email']
+            auth_user.first_name=form.cleaned_data['firstname']
+            auth_user.last_name=form.cleaned_data['lastname']
+            auth_user.affiliation=form.cleaned_data['affiliation']
+            auth_user.experience=form.cleaned_data['experience']
+            auth_user.interests=form.cleaned_data['interests']
+            auth_user.save()
+            return HttpResponseRedirect('/view_profile')
+    else:
+        form = EditProfileForm(initial={'email': auth_user.email, 'firstname': auth_user.first_name, 'lastname': auth_user.last_name, 'affiliation': auth_user.affiliation, 'experience': auth_user.experience, 'interests': auth_user.interests})
+    variables = {'form': form}
+    return render(request,'edit_profile.html', variables)
  
 def register_success(request):
     return HttpResponseRedirect('/login')
@@ -58,6 +77,7 @@ def view_profile(request):
         'userName' : userName,
         'firstName' : user.first_name,
         'lastName' : user.last_name,
+        'email' : user.email,
         'affiliation' : user.affiliation,
         'experience' : user.experience,
         'interests' : user.interests,

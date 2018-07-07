@@ -29,3 +29,14 @@ class RegistrationForm(forms.Form):
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError(_("The two password fields did not match."))
         return self.cleaned_data
+        
+class EditProfileForm(forms.Form):
+    email = forms.EmailField(widget=forms.TextInput(attrs=dict(required=True, max_length=254)), label=_("Email address"))
+    firstname = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=30)), label=_("First Name"))
+    lastname = forms.CharField(widget=forms.TextInput(attrs=dict(required=False, max_length=30)), label=_("Last Name"))
+    affiliation = forms.CharField(widget=forms.TextInput(attrs=dict(required=False, max_length=254)), label=_("Affiliation"))
+    experience = forms.CharField(widget=forms.TextInput(attrs=dict(required=False, max_length=512)), label=_("Experience"))
+    interests = forms.CharField(widget=forms.TextInput(attrs=dict(required=False, max_length=512)), label=_("Interests"))
+    
+    def clean(self):
+        return self.cleaned_data
