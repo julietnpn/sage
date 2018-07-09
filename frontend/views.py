@@ -552,6 +552,7 @@ def editPlant(request, plantId=None):
         'updatePlantNamesForm' : UpdatePlantNamesForm(),
         'updateAttributeForm' : UpdateAttributeForm(class_name='Plant'),
         'contributors' : getContributors(plantId),
+        'activity': getActivity(plantId)
     }
     return render(request, 'frontend/editplant.html', context)
 
@@ -574,6 +575,27 @@ def getContributors(plantID):
     
     print(contributors)
     return contributors
+
+def getActivity(plantId):
+    transactionIDs_qs = Transactions.objects.filter(plants_id = plantId)
+
+    activities = []
+    for t in transactionIDs_qs:
+
+        actions = Actions.objects.filter(transactions_id = t.id)
+        for a in actions:
+            activity = {
+                "activityID" : a.id,
+                "activityType" : a.action_type,
+                "activityProperty" : a.property,
+                "activityValue" : a.value,
+                "userID" : User.objects.get(id = Transactions.objects.get(id = a.transactions_id).users_id).username
+            }
+            activities.append(activity)
+
+    return activities
+
+
 
 @login_required
 def view_contributor(request, contributorID = None):
