@@ -9,8 +9,11 @@ html {
 }
 
 #maincontentheaderrow{
-	position:relative;
+	position: sticky;
 	z-index: 2;
+	top: 0;
+	background-color: white;
+	padding: 2rem 0;
 }
 
 #maincontentrow{
@@ -166,6 +169,7 @@ section#contain a img {
 
 #login{
 	text-align:right;
+	margin-right: 4rem;
 }
 
 .modalimg{
@@ -181,10 +185,13 @@ section#contain a img {
 .cardimg{
 	height:125px;
 	width:125px;
-	border-radius:25px;
-	margin-left:10px;
-	margin-right:10px;
 	border: 2px solid #ddd;
+	margin-bottom: 1.5rem;
+}
+@media (min-width: 768px){
+	.cardimg{
+		margin-bottom: 0;
+	}
 }
 
 .cardimg > img{
@@ -221,7 +228,22 @@ section#contain a img {
 	padding-bottom:20px;
 	padding-left:10px;
 	padding-right:5px;
-	
+	display: flex;
+	flex-direction: column;
+	width: 90%;
+	max-width: 992px;
+	padding: 2rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+@media (min-width: 768px){
+	.plantcard{
+		flex-direction: row;
+		width: 90%;
+		align-items: center;
+		justify-content: space-between;
+		padding: 4rem;
+	}
 }
 
 .plantname{
@@ -231,6 +253,7 @@ section#contain a img {
 	line-height:16px;
 	padding-top:10px;
 	padding-bottom:5px;
+	margin-bottom: 1rem;
 }
 
 #sidebar{
@@ -243,7 +266,7 @@ section#contain a img {
 }
 
 #sidebar-top{
-	background-color:#8A8A8A;
+	background-color: #333333;
 }
 
 #sidebar-top > #nav, #sidebar-bottom > div{
@@ -261,7 +284,7 @@ section#contain a img {
 	font-weight:bold;
 	font-size:16px;
 	letter-spacing:1px;
-	color:#BDBDBD;
+	color: black;
 	padding-bottom:10px;
 }
 
@@ -342,12 +365,17 @@ section#contain a img {
     width:70%;
 }
 
+#searchform{
+	display: flex;
+	align-items: center;
+}
+
 #searchbar{
 	width:90%;
 	border: 0;
     outline: 0;
     background: transparent;
-    border-bottom: 1px solid black;
+		border-bottom: 1px solid black;
 }
 
 .addImgMdlMsg{
@@ -560,7 +588,8 @@ border-color:#66CD00;
     font-size: 16px;
     border: none;
     cursor: pointer;
-    display:inline-block;
+		display:inline-block;
+		border-radius: 2px;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -574,7 +603,8 @@ border-color:#66CD00;
     display: none;
     background-color: #f9f9f9;
     min-width: 250px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		position: absolute;
 }
 
 /* Links inside the dropdown */
@@ -616,4 +646,57 @@ dont think we need to list */
     border-bottom: 1px solid black;
     width:100%;
     margin-bottom:8px;
+}
+
+.pagination{
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+.pagination a{
+	background-color: #4CAF50;
+	color: white;
+	text-transform: capitalize;
+	padding: 1rem;
+	border-radius: 2px;
+	text-decoration: none;
+}
+
+.pagination a:hover{
+	background-color: #3e8e41;
+	color: white;
+	text-transform: capitalize;
+	padding: 1rem;
+	text-decoration: none;
+}
+
+.current{
+	margin-left: 1rem;
+}
+
+.sage-navbar{
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.sage-navbar--divider{
+	display: flex;
+	align-items: center;
+}
+
+.about{
+	width: 90%;
+	max-width: 768px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.about p{
+	font-size: 1.75rem;
 }
