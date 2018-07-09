@@ -4,6 +4,8 @@ from django.shortcuts import render
 from login.forms import *
 from django.contrib.auth.models import User
 from login.models import AuthUser
+from frontend.models import Transactions, Actions
+from plants.models import Plant
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.views.decorators.csrf import csrf_protect
@@ -73,6 +75,7 @@ def view_profile(request):
     userID = request.user.id
     userName = User.objects.get(id=userID).username
     user = AuthUser.objects.get(username=userName)
+    activity = getUserActivity(userID)
     context = {
         'userName' : userName,
         'firstName' : user.first_name,
@@ -81,5 +84,25 @@ def view_profile(request):
         'affiliation' : user.affiliation,
         'experience' : user.experience,
         'interests' : user.interests,
+        'activity' : getUserActivity(userID)
     }
     return render(request, 'user_profile.html', context)
+
+def getUserActivity(userID):
+    #get list of unique users associated with that ID - this returns a query set of user ids
+    transactions = Transactions.objects.filter(users = userID)
+    activities = []
+    for t in transactions:
+        plant_id = t.plants_id
+        plant = Plant.objects.get(id=plant_id)
+        actions = Actions.objects.filter(transactions_id = t.id)
+        for a in actions:
+            activity = {
+                "plant_name" : plant.get_scientific_name,
+                "type" : a.action_type,
+                "property" : a.property,
+                "value" : a.value
+            }
+            activities.append(activity)
+    return activities
+
