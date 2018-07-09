@@ -22,6 +22,7 @@ urlpatterns= [
     re_path(r'^getNeed/$', views.getNeeds),
     re_path(r'^getTolerance/$', views.getTolerances),
     path('about/', views.about),
+    path('dbstructure', views.dbstructure),
     re_path(r'^view_contributor/([0-9]+)/$', views.view_contributor),
 ]
 

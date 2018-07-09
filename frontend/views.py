@@ -900,3 +900,7 @@ def search(request, searchString):
 
 def about(request):
     return render(request, 'frontend/about.html', {})
+
+
+def dbstructure(request):
+    return render(request, 'frontend/dbstructure.html', {})
