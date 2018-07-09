@@ -267,7 +267,30 @@
         <div><a href="/view_contributor/{{c.userID}}">{{c.userName}}</a></div>
         {% endfor %}
         </div>
-    
+    </div>
+
+    <div class="row editplantrow">
+        <div class="col-sm-5 col-sm-offset-1">
+        <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Activities</div>
+
+        <table>
+            <tr>
+                <th>Contributors</th>
+                <th>Type</th>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+
+            {% for a in activity %}
+                <tr>
+                    <td>{{a.userID}}</td>
+                    <td>{{a.activityType}}</td>
+                    <td>{{a.activityProperty}}</td>
+                    <td>{{a.activityValue}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
     </div>
     
     <div class="row editplantrow">
