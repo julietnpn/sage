@@ -3,13 +3,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<!-- Replace the following with a link for the icon to show up in the tabs bar -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Favicon -->
 	<link rel="shortcut icon" href="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg">
-	<link rel="stylesheet" type="text/css" href="{% static 'frontend/main.css' %}" />
-	<link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet' type='text/css'>
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Karla:400,700|Open+Sans" rel="stylesheet">	
+
+	<!-- Styles -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="{% static 'frontend/main.css' %}" />
 
 
 	<title>{% block title %}{% endblock %}</title>
@@ -23,13 +29,9 @@
 				<div id="sidebar-top" class="row">
 					
 					<div id="nav">
-						<h2 id="nav-title">PDB</h2><br>
-						<p class="nav-header">BROWSE</p>
+						<h2 id="nav-title"><a href="/" class="nav-item">PDB</a></h2><br>
 						<ul>
 							<li><a href="/" class="nav-item">All Plants</a></li>
-						</ul>
-						<p class="nav-header">DOCS</p>
-						<ul>
 							<li><a href="/about" class="nav-item">About</a></li>
 							<li><a href="#" class="nav-item">Database Structure</a></li>
 						</ul>
@@ -48,7 +50,7 @@
 
 			<!--begin main content -->
 			
-			<div id="content" class="col-md-10 col-md-offset-2 col-xs-11 col-xs-offset-1">
+			<div id="content" class="col-md-10 col-md-offset-2 col-xs-12">
 				<div id="maincontentheaderrow" class="row">
 				{% block maincontentheader %}
 				{% endblock %}
