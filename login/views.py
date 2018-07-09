@@ -83,3 +83,18 @@ def view_profile(request):
         'interests' : user.interests,
     }
     return render(request, 'user_profile.html', context)
+
+@login_required
+def view_contributor(request, contributorID = None):
+    userID = contributorID
+    userName = User.objects.get(id=userID).username
+    user = AuthUser.objects.get(username=userName)
+    context = {
+        'userName' : userName,
+        'firstName' : user.first_name,
+        'lastName' : user.last_name,
+        'affiliation' : user.affiliation,
+        'experience' : user.experience,
+        'interests' : user.interests,
+    }
+    return render(request, 'user_profile.html', context)
