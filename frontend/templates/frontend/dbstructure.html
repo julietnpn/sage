@@ -1,0 +1,430 @@
+{% extends 'frontend/base.html' %}
+
+{% block maincontent %}
+
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        .al {
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>
+    <h4>ID</h4>
+    <table>
+        <tr>
+            <th>Properties</th>
+            <th>Values</th>
+            <th>Descriptions</th>
+        </tr>
+        
+        <tr>
+            <td class="al">Family</td>
+            <td class="al">Acanthaceae<br>Achariaceae<br>Achatocarpaceae<br>Acoraceae<br>Acrobolbaceae<br>Actinidiaceae<br>Adelanthaceae<br>Adoxaceae<br>Aextoxicaceae<br>Aizoaceae<br>Akaniaceae<br>Alismataceae<br>Allisoniaceae<br>Alseuosmiaceae<br>Alstroemeriaceae<br>Altingiaceae<br>Amaranthaceae<br>Amaryllidaceae<br>Amblystegiaceae<br>Amborellaceae<br>Anacampserotaceae<br>Anacardiaceae<br>Anarthriaceae<br>Anastrophyllaceae<br>Ancistrocladaceae<br>Andreaeaceae<br>Andreaeobryaceae<br>Anemiaceae<br>Aneuraceae<br>Anisophylleaceae<br>Annonaceae<br>Antheliaceae<br>Anthocerotaceae<br>Aphanopetalaceae<br>Aphloiaceae<br>Apiaceae<br>Apleniaceae<br>Apocynaceae<br>Apodanthaceae<br>Aponogetonaceae<br>Aquifoliaceae<br>Araceae<br>Araliaceae<br>Araucariaceae<br>Archidiaceae<br>Arecaceae<br>Argophyllaceae<br>Aristolochiaceae<br>Arnelliaceae<br>Asparagaceae<br>Aspleniaceae<br>Asteliaceae<br>Asteropeiaceae<br>Atherospermataceae<br>Athyriaceae<br>Aulacomniaceae<br>Austrobaileyaceae<br>Aytoniaceae<br>Balanopaceae<br>Balanophoraceae<br>Balantiopsaceae<br>Balsaminaceae<br>Barbeuiaceae<br>Barbeyaceae<br>Bartramiaceae<br>Basellaceae<br>Bataceae<br>Begoniaceae<br>Berberidaceae<br>Berberidopsidaceae<br>Betulaceae<br>Biebersteiniaceae<br>Bignoniaceae<br>Bixaceae<br>Blandfordiaceae<br>Blasiaceae<br>Blechnaceae<br>Bonnetiaceae<br>Boraginaceae<br>Boryaceae<br>Brachytheciaceae<br>Brassicaceae<br>Brevianthaceae<br>Bromeliaceae<br>Bruchiaceae<br>Brunelliaceae<br>Bruniaceae<br>Bryaceae<br>Bryobartramiaceae<br>Bryoxiphiaceae<br>Burmanniaceae<br>Burseraceae<br>Butomaceae<br>Buxaceae<br>Buxbaumiaceae<br>Byblidaceae<br>Cabombaceae<br>Cactaceae<br>Calceolariaceae<br>Calomniaceae<br>Calophyllaceae<br>Calycanthaceae<br>Calyceraceae<br>Calymperaceae<br>Calypogeiaceae<br>Campanulaceae<br>Campynemataceae<br>Canellaceae<br>Cannabaceae<br>Cannaceae<br>Capparaceae<br>Caprifoliaceae<br>Cardiopteridaceae<br>Caricaceae<br>Carlemanniaceae<br>Caryocaraceae<br>Caryophyllaceae<br>Casuarinaceae<br>Catagoniaceae<br>Catoscopiaceae<br>Celastraceae<br>Centrolepidaceae<br>Centroplacaceae<br>Cephalotaceae<br>Cephaloziaceae<br>Cephaloziellaceae<br>Ceratophyllaceae<br>Cercidiphyllaceae<br>Chaetophyllopsaceae<br>Chloranthaceae<br>Chonecoleaceae<br>Chrysobalanaceae<br>Cibotiaceae<br>Cinclidotaceae<br>Circaeasteraceae<br>Cistaceae<br>Cleomaceae<br>Clethraceae<br>Cleveaceae<br>Climaciaceae<br>Clusiaceae<br>Colchicaceae<br>Columelliaceae<br>Combretaceae<br>Commelinaceae<br>Compositae<br>Connaraceae<br>Conocephalaceae<br>Convolvulaceae<br>Coriariaceae<br>Cornaceae<br>Corsiaceae<br>Corsiniaceae<br>Corynocarpaceae<br>Costaceae<br>Crassulaceae<br>Crossosomataceae<br>Cryphaeaceae<br>Ctenolophonaceae<br>Cucurbitaceae<br>Culcitaceae<br>Cunoniaceae<br>Cupressaceae<br>Curtisiaceae<br>Cyatheaceae<br>Cycadaceae<br>Cyclanthaceae<br>Cymodoceaceae<br>Cynomoriaceae<br>Cyperaceae<br>Cyrillaceae<br>Cyrtopodaceae<br>Cystodiaceae<br>Cystopteridaceae<br>Cytinaceae<br>Daltoniaceae<br>Daphniphyllaceae<br>Dasypogonaceae<br>Datiscaceae<br>Davalliaceae<br>Degeneriaceae<br>Dendrocerotaceae<br>Dennstaedtiaceae<br>Diapensiaceae<br>Dichapetalaceae<br>Dicksoniaceae<br>Dicnemonaceae<br>Dicranaceae<br>Didiereaceae<br>Dilleniaceae<br>Dioncophyllaceae<br>Dioscoreaceae<br>Dipentodontaceae<br>Diphysciaceae<br>Diplaziopsidaceae<br>Dipteridaceae<br>Dipterocarpaceae<br>Dirachmaceae<br>Disceliaceae<br>Ditrichaceae<br>Doryanthaceae<br>Droseraceae<br>Drosophyllaceae<br>Dryopteridacae<br>Dryopteridaceae<br>Ebenaceae<br>Ecdeiocoleaceae<br>Echinodiaceae<br>Elaeagnaceae<br>Elaeocarpaceae<br>Elatinaceae<br>Emblingiaceae<br>Encalyptaceae<br>Entodontaceae<br>Ephedraceae<br>Ephemeraceae<br>Equisetaceae<br>Ericaceae<br>Eriocaulaceae<br>Erpodiaceae<br>Erythroxylaceae<br>Escalloniaceae<br>Eucommiaceae<br>Euphorbiaceae<br>Euphroniaceae<br>Eupomatiaceae<br>Eupteleaceae<br>Eustichiaceae<br>Exormothecaceae<br>Fabroniaceae<br>Fagaceae<br>Fissidentaceae<br>Flacourtiaceae<br>Flagellariaceae<br>Fontinalaceae<br>Fossombroniaceae<br>Fouquieriaceae<br>Frankeniaceae<br>Funariaceae<br>Garryaceae<br>Geissolomataceae<br>Gelsemiaceae<br>Gentianaceae<br>Geocalycaceae<br>Geraniaceae<br>Gerrardinaceae<br>Gesneriaceae<br>Gigaspermaceae<br>Ginkgoaceae<br>Gisekiaceae<br>Gleicheniaceae<br>Gnetaceae<br>Goebeliellaceae<br>Gomortegaceae<br>Goodeniaceae<br>Goupiaceae<br>Grimmiaceae<br>Grossulariaceae<br>Grubbiaceae<br>Guamatelaceae<br>Gunneraceae<br>Gymnomitriaceae<br>Gyrostemonaceae<br>Gyrothyraceae<br>Haemodoraceae<br>Halophytaceae<br>Haloragaceae<br>Hamamelidaceae<br>Hanguanaceae<br>Haplomitriaceae<br>Haptanthaceae<br>Hedwigiaceae<br>Heliconiaceae<br>Helicophyllaceae<br>Helwingiaceae<br>Herbertaceae<br>Hernandiaceae<br>Himantandraceae<br>Hookeriaceae<br>Huaceae<br>Humiriaceae<br>Hydatellaceae<br>Hydnoraceae<br>Hydrangeaceae<br>Hydrocharitaceae<br>Hydroleaceae<br>Hydrostachyaceae<br>Hylocomiaceae<br>Hymenophyllaceae<br>Hymenophytaceae<br>Hypericaceae<br>Hypnaceae<br>Hypnodendraceae<br>Hypodematiaceae<br>Hypopterygiaceae<br>Hypoxidaceae<br>Icacinaceae<br>Iridaceae<br>Irvingiaceae<br>Isoëtaceae<br>Iteaceae<br>Ixioliriaceae<br>Ixonanthaceae<br>Jackiellaceae<br>Joinvilleaceae<br>Jubulaceae<br>Jubulopsaceae<br>Juglandaceae<br>Juncaceae<br>Juncaginaceae<br>Jungermanniaceae<br>Kirkiaceae<br>Koeberliniaceae<br>Krameriaceae<br>Lacistemataceae<br>Lactoridaceae<br>Lamiaceae<br>Lanariaceae<br>Lardizabalaceae<br>Lauraceae<br>Lecythidaceae<br>Leguminosae<br>Lejeuneaceae<br>Lembophyllaceae<br>Lentibulariaceae<br>Lepicoleaceae<br>Lepidobotryaceae<br>Lepidolaenaceae<br>Lepidoziaceae<br>Leptodontaceae<br>Lepyrodontaceae<br>Leskeaceae<br>Leucodontaceae<br>Leucomiaceae<br>Liliaceae<br>Limeaceae<br>Limnanthaceae<br>Linaceae<br>Linderniaceae<br>Lindsaeaceae<br>Loasaceae<br>Loganiaceae<br>Lomariopsidaceae<br>Lonchitidaceae<br>Lophiocarpaceae<br>Lophocoleaceae<br>Lophopyxidaceae<br>Lophoziaceae<br>Loranthaceae<br>Lowiaceae<br>Loxsomataceae<br>Lunulariaceae<br>Lycopodiaceae<br>Lygodiaceae<br>Lythraceae<br>Magnoliaceae<br>Makinoaceae<br>Malpighiaceae<br>Malvaceae<br>Marantaceae<br>Marattiaceae<br>Marcgraviaceae<br>Marchantiaceae<br>Marsileaceae<br>Martyniaceae<br>Mastigophoraceae<br>Matoniaceae<br>Mayacaceae<br>Meesiaceae<br>Melanthiaceae<br>Melastomataceae<br>Meliaceae<br>Melianthaceae<br>Menispermaceae<br>Menyanthaceae<br>Mesoptychiaceae<br>Metaxyaceae<br>Meteoriaceae<br>Metteniusaceae<br>Metzgeriaceae<br>Microtheciellaceae<br>Misodendraceae<br>Mitrastemonaceae<br>Mitteniaceae<br>Mizutaniaceae<br>Mniaceae<br>Molluginaceae<br>Monimiaceae<br>Monocarpaceae<br>Monocleaceae<br>Monosoleniaceae<br>Montiaceae<br>Montiniaceae<br>Moraceae<br>Moringaceae<br>Muntingiaceae<br>Musaceae<br>Myodocarpaceae<br>Myricaceae<br>Myriniaceae<br>Myristicaceae<br>Myrothamnaceae<br>Myrtaceae<br>Myuriaceae<br>Nartheciaceae<br>Neckeraceae<br>Nelumbonaceae<br>Neotrichocoleaceae<br>Nepenthaceae<br>Nephrolepidaceae<br>Neuradaceae<br>Nitrariaceae<br>Nothofagaceae<br>Notothyladaceae<br>Nyctaginaceae<br>Nymphaeaceae<br>Ochnaceae<br>Octoblepharaceae<br>Oedipodiaceae<br>Olacaceae<br>Oleaceae<br>Oleandraceae<br>Onagraceae<br>Oncothecaceae<br>Onocleaceae<br>Ophioglossaceae<br>Opiliaceae<br>Orchidaceae<br>Orobanchaceae<br>Orthorrhynchiaceae<br>Orthotrichaceae<br>Osmundaceae<br>Oxalidaceae<br>Oxymitraceae<br>Paeoniaceae<br>Pallaviciniaceae<br>Pandaceae<br>Pandanaceae<br>Papaveraceae<br>Paracryphiaceae<br>Passifloraceae<br>Paulowniaceae<br>Pedaliaceae<br>Pelliaceae<br>Penaeaceae<br>Pennantiaceae<br>Pentadiplandraceae<br>Pentaphragmataceae<br>Pentaphylacaceae<br>Penthoraceae<br>Peraceae<br>Peridiscaceae<br>Petenaeaceae<br>Petermanniaceae<br>Petrosaviaceae<br>Phellinaceae<br>Philesiaceae<br>Philydraceae<br>Phrymaceae<br>Phyllanthaceae<br>Phyllodrepaniaceae<br>Phyllogoniaceae<br>Phyllonomaceae<br>Physenaceae<br>Phytolaccaceae<br>Picramniaceae<br>Picrodendraceae<br>Pilotrichaceae<br>Pinaceae<br>Piperaceae<br>Pittosporaceae<br>Plagiochilaceae<br>Plagiogyriaceae<br>Plagiotheciaceae<br>Plantaginaceae<br>Platanaceae<br>Pleurophascaceae<br>Pleuroziaceae<br>Pleuroziopsaceae<br>Plocospermataceae<br>Plumbaginaceae<br>Poaceae<br>Podocarpaceae<br>Podostemaceae<br>Polemoniaceae<br>Polygalaceae<br>Polygonaceae<br>Polypodiaceae<br>Polytrichaceae<br>Pontederiaceae<br>Porellaceae<br>Portulacaceae<br>Posidoniaceae<br>Potamogetonaceae<br>Pottiaceae<br>Primulaceae<br>Prionodontaceae<br>Proteaceae<br>Pseudoditrichaceae<br>Pseudolepicoleaceae<br>Psilotaceae<br>Pteridaceae<br>Pterigynandraceae<br>Pterobryaceae<br>Ptilidiaceae<br>Ptychomitriaceae<br>Ptychomniaceae<br>Putranjivaceae<br>Quillajaceae<br>Racopilaceae<br>Radulaceae<br>Rafflesiaceae<br>Ranunculaceae<br>Rapateaceae<br>Regmatodontaceae<br>Resedaceae<br>Restionaceae<br>Rhabdodendraceae<br>Rhabdoweisiaceae<br>Rhachidosoraceae<br>Rhachitheciaceae<br>Rhacocarpaceae<br>Rhamnaceae<br>Rhipogonaceae<br>Rhizogoniaceae<br>Rhizophoraceae<br>Ricciaceae<br>Riellaceae<br>Rigodiaceae<br>Roridulaceae<br>Rosaceae<br>Rousseaceae<br>Rubiaceae<br>Ruppiaceae<br>Rutaceae<br>Rutenbergiaceae<br>Sabiaceae<br>Saccolomataceae<br>Salicaceae<br>Salvadoraceae<br>Salviniaceae<br>Santalaceae<br>Sapindaceae<br>Sapotaceae<br>Sarcobataceae<br>Sarcolaenaceae<br>Sarraceniaceae<br>Saururaceae<br>Saxifragaceae<br>Scapaniaceae<br>Scheuchzeriaceae<br>Schisandraceae<br>Schistochilaceae<br>Schistostegaceae<br>Schizaeaceae<br>Schlegeliaceae<br>Schoepfiaceae<br>Sciadopityaceae<br>Scorpidiaceae<br>Scrophulariaceae<br>Selaginellaceae<br>Seligeriaceae<br>Sematophyllaceae<br>Serpotortellaceae<br>Setchellanthaceae<br>Simaroubaceae<br>Simmondsiaceae<br>Siparunaceae<br>Sladeniaceae<br>Smilacaceae<br>Solanaceae<br>Sorapillaceae<br>Sphaerocarpaceae<br>Sphaerosepalaceae<br>Sphagnaceae<br>Sphenocleaceae<br>Spiridentaceae<br>Splachnaceae<br>Splachnobryaceae<br>Stachyuraceae<br>Staphyleaceae<br>Stegnospermataceae<br>Stemonaceae<br>Stemonuraceae<br>Stereophyllaceae<br>Stilbaceae<br>Strasburgeriaceae<br>Strelitziaceae<br>Stylidiaceae<br>Styracaceae<br>Surianaceae<br>Symplocaceae<br>Takakiaceae<br>Talinaceae<br>Tamaricaceae<br>Tapisciaceae<br>Targioniaceae<br>Taxaceae<br>Tecophilaeaceae<br>Tectariaceae<br>Tetrachondraceae<br>Tetramelaceae<br>Tetrameristaceae<br>Tetraphidaceae<br>Thamnobryaceae<br>Theaceae<br>Theliaceae<br>Thelypteridaceae<br>Thomandersiaceae<br>Thuidiaceae<br>Thurniaceae<br>Thymelaeaceae<br>Thyrsopteridaceae<br>Ticodendraceae<br>Timmiaceae<br>Tofieldiaceae<br>Torricelliaceae<br>Tovariaceae<br>Trachypodaceae<br>Treubiaceae<br>Trichocoleaceae<br>Trichotemnomataceae<br>Trigoniaceae<br>Trimeniaceae<br>Triuridaceae<br>Trochodendraceae<br>Tropaeolaceae<br>Typhaceae<br>Ulmaceae<br>Urticaceae<br>Vahliaceae<br>Vandiemeniaceae<br>Velloziaceae<br>Verbenaceae<br>Vetaformaceae<br>Violaceae<br>Viridivelleraceae<br>Vitaceae<br>Vivianiaceae<br>Vochysiaceae<br>Wardiaceae<br>Welwitschiaceae<br>Wiesnerellaceae<br>Winteraceae<br>Woodsiaceae<br>Xanthorrhoeaceae<br>Xeronemataceae<br>Xyridaceae<br>Zamiaceae<br>Zingiberaceae<br>Zosteraceae<br>Zygophyllaceae</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">Family Common Name</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">Genus</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">Species</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">Variety</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">Common Name</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">Endemic Status</td>
+            <td class="al">Native<br>Naturalized<br>Waif<br>Invasive<br>Endangered<br>Protected</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">tags</td>
+            <td class="al"></td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">url tags</td>
+            <td class="al"></td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">image url</td>
+            <td class="al"></td>
+            <td class="al"></td>
+        </tr>
+    </table>
+
+
+    <h4>Characteristics</h4>
+    <table>
+        <tr>
+            <th>Properties</th>
+            <th>Values</th>
+            <th>Descriptions</th>
+        </tr>
+        
+        <tr>
+            <td class="al">Duration</td>
+            <td class="al">Annual<br>Biennial<br>Perennial</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">height at maturity</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">spread at maturity</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">pH</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">layer</td>
+            <td class="al">climax<br>understory<br>shrub<br>herb<br>ground cover<br>climber<br>clumper<br>palm<br>emergent palm</td>
+            <td class="al">climax - Canopy of large trees
+                <br>understory - in the shade of the climax trees
+                <br>shrubs - lower than the understory, but still woody plants, and generally don't have a trunk
+                <br>herb - herbaceous layer, little plants that are not woody
+                <br>ground covering - pants that creep across the ground, but can be woody or herbaceous
+                <br>cliber - the vertical layer that climbs up shrubs, understory, and climax</td>
+        </tr>
+
+        <tr>
+            <td class="al">canopy density</td>
+            <td class="al">impenetrable<br>dense<br>moderate<br>sparse<br>almost none</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">active growth period</td>
+            <td class="al">spring<br>summer<br>fall<br>winter</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">harvest period</td>
+            <td class="al">spring<br>summer<br>fall<br>winter</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">leaf retention</td>
+            <td class="al">deciduous<br>evergreen</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">flower color</td>
+            <td class="al">Blue<br>Brown<br>Green<br>Orange<br>Purple<br>Red<br>White<br>Yellow</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">foliage color</td>
+            <td class="al">Dark Green<br>Green<br>Gray-Green<br>Red<br>White-Gray<br>Yellow-Green</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">fruit color</td>
+            <td class="al">Black<br>Blue<br>Brown<br>Green<br>Orange<br>Purple<br>Red<br>White<br>Yellow</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">root depth</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">degree of serotiny</td>
+            <td class="al">strongly serotinous<br>weakly serotinous<br>facultatively serotinous<br>non-serotinous</td>
+            <td class="al">Plant retains all of their seed indefinitely in the absence of a trigger
+                <br>Plant eventually releases some of their seed spontaneously in the absence of a trigger
+                <br>Plant releases all seed spontaneously after a period of seed storage, but a trigger event curtails the seed storage period
+                <br>Plant does not require a trigger</td>
+        </tr>
+
+        <tr>
+            <td class="al">time to first harvest</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">life span</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+    </table>
+
+
+    <h4>Tolerances</h4>
+    <table>
+        <tr>
+            <th>Properties</th>
+            <th>Values</th>
+            <th>Descriptions</th>
+        </tr>
+
+        <tr>
+            <td class="al">shade tolerance</td>
+            <td class="al">permanent deep shade<br>permanent shade<br>partial shade<br>light shade<br>no shade</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">salt tolerance</td>
+            <td class="al">salt-tolerant<br>moderately salt-tolerant<br>slightly-salt tolerant<br>not salt-tolerant</td>
+            <td class="al">Highly resistant to salt drift and can be used in exposed environment.<br>Tolerates some salt spray, but grow best when protected from it.<br>Should be protected from any spray.</td>
+        </tr>
+
+        <tr>
+            <td class="al">flood tolerance</td>
+            <td class="al">flood-tolerant<br>moderately flood-tolerant<br>not flood-tolerant</td>
+            <td class="al">Survives high water table and flooded conditions for days to weeks.<br>Survives several days of excessively wet or flooded soil conditions.<br>Not tolerant of wet or flooded soil.</td>
+        </tr>
+
+        <tr>
+            <td class="al">drought tolerance</td>
+            <td class="al">drought-tolerant<br>moderately drought-tolerant<br>not drought-tolerant</td>
+            <td class="al">Tolerates lack of water for a few days to several weeks.<br>Can withstand several days of drought with some stress effects.<br>May survive a few days of drought, but with severe damage.</td>
+        </tr>
+
+        <tr>
+            <td class="al">humidity tolerance</td>
+            <td class="al">humidity-tolerant<br>moderately humidity-tolerant<br>not humidity-tolerant</td>
+            <td class="al">Can achieve normal growth in humidity greater than 70%.<br>Tolerates high humidity, but will decrease reproduction.<br>Cannot with stand high-humidity conditions and will incur damage.</td>
+        </tr>
+
+        <tr>
+            <td class="al">wind tolerance</td>
+            <td class="al">very wind tolerant<br>moderately wind tolerant<br>somewhat wind-tolerant<br>not wind-tolerant</td>
+            <td class="al">Can survive winds from 110-130 mph<br>Can survive winds from 75-110mph<br>Can survive winds from 55-75mph<br>Can survive winds less than 55mph</td>
+        </tr>
+
+        <tr>
+            <td class="al">soil-drainage tolerance</td>
+            <td class="al">poor-drainage tolerant<br>somewhat-poor-drainage tolerant<br>moderate-drainage tolerant<br>well-drained tolerant<br>excessively-drained tolerant</td>
+            <td class="al">Wet to shallow depths most of the time.<br>Periodic wetness at shallow depths due to seasonable weather or water conditions.<br>Soil is wet in root zone for short period of the year.<br>Adequate water movement; root growth not restricted due to wetness.<br>Soil doesn't retain adequate water for most plant growth following precipitation.</td>
+        </tr>
+
+        <tr>
+            <td class="al">fire tolerance</td>
+            <td class="al">resistant to fire<br>not resistant to fire<br>accelerates fire</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">minimum temperature tolerance</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">heat tolerance</td>
+            <td class="al"></td>
+            <td class="al">number of days in a year a plant can survive 86 degree F heat or higher</td>
+        </tr>
+    </table>
+
+
+    <h4>Needs</h4>
+    <table>
+        <tr>
+            <th>Properties</th>
+            <th>Values</th>
+            <th>Descriptions</th>
+        </tr>
+        
+        <tr>
+            <td class="al">nutrient (fertility) requirements </td>
+            <td class="al">low<br>moderate<br>high</td>
+            <td class="al"></td>
+        </tr>
+        
+        <tr>
+            <td class="al">water needs</td>
+            <td class="al">amount<br>units<br>frequency<br>season</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">inoculant</td>
+            <td class="al">[user specified]</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">sun</td>
+            <td class="al">full sun<br>partial sun<br>indirect sun<br>morning sun<br>afternoon sun</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">serotiny</td>
+            <td class="al">none<br>necriscene <br>hygriscene <br>soliscene <br>xeriscene <br>pyriscene <br>phyrohydriscene</td>
+            <td class="al"><br>death of parent plant or branch<br>wetting<br>warming by the sun<br>drying atmospheric conditions<br>fire<br>fire followed by wetting</td>
+        </tr>
+    </table>
+
+
+    <h4>Products</h4>
+    <table>
+        <tr>
+            <th>Properties</th>
+            <th>Values</th>
+            <th>Descriptions</th>
+        </tr>
+        
+        <tr>
+            <td class="al">human food</td>
+            <td class="al">greens<br>grains<br>vegetables<br>nuts<br>fruit</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">raw materials</td>
+            <td class="al">biomass<br>timber<br>rubber<br>fiber<br>oil<br>essential oil<br>fuel<br>naval store<br>pulpwood<br>veneer<br>dye</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">medicinal</td>
+            <td class="al">antispasmodic<br>stimulant<br>carminative<br>anti-inflammatory<br>antiseptic<br>insect repellent</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">biochemical material</td>
+            <td class="al">detergent<br>wetting agent<br>emulsifier<br>foaming agent</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">cultural and amenity</td>
+            <td class="al">aesthetic<br>recreational<br>artistic inspiration<br>cultural heritiage and identity<br>spirtual and religious inspiration</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">mineral nutrients</td>
+            <td class="al">nitrogen<br>phosphorous<br>potassium<br>boron<br>copper<br>iron<br>chloride<br>manganese<br>molybdenum<br>zinc</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">animal food</td>
+            <td class="al">domestic<br>wild</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">allelochemicals</td>
+            <td class="al"></td>
+            <td class="al"></td>
+        </tr>
+    </table>
+
+
+    <h4>Behaviors</h4>
+    <table>
+        <tr>
+            <th>Properties</th>
+            <th>Values</th>
+            <th>Descriptions</th>
+        </tr>
+        
+        <tr>
+            <td class="al">erosion control</td>
+            <td class="al">great<br>medium<br>little<br>none</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">insect attractor</td>
+            <td class="al">pointers to values in insect table</td>
+            <td class="al">chose many</td>
+        </tr>
+
+        <tr>
+            <td class="al">insect regulator</td>
+            <td class="al">pointers to values in insect table</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">animal regulator</td>
+            <td class="al">pointers to values in animal table</td>
+            <td class="al"></td>
+        </tr>
+        
+        <tr>
+            <td class="al">animal attraction</td>
+            <td class="al">pointers to values in animal table</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">human and livestock toxicity</td>
+            <td class="al">none<br>slight<br>moderate<br>severe</td>
+            <td class="al"></td>
+        </tr>
+
+        <tr>
+            <td class="al">barrier</td>
+            <td class="al">wind break<br>chemical<br>hedge</td>
+            <td class="al">choose many</td>
+        </tr>
+    </table>
+</body>
+
+{% endblock %}
