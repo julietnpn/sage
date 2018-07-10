@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import *
+#from django.db.models import get_models, get_app
+from django.apps import apps
  
 @csrf_protect
 def register(request):
@@ -88,21 +90,45 @@ def view_profile(request):
     }
     return render(request, 'user_profile.html', context)
 
+
+@login_required
+def view_contributor(request, contributorID = None):
+    userID = contributorID
+    userName = User.objects.get(id=userID).username
+    user = AuthUser.objects.get(username=userName)
+    context = {
+        'userName' : userName,
+        'firstName' : user.first_name,
+        'lastName' : user.last_name,
+        'affiliation' : user.affiliation,
+        'experience' : user.experience,
+        'interests' : user.interests,
+        'activity' : getUserActivity(userID)
+    }
+    return render(request, 'user_profile.html', context)
+
 def getUserActivity(userID):
-    #get list of unique users associated with that ID - this returns a query set of user ids
+    # get list of transactions made by a user, and we are creating a avtivity context,
+    # which is a list of activites that consist of plant name, activity type, property, and its value.     
     transactions = Transactions.objects.filter(users = userID)
     activities = []
     for t in transactions:
         plant_id = t.plants_id
         plant = Plant.objects.get(id=plant_id)
         actions = Actions.objects.filter(transactions_id = t.id)
+    
         for a in actions:
+            try:
+                property_model = next((m for m in apps.get_models() if m._meta.db_table == a.property), None)
+                value = property_model.objects.get(id = a.value).value 
+            except:
+                value = a.value
+    
             activity = {
                 "plant_name" : plant.get_scientific_name,
                 "type" : a.action_type,
                 "property" : a.property,
-                "value" : a.value
+                "value" : value 
             }
             activities.append(activity)
     return activities
-

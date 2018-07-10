@@ -15,7 +15,26 @@
             {% if affiliation %}<div>Affiliation: {{ affiliation }}</div>{% endif %}
             {% if experience %}<div>Experience: {{ experience }}</div>{% endif %}
             {% if interests %}<div>Interests: {{ interests }}</div>{% endif %}
-            {{activity}}
+
+            <p></p>
+                <table>
+                    <tr>
+                        <th>Plant Scientific Name</th>
+                        <th>Type</th>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+        
+                    {% for a in activity %}
+                        <tr>
+                            <td>{{a.plant_name}}</td>
+                            <td>{{a.type}}</td>
+                            <td>{{a.property}}</td>
+                            <td>{{a.value}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
 	    {% else %}
             <p>No User Profile</p>
         {% endif %}

@@ -29,6 +29,7 @@ urlpatterns = [
     re_path(r'^register/success/$', register_success),
     re_path(r'^view_profile/$', view_profile),
     re_path(r'^edit_profile/$', edit_profile),
+    re_path(r'^view_contributor/([0-9]+)/$', view_contributor),
     #path(r'^home/$', home),
     #path(r'^home/', frontend.urls),
     re_path(r'^login/$', django.contrib.auth.views.login, name='login'),
