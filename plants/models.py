@@ -372,6 +372,7 @@ class PlantActiveGrowthPeriodByRegion(models.Model):
     plants = models.ForeignKey('Plant', blank=True, null=True, on_delete=models.CASCADE)
     active_growth_period = models.ForeignKey(ActiveGrowthPeriod, blank=True, null=True, on_delete=models.CASCADE)
     regions = models.ForeignKey('Region', blank=True, null=True, on_delete=models.CASCADE)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
