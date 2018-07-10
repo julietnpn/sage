@@ -20,6 +20,9 @@ td, th {
 	top: 0;
 	background-color: white;
 	padding: 2rem 0;
+	box-shadow:0 0 8px 2px rgba(0,0,0,.2);
+	opacity: .95;
+	margin-bottom: 4rem;
 }
 
 #maincontentrow{
@@ -694,6 +697,11 @@ dont think we need to list */
 .sage-navbar--divider{
 	display: flex;
 	align-items: center;
+}
+
+.title{
+	text-align: center;
+	width: 100%;
 }
 
 .about{
