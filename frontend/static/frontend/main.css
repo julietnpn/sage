@@ -1,7 +1,7 @@
 html {
-	/*padding: 30px;*/
 	width:100%;
 	height:100%;
+	padding: 0;
 }
 
 .formdiv{
@@ -497,7 +497,6 @@ border-color:#66CD00;
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 13px;
-	margin-right:20px;
 	margin-top: 20px;
 	margin-bottom:10px;
 	color:gray;
@@ -507,20 +506,37 @@ border-color:#66CD00;
 	cursor:pointer;
 }
 
+.add-new-cards{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.add-new-cards:after{
+	width: 32%;
+	max-width:350px;
+	display: block;
+	content: "";
+	height: 0;
+}
+
 .add-attribute-container{
 	display:inline-block;
-	width:100%;
-
-	border-radius:25px;
+	width: 32%;
+	border-radius: 2px;
 	border: 2px solid #ddd;
+	margin-bottom: 2rem;
 	max-width:350px;
-
 }
 
 .add-attribute-center{
 	/*display:table-row;*/
 	width:100%;
-	color:#ddd;
+	/* color:#ddd; */
+	color: black;
 	text-align:center;
 	padding-top:20px;
 	padding-bottom: 10px;
@@ -700,8 +716,18 @@ dont think we need to list */
 }
 
 .title{
+	font-size: 1.5rem;
 	text-align: center;
-	width: 100%;
+	width: 85%;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+@media (min-width: 768px){
+	.title{
+		font-size: 2.5rem;
+	}
 }
 
 .about{
