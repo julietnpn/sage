@@ -4,12 +4,16 @@ from django.shortcuts import render
 from login.forms import *
 from django.contrib.auth.models import User
 from login.models import AuthUser
+from frontend.models import Transactions, Actions
+from plants.models import Plant
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import *
+#from django.db.models import get_models, get_app
+from django.apps import apps
  
 @csrf_protect
 def register(request):
@@ -73,6 +77,7 @@ def view_profile(request):
     userID = request.user.id
     userName = User.objects.get(id=userID).username
     user = AuthUser.objects.get(username=userName)
+    activity = getUserActivity(userID)
     context = {
         'userName' : userName,
         'firstName' : user.first_name,
@@ -81,8 +86,10 @@ def view_profile(request):
         'affiliation' : user.affiliation,
         'experience' : user.experience,
         'interests' : user.interests,
+        'activity' : getUserActivity(userID)
     }
     return render(request, 'user_profile.html', context)
+
 
 @login_required
 def view_contributor(request, contributorID = None):
@@ -96,5 +103,32 @@ def view_contributor(request, contributorID = None):
         'affiliation' : user.affiliation,
         'experience' : user.experience,
         'interests' : user.interests,
+        'activity' : getUserActivity(userID)
     }
     return render(request, 'user_profile.html', context)
+
+def getUserActivity(userID):
+    # get list of transactions made by a user, and we are creating a avtivity context,
+    # which is a list of activites that consist of plant name, activity type, property, and its value.     
+    transactions = Transactions.objects.filter(users = userID)
+    activities = []
+    for t in transactions:
+        plant_id = t.plants_id
+        plant = Plant.objects.get(id=plant_id)
+        actions = Actions.objects.filter(transactions_id = t.id)
+    
+        for a in actions:
+            try:
+                property_model = next((m for m in apps.get_models() if m._meta.db_table == a.property), None)
+                value = property_model.objects.get(id = a.value).value 
+            except:
+                value = a.value
+    
+            activity = {
+                "plant_name" : plant.get_scientific_name,
+                "type" : a.action_type,
+                "property" : a.property,
+                "value" : value 
+            }
+            activities.append(activity)
+    return activities

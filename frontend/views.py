@@ -584,20 +584,22 @@ def getActivity(plantId):
 
         actions = Actions.objects.filter(transactions_id = t.id)
         for a in actions:
+            try:
+                property_model = next((m for m in apps.get_models() if m._meta.db_table == a.property), None)
+                value = property_model.objects.get(id = a.value).value 
+            except:
+                value = a.value
+        
             activity = {
                 "activityID" : a.id,
                 "activityType" : a.action_type,
                 "activityProperty" : a.property,
-                "activityValue" : a.value,
+                "activityValue" : value,
                 "userID" : User.objects.get(id = Transactions.objects.get(id = a.transactions_id).users_id).username
             }
             activities.append(activity)
 
     return activities
-
-
-
-
 
 @login_required
 def addPlant(request):
