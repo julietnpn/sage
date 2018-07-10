@@ -1,8 +1,12 @@
-{% extends 'frontend/base.html' %} {% block maincontent %}
+{% extends 'frontend/base.html' %}
+
+{% block maincontentheader %}
+  <h1 class="title">SAgE - Software for Agricultural Ecosystems</h1>
+{% endblock %}
+
+{% block maincontent %}
 
 <div class="about">
-  <h1>SAgE - Software for Agricultural Ecosystems</h1>
-
   <p>
     SAGE (Software for Agricultural Ecosystems) is a collection of software applications that supports the public pursuit of 
     sustainable agriculture, in cooperation with the Southern California sustainable agriculture community.
@@ -32,7 +36,7 @@
   </p>
     
   <p>
-    For questions and details, contact Juliet at <a href = "perennialpolycultures@ics.uci.edu"> perennialpolycultures@ics.uci.edu </a>
+    For questions and details, contact Juliet at <a href= "mailto:perennialpolycultures@ics.uci.edu"> perennialpolycultures@ics.uci.edu </a>
   </p>
 
   <p>
