@@ -429,6 +429,7 @@ def updateText(request, transaction_id, action_type):
             property = request.POST['property_name']
             value = request.POST['text']
             plantId = request.POST['plant_id']
+            reference = request.POST['reference']
 
             if int(transaction_id) == 0:
                 #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
@@ -437,7 +438,7 @@ def updateText(request, transaction_id, action_type):
             else:
                 transaction = Transactions.objects.get(id = transaction_id)
             actions = []
-            actions.append(Actions(transactions=transaction , action_type=action_type, property=property, value=value))
+            actions.append(Actions(transactions=transaction , action_type=action_type, property=property, value=value, reference=reference))
             Actions.objects.bulk_create(actions)
             response_data = transaction.id
         else:
@@ -455,6 +456,7 @@ def updateSelect(request, transaction_id, action_type):
             property = request.POST['property_name']
             value = request.POST['select']
             plantId = request.POST['plant_id']
+            reference = request.POST['reference']
 
             if int(transaction_id) == 0:
                 #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
@@ -463,7 +465,7 @@ def updateSelect(request, transaction_id, action_type):
             else:
                 transaction = Transactions.objects.get(id = transaction_id)
             actions = []
-            actions.append(Actions(transactions=transaction , action_type=action_type, property=property, value=value))
+            actions.append(Actions(transactions=transaction , action_type=action_type, property=property, value=value , reference=reference))
             Actions.objects.bulk_create(actions)
             response_data = transaction.id
         else:
@@ -479,6 +481,7 @@ def updateMulti(request, transaction_id, action_type):
             property = request.POST['property_name']
             values = dict(request.POST)['multi']
             plantId = request.POST['plant_id']
+            reference = request.POST['reference']
             # oldVals = request.POST['old_vals']
             # oldVals = oldVals.split(",") WHY WAS THIS HERE
 
@@ -491,7 +494,7 @@ def updateMulti(request, transaction_id, action_type):
             actions = []
 
             for i in range(0, len(values)):
-                actions.append(Actions(transactions=transaction , action_type=action_type , property=property, value=values[i]))
+                actions.append(Actions(transactions=transaction , action_type=action_type , property=property, value=values[i], reference=reference))
             Actions.objects.bulk_create(actions)
 
             response_data = transaction.id
@@ -595,7 +598,8 @@ def getActivity(plantId):
                 "activityType" : a.action_type,
                 "activityProperty" : a.property,
                 "activityValue" : value,
-                "userID" : User.objects.get(id = Transactions.objects.get(id = a.transactions_id).users_id).username
+                "userID" : User.objects.get(id = Transactions.objects.get(id = a.transactions_id).users_id).username,
+                "reference" : a.reference
             }
             activities.append(activity)
 

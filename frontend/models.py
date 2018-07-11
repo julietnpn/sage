@@ -29,7 +29,7 @@ class Actions(models.Model):
     scientific_names = models.ForeignKey('plants.ScientificName', on_delete=models.CASCADE, blank=True, null=True)
     property = models.TextField()
     value = models.TextField(blank=True, null=True)
-    citation = models.TextField(blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True

@@ -29,6 +29,7 @@ class UpdateAttributeForm(forms.Form):
 	text= forms.CharField(widget=forms.TextInput(), required=False, label='text', label_suffix='')
 	multi = forms.CharField(widget=forms.SelectMultiple, required=False)
 	select = forms.ModelChoiceField(queryset=None, label="select", empty_label="Loading...", required=False)
+	reference = forms.CharField(widget=forms.TextInput(), required=False, label='Reference')
 
 	def __init__(self, *args, **kwargs):
 		class_name = kwargs.pop('class_name')

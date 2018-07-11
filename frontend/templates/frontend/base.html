@@ -72,8 +72,9 @@
 		      		{% csrf_token %}
 					<label id="mdl-label"></label>
 					{% for field in updateAttributeForm %}
-		      		{{ field }}
-		      		{% endfor %}
+					    <label id = "mdl-label"> {{field.label}} </label>
+				      {{ field }}
+		          {% endfor %}
 
 <!-- 		      		<table border="0" style="width:100%;">
 		      			{% for field in updateAttributeForm %}
@@ -96,7 +97,7 @@
 		      </div>
 		      <div class="modal-footer">
 		      	<button type="button" class="btn btn-default rmvBtn" style="float:left;" data-dismiss="modal">Remove Attribute</button>
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-default cancelBtn" data-dismiss="modal">Cancel</button>
 		        <button type="button" class="btn btn-success submitBtn" data-dismiss="modal">Save</button>
 		      </div>
 		      
