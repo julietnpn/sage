@@ -372,6 +372,7 @@ class PlantActiveGrowthPeriodByRegion(models.Model):
     plants = models.ForeignKey('Plant', blank=True, null=True, on_delete=models.CASCADE)
     active_growth_period = models.ForeignKey(ActiveGrowthPeriod, blank=True, null=True, on_delete=models.CASCADE)
     regions = models.ForeignKey('Region', blank=True, null=True, on_delete=models.CASCADE)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -382,6 +383,7 @@ class PlantAnimalAttractorByRegion(models.Model):
     plants = models.ForeignKey('Plant', blank=True, null=True, on_delete=models.CASCADE)
     animals = models.ForeignKey(Animals, blank=True, null=True, on_delete=models.CASCADE)
     regions = models.ForeignKey('Region', blank=True, null=True, on_delete=models.CASCADE)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -392,6 +394,7 @@ class PlantAnimalRegulatorByRegion(models.Model):
     plants = models.ForeignKey('Plant', blank=True, null=True, on_delete=models.CASCADE)
     animals = models.ForeignKey(Animals, blank=True, null=True, on_delete=models.CASCADE)
     regions = models.ForeignKey('Region', blank=True, null=True, on_delete=models.CASCADE)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -401,6 +404,7 @@ class PlantAnimalRegulatorByRegion(models.Model):
 class PlantBiochemicalMaterialProd(models.Model):
     plants = models.ForeignKey('Plant', blank=True, null=True, on_delete=models.CASCADE)
     biochemical_material_prod = models.ForeignKey(BiochemicalMaterialProd, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -411,6 +415,7 @@ class PlantCanopyDensityByRegion(models.Model):
     plants = models.ForeignKey('Plant', blank=True, null=True, on_delete=models.CASCADE)
     regions = models.ForeignKey('Region', blank=True, null=True, on_delete=models.CASCADE)
     canopy_density = models.ForeignKey(CanopyDensity, blank=True, null=True, on_delete=models.CASCADE)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -421,6 +426,7 @@ class PlantCanopyDensityByRegion(models.Model):
 class PlantCulturalAndAmenityProd(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     cultural_and_amenity_prod = models.ForeignKey(CulturalAndAmenityProd, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -431,6 +437,7 @@ class PlantDurationByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
     duration = models.ForeignKey(Duration, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -442,6 +449,7 @@ class PlantEndemicStatusByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     endemic_status = models.ForeignKey(EndemicStatus, on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -451,6 +459,7 @@ class PlantErosionControlByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
     erosion_control = models.ForeignKey(ErosionControl, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -461,6 +470,7 @@ class PlantBarrierByRegion(models.Model):# BarrierByRegion
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
     barrier = models.ForeignKey('Barrier', on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -471,7 +481,8 @@ class PlantNutrientRequirementsByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
     nutrient_requirements = models.ForeignKey(NutrientRequirements, on_delete=models.CASCADE, blank=True, null=True) #####
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_nutrient_requirements_by_region'
@@ -481,6 +492,7 @@ class PlantNutrientRequirementsByRegion(models.Model):
 class PlantFlowerColor(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     flower_color = models.ForeignKey(FlowerColor, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -490,6 +502,7 @@ class PlantFlowerColor(models.Model):
 class PlantFoliageColor(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     foliage_color = models.ForeignKey(FoliageColor, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -499,6 +512,7 @@ class PlantFoliageColor(models.Model):
 class PlantFoodProd(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     food_prod = models.ForeignKey(FoodProd, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -507,6 +521,7 @@ class PlantFoodProd(models.Model):
 class PlantAnimalFood(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     animal_food = models.ForeignKey(AnimalFood, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -515,6 +530,7 @@ class PlantAnimalFood(models.Model):
 class PlantFruitColor(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     fruit_color = models.ForeignKey(FruitColor, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -525,6 +541,7 @@ class PlantHarvestPeriodByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     harvest_period = models.ForeignKey(HarvestPeriod, on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -535,6 +552,7 @@ class PlantInsectAttractorByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     insects = models.ForeignKey(Insects, on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -548,6 +566,7 @@ class PlantInsectRegulatorByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     insects = models.ForeignKey(Insects, on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -557,7 +576,8 @@ class PlantInsectRegulatorByRegion(models.Model):
 class PlantLayer(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     layer = models.ForeignKey(Layer, on_delete=models.CASCADE, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_layer'
@@ -570,7 +590,8 @@ class PlantLeafRetentionByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
     leaf_retention = models.ForeignKey(LeafRetention, on_delete=models.CASCADE, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_leaf_retention_by_region'
@@ -580,7 +601,8 @@ class PlantLeafRetentionByRegion(models.Model):
 class PlantMedicinalsProd(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     medicinals_prod = models.ForeignKey(MedicinalsProd, on_delete=models.CASCADE, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_medicinals_prod'
@@ -589,6 +611,7 @@ class PlantMedicinalsProd(models.Model):
 class PlantMineralNutrientsProd(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     mineral_nutrients_prod = models.ForeignKey(MineralNutrientsProd, on_delete=models.CASCADE, blank=True, null=True)
+    reference = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -597,7 +620,8 @@ class PlantMineralNutrientsProd(models.Model):
 class PlantRawMaterialsProd(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     raw_materials_prod = models.ForeignKey('RawMaterialsProd', on_delete=models.CASCADE, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_raw_materials_prod'
@@ -606,7 +630,8 @@ class PlantScientificName(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     scientific_name = models.ForeignKey('ScientificName', on_delete=models.CASCADE, blank=True, null=True)
     value = models.TextField(blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_scientific_name'
@@ -615,7 +640,8 @@ class PlantShadeTolByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     shade_tol = models.ForeignKey('ShadeTol', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_shade_tol_by_region'
@@ -624,7 +650,8 @@ class PlantSoilDrainageTolByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     soil_drainage_tol = models.ForeignKey('SoilDrainageTol', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_soil_drainage_tol_by_region'
@@ -661,7 +688,8 @@ class PlantSunNeedsByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
     sun_needs = models.ForeignKey('SunNeeds', on_delete=models.CASCADE, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_sun_needs_by_region'
@@ -672,7 +700,8 @@ class PlantWaterNeedsByRegion(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     regions = models.ForeignKey('Region', on_delete=models.CASCADE, blank=True, null=True)
     water_needs = models.ForeignKey('WaterNeeds', on_delete=models.CASCADE, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_water_needs_by_region'
@@ -914,7 +943,8 @@ class PlantRegion(models.Model):
     height = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     spread = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     root_depth = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-
+    reference = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'plants_region'

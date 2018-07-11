@@ -187,6 +187,11 @@ var EditPlant = function(){
 
         // jQuery Event: Plant Names (common name, latin name, family, etc.) are hovered
         // Reslting Action Summary: Display "click to edit"
+
+        $('.cancelBtn').click(function(){
+            resetUpdateAttributeModal();
+        });
+
         $('.submitBtn').click(function(){ //not update names
             if (userId < 1){
                  userNotAuthenticated();
@@ -349,7 +354,6 @@ var EditPlant = function(){
                 $("#updateAttributeMdl").modal('hide');
 
                 resetUpdateAttributeModal();
-
 
                 if(isNewAttribute == "1" ){
                     var $newRow = $("<div>")

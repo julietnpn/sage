@@ -247,6 +247,7 @@
                 <th>Type</th>
                 <th>Property</th>
                 <th>Value</th>
+                <th>Reference</th>
             </tr>
 
             {% for a in activity %}
@@ -255,6 +256,7 @@
                     <td>{{a.activityType}}</td>
                     <td>{{a.activityProperty}}</td>
                     <td>{{a.activityValue}}</td>
+                    <td>{{a.reference}}</td>
                 </tr>
             {% endfor %}
         </table>

@@ -128,7 +128,8 @@ def getUserActivity(userID):
                 "plant_name" : plant.get_scientific_name,
                 "type" : a.action_type,
                 "property" : a.property,
-                "value" : value 
+                "value" : value,
+                "reference" : a.reference
             }
             activities.append(activity)
     return activities
