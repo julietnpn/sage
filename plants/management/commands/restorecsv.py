@@ -111,24 +111,7 @@ properties_many_to_many = ['biochemical_material_prod',
                            'mineral_nutrients_prod',
                            'raw_materials_prod'
                            ]
-
-def get_attributes(cls):
-	f = False
-	attributes = cls.__doc__.split(',')[1:]
-	attributes[-1] = attributes[-1][:-1]
-	if "regions" in attributes[-1]:
-		t = attributes[-1]
-		attributes[-1]=attributes[-2]
-		attributes[-2]=t
-		f= True
-	if "name_category" in attributes[-1]:
-		t = attributes[-1]
-		attributes[-1]=attributes[-2]
-		attributes[-2]=t
-		f= True
-	attributes = [i.strip()+'_id' for i in attributes]
-	return attributes, f
-
+						   
 
 #--------------------------------------The Ecology Center - Plant List-------------
 #written by Moin
