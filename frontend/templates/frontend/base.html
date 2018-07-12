@@ -72,8 +72,11 @@
 		      		{% csrf_token %}
 					<label id="mdl-label"></label>
 					{% for field in updateAttributeForm %}
-					    <label id = "mdl-label"> {{field.label}} </label>
-				      {{ field }}
+							{% if field.label == "Reference" %}	
+							<label id = "mdl-label"> {{field.label}} </label>
+							{% endif %}
+							{{ field }}
+							
 		          {% endfor %}
 
 <!-- 		      		<table border="0" style="width:100%;">
