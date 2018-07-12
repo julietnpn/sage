@@ -7,11 +7,15 @@ import csv
 class Command(BaseCommand):
 	
 	def handle(self, *args, **options):
-		path1=r'/Users/matthew/Desktop/programming projects/django/SAGE/sage/plants/management/csvdata/ICS5_2015.csv'
-		
+		path1 = r'./plants/management/csvdata/ICS5_2015.csv'
+		path2 = r'./plants/management/csvdata/ICS5_2016.csv'
+		path3 = r'./plants/management/csvdata/ICS5_2017.csv'
+
 		user = AuthUser.objects.get(username='ICS5')
 	
 		csv_import(path1, user)
+		csv_import(path2, user)
+		csv_import(path3, user)
 
 scientific_names_list = []
 transaction_list = []
@@ -79,6 +83,10 @@ properties_many_to_many = ['biochemical_material_prod',
 						   ]
 
 def csv_import(path, user):
+	plant_name_ids = { }
+	for p in Plant.objects.all():
+		plant_name_ids[p.get_scientific_name] = p.id
+
 	with open(path) as f:
 		reader = csv.DictReader(f)
 		for i,plant in enumerate(reader):
@@ -91,7 +99,7 @@ def csv_import(path, user):
 
 			scientific_name = ''
 			genus = ''
-			speces = '' 
+			species = '' 
 			variety = ''
 			subspecies = ''
 			cultivar = ''
@@ -108,7 +116,7 @@ def csv_import(path, user):
 						if "spp." in i:
 							found = True
 						if found:
-							subspecies = i
+							subspecies = ' ' + i
 							continue
 			if ' x ' in scientific_name:
 				sciname_bits= scientific_name.split()
@@ -118,7 +126,7 @@ def csv_import(path, user):
 				sciname_bits= scientific_name.split()
 				for i in sciname_bits:
 					if i.startswith("'") and i.endswith("'"):
-						cultivar = i
+						cultivar = ' ' + i
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
 							species = ''
@@ -129,13 +137,13 @@ def csv_import(path, user):
 					if "Var. " or "var. " in i:
 						found = True
 					if found:
-						variety = i
+						variety = ' ' + i
 						continue
 			if genus is '':
 				sciname_bits = scientific_name.split()
 				genus = sciname_bits[0]
 				if len(sciname_bits) > 1:
-					species = sciname_bits[1]
+					species = ' ' + sciname_bits[1]
 				else:
 					print("genus only, delete transaction")
 					continue
@@ -143,13 +151,18 @@ def csv_import(path, user):
 			#check if this scientific name is already in the database
 			#if scientific name has already been added, then this should be an update transaction, not an insert
 			whole_db_scientific_name = genus + species + subspecies + variety + cultivar
-			if whole_db_scientific_name in scientific_names_list:
+			if whole_db_scientific_name in plant_name_ids:
+				print('plant in database, update!')
+				trans_type = 'UPDATE'
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id = plant_name_ids[whole_db_scientific_name], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+			
+			elif whole_db_scientific_name in scientific_names_list:
 				trans_type = 'UPDATE'
 				s_index =scientific_names_list.index(whole_db_scientific_name)
 				print("index in scientific names list: ", s_index)
 				print("transaction id of that index: ", transaction_list[s_index])
-				plantobject = next((p for p in Plant.objects.all() if p.getScientificName == whole_db_scientific_name), None)
-				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id = plantobject.id, ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, parent_transaction=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the parent_transactions of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+			
 			else:
 				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
 			
@@ -174,113 +187,225 @@ def csv_import(path, user):
 
 
 			if plant['Family Name'].strip():
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='family', value=plant['Family Name'].strip()))
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='family', value=plant['Family Name'].strip().lower()))
 
 			if plant['Common Names'].strip():
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='common_name', value=plant['Common Names'].strip()))
+				plants_list = plant['Common Names'].splitlines()
+				plants = ''
+				for p in plants_list:
+					if p != '':
+						plants += p.strip()
+						if p != plants_list[-1] and p.strip()[-1] != ',':
+							plants += ", "
+						elif p.strip()[-1] == ',':
+							plants += ' '
+				print('pp: ', plants)
+				try:
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='common_name', value=plants))
+				except:
+					continue
 
 			if plant['Endemic status to Southern California'].strip():
-				endemic_status_id = EndemicStatus.objects.filter(value=plant['Endemic status to Southern California'].strip().lower()).first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='endemic_status', value=endemic_status_id))
+				endemic_status = EndemicStatus.objects.filter(value=plant['Endemic status to Southern California'].strip().lower()).first()
+				if endemic_status != None:
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='endemic_status', value=endemic_status.id))
 
 			if plant['Duration of life'].strip():
 				duration_id = Duration.objects.filter(value=plant['Duration of life'].strip().lower()).first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='duration', value=duration_id))
 
 			if plant['Layer'].strip():
-				layer_id = Layer.objects.filter(value=plant['Layer'].strip()).first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='layer', value=layer_id))
+				layer = plant['Layer'].split(',')
+				for l in layer:
+					l_id = Layer.objects.filter(value=l.strip().lower()).first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='layer', value=l_id))
 
 			if plant['Maximum canopy density'].strip():
-				canopy_density_id = CanopyDensity.objects.filter(value=plant['Maximum canopy density'].strip()).first().id
+				canopy_density_id = CanopyDensity.objects.filter(value=plant['Maximum canopy density'].strip().lower()).first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='canopy_density', value=canopy_density_id))
 
 			if plant['Leaf retention'].strip():
-				leaf_retention_id = LeafRetention.objects.filter(value=plant['Leaf retention'].strip()).first().id
+				leaf_retention_id = LeafRetention.objects.filter(value=plant['Leaf retention'].strip().lower()).first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='leaf_retention', value=leaf_retention_id))
 
 			if plant['Primary flower color'].strip():
-				flower_color_id = FlowerColor.objects.filter(value=plant['Primary flower color'].strip().lower()).first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='flower_color', value=flower_color_id))
+				flower_color = plant['Primary flower color'].split(',')
+				for fc in flower_color:
+					fc_id = FlowerColor.objects.filter(value=fc.strip().lower()).first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='flower_color', value=fc_id))
 
 			if plant['Foliage color'].strip():
-				foliage_color_id = FoliageColor.objects.filter(value=plant['Foliage color'].strip().lower()).first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='foliage_color', value=foliage_color_id))
+				foliage_color = plant['Foliage color'].split(',')
+				for fc in foliage_color:
+					fc_id = FoliageColor.objects.filter(value=fc.strip().lower()).first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='foliage_color', value=fc_id))
 
 			if plant['Fruit color (when ripe)'].strip():
-				fruit_color_id = FruitColor.objects.filter(value=plant['Fruit color (when ripe)'].strip().lower()).first().id
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='fruit_color', value=fruit_color_id))
-
+				fruit_color = plant['Fruit color (when ripe)'].split(',')
+				for fc in fruit_color:
+					fc_id = FruitColor.objects.filter(value=fc.strip().lower()).first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='fruit_color', value=fc_id))
+			
 			if plant['Degree of serotiny'].strip():
-				degree_of_serotiny = plant['Degree of serotiny'].strip()
+				degree_of_serotiny = plant['Degree of serotiny'].strip().lower()
 				if 'strongly serotinous' in degree_of_serotiny:
 					degree_of_serotiny_id = DegreeOfSerotiny.objects.filter(value='strongly serotinous').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='degree_of_serotiny', value=degree_of_serotiny_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='degree_of_serotiny_id', value=degree_of_serotiny_id))
 				elif 'weakly serotinous' in degree_of_serotiny:
 					degree_of_serotiny_id = DegreeOfSerotiny.objects.filter(value='weakly serotinous').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='degree_of_serotiny', value=degree_of_serotiny_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='degree_of_serotiny_id', value=degree_of_serotiny_id))
 				elif 'facultatively serotinous' in degree_of_serotiny:
 					degree_of_serotiny_id = DegreeOfSerotiny.objects.filter(value='facultatively serotinous').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='degree_of_serotiny', value=degree_of_serotiny_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='degree_of_serotiny_id', value=degree_of_serotiny_id))
 				elif 'non-serotinous' in degree_of_serotiny:
 					degree_of_serotiny_id = DegreeOfSerotiny.objects.filter(value='non-serotinous').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='degree_of_serotiny', value=degree_of_serotiny_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='degree_of_serotiny_id', value=degree_of_serotiny_id))
 
 			if plant['Shade tolerance'].strip():
 				shade_tol = plant['Shade tolerance'].split(',')
 				for st in shade_tol:
-					st_id = ShadeTol.objects.filter(value=st.strip()).first().id
+					st_id = ShadeTol.objects.filter(value=st.strip().lower()).first().id
 					actions.append(Actions(transactions=transaction, action_type=trans_type, property='shade_tol', value=st_id))
 
 			if plant['Salt tolerance'].strip():
-				salt_tol = plant['Salt tolerance'].strip()
+				salt_tol = plant['Salt tolerance'].strip().lower()
 				if 'moderately salt-tolerant' in salt_tol:
 					salt_told_id = SaltTol.objects.filter(value='moderately salt-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='salt_tol', value=salt_told_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='salt_tol_id', value=salt_told_id))
 				elif 'slightly salt-tolerant' in salt_tol:
 					salt_told_id = SaltTol.objects.filter(value='slightly salt-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='salt_tol', value=salt_told_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='salt_tol_id', value=salt_told_id))
 				elif 'not salt-tolerant' in salt_tol:
 					salt_told_id = SaltTol.objects.filter(value='not salt-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='salt_tol', value=salt_told_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='salt_tol_id', value=salt_told_id))
 				elif 'salt-tolerant' in salt_tol:
 					salt_told_id = SaltTol.objects.filter(value='salt-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='salt_tol', value=salt_told_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='salt_tol_id', value=salt_told_id))
 	
 			if plant['Flood tolerance'].strip():
-				flood_tol = plant['Flood tolerance'].strip()
+				flood_tol = plant['Flood tolerance'].strip().lower()
 				if 'moderately flood-tolerant' in flood_tol:
 					flood_tol_id = FloodTol.objects.filter(value='moderately flood-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='flood_tol', value=flood_tol_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='flood_tol_id', value=flood_tol_id))
 				elif 'not flood-tolerant' in flood_tol:
 					flood_tol_id = FloodTol.objects.filter(value='not flood-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='flood_tol', value=flood_tol_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='flood_tol_id', value=flood_tol_id))
 				elif 'flood-tolerant' in flood_tol:
 					flood_tol_id = FloodTol.objects.filter(value='flood-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='flood_tol', value=flood_tol_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='flood_tol_id', value=flood_tol_id))
 
 			if plant['Drought tolerance'].strip():
-				drought_tol = plant['Drought tolerance'].strip()
+				drought_tol = plant['Drought tolerance'].strip().lower()
 				if 'moderately drought-tolerant' in drought_tol:
 					drought_tol_id = DroughtTol.objects.filter(value='moderately drought-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='drought_tol', value=drought_tol_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='drought_tol_id', value=drought_tol_id))
 				elif 'not drought-tolerant' in drought_tol:
 					drought_tol_id = DroughtTol.objects.filter(value='not drought-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='drought_tol', value=drought_tol_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='drought_tol_id', value=drought_tol_id))
 				elif 'drought-tolerant' in drought_tol:
 					drought_tol_id = DroughtTol.objects.filter(value='drought-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='drought_tol', value=drought_tol_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='drought_tol_id', value=drought_tol_id))
 
 			if plant['Humidity tolerance'].strip():
-				humidity_tol = plant['Humidity tolerance'].strip()
+				humidity_tol = plant['Humidity tolerance'].strip().lower()
 				if 'moderately humidity-tolerant' in humidity_tol:
 					humidity_tol_id = HumidityTol.objects.filter(value='moderately humidity-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='humidity_tol', value=humidity_tol_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='humidity_tol_id', value=humidity_tol_id))
 				elif 'not humidity-tolerant' in humidity_tol:
 					humidity_tol_id = HumidityTol.objects.filter(value='not humidity-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='humidity_tol', value=humidity_tol_id))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='humidity_tol_id', value=humidity_tol_id))
 				elif 'humidity-tolerant' in humidity_tol:
 					humidity_tol_id = HumidityTol.objects.filter(value='humidity-tolerant').first().id
-					actions.append(Actions(transactions=transaction, action_type=trans_type, property='humidity_tol', value=humidity_tol_id))
-					
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='humidity_tol_id', value=humidity_tol_id))
+			
+			if plant['Fire tolerance'].strip():
+				fire_tol = plant['Fire tolerance'].strip().lower()
+				if 'resistant to fire' in fire_tol:
+					fire_tol_id = FireTol.objects.filter(value='resistant to fire').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='fire_tol_id', value=fire_tol_id))
+				elif 'not resistant to fire' in fire_tol:
+					fire_tol_id = FireTol.objects.filter(value='not resistant to fire').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='fire_tol_id', value=fire_tol_id))
+				elif 'accelerates fire' in fire_tol:
+					fire_tol_id = FireTol.objects.filter(value='accelerates fire').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='fire_tol_id', value=fire_tol_id))
+				
+			if plant['Nutrient requirements'].strip():
+				nutrient_req = NutrientRequirements.objects.filter(value=plant['Nutrient requirements'].strip().lower()).first()
+				if nutrient_req != None:
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='nutrient_requirements', value=nutrient_req.id))
+			
+			if plant['Sun light requirements'].strip():
+				sun_light = plant['Sun light requirements'].split(',')
+				for sl in sun_light:
+					sl_id = SunNeeds.objects.filter(value=sl.strip().lower()).first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='sun_needs', value=sl_id))
+
+			if plant['Serotiny'].strip():
+				serotiny = plant['Serotiny'].strip().lower()
+				if 'none' in serotiny:
+					serotiny_id = Serotiny.objects.filter(value='none').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='serotiny_id', value=serotiny_id))
+				elif 'necriscene' in serotiny:
+					serotiny_id = Serotiny.objects.filter(value='necriscene').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='serotiny_id', value=serotiny_id))
+				elif 'hygriscene' in serotiny:
+					serotiny_id = Serotiny.objects.filter(value='hygriscene').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='serotiny_id', value=serotiny_id))
+				elif 'soliscene' in serotiny:
+					serotiny_id = Serotiny.objects.filter(value='soliscene').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='serotiny_id', value=serotiny_id))
+				elif 'xeriscene' in serotiny:
+					serotiny_id = Serotiny.objects.filter(value='xeriscene').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='serotiny_id', value=serotiny_id))
+				elif 'pyriscene' in serotiny:
+					serotiny_id = Serotiny.objects.filter(value='pyriscene').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='serotiny_id', value=serotiny_id))
+				elif 'phyrohydriscene' in serotiny:
+					serotiny_id = Serotiny.objects.filter(value='phyrohydriscene').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='serotiny_id', value=serotiny_id))
+
+			if plant['Raw materials'].strip():
+				raw_materials = plant['Raw materials'].split(',')
+				for rm in raw_materials:
+					raw_mat = RawMaterialsProd.objects.filter(value=rm.strip().lower()).first()
+					if raw_mat != None:
+						actions.append(Actions(transactions=transaction, action_type=trans_type, property='raw_materials_prod', value=raw_mat.id))
+
+			if plant['Medicinal'].strip():
+				medicinal = plant['Medicinal'].split(',')
+				for m in medicinal:
+					med = MedicinalsProd.objects.filter(value=m.strip().lower()).first()
+					if med != None:
+						actions.append(Actions(transactions=transaction, action_type=trans_type, property='medicinals_prod', value=med.id))
+			
+			if plant['Biochemical material'].strip():
+				biochem_material = plant['Biochemical material'].split(',')
+				for bm in biochem_material:
+					biochem = BiochemicalMaterialProd.objects.filter(value=bm.strip().lower()).first()
+					if biochem != None:
+						actions.append(Actions(transactions=transaction, action_type=trans_type, property='biochemical_material_prod', value=biochem.id))
+			
+			if plant['Cultural and amenity'].strip():
+				cultural_amenity = plant['Cultural and amenity'].split(',')
+				for ca in cultural_amenity:
+					cultural = CulturalAndAmenityProd.objects.filter(value=ca.strip().lower()).first()
+					if cultural != None:
+						actions.append(Actions(transactions=transaction, action_type=trans_type, property='cultural_and_amenity_prod', value=cultural.id))
+			
+			if plant['Nutrients added to soil'].strip():
+				nutrients_added = plant['Nutrients added to soil'].split(',')
+				for n in nutrients_added:
+					nutrient = MineralNutrientsProd.objects.filter(value=n.strip().lower()).first()
+					if nutrient != None:
+						actions.append(Actions(transactions=transaction, action_type=trans_type, property='mineral_nutrients_prod', value=nutrient.id))
+			
+			if plant['Erosion Control'].strip():
+				erosion_control_id = ErosionControl.objects.filter(value=plant['Erosion Control'].strip().lower()).first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='erosion_control', value=erosion_control_id))
+			
+			if plant['Toxicity to human and livestock'].strip():
+				toxicity_id = Toxicity.objects.filter(value=plant['Toxicity to human and livestock'].strip().lower()).first().id
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='toxicity_id', value=toxicity_id))
+
 			Actions.objects.bulk_create(actions)

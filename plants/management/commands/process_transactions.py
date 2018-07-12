@@ -43,7 +43,8 @@ properties_1_to_1 = ['common_name',
                      'serotiny_id',
                      'degree_of_serotiny_id',# add family here?!?!
                      'family_id',
-                     'family_common_name_id']
+                     'family_common_name_id',
+					 'time_to_first_harvest']
 
 properties_many_with_region = ['active_growth_period',
                                'animal_attractor',
@@ -230,7 +231,7 @@ def process_transactions():
 			print("this plants related transaction id is ",transaction.parent_transaction)
 			parentTrans = Transactions.objects.get(id=transaction.parent_transaction)
 			transaction.plants_id = parentTrans.plants_id
-			transaction.save()
+			transaction.save()				
 		else:
 			print('rollback')
 			# db.session.rollback()
@@ -332,6 +333,7 @@ def process_transactions():
 					# pass
 			else:
 				# db.session.rollback()
+				print('invalid property transaction id ', transaction.id)
 				raise ValueError("Invalid property name = " + action.property)
 				pass
 

@@ -159,7 +159,7 @@ def csv_import1(path1, user):
 						if "spp." in i:
 							found = True
 						if found:
-							subspecies = i;
+							subspecies = i
 							continue
 			if ' x ' in scientific_name:
 				sciname_bits= scientific_name.split()
@@ -180,7 +180,7 @@ def csv_import1(path1, user):
 					if "Var. " or "var. " in i:
 						found = True
 					if found:
-						variety = i;
+						variety = i
 						continue
 			if genus is '':
 				#genus has not been defined and needs to be defined
