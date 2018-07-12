@@ -1018,7 +1018,7 @@ class Plant(models.Model):
     # genus = models.CharField(max_length=160, blank=True, null=True)
     # species = models.CharField(max_length=160, blank=True, null=True)
     # variety = models.CharField(max_length=160, blank=True, null=True)
-    common_name = models.CharField(max_length=160, blank=True, null=True)
+    common_name = models.CharField(max_length=300, blank=True, null=True)
     #endemic_status
     endemic_status = models.ManyToManyField(EndemicStatus, through=PlantEndemicStatusByRegion)
     @property
