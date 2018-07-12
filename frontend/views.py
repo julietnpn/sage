@@ -272,7 +272,7 @@ def removeAttribute(request):
 
         if transaction_id == 0:
             #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type=action_type, ignore=False)
-            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
             transaction.save()
             response_data = transaction.id
         else:
@@ -296,7 +296,7 @@ def updateNames(request):
 
         if transaction_id == 0:
             #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type=action_type, ignore=False)
-            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type=action_type, ignore=False)
+            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type=action_type, parent_transaction = parent_transactions(plantId), ignore=False)
             transaction.save()
         else:
             transaction = Transactions.objects.get(id=transaction_id)
@@ -433,7 +433,7 @@ def updateText(request, transaction_id, action_type):
 
             if int(transaction_id) == 0:
                 #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
                 transaction.save()
             else:
                 transaction = Transactions.objects.get(id = transaction_id)
@@ -460,7 +460,7 @@ def updateSelect(request, transaction_id, action_type):
 
             if int(transaction_id) == 0:
                 #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
                 transaction.save()
             else:
                 transaction = Transactions.objects.get(id = transaction_id)
@@ -486,7 +486,7 @@ def updateMulti(request, transaction_id, action_type):
             # oldVals = oldVals.split(",") WHY WAS THIS HERE
 
             if int(transaction_id) == 0: 
-                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
                 #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
                 transaction.save()
             else:
@@ -919,3 +919,8 @@ def about(request):
 
 def dbstructure(request):
     return render(request, 'frontend/dbstructure.html', {})
+
+def parent_transactions(p_id):
+    # find the most recent transcations associated with the plant ID, and return the transaction ID of the transaction
+    last_transaction = Transactions.objects.filter(plants_id = p_id).last()
+    return last_transaction.id
