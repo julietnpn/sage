@@ -4,8 +4,12 @@ from frontend.models import Actions, Transactions
 from login.models import AuthUser
 import csv
 
+def parent_transaction(p_id):
+    # find the most recent transcations associated with the plant ID, and return the transaction ID of the transaction
+    last_transaction = Transactions.objects.filter(plants_id = p_id).last()
+    return last_transaction.id
+
 class Command(BaseCommand):
-	
 	def handle(self, *args, **options):
 		path1 = r'./plants/management/csvdata/ICS5_2015.csv'
 		path2 = r'./plants/management/csvdata/ICS5_2016.csv'
@@ -154,7 +158,8 @@ def csv_import(path, user):
 			if whole_db_scientific_name in plant_name_ids:
 				print('plant in database, update!')
 				trans_type = 'UPDATE'
-				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id = plant_name_ids[whole_db_scientific_name], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+				p_id = plant_name_ids[whole_db_scientific_name]
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=p_id, parent_transaction=parent_transaction(p_id), ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
 			
 			elif whole_db_scientific_name in scientific_names_list:
 				trans_type = 'UPDATE'

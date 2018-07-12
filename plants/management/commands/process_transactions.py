@@ -229,6 +229,7 @@ def process_transactions():
 		elif transaction.transaction_type == 'UPDATE':
 			#BECAUSE WE FLUSHED THE PLANTS TABLE, WE HAVE TO RESET THE PLANT ID FROM THE PARENT TRANSACTION (THE ORIGINAL INSERT OF THAT PLANT)
 			print("this plants related transaction id is ",transaction.parent_transaction)
+			print("user id: ", transaction.users_id, " transaction_id: ", transaction.id)
 			parentTrans = Transactions.objects.get(id=transaction.parent_transaction)
 			transaction.plants_id = parentTrans.plants_id
 			transaction.save()				
