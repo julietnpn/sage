@@ -6,8 +6,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg">
-
+	<!-- <link rel="shortcut icon" href="http://grandaspirations.org/wp-content/uploads/2010/11/growing-plant.jpg"> -->
+	<link rel="shortcut icon" href="{% static 'frontend/img/favicon.ico' %}" />
+	<!-- Thanks to StockIO
+		https://www.stockio.com/free-icon/veggie-icons-sage -->
+	
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Karla:400,700|Open+Sans" rel="stylesheet">	
 
@@ -17,8 +20,9 @@
 	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" type="text/css" href="{% static 'frontend/main.css' %}" />
 
-
-	<title>{% block title %}{% endblock %}</title>
+	<!-- Can switch back to this if we really do want dynamic tab titles -->
+	<!-- <title>{% block title %}{% endblock %}</title> -->
+	<title>SAgE Plant Database</title>
 </head>
 
 <body>
@@ -73,10 +77,9 @@
 					<label id="mdl-label"></label>
 					{% for field in updateAttributeForm %}
 							{% if field.label == "Reference" %}	
-							<label id = "mdl-label"> {{field.label}} </label>
+							<div><label id= "mdl-label"> {{field.label}} </label></div>
 							{% endif %}
-							{{ field }}
-							
+							<div>{{ field }}</div>
 		          {% endfor %}
 
 <!-- 		      		<table border="0" style="width:100%;">

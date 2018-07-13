@@ -185,6 +185,10 @@ var EditPlant = function(){
             $("#updateAttributeMdl").modal();
         });
 
+        $('#updateAttributeMdl').on('hidden.bs.modal', function () {
+            resetUpdateAttributeModal();
+        })
+
         // jQuery Event: Plant Names (common name, latin name, family, etc.) are hovered
         // Reslting Action Summary: Display "click to edit"
 
