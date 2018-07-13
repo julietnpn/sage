@@ -16,6 +16,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 import pdb
 from django.views.generic import View
+import csv
 
 
 
@@ -924,3 +925,15 @@ def parent_transactions(p_id):
     # find the most recent transcations associated with the plant ID, and return the transaction ID of the transaction
     last_transaction = Transactions.objects.filter(plants_id = p_id).last()
     return last_transaction.id
+
+def export_plant_data(request):
+    # create a HttpResponse object
+    response = HttpResponse(content_type = 'text/csv')
+    response['Content-Dispostion'] = 'attachment; filename = "export_plant_data.csv"'
+
+    writer = csv.writer(response)
+    all_plants = Plant.objects.all()
+    for p in all_plants:
+        writer.writerow([p.get_scientific_name])
+    
+    return response

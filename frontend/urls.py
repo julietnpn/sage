@@ -21,6 +21,7 @@ urlpatterns= [
     re_path(r'^getBehavior/$', views.getBehaviors),
     re_path(r'^getNeed/$', views.getNeeds),
     re_path(r'^getTolerance/$', views.getTolerances),
+    re_path(r'^export_plant_data/$', views.export_plant_data),
     path('about/', views.about),
     path('dbstructure', views.dbstructure),
 ]
