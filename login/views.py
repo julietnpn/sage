@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect
 from django.template import *
 #from django.db.models import get_models, get_app
 from django.apps import apps
+from django.contrib.auth.hashers import *
  
 @csrf_protect
 def register(request):
@@ -133,3 +134,20 @@ def getUserActivity(userID):
             }
             activities.append(activity)
     return activities
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.POST)
+        if form.is_valid():
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+            request.user.password = make_password(password1)
+            request.user.password = make_password(password2)
+            request.user.save()
+            return HttpResponseRedirect('/reset')
+    else:
+        form = PasswordChangeForm()
+    variables = {'form': form}
+    return render(request,'change_password.html', variables)
+    

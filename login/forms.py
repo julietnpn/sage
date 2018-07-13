@@ -37,6 +37,11 @@ class EditProfileForm(forms.Form):
     affiliation = forms.CharField(widget=forms.TextInput(attrs=dict(required=False, max_length=254)), label=_("Affiliation"))
     experience = forms.CharField(widget=forms.TextInput(attrs=dict(required=False, max_length=512)), label=_("Experience"))
     interests = forms.CharField(widget=forms.TextInput(attrs=dict(required=False, max_length=512)), label=_("Interests"))
-    
+
     def clean(self):
         return self.cleaned_data
+
+class PasswordChangeForm(forms.Form):
+    password1 = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=30)), label=_("Change Password"))
+    password2 = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=30)), label=_("Confirm Password"))
+    
