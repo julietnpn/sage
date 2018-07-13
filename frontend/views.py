@@ -841,6 +841,7 @@ def filter(request):
 
 
 from itertools import chain
+plant_search_results = {}
 def search(request, searchString):
     #print(searchString)
         
@@ -881,7 +882,8 @@ def search(request, searchString):
             results_list = list(chain(results_list, splants))
             
     results_list = list(set(results_list))
-    
+    plant_search_results['plants'] = results_list
+
     print(len(results_list))
     # else:
 #       results_list = list(chain(layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results, common_name_results))
@@ -932,8 +934,14 @@ def export_plant_data(request):
     response['Content-Dispostion'] = 'attachment; filename = "export_plant_data.csv"'
 
     writer = csv.writer(response)
-    all_plants = Plant.objects.all()
-    for p in all_plants:
-        writer.writerow([p.get_scientific_name])
-    
+
+    if plant_search_results == {}:
+        all_plants = Plant.objects.all()
+        for p in all_plants:
+            writer.writerow([p.get_scientific_name])
+    else:
+        for p in plant_search_results['plants']:
+            writer.writerow([p.get_scientific_name])
+        plant_search_results.clear()
+
     return response
