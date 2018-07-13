@@ -8,6 +8,7 @@ urlpatterns= [
     re_path(r'^addPlant/$', views.addPlant, name='index'),
     re_path(r'^edit/([0-9]+)/$', views.editPlant, name='editPlant'),
     re_path(r'^search/(?P<searchString>[\w ]+)/$', views.search, name='editPlant'),
+    re_path(r'^search//()', views.search, name='editPlant'),
     re_path(r'^filter/$', views.filter),
     re_path(r'^reload_controls/(?P<className>\w+)/$', views.reload_attribute_vals_view, name='reload_controls'),
     re_path(r'^updateText/(?P<transaction_id>[0-9]+)/(?P<action_type>\w+)/$', views.updateText, name='updateText'),

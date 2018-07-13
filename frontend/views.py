@@ -1,5 +1,5 @@
 from django.http import *
-from django.shortcuts import render #, render_to_response, redirect
+from django.shortcuts import render, redirect #, render_to_response, redirect
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -844,7 +844,9 @@ from itertools import chain
 plant_search_results = {}
 def search(request, searchString):
     #print(searchString)
-        
+    if not searchString:
+        return redirect("/")
+    
     plants = Plant.objects
 
     layer_results = Plant.objects.filter(layer__in=Layer.objects.filter(value__icontains=searchString))
