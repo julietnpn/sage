@@ -10,3 +10,4 @@ plantguildcomposer.esproj/user.Sean.espressostorage
 user.Sean.espressostorage
 
 *.pyc
+.vscode/settings.json
