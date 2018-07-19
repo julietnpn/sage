@@ -659,17 +659,16 @@ dont think we need to list */
 
 
 .dropdown-select{
-	color:black;
-	padding-left:16px;
-	padding-right:16px;
-	padding-top:12px;
-	padding-bottom:4px;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    border-bottom: 1px solid black;
-    width:100%;
-    margin-bottom:8px;
+	width: 100%;
+	border: none;
+	height: 44px;
+	padding-left: 16px;
+	padding-right: 16px;
+	background-color: #f9f9f9;
+}
+
+.dropdown-select:focus{
+	outline: 1px solid #4CAF50;
 }
 
 .pagination{
