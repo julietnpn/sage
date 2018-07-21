@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'x2ama@8i31%i_3vc!4r94rv5_!*@yx#wz89=#_)wj7g466p1%0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True #should be set to false for heroku
 
 ALLOWED_HOSTS = ['*']
 
@@ -75,7 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'plantsproject.wsgi.application'
 
-SITE_ID = 2
+SITE_ID = 1 #should be set to 2 for heroku
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 COMMENTS_XTD_CONFIRM_EMAIL = True
@@ -98,8 +98,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'django-plants',
-        'USER': 'pacificsage',
-        'PASSWORD': 'plants',
+        'USER': 'postgres',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
     }

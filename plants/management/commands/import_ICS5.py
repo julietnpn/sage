@@ -27,7 +27,7 @@ class Command(BaseCommand):
             csv_import(path2, user)
             csv_import(path3, user)
         if args == '-second':
-            #new methods for the second wave of parsing
+            #matthew: new methods for the second wave of parsing
             #csv_import2(path1, user)
             #csv_import2(path2, user)
             #csv_import2(path3, user)
@@ -36,7 +36,7 @@ class Command(BaseCommand):
             csv_import(path1, user)
             csv_import(path2, user)
             csv_import(path3, user)
-            #uncomment these when the code is written.
+            #matthew: uncomment these when the code is written.
             #csv_import2(path1, user)
             #csv_import2(path2, user)
             #csv_import2(path3, user)
@@ -437,4 +437,4 @@ def csv_import(path, user):
 			
 			
 def csv_import2(path, user):
-    #add second wave parsing code here.
+    #matthew: add second wave parsing code here.
