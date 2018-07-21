@@ -75,18 +75,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'plantsproject.wsgi.application'
 
-SITE_ID = 1
+SITE_ID = 2
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 COMMENTS_XTD_CONFIRM_EMAIL = True
 
-# EMAIL_HOST = "smtp.mail.com"
-# EMAIL_PORT = "587"
-# EMAIL_HOST_USER = "noreply@sage-pdb.com"
-# EMAIL_HOST_PASSWORD = "yourpassword"
-# DEFAULT_FROM_EMAIL = "perennialpolycultures@ics.uci.edu"
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = "softwareforagroecosystems@gmail.com"
+EMAIL_HOST_PASSWORD = "apse4-cactus"
+EMAIL_SUBJECT_PREFIX = "[SAGE] "
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+ 
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -94,8 +98,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'django-plants',
-        'USER': 'postgres',
-        'PASSWORD': '',
+        'USER': 'pacificsage',
+        'PASSWORD': 'plants',
         'HOST': 'localhost',
         'PORT': '5432',
     }

@@ -10,6 +10,11 @@ def parent_transaction(p_id):
     return last_transaction.id
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+		parser.add_argument('-first', nargs='?', help='Use if importing the ICS5 data in the first round of parsing. Many data in this stage were skipped because of inconsistencies.)
+		parser.add_argument('-second', nargs='?', help='Use if importing the ICS5 data in the second round of parsing. This imports most of the data skipped in the first round.')
+		parser.add_argument('-all', nargs='?', help='Use if importing the ICS5 data from both first and second round of parsing.')
+		
 	def handle(self, *args, **options):
 		path1 = r'./plants/management/csvdata/ICS5_2015.csv'
 		path2 = r'./plants/management/csvdata/ICS5_2016.csv'
@@ -17,9 +22,24 @@ class Command(BaseCommand):
 
 		user = AuthUser.objects.get(username='ICS5')
 	
-		csv_import(path1, user)
-		csv_import(path2, user)
-		csv_import(path3, user)
+	    if args == '-first':
+            csv_import(path1, user)
+            csv_import(path2, user)
+            csv_import(path3, user)
+        if args == '-second':
+            #new methods for the second wave of parsing
+            #csv_import2(path1, user)
+            #csv_import2(path2, user)
+            #csv_import2(path3, user)
+        
+        if args == '-all' or None:
+            csv_import(path1, user)
+            csv_import(path2, user)
+            csv_import(path3, user)
+            #uncomment these when the code is written.
+            #csv_import2(path1, user)
+            #csv_import2(path2, user)
+            #csv_import2(path3, user)
 
 scientific_names_list = []
 transaction_list = []
@@ -414,3 +434,7 @@ def csv_import(path, user):
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='toxicity_id', value=toxicity_id))
 
 			Actions.objects.bulk_create(actions)
+			
+			
+def csv_import2(path, user):
+    #add second wave parsing code here.
