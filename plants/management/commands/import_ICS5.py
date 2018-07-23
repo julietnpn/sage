@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from plants.models import *
 from frontend.models import Actions, Transactions
 from login.models import AuthUser
-import csv
+import csv, re
 
 def parent_transaction(p_id):
     # find the most recent transcations associated with the plant ID, and return the transaction ID of the transaction
@@ -10,8 +10,8 @@ def parent_transaction(p_id):
     return last_transaction.id
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
-		parser.add_argument('-first', nargs='?', help='Use if importing the ICS5 data in the first round of parsing. Many data in this stage were skipped because of inconsistencies.)
+	def add_arguments(self, parser):
+		parser.add_argument('-first', nargs='?', help='Use if importing the ICS5 data in the first round of parsing. Many data in this stage were skipped because of inconsistencies.')
 		parser.add_argument('-second', nargs='?', help='Use if importing the ICS5 data in the second round of parsing. This imports most of the data skipped in the first round.')
 		parser.add_argument('-all', nargs='?', help='Use if importing the ICS5 data from both first and second round of parsing.')
 		
@@ -21,25 +21,22 @@ class Command(BaseCommand):
 		path3 = r'./plants/management/csvdata/ICS5_2017.csv'
 
 		user = AuthUser.objects.get(username='ICS5')
-	
-	    if args == '-first':
-            csv_import(path1, user)
-            csv_import(path2, user)
-            csv_import(path3, user)
-        if args == '-second':
-            #matthew: new methods for the second wave of parsing
-            #csv_import2(path1, user)
-            #csv_import2(path2, user)
-            #csv_import2(path3, user)
-        
-        if args == '-all' or None:
-            csv_import(path1, user)
-            csv_import(path2, user)
-            csv_import(path3, user)
-            #matthew: uncomment these when the code is written.
-            #csv_import2(path1, user)
-            #csv_import2(path2, user)
-            #csv_import2(path3, user)
+		
+		if args == '-first':
+			csv_import(path1, user)
+			csv_import(path2, user)
+			csv_import(path3, user)
+		if args == '-second':
+			csv_import2(path1, user)
+			csv_import2(path2, user)
+			csv_import2(path3, user)
+		if args == '-all' or None:
+			csv_import(path1, user)
+			csv_import(path2, user)
+			csv_import(path3, user)
+			csv_import2(path1, user)
+			csv_import2(path2, user)
+			csv_import2(path3, user)
 
 scientific_names_list = []
 transaction_list = []
@@ -437,4 +434,188 @@ def csv_import(path, user):
 			
 			
 def csv_import2(path, user):
-    #matthew: add second wave parsing code here.
+	plant_name_ids = { }
+	for p in Plant.objects.all():
+		plant_name_ids[p.get_scientific_name] = p.id
+
+	with open(path) as f:
+		reader = csv.DictReader(f)
+		for i,plant in enumerate(reader):
+			trans_type = 'INSERT'
+			actions = []
+
+			if not(plant['Scientific Name']):
+				continue
+			print(i, plant['Scientific Name'], len(plant['Scientific Name']))
+
+			scientific_name = ''
+			genus = ''
+			species = '' 
+			variety = ''
+			subspecies = ''
+			cultivar = ''
+
+			scientific_name = plant['Scientific Name']
+			if 'spp.' in scientific_name:
+				if scientific_name.endswith('spp.'):
+					print("spp only, delete transaction")
+					continue
+				else:
+					sciname_bits= scientific_name.split()
+					found = False
+					for i in sciname_bits:
+						if "spp." in i:
+							found = True
+						if found:
+							subspecies = ' ' + i
+							continue
+			if ' x ' in scientific_name:
+				sciname_bits= scientific_name.split()
+				genus = sciname_bits[0] + " x " + sciname_bits[2]
+				species = ''
+			if "'" in scientific_name:
+				sciname_bits= scientific_name.split()
+				for i in sciname_bits:
+					if i.startswith("'") and i.endswith("'"):
+						cultivar = ' ' + i
+						if i<2 and genus is None:
+							genus = sciname_bits[0]
+							species = ''
+			if 'var. ' in scientific_name:
+				sciname_bits= scientific_name.split()
+				found = False
+				for i in sciname_bits:
+					if "Var. " or "var. " in i:
+						found = True
+					if found:
+						variety = ' ' + i
+						continue
+			if genus is '':
+				sciname_bits = scientific_name.split()
+				genus = sciname_bits[0]
+				if len(sciname_bits) > 1:
+					species = ' ' + sciname_bits[1]
+				else:
+					print("genus only, delete transaction")
+					continue
+			
+			#check if this scientific name is already in the database
+			#if scientific name has already been added, then this should be an update transaction, not an insert
+			whole_db_scientific_name = genus + species + subspecies + variety + cultivar
+			if whole_db_scientific_name in plant_name_ids:
+				print('plant in database, update!')
+				trans_type = 'UPDATE'
+				p_id = plant_name_ids[whole_db_scientific_name]
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=p_id, parent_transaction=parent_transaction(p_id), ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+			
+			elif whole_db_scientific_name in scientific_names_list:
+				trans_type = 'UPDATE'
+				s_index =scientific_names_list.index(whole_db_scientific_name)
+				print("index in scientific names list: ", s_index)
+				print("transaction id of that index: ", transaction_list[s_index])
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, parent_transaction=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the parent_transactions of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+			
+			else:
+				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
+			
+			scientific_names_list.append(whole_db_scientific_name)
+			transaction_list.append(transaction.id)
+			
+			genus_id = ScientificName.objects.filter(value='genus').first()
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+			
+			if species is not '':
+				species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
+			if variety is not '':
+				variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
+			if subspecies is not '':
+				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+			if cultivar is not '':
+				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
+
+			if plant['pH range'].strip():
+				pH_range = re.split('- | to', plant['pH range'].strip())
+				if len(pH_range) == 2:
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='pH_min', value=float(pH_range[0].strip())))
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='pH_max', value=float(pH_range[1].strip())))
+					
+			if plant['Wind tolerance'].strip():
+				wind_tol = plant['Wind tolerance'].strip().lower()
+				if 'very' in wind_tol:
+					wind_tol_id = WindTol.objects.filter(value='very wind tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='wind_tol_id', value=wind_tol_id))
+				elif 'moderately' in wind_tol:
+					wind_tol_id = WindTol.objects.filter(value='moderately wind tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='wind_tol_id', value=wind_tol_id))
+				elif 'somewhat' in wind_tol:
+					wind_tol_id = WindTol.objects.filter(value='somewhat wind-tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='wind_tol_id', value=wind_tol_id))
+				elif 'not' in wind_tol:
+					wind_tol_id = WindTol.objects.filter(value='not wind-tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='wind_tol_id', value=wind_tol_id))
+			
+			if plant['Active growth period'].strip():
+				active_growth_period = plant['Active growth period'].split(',')
+				for agp in active_growth_period:
+					agp_id = ActiveGrowthPeriod.objects.filter(value=agp.strip().lower()).first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='active_growth_period', value=agp_id))
+
+			if plant['Harvest period'].strip():
+				harvest_period = plant['Harvest period'].split(',')
+				for hp in harvest_period:
+					hp_id = HarvestPeriod.objects.filter(value=hp.strip().lower()).first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='harvest_period', value=hp_id))
+
+			if plant['Soil drainage tolerance'].strip():
+				soil_drain_tol = plant['Soil drainage tolerance'].strip().lower()
+				if 'poor-drainage tolerant' in soil_drain_tol:
+					soil_drain_tol_id = SoilDrainageTol.objects.filter(value='poor-drainage tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='soil_drainage_tol', value=soil_drain_tol_id))
+				elif 'somewhat-poor-drainage tolerant' in soil_drain_tol:
+					soil_drain_tol_id = SoilDrainageTol.objects.filter(value='somewhat-poor-drainage tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='soil_drainage_tol', value=soil_drain_tol_id))
+				elif 'moderate-drainage tolerant' in soil_drain_tol:
+					soil_drain_tol_id = SoilDrainageTol.objects.filter(value='moderate-drainage tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='soil_drainage_tol', value=soil_drain_tol_id))
+				elif 'well-drained tolerant' in soil_drain_tol:
+					soil_drain_tol_id = SoilDrainageTol.objects.filter(value='well-drained tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='soil_drainage_tol', value=soil_drain_tol_id))
+				elif 'excessively-drained tolerant' in soil_drain_tol:
+					soil_drain_tol_id = SoilDrainageTol.objects.filter(value='excessively-drained tolerant').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='soil_drainage_tol', value=soil_drain_tol_id))
+					
+			if plant['Innoculant'].strip():
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='inoculant', value=plant['Innoculant'].strip().lower()))
+
+			if plant['Human food'].strip():
+				human_food = plant['Huamn food'].strip()
+				if "greens" in human_food:
+					hf_id = FoodProd.objects.filter(value='greens').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='food_prod', value=hf_id))
+				if "grains" in human_food:
+					hf_id = FoodProd.objects.filter(value='grains').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='food_prod', value=hf_id))
+				if "vegetables" in human_food:
+					hf_id = FoodProd.objects.filter(value='vegetables').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='food_prod', value=hf_id))
+				if "nuts" in human_food:
+					hf_id = FoodProd.objects.filter(value='nuts').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='food_prod', value=hf_id))
+				if "fruit" in human_food:
+					hf_id = FoodProd.objects.filter(value='fruit').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='food_prod', value=hf_id))
+
+			if plant['Allelochemicals'].strip():
+				allelo = plant['Allelochemicals'].strip().lower()
+				if allelo == 'no' or allelo == 'none':
+					allelo_id = Allelopathic.objects.filter(value='no').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='allelopathic_id', value=allelo_id))
+				elif allelo == 'yes':
+					allelo_id = Allelopathic.objects.filter(value='yes').first().id
+					actions.append(Actions(transactions=transaction, action_type=trans_type, property='allelopathic_id', value=allelo_id))
+
+			Actions.objects.bulk_create(actions)
