@@ -844,7 +844,7 @@ from itertools import chain
 plant_search_results = {}
 def search(request, searchString):
     #print(searchString)
-
+    
     if not searchString:
         return redirect("/")
     
@@ -938,13 +938,57 @@ def export_plant_data(request):
 
     writer = csv.writer(response)
 
+    writer.writerow(['Scientific Name', 'Family Name', 'Common Names', 'Endemic status to Southern California', 
+                    'Duration of life', 'Height at maturity', 'Spread at maturity', 'pH range', 'Layer', 'Maximum canopy density', 
+                    'Active growth period', 'Harvest period', 'Leaf retention', 'Primary flower color', 'Foliage color', 'Fruit Color', 
+                    'Degree of serotiny', 'Shade tolerance', 'Salt tolerance', 'Flood tolerance', 'Drought tolerance', 'Humidity tolerance', 
+                    'Wind tolerance', 'Soil drainage tolerance', 'Fire tolerance', 'Minimum temperature (ºF) tolerance', 'Nutrient requirements',
+                    'Water requirements', 'Sun light requirements', 'Innoculant', 'Serotiny', 'Human food', 'Raw materials', 'Medicinal', 
+                    'Biochemical material', 'Cultural and amenity', 'Nutrients added to soil', 'Allelochemicals', 'Erosion Control', 
+                    'Insect attractor', 'Insect regulator', 'Animal attractor', 'Animal regulator', 'Toxicity to human and livestock'])	
+
     if plant_search_results == {}:
         all_plants = Plant.objects.all()
         for p in all_plants:
-            writer.writerow([p.get_scientific_name])
+            height, spread = "", ""
+            region = p.get_region
+            if region is not None:
+                height = region['height']
+                spread = region['spread']
+
+            pH_range = ""
+            if p.pH_min != None and p.pH_max != None:
+                pH_range += str(p.pH_min) + '-' + str(p.pH_max)
+
+            writer.writerow([p.get_scientific_name, p.family, p.common_name, p.get_endemic_status, 
+                             p.get_duration, height, spread, pH_range, p.get_layer, p.get_canopy_density, 
+                             p.get_active_growth_period, p.get_harvest_period, p.get_leaf_retention, p.get_flower_color, p.get_foliage_color, p.get_fruit_color,
+                             p.degree_of_serotiny, p.get_shade_tol, p.salt_tol, p.flood_tol, p.drought_tol, p.humidity_tol,
+                             p.wind_tol, p.get_soil_drainage_tol, p.fire_tol, p.minimum_temperature_tol, p.get_nutrient_requirements,
+                             p.get_water_needs, p.get_sun_needs, p.inoculant, p.serotiny, p.get_food_prod, p.get_raw_materials_prod, p.get_medicinals_prod,
+                             p.get_biochemical_material_prod, p.get_cultural_and_amenity_prod, p.get_mineral_nutrients_prod, p.allelopathic, p.get_erosion_control,
+                             p.get_plants_insect_attractor, p.get_plants_insect_regulator, p.get_plants_animal_attractor,  p.get_plants_animal_regulator, p.toxicity])
+        
     else:
         for p in plant_search_results['plants']:
-            writer.writerow([p.get_scientific_name])
-        plant_search_results.clear()
+            height, spread = "", ""
+            region = p.get_region
+            if region is not None:
+                height = region['height']
+                spread = region['spread']
 
+            pH_range = ""
+            if p.pH_min != None and p.pH_max != None:
+                pH_range += str(p.pH_min) + '-' + str(p.pH_max)
+
+            writer.writerow([p.get_scientific_name, p.family, p.common_name, p.get_endemic_status, 
+                             p.get_duration, height, spread, pH_range, p.get_layer, p.get_canopy_density, 
+                             p.get_active_growth_period, p.get_harvest_period, p.get_leaf_retention, p.get_flower_color, p.get_foliage_color, p.get_fruit_color,
+                             p.degree_of_serotiny, p.get_shade_tol, p.salt_tol, p.flood_tol, p.drought_tol, p.humidity_tol,
+                             p.wind_tol, p.get_soil_drainage_tol, p.fire_tol, p.minimum_temperature_tol, p.get_nutrient_requirements,
+                             p.get_water_needs, p.get_sun_needs, p.inoculant, p.serotiny, p.get_food_prod, p.get_raw_materials_prod, p.get_medicinals_prod,
+                             p.get_biochemical_material_prod, p.get_cultural_and_amenity_prod, p.get_mineral_nutrients_prod, p.allelopathic, p.get_erosion_control,
+                             p.get_plants_insect_attractor, p.get_plants_insect_regulator, p.get_plants_animal_attractor,  p.get_plants_animal_regulator, p.toxicity])
+        
+        plant_search_results.clear()
     return response
