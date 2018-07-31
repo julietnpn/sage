@@ -68,7 +68,9 @@ var Filter = function(){
 		   	$("#filter_field").val($selected.attr("data-fieldname"));
 		   	$("#filter_field_type").val($selected.attr("data-field_type"));
 
-		   	//addFilter($selected.val(), $selected.attr("data-fieldname"), $selected.attr("data-field_type"), -1)
+			   //addFilter($selected.val(), $selected.attr("data-fieldname"), $selected.attr("data-field_type"), -1)
+			// Would need another AJAX call here to get the available values for many to many and many to one possible choices?
+			// Does the endpoint already exist for these values?
 		   	$("#category").replaceWith("<input type='text' id='filtertextfield' data-category='"+category+"'  class='dropdown-select' placeholder='"+ $selected.val() + ' ' + "'></input>");
 		   	$("#filtertextfield").focus();
 		});
