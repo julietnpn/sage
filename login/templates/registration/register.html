@@ -2,12 +2,15 @@
 {% block title %}User Registration{% endblock %}
 {% block head %}User Registration{% endblock %}
 {% block maincontent %}
-Create a new user
-    <form method="post" action="">{% csrf_token %}
-        <table border="0">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Register" />
-    </form>
-    <a href="/">Log in</a>
+    <div class="w-90 center">
+        <h1 class="f1 b mv0">Create a New Account</h1>
+        <hr>
+        <form method="post" action="">{% csrf_token %}
+            <table class="mb3" border="0">
+                {{ form.as_table }}
+            </table>
+            <input class="dropbtn dropbtn--block mb3" type="submit" value="Register" />
+        </form>
+        <a class="dropbtn dropbtn--block" href="/">Log in</a>
+    </div>
 {% endblock %}

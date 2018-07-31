@@ -2,13 +2,16 @@
 {% block title %}Edit Profile{% endblock %}
 {% block head %}Edit Profile{% endblock %}
 {% block maincontent %}
-Edit profile
+<div class="w-90 center">
+    <h1 class="f1 mv0">Edit Profile</h1>
+    <hr>
     <form method="post" action="">{% csrf_token %}
-        <table border="0">
+        <table class="mb4" border="0">
             {{ form.as_table }}
         </table>
-        <input type="submit" value="UpdateProfile" />
+        <input class="dropbtn dropbtn--block mb3" type="submit" value="Save Profile" />
     </form>
-    <div><a href="/change_password">Change Password</a></div>
-    <a href="/view_profile">View Profile</a>
+    <a class="dropbtn dropbtn--block mb3" href="/change_password">Change Password</a>
+    <a class="dropbtn dropbtn--block" href="/view_profile">Cancel</a>    
+</div>
 {% endblock %}
