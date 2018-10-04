@@ -5,19 +5,32 @@
 {% endblock %}
 {% block maincontent %}
  
- <div class="row username">
-	<div class="col-sm-11 col-sm-offset-1">
-	    {% if userName %}
-            <p>User Name: {{ userName }}</p>
-            {% if firstName %}<div>First Name: {{ firstName }}</div>{% endif %}
-            {% if lastName %}<div>Last Name: {{ lastName }}</div>{% endif %}
-            {% if email %}<div>Email: {{ email }}</div>{% endif %}
-            {% if affiliation %}<div>Affiliation: {{ affiliation }}</div>{% endif %}
-            {% if experience %}<div>Experience: {{ experience }}</div>{% endif %}
-            {% if interests %}<div>Interests: {{ interests }}</div>{% endif %}
-
-            <p></p>
-                <table>
+ <div class="username w-90 center">
+        {% if userName %}
+            <h1 class="f1 b mt0">Account Details</h1>
+            <hr>
+            <div class="f2 mb2"><strong>Username: </strong>{{ userName }}</div>
+            {% if firstName %}
+            <div class="f2 mb2"><strong>First Name: </strong>{{ firstName }}</div>
+            {% endif %}
+            {% if lastName %}
+            <div class="f2 mb2"><strong>Last Name: </strong>{{ lastName }}</div>
+            {% endif %}
+            {% if email %}
+            <div class="f2 mb2"><strong>Email: </strong>{{ email }}</div>
+            {% endif %}
+            {% if affiliation %}
+            <div class="f2 mb2"><strong>Affiliation: </strong>{{ affiliation }}</div>
+            {% endif %}
+            {% if experience %}
+            <div class="f2 mb2"><strong>Experience: </strong>{{ experience }}</div>
+            {% endif %}
+            {% if interests %}
+            <div class="f2 mb4"><strong>Interests: </strong>{{ interests }}</div>
+            {% endif %}
+            <h2 class="f1 b">Account Activity</h2>
+            <hr>
+                <table class="mb4">
                     <tr>
                         <th>Plant Scientific Name</th>
                         <th>Type</th>
@@ -40,7 +53,6 @@
 	    {% else %}
             <p>No User Profile</p>
         {% endif %}
-        <a href="/edit_profile">Edit Profile</a>
-	</div>
+        <a class="dropbtn dropbtn--block" href="/edit_profile">Edit Profile</a>
 </div>
 {% endblock %}

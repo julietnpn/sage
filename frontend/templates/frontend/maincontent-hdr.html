@@ -6,8 +6,8 @@
 
 	<div class="sage-navbar--divider">
 		<div id="login">{% spaceless %} {% if request.user.is_authenticated %} Welcome, {{ request.user.username }}!
-			<a href="/logout">Log out</a> |
-			<a href="/view_profile">View Profile</a>
+			<a href="/view_profile">View Profile</a> |
+			<a href="/logout">Log out</a>
 			{% else %}
 			<a href="/login">Log in</a>
 			{% endif %} {% endspaceless %}
