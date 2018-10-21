@@ -17,6 +17,7 @@ import json
 import pdb
 from django.views.generic import View
 import csv
+import django_rq
 
 
 
@@ -848,12 +849,12 @@ def search(request, searchString):
     if not searchString:
         return redirect("/")
     
-    plants = Plant.objects.all()
-    full_scientific_name_results = []
-    for p in plants:
-        if p.get_scientific_name == searchString:
-            full_scientific_name_results.append (p)
+    sci_name_seg_job = django_rq.enqueue(search_sciname_seg, searchString = searchString)
 
+    sci_name_full_job = django_rq.enqueue(search_sciname_full, searchString = searchString)
+   
+    plants = Plant.objects.all()
+    
     layer_results = plants.filter(layer__in=Layer.objects.filter(value__icontains=searchString))
     food_results = plants.filter(food_prod__in=FoodProd.objects.filter(value__icontains=searchString))
     rawmat_results = plants.filter(raw_materials_prod__in=RawMaterialsProd.objects.filter(value__icontains=searchString))
@@ -867,22 +868,36 @@ def search(request, searchString):
     insect_attract_results = plants.filter(plants_insect_attractor__in=Insects.objects.filter(value__icontains=searchString))
     insect_reg_results = plants.filter(plants_insect_regulator__in=Insects.objects.filter(value__icontains=searchString))
     
+    scientific_name_results = plants.filter(scientific_name__in=ScientificName.objects.filter(value__icontains=searchString))
     
     common_name_results = plants.filter(common_name__icontains=searchString)
 
     #check to see if part of the search string matches part of the scientific name (to get similar results)
-    results_list = list(chain(full_scientific_name_results, common_name_results, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
+    results_list = list(chain(common_name_results, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 
-    searchStringSegments = searchString.split(" ")
-    for s in searchStringSegments:
-        #print(s)
-        plant_scientific_name_results = PlantScientificName.objects.filter(value=s)
-        #print("search results for sci name")
-        for p in plant_scientific_name_results:
-            #print(p.value)
-            splants = Plant.objects.filter(id=p.plants.id)
-            #print(splants)
-            results_list = list(chain(results_list, splants))
+    #search scientific name segments
+    # searchStringSegments = searchString.split(" ")
+#     for s in searchStringSegments:
+#         #print(s)
+#         plant_scientific_name_results = PlantScientificName.objects.filter(value=s)
+#         #print("search results for sci name")
+#         for p in plant_scientific_name_results:
+#             #print(p.value)
+#             splants = Plant.objects.filter(id=p.plants.id)
+#             #print(splants)
+            #results_list = list(chain(results_list, splants))
+
+    # if sci_name_full_job.result is not None:
+#         results_list = list(chain(results_list, sci_name_full_results_list))
+#     else:
+#         print("full scientific name search is taking too long")
+
+    if sci_name_seg_job.result is not None:
+        results_list = list(chain(results_list, sci_name_seg_results_list))
+    else:
+        print("scientific name segment search is taking too long")
+    
+  
             
     results_list = list(set(results_list))
     plant_search_results['plants'] = results_list
@@ -918,6 +933,29 @@ def search(request, searchString):
     }
     return render(request, 'frontend/cardview.html', context)
 
+
+def search_sciname_seg(searchString):
+    searchStringSegments = searchString.split(" ")
+    results_list = list()
+    for s in searchStringSegments:
+        #print(s)
+        plant_scientific_name_results = PlantScientificName.objects.filter(value=s)
+        #print("search results for sci name")
+        for p in plant_scientific_name_results:
+            #print(p.value)
+            splants = Plant.objects.filter(id=p.plants.id)
+            #print(splants)
+            results_list = list(chain(results_list, splants))
+    return results_list
+
+def search_sciname_full(searchString):
+     # search full scientific name
+    plants = Plant.objects.all()
+    full_scientific_name_results = []
+    for p in plants:
+        if p.get_scientific_name == searchString:
+            full_scientific_name_results.append (p)
+    return full_scientific_name_results
 
 def about(request):
     return render(request, 'frontend/about.html', {})

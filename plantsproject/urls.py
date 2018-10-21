@@ -41,6 +41,7 @@ urlpatterns = [
     re_path(r'^reset/$', django.contrib.auth.views.password_reset_complete, name='password_reset_complete'),
     re_path(r'^', include('frontend.urls')),
     re_path(r'^comments/', include('django_comments_xtd.urls')),
+    path('django-rq/', include('django_rq.urls')),
 ]
 
 

@@ -208,21 +208,22 @@ def csv_import1(path1, user):
 			scientific_names_list.append(whole_db_scientific_name)
 			transaction_list.append(transaction.id)
 			
-			genus_id = ScientificName.objects.filter(value='genus').first()
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+			#genus_id = ScientificName.objects.filter(value='genus').first()
+			
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
 			
 			if species is not '':
-				species_id = ScientificName.objects.filter(value='species').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
+				#species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
 			if variety is not '':
-				variety_id = ScientificName.objects.filter(value='variety').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
+				#variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))	
 			if subspecies is not '':
-				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+				#subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
 			if cultivar is not '':
-				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
+				#cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
 
 			if plant['Common Name'].strip():
 				actions.append(Actions(transactions=transaction , action_type=trans_type, property='common_name', value=plant['Common Name'].strip()))
@@ -325,21 +326,22 @@ def csv_import3(path, user):
 			#plant_cultivar_results=PlantScientificName.objects.filter(value=cultivar)
 			
 			
-			genus_id = ScientificName.objects.filter(value='genus').first()
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+			#genus_id = ScientificName.objects.filter(value='genus').first()
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
+
 			
 			if species is not '':
-				species_id = ScientificName.objects.filter(value='species').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
+				#species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
 			if variety is not '':
-				variety_id = ScientificName.objects.filter(value='variety').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
+				#variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))	
 			if subspecies is not '':
-				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+				#subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
 			if cultivar is not '':
-				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
+				#cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
 
 
 
@@ -621,21 +623,21 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 			scientific_names_list.append(whole_db_scientific_name)
 			transaction_list.append(transaction.id)
 			
-			genus_id = ScientificName.objects.filter(value='genus').first()
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+			#genus_id = ScientificName.objects.filter(value='genus').first()
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
 			
 			if species is not '':
-				species_id = ScientificName.objects.filter(value='species').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
+				#species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
 			if variety is not '':
-				variety_id = ScientificName.objects.filter(value='variety').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
+				#variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))	
 			if subspecies is not '':
-				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+				#subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
 			if cultivar is not '':
-				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
+				#cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
 
 
 

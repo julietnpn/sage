@@ -629,7 +629,7 @@ class PlantRawMaterialsProd(models.Model):
 class PlantScientificName(models.Model):
     plants = models.ForeignKey('Plant', on_delete=models.CASCADE, blank=True, null=True)
     scientific_name = models.ForeignKey('ScientificName', on_delete=models.CASCADE, blank=True, null=True)
-    value = models.TextField(blank=True, null=True)
+    category = models.TextField(blank=True, null=True) #"genus", "species", "cultivar", "variety", "subspecies" only
     reference = models.TextField(blank=True, null=True)
     
     class Meta:
@@ -742,7 +742,7 @@ class SaltTol(models.Model):
         return self.value
 
 class ScientificName(models.Model):
-    value = models.TextField(blank=True, null=True)
+    value = models.TextField(blank=True, null=True) #scientific name component (e.g., "Aloe" or "vera" but not "Aloe" "vera")
 
     class Meta:
         managed = True
@@ -976,7 +976,7 @@ class Plant(models.Model):
         #name = all_names
         
         try:
-            ps = PlantScientificName.objects.filter(plants=self.id)
+            namecomponents = PlantScientificName.objects.filter(plants=self.id)
         except PlantScientificName.DoesNotExist:
             print('Plant Scientific Name Does not Exist for plant' + str(self.id))
             return None
@@ -988,18 +988,17 @@ class Plant(models.Model):
         variety = ''
         subspecies = ''
         cultivar = ''
-        for a in ps:
-            sc = a.scientific_name
-            if sc.value in 'genus':
-                genus = a.value
-            elif sc.value in 'species':
-                species = a.value
-            elif sc.value in 'subspecies':
-                subspecies = 'spp. ' + a.value
-            elif sc.value in 'variety':
-                variety = 'var. ' + a.value
-            elif sc.value in 'cultivar':
-                subspecies = "cultivar. '" + a.value + "'"
+        for c in namecomponents:
+            if c.category in 'genus':
+                genus = c.sceintific_name.value
+            elif c.category in 'species':
+                species = c.sceintific_name.value
+            elif c.category in 'subspecies':
+                subspecies = 'spp. ' + c.sceintific_name.value
+            elif c.category in 'variety':
+                variety = 'var. ' + c.sceintific_name.value
+            elif c.category in 'cultivar':
+                subspecies = "cultivar. '" + c.sceintific_name.value + "'"
         
         
         if genus is not '':

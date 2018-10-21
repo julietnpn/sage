@@ -27,16 +27,16 @@ class Command(BaseCommand):
 			csv_import(path2, user)
 			csv_import(path3, user)
 		if args == '-second':
-			csv_import2(path1, user)
-			csv_import2(path2, user)
-			csv_import2(path3, user)
+			#csv_import2(path1, user)
+			#csv_import2(path2, user)
+			#csv_import2(path3, user)
 		if args == '-all' or None:
 			csv_import(path1, user)
 			csv_import(path2, user)
 			csv_import(path3, user)
-			csv_import2(path1, user)
-			csv_import2(path2, user)
-			csv_import2(path3, user)
+			#csv_import2(path1, user)
+			#csv_import2(path2, user)
+			#csv_import2(path3, user)
 
 scientific_names_list = []
 transaction_list = []
@@ -191,21 +191,21 @@ def csv_import(path, user):
 			scientific_names_list.append(whole_db_scientific_name)
 			transaction_list.append(transaction.id)
 			
-			genus_id = ScientificName.objects.filter(value='genus').first()
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+			#genus_id = ScientificName.objects.filter(value='genus').first()
+			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
 			
 			if species is not '':
-				species_id = ScientificName.objects.filter(value='species').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
+				#species_id = ScientificName.objects.filter(value='species').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
 			if variety is not '':
-				variety_id = ScientificName.objects.filter(value='variety').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
+				#variety_id = ScientificName.objects.filter(value='variety').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))	
 			if subspecies is not '':
-				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+				#subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
 			if cultivar is not '':
-				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
+				#cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
 
 
 			if plant['Family Name'].strip():
@@ -430,114 +430,7 @@ def csv_import(path, user):
 				toxicity_id = Toxicity.objects.filter(value=plant['Toxicity to human and livestock'].strip().lower()).first().id
 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='toxicity_id', value=toxicity_id))
 
-			Actions.objects.bulk_create(actions)
-			
-			
-def csv_import2(path, user):
-	plant_name_ids = { }
-	for p in Plant.objects.all():
-		plant_name_ids[p.get_scientific_name] = p.id
-
-	with open(path) as f:
-		reader = csv.DictReader(f)
-		for i,plant in enumerate(reader):
-			trans_type = 'INSERT'
-			actions = []
-
-			if not(plant['Scientific Name']):
-				continue
-			print(i, plant['Scientific Name'], len(plant['Scientific Name']))
-
-			scientific_name = ''
-			genus = ''
-			species = '' 
-			variety = ''
-			subspecies = ''
-			cultivar = ''
-
-			scientific_name = plant['Scientific Name']
-			if 'spp.' in scientific_name:
-				if scientific_name.endswith('spp.'):
-					print("spp only, delete transaction")
-					continue
-				else:
-					sciname_bits= scientific_name.split()
-					found = False
-					for i in sciname_bits:
-						if "spp." in i:
-							found = True
-						if found:
-							subspecies = ' ' + i
-							continue
-			if ' x ' in scientific_name:
-				sciname_bits= scientific_name.split()
-				genus = sciname_bits[0] + " x " + sciname_bits[2]
-				species = ''
-			if "'" in scientific_name:
-				sciname_bits= scientific_name.split()
-				for i in sciname_bits:
-					if i.startswith("'") and i.endswith("'"):
-						cultivar = ' ' + i
-						if i<2 and genus is None:
-							genus = sciname_bits[0]
-							species = ''
-			if 'var. ' in scientific_name:
-				sciname_bits= scientific_name.split()
-				found = False
-				for i in sciname_bits:
-					if "Var. " or "var. " in i:
-						found = True
-					if found:
-						variety = ' ' + i
-						continue
-			if genus is '':
-				sciname_bits = scientific_name.split()
-				genus = sciname_bits[0]
-				if len(sciname_bits) > 1:
-					species = ' ' + sciname_bits[1]
-				else:
-					print("genus only, delete transaction")
-					continue
-			
-			#check if this scientific name is already in the database
-			#if scientific name has already been added, then this should be an update transaction, not an insert
-			whole_db_scientific_name = genus + species + subspecies + variety + cultivar
-			if whole_db_scientific_name in plant_name_ids:
-				print('plant in database, update!')
-				trans_type = 'UPDATE'
-				p_id = plant_name_ids[whole_db_scientific_name]
-				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=p_id, parent_transaction=parent_transaction(p_id), ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
-			
-			elif whole_db_scientific_name in scientific_names_list:
-				trans_type = 'UPDATE'
-				s_index =scientific_names_list.index(whole_db_scientific_name)
-				print("index in scientific names list: ", s_index)
-				print("transaction id of that index: ", transaction_list[s_index])
-				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, parent_transaction=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the parent_transactions of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
-			
-			else:
-				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
-			
-			scientific_names_list.append(whole_db_scientific_name)
-			transaction_list.append(transaction.id)
-			
-			genus_id = ScientificName.objects.filter(value='genus').first()
-			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
-			
-			if species is not '':
-				species_id = ScientificName.objects.filter(value='species').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
-			if variety is not '':
-				variety_id = ScientificName.objects.filter(value='variety').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))	
-			if subspecies is not '':
-				subspecies_id = ScientificName.objects.filter(value='subspecies').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
-			if cultivar is not '':
-				cultivar_id = ScientificName.objects.filter(value='cultivar').first()
-				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
-
-			if plant['pH range'].strip():
+						if plant['pH range'].strip():
 				pH_range = re.split('- | to', plant['pH range'].strip())
 				if len(pH_range) == 2:
 					actions.append(Actions(transactions=transaction, action_type=trans_type, property='pH_min', value=float(pH_range[0].strip())))
@@ -617,5 +510,114 @@ def csv_import2(path, user):
 				elif allelo == 'yes':
 					allelo_id = Allelopathic.objects.filter(value='yes').first().id
 					actions.append(Actions(transactions=transaction, action_type=trans_type, property='allelopathic_id', value=allelo_id))
-
+			
 			Actions.objects.bulk_create(actions)
+			
+			# 
+# def csv_import2(path, user):
+# 	plant_name_ids = { }
+# 	for p in Plant.objects.all():
+# 		plant_name_ids[p.get_scientific_name] = p.id
+# 
+# 	with open(path) as f:
+# 		reader = csv.DictReader(f)
+# 		for i,plant in enumerate(reader):
+# 			trans_type = 'INSERT'
+# 			actions = []
+# 
+# 			if not(plant['Scientific Name']):
+# 				continue
+# 			print(i, plant['Scientific Name'], len(plant['Scientific Name']))
+# 
+# 			scientific_name = ''
+# 			genus = ''
+# 			species = '' 
+# 			variety = ''
+# 			subspecies = ''
+# 			cultivar = ''
+# 
+# 			scientific_name = plant['Scientific Name']
+# 			if 'spp.' in scientific_name:
+# 				if scientific_name.endswith('spp.'):
+# 					print("spp only, delete transaction")
+# 					continue
+# 				else:
+# 					sciname_bits= scientific_name.split()
+# 					found = False
+# 					for i in sciname_bits:
+# 						if "spp." in i:
+# 							found = True
+# 						if found:
+# 							subspecies = ' ' + i
+# 							continue
+# 			if ' x ' in scientific_name:
+# 				sciname_bits= scientific_name.split()
+# 				genus = sciname_bits[0] + " x " + sciname_bits[2]
+# 				species = ''
+# 			if "'" in scientific_name:
+# 				sciname_bits= scientific_name.split()
+# 				for i in sciname_bits:
+# 					if i.startswith("'") and i.endswith("'"):
+# 						cultivar = ' ' + i
+# 						if i<2 and genus is None:
+# 							genus = sciname_bits[0]
+# 							species = ''
+# 			if 'var. ' in scientific_name:
+# 				sciname_bits= scientific_name.split()
+# 				found = False
+# 				for i in sciname_bits:
+# 					if "Var. " or "var. " in i:
+# 						found = True
+# 					if found:
+# 						variety = ' ' + i
+# 						continue
+# 			if genus is '':
+# 				sciname_bits = scientific_name.split()
+# 				genus = sciname_bits[0]
+# 				if len(sciname_bits) > 1:
+# 					species = ' ' + sciname_bits[1]
+# 				else:
+# 					print("genus only, delete transaction")
+# 					continue
+# 			
+# 			#check if this scientific name is already in the database
+# 			#if scientific name has already been added, then this should be an update transaction, not an insert
+# 			whole_db_scientific_name = genus + species + subspecies + variety + cultivar
+# 			if whole_db_scientific_name in plant_name_ids:
+# 				print('plant in database, update!')
+# 				trans_type = 'UPDATE'
+# 				p_id = plant_name_ids[whole_db_scientific_name]
+# 				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, plants_id=p_id, parent_transaction=parent_transaction(p_id), ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the plants_id of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+# 			
+# 			elif whole_db_scientific_name in scientific_names_list:
+# 				trans_type = 'UPDATE'
+# 				s_index =scientific_names_list.index(whole_db_scientific_name)
+# 				print("index in scientific names list: ", s_index)
+# 				print("transaction id of that index: ", transaction_list[s_index])
+# 				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, parent_transaction=transaction_list[s_index], ignore=False)#because the transactions haven't been processed and Plants haven't been created, we need to keep track of which plant this is an update to. I'm saving the transaction id of the INSERT plant to the parent_transactions of the Update plant. In process_transactions I will use the transaction_id stored in plants_id to look it up.
+# 			
+# 			else:
+# 				transaction = Transactions.objects.create(users_id=user.id, transaction_type=trans_type, ignore=False)# not always Update
+# 			
+# 			scientific_names_list.append(whole_db_scientific_name)
+# 			transaction_list.append(transaction.id)
+# 			
+# 			#genus_id = ScientificName.objects.filter(value='genus').first()
+# 			actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
+# 			
+# 			if species is not '':
+# 				#species_id = ScientificName.objects.filter(value='species').first()
+# 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
+# 			if variety is not '':
+# 				#variety_id = ScientificName.objects.filter(value='variety').first()
+# 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))	
+# 			if subspecies is not '':
+# 				#subspecies_id = ScientificName.objects.filter(value='subspecies').first()
+# 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
+# 			if cultivar is not '':
+# 				#cultivar_id = ScientificName.objects.filter(value='cultivar').first()
+# 				actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
+# 
+# 
+# 
+# 			Actions.objects.bulk_create(actions)
