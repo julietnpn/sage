@@ -17,7 +17,7 @@ import json
 import pdb
 from django.views.generic import View
 import csv
-import django_rq
+#import django_rq
 
 
 
