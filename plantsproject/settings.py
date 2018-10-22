@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import dj_database_url
-import django_rq
+#import django_rq
 #import django.contrib.auth
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'django_comments',
     'django.contrib.auth',
     'django.contrib.admin',
-    'django_rq',
+    #'django_rq',
     #'composer',
 )
 
@@ -154,30 +154,30 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-RQ_QUEUES = {
-    'default': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
-        'PASSWORD': '',
-        'DEFAULT_TIMEOUT': 360,
-    },
-    'with-sentinel': {
-       'SENTINELS': [('localhost', 26736), ('localhost', 26737)],
-       'MASTER_NAME': 'redismaster',
-       'DB': 0,
-       'PASSWORD': 'secret',
-       'SOCKET_TIMEOUT': None,
-    },
-    'high': {
-        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
-        'DEFAULT_TIMEOUT': 500,
-    },
-    'low': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
-    }
-}
-
-#RQ_EXCEPTION_HANDLERS = ['path.to.my.handler'] # If you need custom exception handlers
+# RQ_QUEUES = {
+#     'default': {
+#         'HOST': 'localhost',
+#         'PORT': 6379,
+#         'DB': 0,
+#         'PASSWORD': '',
+#         'DEFAULT_TIMEOUT': 360,
+#     },
+#     'with-sentinel': {
+#        'SENTINELS': [('localhost', 26736), ('localhost', 26737)],
+#        'MASTER_NAME': 'redismaster',
+#        'DB': 0,
+#        'PASSWORD': 'secret',
+#        'SOCKET_TIMEOUT': None,
+#     },
+#     'high': {
+#         'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+#         'DEFAULT_TIMEOUT': 500,
+#     },
+#     'low': {
+#         'HOST': 'localhost',
+#         'PORT': 6379,
+#         'DB': 0,
+#     }
+# }
+# 
+# #RQ_EXCEPTION_HANDLERS = ['path.to.my.handler'] # If you need custom exception handlers

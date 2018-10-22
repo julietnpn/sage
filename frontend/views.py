@@ -559,6 +559,7 @@ def editPlant(request, plantId=None):
         'contributors' : getContributors(plantId),
         'activity': getActivity(plantId)
     }
+    
     return render(request, 'frontend/editplant.html', context)
 
 def getContributors(plantID):
@@ -622,24 +623,26 @@ def addPlant(request):
             variety = ''
             subspecies = ''
             cultivar = ''
-            delete = False
             response = ''
             
 #First check that we can create a true name
             if 'spp.' in scientificName:
                 if scientificName.endswith('spp.'):
-                    print("spp only, delete transaction")
-                    delete = True
+                    #spp only, don't add.
                     response = 'You did not enter a valid name'
+                    return JsonResponse({'error':response},status=400)
                 else:
                     sciname_bits= scientificName.split()
                     found = False
                     for i in sciname_bits:
                         if "spp." in i:
                             found = True
-                        if found:
-                            subspecies = i;
                             continue
+                        if found:
+                            if subspecies is not '':
+                                subspecies = subspecies + " " + i
+                            else:
+                                subspecies = i
             if ' x ' in scientificName:
                 sciname_bits= scientificName.split()
                 genus = sciname_bits[0] + " x " + sciname_bits[2]
@@ -652,15 +655,19 @@ def addPlant(request):
                         if i<2 and genus is None:
                             genus = sciname_bits[0]
                             species = ''
-            if "Var. " or "var. " in scientificName:
+            if " Var. " or " var. " in scientificName:
                 sciname_bits= scientificName.split()
                 found = False
                 for i in sciname_bits:
                     if "Var." or "var." in i:
                         found = True
-                    if found:
-                        variety = i;
                         continue
+                    if found:
+                        if variety is not '':
+                            variety = variety +" " + i
+                        else:
+                            variety = i
+
             if genus is '':
                 sciname_bits = scientificName.split()
                 genus = sciname_bits[0]
@@ -668,95 +675,71 @@ def addPlant(request):
                     species = sciname_bits[1]
                 else:
                     print("genus only, do not create transaction")
-                    delete = True
                     response = 'You did not enter a valid name'
+                    return JsonResponse({'error':response},status=400)
             
-            name = genus + species + subspecies + variety + cultivar
+            name = genus + " " + species + " " + subspecies + " " + variety + " " + cultivar
 
                 
 #Confirm the plant doesn't already exist in the database
             all_plants = Plant.objects.all()
             for p in all_plants:
-                try:
-                    ps = PlantScientificName.objects.filter(plants=p.id)
-                except PlantScientificName.DoesNotExist:
-                    print('Plant Scientific Name Does not Exist for plant' + str(p.id))
-                    
-                pname = ''
-                pgenus = ''
-                pspecies = ''
-                pvariety = ''
-                psubspecies = ''
-                pcultivar = ''
-
-                for a in ps:
-                    sc = a.scientific_name
-                    if sc.value in 'genus':
-                        pgenus = a.value
-                    elif sc.value in 'species':
-                        pspecies = a.value
-                    elif sc.value in 'subspecies':
-                        psubspecies = a.value
-                    elif sc.value in 'variety':
-                        pvariety = a.value
-                    elif sc.value in 'variety':
-                        pcultivar = a.value + "'"
-                        
-                pname = pgenus + pspecies+ psubspecies + pvariety + pcultivar
-                
+                pname = p.get_scientific_name
+                print("pname is " + pname + "; name is " +name)
                 if pname in name:
-                    delete = True  # don't want to add a plant already in the database
+                    # don't want to add a plant already in the database
                     response = 'Plant is already in the database'
+                    return JsonResponse({'error':response},status=400)
 
 #Add the plant to the database
-            if delete is not True:
-                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
-                transaction.save()
-                actions = []
-                trans_type = 'INSERT'
+            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, transaction_type='INSERT', ignore=False)
+            transaction.save()
+            actions = []
+            trans_type = 'INSERT'
 
-                genus_id = ScientificName.objects.filter(value='genus').first()
-                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
-                
-                if species is not '':
-                    species_id = ScientificName.objects.filter(value='species').first()
-                    actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
-                if variety is not '':
-                    variety_id = ScientificName.objects.filter(value='variety').first()
-                    actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))   
-                if subspecies is not '':
-                    subspecies_id = ScientificName.objects.filter(value='subspecies').first()
-                    actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
-                if cultivar is not '':
-                    cultivar_id = ScientificName.objects.filter(value='cultivar').first()
-                    actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
-
-                
-                if commonName:
-                    actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
             
-                Actions.objects.bulk_create(actions)
+            actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
+            
+            if species is not '':
+                
+                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
+            if variety is not '':
+                
+                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))   
+            if subspecies is not '':
+                
+                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
+            if cultivar is not '':
+                
+                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
 
-                context = {
-                    'newPlant':{
-                        'scientific_name': scientificName,
-                        'common_name': commonName
-                    },
-                    'userId': request.user.id,
-                    'transactionId' : transaction.id,
-                    'result': EmptyPlant,
-                    'plantId': 0, 
-                    'scientific_name' :scientificName,
-                    'common_name' : commonName,
-                    'family' : None,
-                    'family_common_name' : None,
-                    'endemic_status' : None,
-                    'updatePlantNamesForm':UpdatePlantNamesForm(),
-                    'updateAttributeForm' : UpdateAttributeForm(class_name='Plant'),
-                }
-                return render(request, 'frontend/editplant.html', context)
-            else:
-                return JsonResponse({'error':response},status=400)
+            
+            if commonName:
+                actions.append(Actions(transactions=transaction , action_type='INSERT', property='common_name', value=commonName))
+        
+            Actions.objects.bulk_create(actions)
+
+            context = {
+                'newPlant':{
+                    'scientific_name': scientificName,
+                    'common_name': commonName
+                },
+                'userId': request.user.id,
+                'transactionId' : transaction.id,
+                'result': EmptyPlant,
+                'plantId': 0, 
+                'scientific_name' : scientificName,
+                'common_name' : commonName,
+                'family' : None,
+                'family_common_name' : None,
+                'endemic_status' : None,
+                'images' : None,
+                'updatePlantNamesForm':UpdatePlantNamesForm(),
+                'updateAttributeForm' : UpdateAttributeForm(class_name='Plant'),
+                'contributors' : None,
+                'activity' : None,
+            }
+            return render(request, 'frontend/editplant.html', context)
 
 
 def viewPlants(request):
@@ -849,9 +832,9 @@ def search(request, searchString):
     if not searchString:
         return redirect("/")
     
-    sci_name_seg_job = django_rq.enqueue(search_sciname_seg, searchString = searchString)
+    #sci_name_seg_job = django_rq.enqueue(search_sciname_seg, searchString = searchString)
 
-    sci_name_full_job = django_rq.enqueue(search_sciname_full, searchString = searchString)
+    #sci_name_full_job = django_rq.enqueue(search_sciname_full, searchString = searchString)
    
     plants = Plant.objects.all()
     
@@ -873,7 +856,7 @@ def search(request, searchString):
     common_name_results = plants.filter(common_name__icontains=searchString)
 
     #check to see if part of the search string matches part of the scientific name (to get similar results)
-    results_list = list(chain(common_name_results, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
+    results_list = list(chain(scientific_name_results, common_name_results, layer_results, food_results, rawmat_results, med_results, biomed_results, water_results, sun_results, nutrients_results, serotiny_results, erosion_results, insect_attract_results, insect_reg_results))
 
     #search scientific name segments
     # searchStringSegments = searchString.split(" ")
@@ -892,12 +875,12 @@ def search(request, searchString):
 #     else:
 #         print("full scientific name search is taking too long")
 
-    if sci_name_seg_job.result is not None:
-        results_list = list(chain(results_list, sci_name_seg_results_list))
-    else:
-        print("scientific name segment search is taking too long")
-    
-  
+#     if sci_name_seg_job.result is not None:
+#         results_list = list(chain(results_list, sci_name_seg_results_list))
+#     else:
+#         print("scientific name segment search is taking too long")
+#     
+#   
             
     results_list = list(set(results_list))
     plant_search_results['plants'] = results_list
@@ -934,28 +917,28 @@ def search(request, searchString):
     return render(request, 'frontend/cardview.html', context)
 
 
-def search_sciname_seg(searchString):
-    searchStringSegments = searchString.split(" ")
-    results_list = list()
-    for s in searchStringSegments:
-        #print(s)
-        plant_scientific_name_results = PlantScientificName.objects.filter(value=s)
-        #print("search results for sci name")
-        for p in plant_scientific_name_results:
-            #print(p.value)
-            splants = Plant.objects.filter(id=p.plants.id)
-            #print(splants)
-            results_list = list(chain(results_list, splants))
-    return results_list
-
-def search_sciname_full(searchString):
-     # search full scientific name
-    plants = Plant.objects.all()
-    full_scientific_name_results = []
-    for p in plants:
-        if p.get_scientific_name == searchString:
-            full_scientific_name_results.append (p)
-    return full_scientific_name_results
+# def search_sciname_seg(searchString):
+#     searchStringSegments = searchString.split(" ")
+#     results_list = list()
+#     for s in searchStringSegments:
+#         #print(s)
+#         plant_scientific_name_results = PlantScientificName.objects.filter(value=s)
+#         #print("search results for sci name")
+#         for p in plant_scientific_name_results:
+#             #print(p.value)
+#             splants = Plant.objects.filter(id=p.plants.id)
+#             #print(splants)
+#             results_list = list(chain(results_list, splants))
+#     return results_list
+# 
+# def search_sciname_full(searchString):
+#      # search full scientific name
+#     plants = Plant.objects.all()
+#     full_scientific_name_results = []
+#     for p in plants:
+#         if p.get_scientific_name == searchString:
+#             full_scientific_name_results.append (p)
+#     return full_scientific_name_results
 
 def about(request):
     return render(request, 'frontend/about.html', {})

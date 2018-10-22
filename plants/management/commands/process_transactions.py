@@ -3,6 +3,7 @@ from plants.models import *
 from frontend.models import Actions, Transactions
 from login.models import AuthUser
 import csv
+import psycopg2
 
 class Command(BaseCommand):
 
@@ -165,7 +166,10 @@ def process_updates():
             elif property in properties_1_to_1:
                 print('T_id={0}, property={1}, value={2}'.format(transaction.id, property, value[0]))
                 setattr(the_plant, property, value[0]) # pH or ph... not being saved!
-                the_plant.save()
+                try: 
+                    the_plant.save()
+                except Error as e:
+                    print(e)
             elif property in properties_many_with_region:# TODO PlantBarrierByRegion
                 print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, property, value[1], value[0]))
                 class_name = 'Plant' + property.title().replace('_', '') + 'ByRegion'
@@ -205,7 +209,7 @@ def process_updates():
 
 def process_transactions():
     for transaction in Transactions.objects.all().filter(ignore=False).order_by('id'):
-        print('transaction_type = ' + transaction.transaction_type)
+        #print('transaction_type = ' + transaction.transaction_type)
         if transaction.transaction_type == 'INSERT':# get_or_crete????????
 #confirm plant isn't already in database
             
@@ -228,8 +232,8 @@ def process_transactions():
             continue
         elif transaction.transaction_type == 'UPDATE':
             #BECAUSE WE FLUSHED THE PLANTS TABLE, WE HAVE TO RESET THE PLANT ID FROM THE PARENT TRANSACTION (THE ORIGINAL INSERT OF THAT PLANT)
-            print("this plants related transaction id is ",transaction.parent_transaction)
-            print("user id: ", transaction.users_id, " transaction_id: ", transaction.id)
+            #print("this plants related transaction id is ",transaction.parent_transaction)
+            #print("user id: ", transaction.users_id, " transaction_id: ", transaction.id)
             parentTrans = Transactions.objects.get(id=transaction.parent_transaction)
             transaction.plants_id = parentTrans.plants_id
             transaction.save()              
@@ -246,11 +250,14 @@ def process_transactions():
             
             
             if action.property in properties_scientific_name:
-                print('T_id={0}, property={1}, name={2}, value={3}'.format(transaction.id, action.property, action.scientific_names, action.value))
+                #print('T_id={0}, property={1}, name={2}, value={3}'.format(transaction.id, action.property, action.category, action.value))
                 
-                sci_name_obj_id = ScientificName.objects.get(value = action.value).id
-                sci_cls_instance = None
-                if sci_name_obj_id is None:
+                sci_name_obj_id = None
+                try:
+                    sci_name_obj = ScientificName.objects.get(value = action.value)
+                    sci_name_obj_id = sci_name_obj.id
+                except:
+                    sci_cls_instance = None
                     class_name = 'ScientificName'
                     sci_cls = globals()[class_name]
                     sci_cls_instance =  sci_cls()
@@ -261,7 +268,7 @@ def process_transactions():
                 class_name = 'PlantScientificName'
                 cls = globals()[class_name]
                 cls_instance = cls()
-                cls_instance = cls(cls_instance.id ,the_plant.id, action.scientific_names.id, )
+                cls_instance = cls(cls_instance.id ,the_plant.id, sci_name_obj_id, action.category)
                 cls_instance.save()
             
             
@@ -287,11 +294,14 @@ def process_transactions():
 
             elif action.property in properties_1_to_1:# TODO check for INSERT DELETE UPDATE??????????????????
                                                     # TODO height
-                print('T_id={0}, property={1}, value={2}'.format(transaction.id, action.property, action.value))
+                #print('T_id={0}, property={1}, value={2}'.format(transaction.id, action.property, action.value))
                 setattr(the_plant, action.property, action.value)# pH or ph... not being saved!
-                the_plant.save()
+                try: 
+                    the_plant.save()
+                except Error as e:
+                    print(e)
             elif action.property in properties_many_with_region:# TODO height
-                print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, action.property, action.regions, action.value))
+                #print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, action.property, action.regions, action.value))
                 class_name = 'Plant' + action.property.title().replace('_', '') + 'ByRegion'
                 cls = globals()[class_name]
                 attributes, is_region_last = get_attributes(cls)
@@ -299,7 +309,7 @@ def process_transactions():
                     # temp = cls.objects.create(the_plant.id, action.regions, action.value)
                     cls_instance = cls()
                     cls_instance.save()
-                    print (cls_instance.id ,the_plant.id, action.regions, action.value)
+                    #print (cls_instance.id ,the_plant.id, action.regions, action.value)
                     if is_region_last:
                         cls_instance = cls(cls_instance.id ,the_plant.id, action.value, action.regions)# no regions added?
                     else:
@@ -312,7 +322,7 @@ def process_transactions():
                     # temp = cls.objects.create(the_plant.id, action.value)
                     cls_instance = cls()
                     cls_instance.save()
-                    print (cls_instance.id ,the_plant.id, action.value)
+                    #print (cls_instance.id ,the_plant.id, action.value)
                     cls_instance = cls(cls_instance.id ,the_plant.id, action.value)
                     cls_instance.save()
             elif action.property in properties_1_to_many: # TODO Seortiny

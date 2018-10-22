@@ -989,16 +989,22 @@ class Plant(models.Model):
         subspecies = ''
         cultivar = ''
         for c in namecomponents:
-            if c.category in 'genus':
-                genus = c.sceintific_name.value
-            elif c.category in 'species':
-                species = c.sceintific_name.value
-            elif c.category in 'subspecies':
-                subspecies = 'spp. ' + c.sceintific_name.value
-            elif c.category in 'variety':
-                variety = 'var. ' + c.sceintific_name.value
-            elif c.category in 'cultivar':
-                subspecies = "cultivar. '" + c.sceintific_name.value + "'"
+            try:
+                if c.category in 'genus':
+                    genus = c.scientific_name.value
+                elif c.category in 'species':
+                    species = c.scientific_name.value
+                elif c.category in 'subspecies':
+                    subspecies = 'spp. ' + c.scientific_name.value
+                elif c.category in 'variety':
+                    variety = 'var. ' + c.scientific_name.value
+                elif c.category in 'cultivar':
+                    subspecies = "cultivar. '" + c.scientific_name.value + "'"
+            except:
+                print("name object for category " + c.category + " is not in the database.")
+                print (c)
+                #print(c.category + "  " + c.scientific_name.value)
+                
         
         
         if genus is not '':

@@ -26,7 +26,7 @@ class Actions(models.Model):
     transactions = models.ForeignKey('Transactions', on_delete=models.CASCADE, blank=True, null=True)
     action_type = models.TextField()
     regions = models.ForeignKey('plants.Region', on_delete=models.CASCADE, blank=True, null=True)
-    scientific_names = models.ForeignKey('plants.ScientificName', on_delete=models.CASCADE, blank=True, null=True)
+    category = models.TextField(blank=True, null=True) #for scientific name category
     property = models.TextField()
     value = models.TextField(blank=True, null=True)
     reference = models.TextField(blank=True, null=True)

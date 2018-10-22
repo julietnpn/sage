@@ -17,11 +17,11 @@ class Command(BaseCommand):
 
 
 
-		path1=r'../csv/TEC_for_import.csv'
+		path1=r'plants/management/csvdata/TEC_for_import.csv'
 		#Common Name,Scientific Name,Type of plant,Height range
-		path2=r'../csv/usda.orange.for_import.csv'
+		path2=r'plants/management/csvdata/usda.orange.for_import.csv'
 		#Scientific Name,Common Name,Genus,Family,Family Common Name,Duration,Growth Habit,Fact Sheets,Plant Guides,Characteristics Data,Cultivar Name,Active Growth Period,Bloat,Coppice Potential,Fire Resistance,Flower Color,Flower Conspicuous,Foliage Color,Foliage Porosity Summer,Fruit Color,Fruit Conspicuous,"Height, Mature (feet)",Known Allelopath,Leaf Retention,Lifespan,Nitrogen Fixation,Shape and Orientation,Toxicity,Drought Tolerance,Fertility Requirement,Moisture Use,pH (Minimum),pH (Maximum),Salinity Tolerance,Shade Tolerance,Fruit/Seed Period End,Berry/Nut/Seed Product,Christmas Tree Product,Fodder Product,Fuelwood Product,Lumber Product,Naval Store Product,Post Product,Pulpwood Product,Veneer Product
-		path3=r'../csv/plantdb_export_zone10.csv'
+		path3=r'plants/management/csvdata/plantdb_export_zone10.csv'
 		#ID,Name,Scientific name,Plant Type,Height,Spread,Root Depth,Seasonal Interest,Notes,Flower Color,Root Type,Bloom Time,Fruit Time,Texture,Form,Growth Rate,Insect Predation,Disease,Light,Hardiness Zone,Soil Moisture,Soil pH,Ecological Function,Human Use/Crop
 
 		user1 = AuthUser.objects.get(username='TEC_PDC_2014')
@@ -235,7 +235,7 @@ def csv_import1(path1, user):
 #written by Moin
 def csv_import3(path, user):
 	print("CSV Import 3")
-	with open(path) as f:
+	with open(path, 'r') as f:
 		reader = csv.DictReader(f)
 		for i,plant in enumerate(reader):
 			trans_type = 'INSERT'
@@ -281,7 +281,7 @@ def csv_import3(path, user):
 				for i in sciname_bits: #make sure it is not a genus with a cultivar
 					if i.startswith("'") and i.endswith("'"):
 						cultivar = i
-						if i<2 and genus is None:
+						if len(sciname_bits)<2 and genus is None:
 							genus = sciname_bits[0]
 							species = ''
 			if 'var. ' in scientific_name:
@@ -454,7 +454,7 @@ def csv_import3(path, user):
 					soil_drainage_tol_id = SoilDrainageTol.objects.filter(value='moderate-drainage tolerant').first().id
 					actions.append(Actions(transactions=transaction, action_type=trans_type, property='soil_drainage_tol', value=soil_drainage_tol_id))
 				if 'Dry' in soils:
-					soil_drainage_tol_id = SoilDrainageTol.objects.filter(value='excessively-drained tolerance').first().id
+					soil_drainage_tol_id = SoilDrainageTol.objects.filter(value='excessively-drained tolerant').first().id
 					actions.append(Actions(transactions=transaction, action_type=trans_type, property='soil_drainage_tol', value=soil_drainage_tol_id))
 
 			if plant['Soil pH']:
@@ -584,7 +584,7 @@ def csv_import2(path, user):############################serotiny, degree_of_sero
 						if i<2 and genus is None:
 							genus = sciname_bits[0]
 							species = ''
-			if 'var. ' in scientific_name:
+			if 'var. ' or 'Var. ' in scientific_name:
 				sciname_bits= scientific_name.split()
 				found = False
 				for i in sciname_bits:

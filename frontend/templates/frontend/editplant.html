@@ -4,8 +4,8 @@
     {% if common_name %}
         {{ common_name }}
     {% else %}
-        {% if get_scientific_name %}
-            {{ get_scientific_name }}
+        {% if scientific_name %}
+            {{ scientific_name }}
         {% else %}
             No Plant Name
         {% endif %}
@@ -56,6 +56,7 @@
 
     <div class="row editplantrow">
         <div id="plant-images" class="col-sm-11 col-sm-offset-1">
+            {% if images %}
             <div id="populated-images">
                 {% for img in images %}
                 <a href="{{ img.value }}"><img src="{{ img.value }}" class='cardimg' id="imagelightbox" alt="Plant Image" /></a>
@@ -63,6 +64,7 @@
             </div>
             {% if images|length < 5 %}
             <div id ="add-new-img" src="" class="cardimg"/><div id="add-new-img2"><div>+ add new</div></div></div>
+            {% endif %}
             {% endif %}
         </div>
         
@@ -228,6 +230,7 @@
         </div>
     </div>
     
+    {% if contributors %}
     <div class="row editplantrow">
         <div class="col-sm-5 col-sm-offset-1">
         <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Contributors</div>
@@ -262,7 +265,9 @@
         </table>
         </div>
     </div>
+
     
+
     <div class="row editplantrow">
         <div class="col-sm-5 col-sm-offset-1">
         <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Comments</div>
@@ -274,6 +279,7 @@
         </div>
     
     </div>
+    {% endif %}
     
 {% else %}
     <p>No plant</p> <!--fancy this up a bit-->
