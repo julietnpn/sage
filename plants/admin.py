@@ -250,8 +250,8 @@ class PlantIDAdmin(admin.ModelAdmin):
 	def get_endemic_status(self, obj):
 		return ','.join([str(a) for a in obj.endemic_status.all()])
 	get_endemic_status.short_description = 'Endemic Status'
-	def get_scientific_name(self, obj):
-		return ' '.join ([str(a) for a in plants_scientific_name.all()])
+	#def get_scientific_name(self, obj):
+		#return ' '.join ([str(a) for a in plants_scientific_name.all()])
 
 class PlantCharacteristic(Plant):
 	class Meta:
