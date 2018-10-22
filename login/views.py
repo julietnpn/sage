@@ -25,13 +25,14 @@ def register(request):
             username=form.cleaned_data['username'],
             password=form.cleaned_data['password1'],
             email=form.cleaned_data['email'],
-            first_name=form.cleaned_data['firstname'],
-            last_name=form.cleaned_data['lastname'],
             )
             auth_user = AuthUser.objects.get(username=form.cleaned_data['username'])
+            auth_user.first_name=form.cleaned_data['firstname'],
+            auth_user.last_name=form.cleaned_data['lastname'],
             auth_user.affiliation=form.cleaned_data['affiliation']
             auth_user.experience=form.cleaned_data['experience']
             auth_user.interests=form.cleaned_data['interests']
+            auth_user.is_data_import = False
             auth_user.save()
             return HttpResponseRedirect('/register/success/')
     else:
