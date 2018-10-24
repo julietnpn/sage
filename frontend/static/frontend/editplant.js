@@ -17,6 +17,7 @@ var EditPlant = function(){
         setUserId(userId);
     	setJqueryMap();
         transactionId = transactionId == "None" ? 0 : transactionId;
+        
         common_name = pCommonName;
         scientific_name = pScientificName;
         resetUpdateAttributeModal();
@@ -406,7 +407,7 @@ var EditPlant = function(){
         });
 
 
-        jqueryMap.$chooseImg.on("click", function(){
+        jqueryMap.$chooseImg.on("click", function(data){
             if (userId < 1){
                 userNotAuthenticated();
                 return;
@@ -415,8 +416,9 @@ var EditPlant = function(){
 
             $("#hidden-plantId-img").val(getPlantId());
             $("#hidden-url-img").val(url);
-
-            $.post('/addImg/', $("#addImg form").serialize(), function(data){
+            
+            
+            $.post('/addImg/'+ transactionId + "/UPDATE/", $("#addImg form").serialize(), function(data){
                 $("<img />").attr("src", url)
                     .addClass('cardimg')
                     .attr('id', 'imagelightbox')
@@ -427,6 +429,8 @@ var EditPlant = function(){
                 if($("#populated-images").children().length >= 5){
                     $("#add-new-img").remove();
                 }
+                
+                transactionId = data;
             })
             .fail(function(){
                 alert("Error - Could not add image.");

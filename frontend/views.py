@@ -10,7 +10,7 @@ from login. models import *
 from .models import Actions, Transactions
 from django.contrib.auth.models import User
 from django.apps import apps
-from .forms import AddPlantForm, UpdateAttributeForm, UpdatePlantNamesForm #, UpdateTextForm, UpdateSelectForm, UpdateMultiForm
+from .forms import AddPlantForm, UpdateAttributeForm, UpdatePlantNamesForm 
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
@@ -252,19 +252,34 @@ def reload_attribute_vals_view(request, className=None):
         response_data['dropdownvals'].append(p)
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-def addImg(request):
+def addImg(request, transaction_id, action_type):
     if request.method == 'POST':
-        plant = Plant.objects.get(id=request.POST['plant_id'])
-        relation = ImageURL(plants=plant, value=request.POST['image_url'])
-        relation.save()
+        plantId = request.POST['plant_id']
+        #relation = ImageURL(plants=plant, value=request.POST['image_url'])
+        #relation.save()
+        print("in addImg view")
 
         #transaction/action instead??
+        if int(transaction_id) == 0: 
+            print("transaction id is zero")
+            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
+            #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+            transaction.save()
+        else:
+            transaction = Transactions.objects.get(id = transaction_id)
+        action = Actions.objects.create(transactions=transaction , action_type=action_type , property="ImageURL", value=request.POST['image_url'])
+        action.save()
 
-        response_data = "post"
+        response_data = int(transaction.id)
+
     else:
         response_data = "get"
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+    
+    
+    
+    
 
 def removeAttribute(request):
     if request.method == 'POST':

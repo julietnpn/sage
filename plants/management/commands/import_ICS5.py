@@ -147,10 +147,10 @@ def csv_import(path, user):
                 species = ''
             if "'" in scientific_name:
                 sciname_bits= scientific_name.split()
-                for i in sciname_bits:
+                for index, i in enumerate(sciname_bits):
                     if i.startswith("'") and i.endswith("'"):
                         cultivar = ' ' + i
-                        if i<2 and genus is None:
+                        if index<2 and genus is None:
                             genus = sciname_bits[0]
                             species = ''
             if 'var. ' in scientific_name:

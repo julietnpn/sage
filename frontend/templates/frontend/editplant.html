@@ -62,9 +62,10 @@
                 <a href="{{ img.value }}"><img src="{{ img.value }}" class='cardimg' id="imagelightbox" alt="Plant Image" /></a>
                 {% endfor %}
             </div>
+            {% endif %}
             {% if images|length < 5 %}
             <div id ="add-new-img" src="" class="cardimg"/><div id="add-new-img2"><div>+ add new</div></div></div>
-            {% endif %}
+            
             {% endif %}
         </div>
         
