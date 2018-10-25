@@ -370,8 +370,9 @@ def updateNames(request):
                 for i in sciname_bits:
                     if "Var." or "var." in i:
                         found = True
+                        continue
                     if found:
-                        variety = i;
+                        variety += i;
                         continue
             if genus is '':
                 #genus has not been defined and needs to be defined
