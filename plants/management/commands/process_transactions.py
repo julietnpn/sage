@@ -201,6 +201,13 @@ def process_updates():
                     cls_instance = cls_instance.first()
                 cls_instance = cls(cls_instance.id ,the_plant.id, value[0])# make sure that it is rewriting....
                 cls_instance.save()
+            elif property in "ImageURL":
+                class_name = action.property
+                cls = globals()[class_name]
+                cls_instance = cls()
+                cls_instance.save()
+                cls_instance = cls(cls_instance.id, the_plant.id, action.value)
+                cls_instance.save()
             elif property in properties_1_to_many:
                 pass
             else:
@@ -324,6 +331,14 @@ def process_transactions():
                     cls_instance.save()
                     #print (cls_instance.id ,the_plant.id, action.value)
                     cls_instance = cls(cls_instance.id ,the_plant.id, action.value)
+                    cls_instance.save()
+            elif action.property in 'ImageURL':
+                class_name = action.property
+                cls = globals()[class_name]
+                if action.action_type == 'INSERT':
+                    cls_instance = cls()
+                    cls_instance.save()
+                    cls_instance = cls(cls_instance.id, the_plant.id, action.value)
                     cls_instance.save()
             elif action.property in properties_1_to_many: # TODO Seortiny
                 pass

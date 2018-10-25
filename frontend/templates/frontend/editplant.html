@@ -62,9 +62,10 @@
                 <a href="{{ img.value }}"><img src="{{ img.value }}" class='cardimg' id="imagelightbox" alt="Plant Image" /></a>
                 {% endfor %}
             </div>
+            {% endif %}
             {% if images|length < 5 %}
             <div id ="add-new-img" src="" class="cardimg"/><div id="add-new-img2"><div>+ add new</div></div></div>
-            {% endif %}
+            
             {% endif %}
         </div>
         
@@ -233,7 +234,7 @@
     {% if contributors %}
     <div class="row editplantrow">
         <div class="col-sm-5 col-sm-offset-1">
-        <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Contributors</div>
+        <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>People or Organizations that Contributed Data</div>
         {% for c in contributors %}
         <div><a href="/view_contributor/{{c.userID}}">{{c.userName}}</a></div>
         {% endfor %}
@@ -242,7 +243,7 @@
 
     <div class="row editplantrow">
         <div class="col-sm-5 col-sm-offset-1">
-        <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Activities</div>
+        <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Contributed Data</div>
 
         <table>
             <tr>

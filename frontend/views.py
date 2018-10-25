@@ -10,7 +10,7 @@ from login. models import *
 from .models import Actions, Transactions
 from django.contrib.auth.models import User
 from django.apps import apps
-from .forms import AddPlantForm, UpdateAttributeForm, UpdatePlantNamesForm #, UpdateTextForm, UpdateSelectForm, UpdateMultiForm
+from .forms import AddPlantForm, UpdateAttributeForm, UpdatePlantNamesForm 
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
@@ -252,19 +252,34 @@ def reload_attribute_vals_view(request, className=None):
         response_data['dropdownvals'].append(p)
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-def addImg(request):
+def addImg(request, transaction_id, action_type):
     if request.method == 'POST':
-        plant = Plant.objects.get(id=request.POST['plant_id'])
-        relation = ImageURL(plants=plant, value=request.POST['image_url'])
-        relation.save()
+        plantId = request.POST['plant_id']
+        #relation = ImageURL(plants=plant, value=request.POST['image_url'])
+        #relation.save()
+        print("in addImg view")
 
         #transaction/action instead??
+        if int(transaction_id) == 0: 
+            print("transaction id is zero")
+            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
+            #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
+            transaction.save()
+        else:
+            transaction = Transactions.objects.get(id = transaction_id)
+        action = Actions.objects.create(transactions=transaction , action_type=action_type , property="ImageURL", value=request.POST['image_url'])
+        action.save()
 
-        response_data = "post"
+        response_data = int(transaction.id)
+
     else:
         response_data = "get"
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+    
+    
+    
+    
 
 def removeAttribute(request):
     if request.method == 'POST':
@@ -292,7 +307,7 @@ def updateNames(request):
     if request.method == 'POST': 
         form = UpdatePlantNamesForm(request.POST)
         plantId = int(request.POST['plant_id'])
-
+        print("plant id in update names: " + str(plantId))
         transaction_id = int(request.POST['transaction_id'])
         action_type = "UPDATE"
 
@@ -304,13 +319,9 @@ def updateNames(request):
             transaction = Transactions.objects.get(id=transaction_id)
 
         actions = []
-        
+        print(request.POST)
         #pdb.set_trace()
         scientific_name = request.POST['scientificName']
-#       species = request.POST['species']
-#       variety = request.POST['variety']
-#       subspecies = request.POST['subspecies']
-#       cultivar = request.POST['cultivar']
         common_name = request.POST['commonName']
         family = request.POST['family']
         family_common_name = request.POST['familyCommonName']
@@ -347,10 +358,10 @@ def updateNames(request):
                 species = ''
             if "'" in scientific_name:
                 sciname_bits= scientific_name.split()
-                for i in sciname_bits: #make sure it is not a genus with a cultivar
+                for index, i in enumerate(sciname_bits): #make sure it is not a genus with a cultivar
                     if i.startswith("'") and i.endswith("'"):
                         cultivar = i
-                        if i<2 and genus is None:
+                        if index<2 and genus is None:
                             genus = sciname_bits[0]
                             species = ''
             if "Var. " or "var. " in scientific_name:
@@ -371,44 +382,22 @@ def updateNames(request):
                 else:
                     print("genus only, delete transaction")
                     transaction.delete() #contains a genus name only
-                
+                    return HttpResponse()
             
             trans_type = 'UPDATE'
-            genus_id = ScientificName.objects.filter(value='genus').first()
-            actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, scientific_names=genus_id))
+            actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
             
             if species is not '':
-                species_id = ScientificName.objects.filter(value='species').first()
-                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, scientific_names=species_id))
+                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
             if variety is not '':
-                variety_id = ScientificName.objects.filter(value='variety').first()
-                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, scientific_names=variety_id))   
+                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))   
             if subspecies is not '':
-                subspecies_id = ScientificName.objects.filter(value='subspecies').first()
-                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, scientific_names=subspecies_id))
+                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
             if cultivar is not '':
-                cultivar_id = ScientificName.objects.filter(value='cultivar').first()
-                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, scientific_names=cultivar_id))
+                actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
 
             
         
-        
-        # if int(request.POST['genus_flag']) == 1:
-#           genus_id = ScientificName.objects.filter(value='genus').first().id
-#           actions.append(Actions(transactions=transaction , action_type=action_type, property='plant_scientific_name', value=genus, scientific_names=genus_id))
-#       if int(request.POST['species_flag']) == 1:
-#           species_id = ScientificName.objects.filter(value='species').first().id
-#           actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=species, scientific_names=species_id))
-#       if int(request.POST['variety_flag']) == 1:
-#           variety_id = ScientificName.objects.filter(value='variety').first().id
-#           actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=variety, scientific_names=variety_id)) 
-#       if int(request.POST['subspecies_flag']) == 1:
-#           subspecies_id = ScientificName.objects.filter(value='subspecies').first().id
-#           actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=subspecies, scientific_names=subspecies_id))
-#       if int(request.POST['cultivar_flag']) == 1:
-#           variety_id = ScientificName.objects.filter(value='cultivar').first().id
-#           actions.append(Actions(transactions=transaction, action_type=trans_type, property='plant_scientific_name', value=cultivar, scientific_names=cultivar_id))
-#           
             
         if int(request.POST['commonName_flag']) == 1:
             actions.append(Actions(transactions=transaction , action_type=action_type, property='common_name', value=common_name))
