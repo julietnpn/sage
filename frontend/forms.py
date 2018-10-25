@@ -36,5 +36,5 @@ class UpdatePlantNamesForm(forms.Form):
 	#familyCommonName =forms.CharField(widget=forms.TextInput(attrs={'id': 'input-familyCommonName'}), label='Family Common Name')
 	#family = forms.CharField(widget=forms.TextInput(attrs={'id': 'input-family'}), label='Family')
 	family = forms.ModelChoiceField(queryset=TheFamily.objects.values_list("value", flat=True).distinct(), label='Family', widget=forms.Select(attrs={'class':'formselect'}))
-	TheFamilyCommonName = forms.ModelChoiceField(queryset=TheFamilyCommonName.objects.values_list("value", flat=True).distinct(), label='Family Common Name', widget=forms.Select(attrs={'class':'formselect'}))
+	familyCommonName = forms.ModelChoiceField(queryset=TheFamilyCommonName.objects.values_list("value", flat=True).distinct(), label='Family Common Name', widget=forms.Select(attrs={'class':'formselect'}))
 	endemicStatus = forms.ModelChoiceField(queryset=EndemicStatus.objects.all().distinct(), label='Endemic Status', widget=forms.Select(attrs={'class':'formselect'}))

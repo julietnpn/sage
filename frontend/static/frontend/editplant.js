@@ -246,8 +246,6 @@ var EditPlant = function(){
             }
 
             $.post('/updateNames/', $("#updateNamesMdl form").serialize(), function(data){
-                //alert($("#genus-flag").val());
-                //alert($("#species-flag").val()); //RESET FLAGS??????????????????????????????!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 $("#scientificName").html($("#input-scientificName").val());
                 // if($("#genus-flag").val() == "1"){
                 //     $("#commonName").
@@ -255,19 +253,22 @@ var EditPlant = function(){
                 $("#commonName").html($("#input-commonName").val());
                 //$("#familyCommonName").html($("#input-familyCommonName").val());
                 //$("#family").html($("#input-family").val());
-                var family = $("#id_family option:selected").text();
-                if($("#id_family option:selected").text().indexOf("--") < 0){
-                    $("#family").html( $("#id_family option:selected").text());
+                $("#family").html( $("#id_family option:selected").text());
+                $("#familyCommonName").html( $("#id_familyCommonName option:selected").text());
+                $("#endemicStatus").html( $("#id_endemicStatus option:selected").text());
+                
+                /*if($("#id_family option:selected").text().indexOf("--") < 0){
+                    
                     //$("#family").show();
                 }
                 if($("#id_familyCommonName option:selected").text().indexOf("--") < 0){
-                    $("#familyCommonName").html( $("#id_familyCommonName option:selected").text());
+                    
                     //$("#familyCommonName").show();
                 }
                 if($("#id_endemicStatus option:selected").text().indexOf("--") < 0){
-                    $("#endemicStatus").html( $("#id_endemicStatus option:selected").text());
+                    
                     $("#endemicStatusWrapper").show();
-                }
+                }*/
                 $("#updateNamesMdl").modal("hide");
                 displayMessage();
             })
