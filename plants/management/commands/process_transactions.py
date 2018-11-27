@@ -116,10 +116,10 @@ def get_attributes(cls):
 
             
 def process_updates():
-
+    print("Processing Updates")
     plants={0:{}}
     for transaction in Transactions.objects.all().filter(ignore=False, transaction_type='UPDATE').order_by('id'): # if same user updates should be filtered out
-        print('transaction_type = ' + transaction.transaction_type)
+        #print('transaction_type = ' + transaction.transaction_type)
         if not(transaction.plants_id):
             print('No plant_id in transaction UPDATE!')
             continue
@@ -141,7 +141,7 @@ def process_updates():
                 the_plant = Plant.objects.get(pk=plant)
             else:
                 raise ValueError("Invalid property plant id = " + plant)
-            print(property, property=='height', property in 'heightspreadroot_depth')
+            #print(property, property=='height', property in 'heightspreadroot_depth')
             if property in 'heightspreadroot_depth':
                 if PlantRegion.objects.filter(plants=the_plant.id, regions=value[1]):# TODO check for region Null----------------------------------
                     plant_region = PlantRegion.objects.filter(plants=the_plant.id, regions=value[1]).first()#filter(transaction.plants_id, action.regions)
@@ -164,14 +164,14 @@ def process_updates():
             elif property in properties_scientific_name:
                 continue
             elif property in properties_1_to_1:
-                print('T_id={0}, property={1}, value={2}'.format(transaction.id, property, value[0]))
+                #print('T_id={0}, property={1}, value={2}'.format(transaction.id, property, value[0]))
                 setattr(the_plant, property, value[0]) # pH or ph... not being saved!
                 try: 
                     the_plant.save()
                 except Error as e:
                     print(e)
             elif property in properties_many_with_region:# TODO PlantBarrierByRegion
-                print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, property, value[1], value[0]))
+                #print('T_id={0}, property={1}, region={2}, value={3}'.format(transaction.id, property, value[1], value[0]))
                 class_name = 'Plant' + property.title().replace('_', '') + 'ByRegion'
                 cls = globals()[class_name]
                 attributes, is_region_last = get_attributes(cls)
@@ -208,6 +208,8 @@ def process_updates():
                 cls_instance.save()
                 cls_instance = cls(cls_instance.id, the_plant.id, action.value)
                 cls_instance.save()
+                print("Process Updates image URL is " + str(action.value))
+                print('T_id={0}, property={1}, value={2}'.format(transaction.id, property, value[0]))
             elif property in properties_1_to_many:
                 pass
             else:
@@ -215,6 +217,7 @@ def process_updates():
                 pass
 
 def process_transactions():
+    print("Processing transactions")
     for transaction in Transactions.objects.all().filter(ignore=False).order_by('id'):
         #print('transaction_type = ' + transaction.transaction_type)
         if transaction.transaction_type == 'INSERT':# get_or_crete????????
@@ -226,7 +229,7 @@ def process_transactions():
             new_plant.save()
             transaction.plants_id = new_plant.id
             transaction.save()
-            print('plant_id = ' + str(transaction.plants_id))
+            #print('plant_id = ' + str(transaction.plants_id))
         elif transaction.transaction_type == 'DELETE':
             if transaction.plant is None:
                 print('None objects')
@@ -339,6 +342,7 @@ def process_transactions():
                     cls_instance = cls()
                     cls_instance.save()
                     cls_instance = cls(cls_instance.id, the_plant.id, action.value)
+                    print("Process Transaction image URL is " + str(action.value))
                     cls_instance.save()
             elif action.property in properties_1_to_many: # TODO Seortiny
                 pass
