@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader, RequestContext
 from plants.models import PlantFoodProd, Plant, PlantMedicinalsProd, PlantCulturalAndAmenityProd, PlantBiochemicalMaterialProd, PlantRawMaterialsProd, PlantMineralNutrientsProd
 from .forms import Human_Needs, Address, Plants, Support, IDForm, finalPage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django import forms
 from django.core.context_processors import csrf
 from django.views.generic.edit import UpdateView

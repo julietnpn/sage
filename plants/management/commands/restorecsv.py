@@ -28,11 +28,12 @@ class Command(BaseCommand):
 		user3 = AuthUser.objects.get(username='Natural_Capital')
 		user2 = AuthUser.objects.get(username='USDA')
 		
-		
 		#only import one file at a time so you don't have duplicates
 		csv_import1(path1, user1)
 		csv_import3(path3, user3)
 		csv_import2(path2, user2)
+		
+		Plant.objects.all().delete()
 
 		
 	

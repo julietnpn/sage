@@ -12,10 +12,12 @@ class Command(BaseCommand):
         parser.add_argument('-update', nargs='?', help='use if updating new plants added through the UI or through an import')
         
     def handle(self, *args, **options):
-        self.stdout.write("processing transactions!!!")
+        #self.stdout.write("processing transactions!!!")
         
-        print('Flushing plant table...')
-        Plant.objects.all().delete()
+        #this was only useful for when we're restoring from the CSV. We don't need this to process transactions from the GUI.
+        #this code has been moved to the restorecsv.py file
+        #print('Flushing plant table...')
+        #Plant.objects.all().delete()
         
         
         process_transactions()
@@ -118,7 +120,9 @@ def get_attributes(cls):
 def process_updates():
     print("Processing Updates")
     plants={0:{}}
-    for transaction in Transactions.objects.all().filter(ignore=False, transaction_type='UPDATE').order_by('id'): # if same user updates should be filtered out
+    for transaction in Transactions.objects.all().filter(ignore=False, transaction_type='NEWUPDATE').order_by('id'): # if same user updates should be filtered out
+        transaction.transaction_type = 'UPDATE'
+        transaction.save()
         #print('transaction_type = ' + transaction.transaction_type)
         if not(transaction.plants_id):
             print('No plant_id in transaction UPDATE!')
@@ -202,7 +206,7 @@ def process_updates():
                 cls_instance = cls(cls_instance.id ,the_plant.id, value[0])# make sure that it is rewriting....
                 cls_instance.save()
             elif property in "ImageURL":
-                class_name = action.property
+                class_name = property
                 cls = globals()[class_name]
                 cls_instance = cls()
                 cls_instance.save()
@@ -223,30 +227,46 @@ def process_transactions():
         if transaction.transaction_type == 'INSERT':# get_or_crete????????
 #confirm plant isn't already in database
             
+            if transaction.plants_id is None:
+                print("creating new plant")
+                new_plant = Plant()
+                new_plant.save()
+                transaction.plants_id = new_plant.id
+                transaction.save()
+            else:
+                continue
             
-            
-            new_plant = Plant()
-            new_plant.save()
-            transaction.plants_id = new_plant.id
-            transaction.save()
             #print('plant_id = ' + str(transaction.plants_id))
         elif transaction.transaction_type == 'DELETE':
-            if transaction.plant is None:
+            if transaction.plants_id is None:
                 print('None objects')
                 pass
+            else:
+                print("deleting plant")
+                Plants.objects.get(id=transaction.plants_id).delete()
                 # db.session.rollback()
                 # raise ValueError("Can't delete plant == None")
             # db.session.delete(transaction.plant)
-            Plant.objects.get(pk=transaction.plant).delete()#----------------should be tested-----
+            #Plant.objects.get(pk=transaction.plant).delete()#----------------should be tested-----
             # db.session.commit()
             continue
         elif transaction.transaction_type == 'UPDATE':
-            #BECAUSE WE FLUSHED THE PLANTS TABLE, WE HAVE TO RESET THE PLANT ID FROM THE PARENT TRANSACTION (THE ORIGINAL INSERT OF THAT PLANT)
-            #print("this plants related transaction id is ",transaction.parent_transaction)
-            #print("user id: ", transaction.users_id, " transaction_id: ", transaction.id)
-            parentTrans = Transactions.objects.get(id=transaction.parent_transaction)
-            transaction.plants_id = parentTrans.plants_id
-            transaction.save()              
+            #Already processed updates, or updates coming from the CSV restore
+            if transaction.plants_id is None:
+                print("warning: proccessed update has no plant id, ok if CSV restore")
+                parentTrans = Transactions.objects.get(id=transaction.parent_transaction)
+                transaction.plants_id = parentTrans.plants_id
+                transaction.save()
+            else:
+                continue
+        elif transaction.transaction_type == 'NEWUPDATE':
+            #New Updates coming from the UI
+            print("new update")
+            if transaction.plants_id is None:
+                print("warning: new update has no plant id")
+                parentTrans = Transactions.objects.get(id=transaction.parent_transaction)
+                transaction.plants_id = parentTrans.plants_id
+                transaction.save()
         else:
             print('rollback')
             # db.session.rollback()

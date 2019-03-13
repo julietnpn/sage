@@ -262,7 +262,7 @@ def addImg(request, transaction_id, action_type):
         #transaction/action instead??
         if int(transaction_id) == 0: 
             print("transaction id is zero")
-            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
+            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='NEWUPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
             #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
             transaction.save()
         else:
@@ -289,7 +289,7 @@ def removeAttribute(request):
 
         if transaction_id == 0:
             #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type=action_type, ignore=False)
-            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
+            transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='NEWUPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
             transaction.save()
             response_data = transaction.id
         else:
@@ -309,7 +309,7 @@ def updateNames(request):
         plantId = int(request.POST['plant_id'])
         print("plant id in update names: " + str(plantId))
         transaction_id = int(request.POST['transaction_id'])
-        action_type = "UPDATE"
+        action_type = "NEWUPDATE"
 
         if transaction_id == 0:
             #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type=action_type, ignore=False)
@@ -425,7 +425,7 @@ def updateText(request, transaction_id, action_type):
 
             if int(transaction_id) == 0:
                 #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
+                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='NEWUPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
                 transaction.save()
             else:
                 transaction = Transactions.objects.get(id = transaction_id)
@@ -452,7 +452,7 @@ def updateSelect(request, transaction_id, action_type):
 
             if int(transaction_id) == 0:
                 #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
-                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
+                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='NEWUPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
                 transaction.save()
             else:
                 transaction = Transactions.objects.get(id = transaction_id)
@@ -478,7 +478,7 @@ def updateMulti(request, transaction_id, action_type):
             # oldVals = oldVals.split(",") WHY WAS THIS HERE
 
             if int(transaction_id) == 0: 
-                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='UPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
+                transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=request.user.id, plants_id=plantId, transaction_type='NEWUPDATE', parent_transaction = parent_transactions(plantId), ignore=False)
                 #transaction = Transactions.objects.create(timestamp=datetime.now(), users_id=1, plants_id=plantId, transaction_type='UPDATE', ignore=False)
                 transaction.save()
             else:
