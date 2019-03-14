@@ -3,7 +3,22 @@
 {% block maincontent %}
 
 {% if plants %}
+<div class="pagination">
+	<span class="step-links">
+		{% if plants.has_previous %}
+		<a href="?page={{ plants.previous_page_number }}">previous</a>
+		{% endif %}
 
+		{% if plants.has_next %}
+		<a href="?page={{ plants.next_page_number }}">next</a>
+		{% endif %}
+
+		<span class="current">
+				Page {{ plants.number }} of {{ plants.paginator.num_pages }}
+			</span>
+		<a href="/export_plant_data" download="export_plant_data.csv">export</a>
+	</span>
+</div>
 {% for plant in plants %}
 <div class='plantcard'>
 	<div id ="add-new-img" class="cardimg" data-plantId="{{plant.id}}" >

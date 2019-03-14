@@ -231,6 +231,19 @@
         </div>
     </div>
     
+    <div class="row editplantrow">
+        <div class="col-sm-5 col-sm-offset-1 commentbox">
+        <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Comments about {{ common_name }}</div>
+        
+        {% get_comment_count for plant as comment_count %}
+        <p>The comments section is available for users to further discuss the plant, provide contextual information, etc.</p>
+        <p>{{ comment_count }} comments have been posted.</p>
+        {% render_comment_list for plant %}
+        {% render_comment_form for plant %}
+        </div>
+    
+    </div>
+    
     {% if contributors %}
     <div class="row editplantrow">
         <div class="col-sm-5 col-sm-offset-1">
@@ -267,19 +280,6 @@
         </div>
     </div>
 
-    
-
-    <div class="row editplantrow">
-        <div class="col-sm-5 col-sm-offset-1">
-        <div class="row italic attribute"><span class="glyphicon glyphicon-plus add-att-btn" aria-hidden="true"></span>Comments</div>
-        
-        {% get_comment_count for plant as comment_count %}
-        <p>{{ comment_count }} comments have been posted.</p>
-        {% render_comment_list for plant %}
-        {% render_comment_form for plant %}
-        </div>
-    
-    </div>
     {% endif %}
     
 {% else %}

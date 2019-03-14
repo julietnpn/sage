@@ -232,6 +232,10 @@ section#contain a img {
 	padding-bottom:20px;
 }
 
+.commentbox{
+	background-color: #e3e5e3;
+}
+
 .plantcard{
 	padding-top:20px;
 	padding-bottom:20px;
@@ -606,8 +610,8 @@ border-color:#66CD00;
 
 /* Dropdown Button */
 .dropbtn {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #d3edd3;
+    color: black;
     padding: 16px;
     font-size: 16px;
     border: none;
@@ -680,7 +684,7 @@ dont think we need to list */
 }
 
 .dropdown-select:focus{
-	outline: 1px solid #4CAF50;
+	outline: 1px solid #d3edd3;
 }
 
 .pagination{
@@ -691,8 +695,8 @@ dont think we need to list */
 }
 
 .pagination a{
-	background-color: #4CAF50;
-	color: white;
+	background-color: #d3edd3;
+	color: black;
 	text-transform: capitalize;
 	padding: 1rem;
 	border-radius: 2px;
