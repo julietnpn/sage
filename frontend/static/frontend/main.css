@@ -306,7 +306,7 @@ section#contain a img {
 
 .nav-item:hover{
 	text-decoration: none;
-	color:#66CD00;
+	color:#3e8e41;
 }
 
 #sidebar-top > #nav > ul{
@@ -340,7 +340,7 @@ section#contain a img {
     font-family: 'Karla', sans-serif;
 	font-size: 16px;
 	font-weight: bold;
-	color:#66CD00;
+	color:#3e8e41;
 	text-align: center;
 }
 
@@ -364,7 +364,7 @@ section#contain a img {
 	margin-right:20px;
 	margin-top: 20px;
 	margin-bottom:10px;
-	color:#66CD00;
+	color:#3e8e41;
 }
 
 .formtxt{
@@ -439,7 +439,7 @@ section#contain a img {
 }
 
 .green{
-	color:#66CD00;
+	color:#3e8e41;
 }
 
 #btm-header{
@@ -449,7 +449,7 @@ section#contain a img {
 	line-height: 13px;
 	margin-top: 20px;
 	margin-bottom:10px;
-	color:#66CD00;
+	color:#3e8e41;
 	letter-spacing:1.5px;
 }
 
@@ -475,7 +475,7 @@ section#contain a img {
 }
 
 .selected{
-border-color:#66CD00;
+border-color:#3e8e41;
 }
 
 #page-header{
@@ -659,7 +659,7 @@ border-color:#66CD00;
 .dropdown-content a:hover {
 	background-color: #f1f1f1;
 	text-decoration: none;
-	color:#66CD00;
+	color:#3e8e41;
 }
 
 /* Show the dropdown menu on hover 

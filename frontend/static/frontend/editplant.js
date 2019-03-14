@@ -290,11 +290,11 @@ var EditPlant = function(){
         jqueryMap.$imgMdlContent.on({ //these arent visible enough
             click: function(){
                 resetBorderColor($(this).siblings());
-                $(this).css('border-color', '#66CD00');
+                $(this).css('border-color', '#3e8e41');
                 $(this).addClass('selected');
             },
             mouseenter: function(){
-                $(this).css('border-color', '#66CD00');
+                $(this).css('border-color', '#3e8e41');
             },
             mouseleave: function(){
                 if(!$(this).hasClass('selected'))
