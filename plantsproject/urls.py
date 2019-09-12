@@ -17,10 +17,13 @@ from django.urls import *
 from django.contrib import admin
 from login.views import *
 import django.contrib.auth.views
+import api.views
+from rest_framework import routers
 
 # urlpatterns = [
 #     path(r'^admin/', include(admin.site.urls)),
 # ]
+
 
 
 urlpatterns = [
@@ -40,6 +43,7 @@ urlpatterns = [
     re_path(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', django.contrib.auth.views.password_reset_confirm, name='password_reset_confirm'),
     re_path(r'^reset/$', django.contrib.auth.views.password_reset_complete, name='password_reset_complete'),
     re_path(r'^', include('frontend.urls')),
+    re_path(r'^', include('api.urls')),
     re_path(r'^comments/', include('django_comments_xtd.urls')),
     #path('django-rq/', include('django_rq.urls')),
 ]

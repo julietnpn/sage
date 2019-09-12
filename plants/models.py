@@ -1192,7 +1192,6 @@ class Plant(models.Model):
         return ', '.join([str(a) for a in self.cultural_and_amenity_prod.all()])
     #MineralNutrientsProd
     mineral_nutrients_prod = models.ManyToManyField(MineralNutrientsProd, through=PlantMineralNutrientsProd, verbose_name='mineral nutrients')
-    
     @property
     def get_mineral_nutrients_prod(self):
         return ', '.join([str(a) for a in self.mineral_nutrients_prod.all()])

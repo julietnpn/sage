@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django_comments',
     'django.contrib.auth',
     'django.contrib.admin',
+    'rest_framework'
     #'django_rq',
     #'composer',
 )
@@ -153,6 +154,11 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
     'compressor.finders.CompressorFinder',
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 # RQ_QUEUES = {
 #     'default': {
