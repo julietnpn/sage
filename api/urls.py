@@ -4,7 +4,8 @@ from . import views
 
 
 urlpatterns= [
-    re_path(r'^api/$', views.plant_list),
+    path('api/all-plants/', views.plant_list),
     path('api/<int:pk>/', views.plant_detail),
+    path('api/', views.api_documentation),
 ]
 

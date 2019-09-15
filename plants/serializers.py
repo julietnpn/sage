@@ -3,11 +3,14 @@ from plants.models import Plant
 
 
 class PlantSerializer(serializers.ModelSerializer):
-    scientific_name = serializers.StringRelatedField(many=True)
+    get_scientific_name = serializers.ReadOnlyField()
+    common_name = serializers.CharField(required=False, allow_blank="True", max_length=300)
     endemic_status = serializers.StringRelatedField(many=True)
     
     #---------- Characteristics
     duration = serializers.StringRelatedField(many=True)
+    life_span = serializers.DecimalField(max_digits=6, decimal_places=2)
+    time_to_first_harvest = serializers.DecimalField(max_digits=6, decimal_places=2)
     #height =
     #spread = 
     #rootdepth =
@@ -31,8 +34,8 @@ class PlantSerializer(serializers.ModelSerializer):
     wind_tol = serializers.StringRelatedField(many=False)
     soil_drainage_tol = serializers.StringRelatedField(many=True)
     fire_tol = serializers.StringRelatedField(many=False)
-    #minimum_temperature_tol 
-    #heat_tol
+    minimum_temperature_tol = serializers.IntegerField()
+    heat_tol = serializers.IntegerField()
     
     #---------- Needs
     nutrient_requirements = serializers.StringRelatedField(many=True)
@@ -65,7 +68,7 @@ class PlantSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Plant
-        fields = '__all__'
+        exclude = ["scientific_name"]
 
 
 # class PlantSerializer(serializers.Serializer):
