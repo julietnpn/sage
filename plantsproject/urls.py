@@ -39,7 +39,7 @@ urlpatterns = [
     #path(r'^home/', frontend.urls),
     #re_path(r'^', include('django.contrib.auth.urls')),
     re_path(r'^login/$', django.contrib.auth.views.LoginView.as_view(), name='login'),
-    re_path(r'^logout/$', django.contrib.auth.views.LogoutView.as_view(), {'next_page':r'^login/$'}, name='logout'),
+    re_path(r'^logout/$', django.contrib.auth.views.LogoutView.as_view(), name='logout'),
     re_path(r'^password_reset/$', django.contrib.auth.views.PasswordResetView, name='password_reset'),
     re_path(r'^password_reset/$', django.contrib.auth.views.PasswordResetDoneView, name='password_reset_done'),
     re_path(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', django.contrib.auth.views.PasswordResetConfirmView, name='password_reset_confirm'),
