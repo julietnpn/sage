@@ -8,13 +8,10 @@
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
-    <form id="login-form" method="post" action=".">{% csrf_token %}
-        <table border="0" class="mb4">
-            <tr><th><label for="id_username">Username:</label></th><td>{{ form.username }}</td></tr>
-            <tr><th><label for="id_password">Password:</label></th><td>{{ form.password }}</td></tr>
-        </table>
-        <input class="dropbtn dropbtn--block mb3" type="submit" value="Log in" />
-        <input type="hidden" name="next" value="/" />
+    <form id="login-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
     </form>
     <a class="dropbtn dropbtn--block mb3" href="/register">Register</a>
     <a class="dropbtn dropbtn--block" href="/password_reset">Forgot Password?</a>

@@ -64,7 +64,7 @@ ROOT_URLCONF = 'plantsproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,7 +79,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'plantsproject.wsgi.application'
 
-SITE_ID = 2 #should be set to 2 for heroku
+SITE_ID = 1 #should be set to 2 for heroku
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 COMMENTS_XTD_CONFIRM_EMAIL = True
@@ -140,10 +140,9 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, '../frontend/static'),
     os.path.join(PROJECT_ROOT, 'static'),
 )
-#django.contrib.auth.LOGIN_URL = '/frontend/login'
-#django.contrib.auth.LOGIN_REDIRECT_URL = '/frontend/home'
-LOGIN_REDIRECT_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL="/login"
+LOGOUT_REDIRECT_URL="/login"
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
@@ -160,6 +159,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+AUTH_USER_MODEL = "login.AuthUser"
 
 # RQ_QUEUES = {
 #     'default': {
