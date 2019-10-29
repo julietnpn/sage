@@ -4,7 +4,7 @@ django-appconf==1.0.2
 django-comments-xtd==2.1.0
 django-compressor==2.2
 django-contrib-comments==1.8.0
-djangorestframework==3.8.2
+djangorestframework==3.9.1
 docutils==0.14
 psycopg2==2.7.5
 pytz==2018.5
