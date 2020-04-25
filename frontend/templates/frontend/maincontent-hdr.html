@@ -1,7 +1,10 @@
 {% extends 'frontend/base.html' %} {% block maincontentheader %}
 <div class="sage-navbar">
-	<div id="filter" class="dropdown">
-		{% block filter %}{% endblock %}
+	<div class="maincontentheaderrow-wrapper">
+			<div id="filter" class="dropdown">
+					{% block filter %}{% endblock %}
+			</div>
+			<a class="export-btn" href="/export_plant_data" download="export_plant_data.csv">Export</a>
 	</div>
 
 	<div class="sage-navbar--divider">
