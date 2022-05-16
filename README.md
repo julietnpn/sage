@@ -4,6 +4,8 @@ This is the dissertation project of Juliet Norton. It is a collaborative effort 
 
 [A NSF Funded Project](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1442749)
 
-[Demo Site](https://sage-pdb.herokuapp.com/)
+[Demo Site](https://sage-pdb.herokuapp.com/) (NOT WORKING CURRENTLY)
+
+[Development Documents](https://drive.google.com/drive/folders/0B2gPzoLteElmWGRLQk15Ni10VlE?resourcekey=0-eFXmd4LqAxDFzt6SVEryqg&usp=sharing)
 
 For questions and details, contact Juliet at jnnorton@uci.edu
