@@ -37,7 +37,7 @@ class AuthUser(AbstractUser):
     password = models.CharField(max_length = 128)
     last_login = models.DateTimeField(blank=True, null=True)
     is_superuser = models.BooleanField()
-    is_data_import = models.NullBooleanField(blank=True)
+    is_data_import = models.BooleanField(blank=True, null=False)
     username = models.CharField(unique=True, max_length=30)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+
 
 # Create your views here.
 from login.forms import *
@@ -9,7 +9,7 @@ from plants.models import Plant
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.views.decorators.csrf import csrf_protect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.template import *
 #from django.db.models import get_models, get_app

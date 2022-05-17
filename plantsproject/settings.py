@@ -57,6 +57,8 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 )
 
 ROOT_URLCONF = 'plantsproject.urls'
@@ -144,7 +146,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL="/login"
 LOGOUT_REDIRECT_URL="/login"
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # List of finder classes that know how to find static files in
 # various locations.
