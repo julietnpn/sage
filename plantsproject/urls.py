@@ -17,14 +17,18 @@ from django.urls import *
 from django.contrib import admin
 from login.views import *
 import django.contrib.auth.views
+import api.views
+from rest_framework import routers
 
 # urlpatterns = [
 #     path(r'^admin/', include(admin.site.urls)),
 # ]
 
 
+
 urlpatterns = [
-    re_path(r'admin/', admin.site.urls),
+    re_path(r'^', include('frontend.urls')),
+    path('admin/', admin.site.urls),
     re_path(r'^register/$', register),
     re_path(r'^register/success/$', register_success),
     re_path(r'^view_profile/$', view_profile),
@@ -33,13 +37,14 @@ urlpatterns = [
     re_path(r'^view_contributor/([0-9]+)/$', view_contributor),
     #path(r'^home/$', home),
     #path(r'^home/', frontend.urls),
-    re_path(r'^login/$', django.contrib.auth.views.login, name='login'),
-    re_path(r'^logout/$', django.contrib.auth.views.logout, {'next_page':'/'}, name='logout'),
-    re_path(r'^password_reset/$', django.contrib.auth.views.password_reset, name='password_reset'),
-    re_path(r'^password_reset/$', django.contrib.auth.views.password_reset_done, name='password_reset_done'),
-    re_path(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', django.contrib.auth.views.password_reset_confirm, name='password_reset_confirm'),
-    re_path(r'^reset/$', django.contrib.auth.views.password_reset_complete, name='password_reset_complete'),
-    re_path(r'^', include('frontend.urls')),
+    #re_path(r'^', include('django.contrib.auth.urls')),
+    re_path(r'^login/$', django.contrib.auth.views.LoginView.as_view(), name='login'),
+    re_path(r'^logout/$', django.contrib.auth.views.LogoutView.as_view(), name='logout'),
+    re_path(r'^password_reset/$', django.contrib.auth.views.PasswordResetView, name='password_reset'),
+    re_path(r'^password_reset/$', django.contrib.auth.views.PasswordResetDoneView, name='password_reset_done'),
+    re_path(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', django.contrib.auth.views.PasswordResetConfirmView, name='password_reset_confirm'),
+    re_path(r'^reset/$', django.contrib.auth.views.PasswordResetCompleteView, name='password_reset_complete'),
+    re_path(r'^', include('api.urls')),
     re_path(r'^comments/', include('django_comments_xtd.urls')),
     #path('django-rq/', include('django_rq.urls')),
 ]

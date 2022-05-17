@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from datetime import datetime
 from plants.models import *
-from login. models import *
+from login.models import *
 from .models import Actions, Transactions
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.apps import apps
 from .forms import AddPlantForm, UpdateAttributeForm, UpdatePlantNamesForm 
 from django.core import serializers
@@ -561,11 +561,9 @@ def getContributors(plantID):
 #     contributorUserNames = []
     contributors = []
     for c in contributorIDs_qs:
-        # contributorIDs.append(c)
-#         contributorUserNames.append(User.objects.get(id = c).username)
         contributor = {
             "userID" : c, 
-            "userName":User.objects.get(id = c).username}
+            "userName":AuthUser.objects.get(id = c).username}
         contributors.append(contributor)
     
     
@@ -591,7 +589,7 @@ def getActivity(plantId):
                 "activityType" : a.action_type,
                 "activityProperty" : a.property,
                 "activityValue" : value,
-                "userID" : User.objects.get(id = Transactions.objects.get(id = a.transactions_id).users_id).username,
+                "userID" : AuthUser.objects.get(id = Transactions.objects.get(id = a.transactions_id).users_id).username,
                 "reference" : a.reference
             }
             activities.append(activity)

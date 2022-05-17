@@ -47,7 +47,8 @@ properties_1_to_1 = ['common_name',
                      'degree_of_serotiny_id',# add family here?!?!
                      'family_id',
                      'family_common_name_id',
-                     'time_to_first_harvest']
+                     'time_to_first_harvest',
+                     'life_span']
 
 properties_many_with_region = ['active_growth_period',
                                'animal_attractor',

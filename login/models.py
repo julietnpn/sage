@@ -1,4 +1,5 @@
 from django.db import models
+from django. contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -32,8 +33,8 @@ class AuthPermission(models.Model):
         unique_together = (('content_type', 'codename'),)
 
 
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
+class AuthUser(AbstractUser):
+    password = models.CharField(max_length = 128)
     last_login = models.DateTimeField(blank=True, null=True)
     is_superuser = models.BooleanField()
     is_data_import = models.NullBooleanField(blank=True)
@@ -47,6 +48,7 @@ class AuthUser(models.Model):
     is_staff = models.BooleanField()
     is_active = models.BooleanField()
     date_joined = models.DateTimeField()
+    
 
     class Meta:
         managed = True

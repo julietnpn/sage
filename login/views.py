@@ -77,7 +77,7 @@ def home(request):
 @login_required
 def view_profile(request):
     userID = request.user.id
-    userName = User.objects.get(id=userID).username
+    userName = AuthUser.objects.get(id=userID).username
     user = AuthUser.objects.get(username=userName)
     activity = getUserActivity(userID)
     context = {
@@ -96,7 +96,7 @@ def view_profile(request):
 @login_required
 def view_contributor(request, contributorID = None):
     userID = contributorID
-    userName = User.objects.get(id=userID).username
+    userName = AuthUser.objects.get(id=userID).username
     user = AuthUser.objects.get(username=userName)
     context = {
         'userName' : userName,
