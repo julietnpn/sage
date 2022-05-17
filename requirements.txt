@@ -9,7 +9,7 @@ Click==7.0
 decorator==4.4.0
 defusedxml==0.5.0
 dj-database-url==0.5.0
-Django==2.2.5
+Django==2.2.28
 django-appconf==1.0.2
 django-comments-xtd==2.4.0
 django-compressor==2.2
