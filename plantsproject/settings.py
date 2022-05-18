@@ -112,8 +112,8 @@ EMAIL_SUBJECT_PREFIX = "[SAGE] "
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
  
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
-Database
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+#Database
 
 POSTGRES_DB = os.environ.get("POSTGRES_DB")
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
