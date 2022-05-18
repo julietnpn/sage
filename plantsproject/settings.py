@@ -17,15 +17,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
+# <DIGITAL OCEAN MIGRATION>
+from django.core.management.utils import get_random_secret_key
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
+
+# <DIGITAL OCEAN MIGRATION>
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False #should be set to false for production server
+#This allows us to toggle Debug by setting an environment variable (locally or on the server).
+DEBUG = os.getenv("DEBUG", "False") == "True" 
 
-ALLOWED_HOSTS = ['*']
+
+# <DIGITAL OCEAN MIGRATION>
+# This defines a list of the server’s addresses or domain names that may be used to connect to the Django instance. 
+# Any incoming request with a Host header that is not in this list will raise an exception. 
+# Django requires that you set this to prevent a certain class of security vulnerability.
+# attempt to read the hosts from an environment variable. 
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 # Application definition
