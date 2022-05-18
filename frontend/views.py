@@ -374,7 +374,7 @@ def updateNames(request):
                     if found:
                         variety += i;
                         continue
-            if genus is '':
+            if genus == '':
                 #genus has not been defined and needs to be defined
                 sciname_bits = scientific_name.split()
                 genus = sciname_bits[0]
@@ -388,13 +388,13 @@ def updateNames(request):
             trans_type = 'UPDATE'
             actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
             
-            if species is not '':
+            if species != '':
                 actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
-            if variety is not '':
+            if variety != '':
                 actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))   
-            if subspecies is not '':
+            if subspecies != '':
                 actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
-            if cultivar is not '':
+            if cultivar != '':
                 actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
 
             
@@ -501,7 +501,7 @@ def editPlant(request, plantId=None):
     plant = Plant.objects.get(id=plantId)
     result = {'Characteristics':[], 'Needs':[], 'Tolerances':[], 'Behaviors':[], 'Products':[], 'About':[]}
     for field in plant.get_all_fields:
-        if field['name'] is 'region':
+        if field['name'] == 'region':
             if plant.get_region is None:
                 height = {'name' : 'height', 'field_type' : 'other', 'value' : None, 'label' : 'height', 'class_name' : 'FIXME'}
                 spread = {'name':'spread', 'field_type':'other', 'value':None, 'label':'spread', 'class_name' : 'FIXME'}
@@ -627,7 +627,7 @@ def addPlant(request):
                             found = True
                             continue
                         if found:
-                            if subspecies is not '':
+                            if subspecies != '':
                                 subspecies = subspecies + " " + i
                             else:
                                 subspecies = i
@@ -651,12 +651,12 @@ def addPlant(request):
                         found = True
                         continue
                     if found:
-                        if variety is not '':
+                        if variety != '':
                             variety = variety +" " + i
                         else:
                             variety = i
 
-            if genus is '':
+            if genus == '':
                 sciname_bits = scientificName.split()
                 genus = sciname_bits[0]
                 if len(sciname_bits) > 1:
@@ -688,16 +688,16 @@ def addPlant(request):
             
             actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=genus, category="genus"))
             
-            if species is not '':
+            if species != '':
                 
                 actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=species, category="species"))
-            if variety is not '':
+            if variety != '':
                 
                 actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=variety, category="variety"))   
-            if subspecies is not '':
+            if subspecies != '':
                 
                 actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=subspecies, category="subspecies"))
-            if cultivar is not '':
+            if cultivar != '':
                 
                 actions.append(Actions(transactions=transaction, action_type=trans_type, property='scientific_name', value=cultivar, category="cultivar"))
 

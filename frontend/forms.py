@@ -16,7 +16,7 @@ class UpdateAttributeForm(forms.Form):
 
 	def __init__(self, *args, **kwargs):
 		class_name = kwargs.pop('class_name')
-		if class_name is "Plant":
+		if class_name == "Plant":
 			values = Plant.objects.none()
 		else:
 			cls_model = apps.get_model('plants', class_name)
