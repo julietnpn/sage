@@ -1007,15 +1007,15 @@ class Plant(models.Model):
                 
         
         
-        if genus is not '':
+        if genus != '':
             name = genus
-        if species is not '' or None:
+        if species != '' or None:
             name = name + " " + species
-        if subspecies is not '':
+        if subspecies != '':
             name = name + " " + subspecies
-        if variety is not '':
+        if variety != '':
             name = name + " " + variety
-        if cultivar is not '':
+        if cultivar != '':
             name = name + " " + cultivar
         
         return name
