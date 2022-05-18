@@ -91,7 +91,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'plantsproject.wsgi.application'
 
-SITE_ID = 2 #should be set to 2 for heroku
+#SITE_ID = 2 #should be set to 2 for heroku
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 COMMENTS_XTD_CONFIRM_EMAIL = True
