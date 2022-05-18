@@ -94,6 +94,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'plantsproject.wsgi.application'
 
+#Django 3.2 Update
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
+
 #SITE_ID = 2 #should be set to 2 for heroku
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
