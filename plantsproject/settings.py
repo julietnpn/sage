@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #should be set to false for heroku
+DEBUG = False #should be set to false for production server
 
 ALLOWED_HOSTS = ['*']
 
