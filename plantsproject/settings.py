@@ -39,6 +39,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 # Django requires that you set this to prevent a certain class of security vulnerability.
 # attempt to read the hosts from an environment variable. 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+print(ALLOWED_HOSTS)
 
 
 # Application definition
@@ -97,7 +98,8 @@ WSGI_APPLICATION = 'plantsproject.wsgi.application'
 #Django 3.2 Update
 DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 
-#SITE_ID = 2 #should be set to 2 for heroku
+#Django Comments
+SITE_ID = 2 #should be set to 2 for heroku, this is for the django_comments infrastructure.
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 COMMENTS_XTD_CONFIRM_EMAIL = True
@@ -140,7 +142,10 @@ if POSTGRES_READY:
             "PORT": POSTGRES_PORT,
         }
     }
+
+#below is what digital ocean content suggested, for setting default to, but it didn't work, the above stuff does.
 #"default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',

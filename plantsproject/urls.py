@@ -47,7 +47,8 @@ urlpatterns = [
     re_path(r'^', include('api.urls')),
     re_path(r'^comments/', include('django_comments_xtd.urls')),
     #path('django-rq/', include('django_rq.urls')),
+    #re_path(r'^', include('composer.urls')),
 ]
 
 
-    #path(r'^composer/',composer.urls),
+    
