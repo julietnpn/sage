@@ -140,7 +140,7 @@ if POSTGRES_READY:
             "PORT": POSTGRES_PORT,
         }
     }
-
+#"default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -186,7 +186,9 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL="/login"
 LOGOUT_REDIRECT_URL="/login"
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
 
 # List of finder classes that know how to find static files in
 # various locations.
