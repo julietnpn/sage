@@ -39,6 +39,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 # Django requires that you set this to prevent a certain class of security vulnerability.
 # attempt to read the hosts from an environment variable. 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+print
 print(ALLOWED_HOSTS)
 
 
@@ -99,7 +100,7 @@ WSGI_APPLICATION = 'plantsproject.wsgi.application'
 DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 
 #Django Comments
-SITE_ID = 2 #should be set to 2 for heroku, this is for the django_comments infrastructure.
+SITE_ID = 5 #should be set to 2 for heroku, 5 for digital ocean. this is for the django_comments infrastructure.
 COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 COMMENTS_XTD_CONFIRM_EMAIL = True
